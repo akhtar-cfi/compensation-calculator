@@ -1,0 +1,36 @@
+id: delhi-mact-2026-88581385
+title: Property dealer, 38, Delhi, 40% disability (injury)
+citation: 'Deepak Gupta Vs Suneet Kalra & Ors., MACT No.: 157/2025, FIR no. 279/2024, PS C. R. Park, CNR No.: DLSE010019062025'
+court: MACT
+source_url: https://indiankanoon.org/doc/88581385/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2024-11-03'
+  claim_filed: '2025-02-21'
+  age: 38
+  employment: self_employed
+  occupation: property dealer (per DAR; no income documents)
+  disability_pct: 40
+  family: the injured himself
+journey:
+- forum: mact
+  date: '2026-06-23'
+  amount: 2974572
+  note: decided on the DAR without framing issues; 9% interest from filing of DAR
+interest_pct: 9
+what_mattered:
+- No ITR or earnings record for his property-dealing work, so minimum wage for a matriculate in Delhi (Rs.21,917)
+  was used
+- 66% permanent disability of spine, left arm and left leg assessed as 40% functional disability for a property
+  dealer who needs mobility, travel and driving
+- No medical bills filed (treated in government hospital AIIMS) but Rs.10,000 awarded for miscellaneous treatment
+  costs; 8 months' loss of income
+- Insurer raised no statutory defence, so liability followed from the chargesheet and DAR
+summary: A 38-year-old property dealer was injured in Delhi in 2024, and left with 40% functional disability. The
+  tribunal awarded Rs 29.75 lakh in 2026, 1.6 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

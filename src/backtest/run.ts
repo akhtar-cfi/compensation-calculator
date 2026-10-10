@@ -169,11 +169,14 @@ export function predict(rules: RulesBundle, r: AwardRow): PredictResult {
   const awarded = r.awarded_total;
   if (awarded === undefined) return { status: "skipped", reason: "needs the awarded total" };
   const proof = r.proof ?? "none";
-  const claimed = r.claimed_monthly_income;
+  // A family with a pay slip or tax returns knows that figure; use it when no separate claimed income was recorded.
+  const claimed = r.claimed_monthly_income ?? (proof !== "none" ? r.income_monthly_accepted : undefined);
   const income =
     proof === "salary_slip" && claimed !== undefined
       ? { proof, monthlySalary: claimed }
-      : { proof: "none" as const, ...(claimed !== undefined && { claimedMonthly: claimed }) };
+      : proof === "itr" && claimed !== undefined
+        ? { proof, itrAnnualIncomes: [{ fy: "pre-accident", income: claimed * 12 }] }
+        : { proof: "none" as const, ...(claimed !== undefined && { claimedMonthly: claimed }) };
   const out = estimate(
     rules,
     {
@@ -227,17 +230,33 @@ export function median(xs: readonly number[]): number | undefined {
   return s.length % 2 ? s[m] : (s[m - 1]! + s[m]!) / 2;
 }
 
+export interface PredictStats {
+  n: number;
+  coverage?: number;
+  medianAbsErrorPct?: number;
+  medianSignedErrorPct?: number;
+}
+
+function predictStats(rows: readonly RowResult[]): PredictStats {
+  const errs = rows.map((r) => r.predict.errorPct!);
+  return {
+    n: rows.length,
+    ...(rows.length && {
+      coverage: rows.filter((r) => r.predict.inRange).length / rows.length,
+      medianAbsErrorPct: median(errs.map(Math.abs))!,
+      medianSignedErrorPct: median(errs)!,
+    }),
+  };
+}
+
 export interface BacktestSummary {
   rows: number;
   replicate: { n: number; passed: number; passRate?: number; meetsK2?: boolean };
   conformity: { n: number; withDeviation: number; byParam: Record<string, number>; medianGapPct?: number };
-  predict: {
-    n: number;
+  predict: PredictStats & {
     notComputable: number;
     reasons: Record<string, number>;
-    coverage?: number;
-    medianAbsErrorPct?: number;
-    medianSignedErrorPct?: number;
+    byKind: Record<"death" | "injury", PredictStats>;
   };
   offers: { n: number; medianRatio?: number; k1Triggered: boolean };
 }
@@ -256,7 +275,6 @@ export function summarise(results: readonly RowResult[]): BacktestSummary {
   const ratios = results.flatMap((r) => (r.offerRatio !== undefined ? [r.offerRatio] : []));
   const medianRatio = median(ratios);
   const gaps = conf.flatMap((r) => (r.conformity.gapPct !== undefined ? [r.conformity.gapPct] : []));
-  const errs = pred.map((r) => r.predict.errorPct!);
   const passRate = rep.length ? passed / rep.length : undefined;
   return {
     rows: results.length,
@@ -272,14 +290,13 @@ export function summarise(results: readonly RowResult[]): BacktestSummary {
       ...(gaps.length && { medianGapPct: median(gaps)! }),
     },
     predict: {
-      n: pred.length,
+      ...predictStats(pred),
       notComputable: nc.length,
       reasons,
-      ...(pred.length && {
-        coverage: pred.filter((r) => r.predict.inRange).length / pred.length,
-        medianAbsErrorPct: median(errs.map(Math.abs))!,
-        medianSignedErrorPct: median(errs)!,
-      }),
+      byKind: {
+        death: predictStats(pred.filter((r) => r.kind === "death")),
+        injury: predictStats(pred.filter((r) => r.kind === "injury")),
+      },
     },
     offers: {
       n: ratios.length,

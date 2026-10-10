@@ -110,13 +110,26 @@ Four checks run on every row:
 
 Sampling bias is stated on every report: published awards over-represent Delhi, and appeals over-represent contested, low awards.
 
-**First data point (one Delhi tribunal injury award, Aug 2026; n = 1, not a calibration):**
+**First back-test (26 Delhi tribunal awards, 2025–26, from Indian Kanoon; not a random sample):**
 
-- Replicate and conformity: exact. The tribunal's loss of earning capacity matches the formula and the rules.
-- Predict from family facts: standard estimate about Rs 5.7 lakh against an award of Rs 11.9 lakh before the negligence cut, and outside the range. Two causes:
-  - The tribunal took a 15% limb certificate as 15% whole-body functional disability; the standard scenario halves a limb percentage.
-  - The discretionary heads were much higher than the experimental bands: Rs 1.25 lakh for shock, pain and amenities against Rs 25,000, and Rs 1.65 lakh for conveyance, diet and family attendant against Rs 15,000.
-- Decision: no change on one award. Recalibrate the limb-to-functional factor and the injury bands on at least 60 Delhi injury awards (milestone M2). Until then, injury results stay experimental and the range for low-disability injuries is likely too low.
+| Check                    | Result                                                              | Reading                                                           |
+| ------------------------ | ------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Replicate                | 21/22 within 1% (K2 passed)                                         | Tribunals' arithmetic matches the formula                         |
+| Conformity               | Multiplier, future prospects and deduction match the rules in 25/26 | The one exception took the multiplier at the end of naval service |
+| Predict, injury (n = 20) | Median abs error 43%, bias −43%, award inside the range in 55%      | Estimates are too low                                             |
+| Predict, death (n = 2)   | Too few to read                                                     | —                                                                 |
+| Offers (n = 12)          | Median offer = 0.08 × the final award                               | Selection-biased: settled cases never reach an award              |
+
+**Why injury estimates are low (median engine ÷ tribunal):**
+
+- **Loss of earning capacity: 0.96 (n = 16).**
+  - Halving a limb certificate matches what Delhi tribunals usually do (75→35, 90→45, 51→25).
+  - The spread is wide (0.3–1.6), so the range must stay wide.
+  - This corrects the earlier n = 1 reading, which suggested the factor was too low.
+- **All other heads: 0.30 (n = 19).**
+  - Part of this is the back-test input: medical bills were not extracted, and tribunals award proven bills in full.
+  - The rest is the experimental bands for pain and suffering, conveyance, diet and attendant, which are far below Delhi practice.
+- **Next step:** extract the per-head amounts from these awards and calibrate the bands. This needs about 60 injury awards before the experimental label comes off.
 
 ## 8. Keeping it current
 
@@ -145,4 +158,4 @@ Sampling bias is stated on every report: published awards over-represent Delhi, 
   - working homemakers (Shishu Pal's add-on);
   - adult-children consortium variations;
   - apportionment between claimants.
-- **Injury bands are uncalibrated** and, on the first Delhi award checked, too low (see the back-test notes in section 7).
+- **Injury non-formula heads are too low.** On 19 Delhi awards they came to a median 30% of what tribunals gave (see section 7).

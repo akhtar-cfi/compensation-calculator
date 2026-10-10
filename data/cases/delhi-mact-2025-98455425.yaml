@@ -1,0 +1,36 @@
+id: delhi-mact-2025-98455425
+title: Homemaker, 62, Ghaziabad, 30% disability (injury)
+citation: Shakuntala Devi Vs. Jaya Bhardwaj & Ors, MACT No. 8 of 2022 (CNR DLND010096862021; FIR No. 3376/2018,
+  PS Sahibabad)
+court: MACT
+source_url: https://indiankanoon.org/doc/98455425/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2018-11-13'
+  claim_filed: '2021-12-24'
+  age: 62
+  employment: homemaker
+  occupation: homemaker; pedestrian hit from behind by a car in Ghaziabad
+  disability_pct: 30
+  family: the injured herself (married)
+journey:
+- forum: mact
+  date: '2025-09-22'
+  amount: 774642
+  note: 9% interest from filing of claim petition; insurer's 'walking on the road, not footpath' plea rejected
+interest_pct: 9
+what_mattered:
+- Homemaker resident of Ghaziabad (U.P.), so Ghaziabad minimum wage of Rs.9,457/month was used instead of the Rs.15,000
+  notional income claimed
+- 15% physical impairment of the right lower limb assessed as 30% functional disability because she does all household
+  work
+- 'Age 62: no future prospects, multiplier 7; 12 months'' loss of earnings'
+- Driver's criminal conviction (on admission of guilt) established negligence; pedestrian-not-on-footpath plea rejected
+summary: A 62-year-old homemaker was injured in Ghaziabad in 2018, and left with 30% functional disability. The
+  tribunal awarded Rs 7.75 lakh in 2025, 6.9 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

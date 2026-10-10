@@ -1,0 +1,40 @@
+id: delhi-mact-2026-127788367
+title: Salaried counter in-charge, 54, Delhi (injury)
+citation: Vijay Kumar Vs. Jag Ram Meena & Ors., DAR No. 643/19 (DLND010179372019)
+court: MACT
+source_url: https://indiankanoon.org/doc/127788367/
+kind: injury
+archetypes:
+- injury_partial_disability_salaried
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2019-08-31'
+  claim_filed: '2019-09-27'
+  age: 54
+  employment: permanent
+  occupation: Counter Incharge with Haryana Tourism Corporation (salaried)
+  disability_pct: 0
+  family: injured man himself
+journey:
+- forum: insurer_offer
+  amount: 83000
+  note: Legal offer of Rs.83,000 plus medical bills; not accepted
+- forum: mact
+  date: '2026-04-16'
+  amount: 385753
+  note: Ankle fracture with implant; 3% limb disability treated as nil functional disability
+interest_pct: 7.5
+what_mattered:
+- Salary slips proved gross salary Rs.59,034/month; 67 days of medical leave compensated even though it was paid
+  leave
+- Medical bills of Rs.1,02,427 reduced by Rs.66,226 already reimbursed by the employer, so only the unreimbursed
+  part (plus Rs.2,709 other bills) was awarded
+- 3% permanent disability of the right lower limb with full ankle movement was held to cause nil functional disability,
+  so no loss of future earnings
+- DTC bus hit the motorcycle from behind; negligence not disputed at final arguments
+summary: A 54-year-old salaried counter in-charge was injured in Delhi in 2019, with no permanent disability. The
+  insurer offered Rs 83,000, which was not accepted. The tribunal awarded Rs 3.86 lakh in 2026, 6.6 years after
+  the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

@@ -1,0 +1,27 @@
+id: delhi-mact-2026-56524335
+title: Injury claim settled at Lok Adalat, Delhi
+citation: 'Dar- Sourav vs Sakil Ahmad And Others, DAR No.: 134/2025 (footer: DAR No. 41/2025), FIR No.: 073/2025,
+  PS: Seelampur'
+court: MACT
+source_url: https://indiankanoon.org/doc/56524335/
+kind: injury
+archetypes:
+- lok_adalat
+state: DL
+facts:
+  age: 35
+  family: the injured himself
+  occupation: not stated
+journey:
+- forum: lok_adalat
+  date: '2026-01-10'
+  amount: 25000
+  note: settled in pre-Lok Adalat hearing; full and final settlement, payable by the insurer; inclusive of any interim
+    award
+what_mattered:
+- Parties compromised before the Lok Adalat; no assessment of income, disability or heads of damage is recorded
+- Settlement is full and final and includes any interim award already paid
+summary: An injury claim before a Delhi tribunal was settled at a Lok Adalat for Rs 25,000 in 2026. The award records
+  the settlement but not the injuries or income.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

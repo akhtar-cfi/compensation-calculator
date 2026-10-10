@@ -22,6 +22,15 @@ export function renderBacktest(
     `| Predict (estimate from family-knowable facts vs award) | ${s.predict.n} computable, ${s.predict.notComputable} not; coverage ${pct(s.predict.coverage)}; median abs error ${pct(s.predict.medianAbsErrorPct)}; bias ${pct(s.predict.medianSignedErrorPct)} | finding, not a gate |`,
     `| Offers (insurer offer ÷ award after negligence cut) | n = ${s.offers.n}; median ${s.offers.medianRatio === undefined ? "–" : s.offers.medianRatio.toFixed(2)} | K1 (n ≥ ${K1_MIN_OFFERS}, median ≥ 0.75): ${s.offers.k1Triggered ? "triggered" : "not triggered"} |`,
   ];
+  L.push(
+    "",
+    `Predict by claim type: ${(["death", "injury"] as const)
+      .map((k) => {
+        const p = s.predict.byKind[k];
+        return `${k} n = ${p.n}, coverage ${pct(p.coverage)}, median abs error ${pct(p.medianAbsErrorPct)}, bias ${pct(p.medianSignedErrorPct)}`;
+      })
+      .join("; ")}.`,
+  );
   if (Object.keys(s.conformity.byParam).length)
     L.push(
       "",

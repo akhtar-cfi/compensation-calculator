@@ -1,0 +1,36 @@
+id: delhi-mact-2025-2066897
+title: Chemist-shop owner, 25, Delhi, 10% disability (injury)
+citation: 'Gaurav Arora Vs. Ananya Khurana & Ors, MACT No.: 603/2019 (FIR no. 108/2019, PS Lajpat Nagar; CNR No.:
+  DLSE01 -005571-2019)'
+court: MACT
+source_url: https://indiankanoon.org/doc/2066897/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+state: DL
+facts:
+  accident_date: '2019-03-03'
+  claim_filed: '2019-07-24'
+  age: 25
+  employment: self_employed
+  occupation: ran a chemist (pharmacy) shop; trained pharmacy assistant, files ITRs
+  disability_pct: 10
+  family: injured man himself (standing beside a parked car when hit)
+journey:
+- forum: mact
+  date: '2025-08-04'
+  amount: 1597792
+  note: No deduction; insurer had filed a legal offer (amount not stated)
+interest_pct: 7.5
+what_mattered:
+- 'Income taken from ITRs: average of two years'' declared income after tax (AY 2018-19 and 2019-20) = Rs.3,86,391/year
+  (Rs.32,199/month); claimed Rs.40,000/month'
+- 25% limb disability (right arm and left leg) held to be only 10% functional disability because his pharmacy business
+  does not need constant personal presence
+- Closure of the shop not proved to be due to the accident (drug licence was in his late brother's name); 9 months'
+  loss of income allowed
+- 40% future prospects and multiplier 18 at age 25
+summary: A 25-year-old chemist-shop owner was injured in Delhi in 2019, and left with 10% functional disability.
+  The tribunal awarded Rs 15.98 lakh in 2025, 6.4 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

@@ -1,0 +1,33 @@
+id: delhi-mact-2025-2368055
+title: Fruit seller, 27, Delhi (death)
+citation: Deepanshu Sachdeva Vs. Arun Kataria & Ors., DAR No. 377/21
+court: MACT
+source_url: https://indiankanoon.org/doc/2368055/
+kind: death
+archetypes:
+- death_self_employed
+state: DL
+facts:
+  accident_date: '2018-01-06'
+  claim_filed: '2021-10-06'
+  age: 27
+  employment: self_employed
+  occupation: fruit seller (business income shown in income-tax returns)
+  family: husband only (he later remarried and divorced)
+journey:
+- forum: mact
+  date: '2025-05-19'
+  amount: 4867167
+  note: Loss of dependency Rs.47,82,467 + conventional heads Rs.84,700; legal offer not filed by insurer
+interest_pct: 7.5
+what_mattered:
+- Deceased's ITR for AY 2017-18 (Rs.3,01,411, no tax) accepted as income proof - Rs.25,118/month - even though no
+  business documents were exhibited
+- 'Husband as sole claimant: 1/3 personal-expense deduction, 40% future prospects (self-employed, under 40), multiplier
+  17 for age 27'
+- Husband's remarriage two years after the accident held no bar to compensation
+- 'Insurer''s drunk-driving recovery plea rejected: driver''s blood sample was never taken and no witness examined'
+summary: A 27-year-old fruit seller died in an accident in Delhi in 2018. The tribunal awarded Rs 48.67 lakh in
+  2025, 7.4 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

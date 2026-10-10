@@ -1,0 +1,34 @@
+id: delhi-mact-2026-7604437
+title: Carpenter whose income was not proved, 53, Delhi (death)
+citation: Fahmeeda & Ors. v. Nazim & Ors., MACT No.:451/25, CNR No.DLSE01-004989-2025
+court: MACT
+source_url: https://indiankanoon.org/doc/7604437/
+kind: death
+archetypes:
+- death_informal_no_proof
+state: DL
+facts:
+  accident_date: '2025-04-29'
+  claim_filed: '2025-05-15'
+  age: 53
+  employment: informal
+  occupation: said to be a carpenter (no proof); unskilled minimum wage of U.P. used
+  family: wife and four adult children (three sons, one daughter)
+journey:
+- forum: mact
+  date: '2026-05-20'
+  amount: 1506296
+  note: decided on documents without framing issues as respondents filed no reply; 7.5% interest from filing of
+    petition
+interest_pct: 7.5
+what_mattered:
+- No proof of work as a carpenter or of education, so minimum wage of an unskilled labourer in U.P. (the Aadhaar
+  address) was used
+- Respondents filed no reply and the insurer raised no statutory defence, so the claim was decided on the chargesheet
+  and documents without evidence
+- Five dependents gave a 1/4 personal-expense deduction; age 53 gave multiplier 11 and 10% future prospects
+- Loss of consortium of Rs.53,240 awarded to each of the five claimants
+summary: A 53-year-old carpenter whose income was not proved died in an accident in Delhi in 2025. The tribunal
+  awarded Rs 15.06 lakh in 2026, 1.1 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

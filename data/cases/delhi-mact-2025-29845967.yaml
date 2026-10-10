@@ -1,0 +1,34 @@
+id: delhi-mact-2025-29845967
+title: Software engineer, 30, Delhi, 45% disability (injury)
+citation: Kunal Singh Vs. Hakim & Ors., MACT No. 186/2016 (CNR DLND010016412015)
+court: MACT
+source_url: https://indiankanoon.org/doc/29845967/
+kind: injury
+archetypes:
+- injury_partial_disability_salaried
+state: DL
+facts:
+  accident_date: '2015-04-03'
+  claim_filed: '2015-09-04'
+  age: 30
+  employment: permanent
+  occupation: software engineer with a private company (permanent job)
+  disability_pct: 45
+  family: the injured himself (married)
+journey:
+- forum: mact
+  date: '2025-10-16'
+  amount: 7060395
+  note: 9% interest from filing of claim petition; insurer to pay and recover from driver/owner as driver had no
+    valid licence for a commercial vehicle
+interest_pct: 9
+what_mattered:
+- Income proved by employer HR witness with salary slips and Form 16 (Rs 4,40,859 gross less Rs 810 tax)
+- 45% permanent physical impairment taken as 45% functional disability because a stiff knee, foot drop and non-healing
+  heel ulcer hinder a software engineer's long sitting
+- Permanent job established by appointment letter, so 50% future prospects; multiplier 17 for age 30
+- Medical bills of Rs 10,40,364 accepted in full; conveyance and attendant claims conceded by the insurer
+summary: A 30-year-old software engineer was injured in Delhi in 2015, and left with 45% functional disability.
+  The tribunal awarded Rs 70.60 lakh in 2025, 10.5 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

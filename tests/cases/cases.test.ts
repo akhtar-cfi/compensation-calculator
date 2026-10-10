@@ -127,7 +127,12 @@ describe("matchCases", () => {
   });
 
   it("drops weak matches instead of padding the list", () => {
-    const m = matchCases(input({ victim: { ageYears: 75, employment: "pensioner" } }), cases);
+    const salariedDeaths = cases.filter((c) => c.kind === "death" && c.facts.employment === "permanent");
+    expect(salariedDeaths.length).toBeGreaterThan(0);
+    const m = matchCases(
+      input({ state: "ZZ", victim: { ageYears: 95, employment: "homemaker" } }),
+      salariedDeaths,
+    );
     expect(m).toEqual([]);
     expect(renderCases(m)).toContain("No similar case");
   });
