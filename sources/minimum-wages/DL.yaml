@@ -1,0 +1,181 @@
+# Delhi (NCT) minimum wages: dated revisions from official Labour Department orders.
+# Rates are monthly (per-day rate = monthly / 26). Every row checked: previous rate + DA = new rate.
+# Do NOT add a rate from an aggregator or news site without the official order: a FORGED order for 1 Oct 2025
+# (Rs 19,846 unskilled) circulated widely and was reported by compliance publishers (see gaps).
+code: DL
+name: Delhi (NCT)
+official_sources:
+  - url: https://labour.delhi.gov.in/labour/current-minimum-wage-rate
+    description: Labour Department, GNCTD - list of minimum-wage and DA orders (archived copy of 27 Jul 2026 used)
+    language: en
+revision_pattern: >-
+  Base rates last fixed by notification of 22.10.2019; dearness allowance (DA) added every 1 April and 1 October
+  from six-monthly All-India CPI averages, by order of the Labour Commissioner (orders often issued weeks later).
+zones: [All]
+category_notes: >-
+  Orders give unskilled, semi-skilled and skilled rates, plus clerical/supervisory rates (non-matriculate = semi-skilled
+  rate, matriculate = skilled rate, graduate and above higher). There is no 'highly skilled' category: highly_skilled is
+  null and the engine falls back to skilled, with a warning.
+days_per_month: 26
+# The official order list (Wayback capture of 27 Jul 2026) shows no order after 1 Apr 2025.
+last_checked: 2026-07-27
+revisions:
+  - effective_from: 2019-04-01
+    unit: month
+    rates: {All: {unskilled: 14468, semi_skilled: 15920, skilled: 17508, highly_skilled: null}}
+    notification:
+      number: "Order No.12(142)/02/MW/VII/3636"
+      date: "2019-10-23"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/5da.pdf
+    evidence_quote: "Unskilled | 13,350/- | 14,000/- | 468/- | 14,468/- | 338/- | 14,806/- | 569/-"
+    confidence: official
+    verified_by: []
+    notes: "Base = 2017 rates as allowed by the Supreme Court (order of 31.10.2018) plus DA from 01.04.2019; valid to 30.09.2019. Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2019-10-01
+    unit: month
+    rates: {All: {unskilled: 14806, semi_skilled: 16284, skilled: 17924, highly_skilled: null}}
+    notification:
+      number: "Order No.12(142)/02/MW/VII/3636"
+      date: "2019-10-23"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/5da.pdf
+    evidence_quote: "Minimum Wages after adding DA w.e.f. 01.10.2019 to 22.10.2019 / date of notification ... Unskilled 14,806/-"
+    confidence: official
+    verified_by: []
+    notes: "Valid from 01.10.2019 up to the date of the new notification (22.10.2019). Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2019-10-22
+    unit: month
+    rates: {All: {unskilled: 14842, semi_skilled: 16341, skilled: 17991, highly_skilled: null}}
+    notification:
+      number: "Notification No.12(142)/02/MW/VII/3636"
+      date: "2019-10-22"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/4da.pdf
+    evidence_quote: "Rates vide notification dated 22.10.19 (Rupees) ... Un-skilled | 14,842/-"
+    confidence: official
+    verified_by: []
+    notes: "Fresh revision under s.5(1)(b), allowed by the Supreme Court on 14.10.2019, applicable from the date of notification. Rates quoted in the order of 07/12/2020; the 22.10.2019 notification itself was not retrieved. The order of 23.10.2019 says the earlier rate ran 'to 22.10.2019', so the switch date may be 22 or 23 Oct 2019. Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2020-04-01
+    unit: month
+    rates: {All: {unskilled: 15310, semi_skilled: 16861, skilled: 18563, highly_skilled: null}}
+    notification:
+      number: "F.No.12(142)/02/MW/VII/Partfile/3786-3809"
+      date: "2020-12-07"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/4da.pdf
+    evidence_quote: "Un-skilled | 14,842/- | 468/- | 15,310/- | 589/- | 182/- | 15,492/- | 596/-"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2020-10-01
+    unit: month
+    rates: {All: {unskilled: 15492, semi_skilled: 17069, skilled: 18797, highly_skilled: null}}
+    notification:
+      number: "F.No.12(142)/02/MW/VII/Partfile/3786-3809"
+      date: "2020-12-07"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/4da.pdf
+    evidence_quote: "Un-skilled | 14,842/- | 468/- | 15,310/- | 589/- | 182/- | 15,492/- | 596/-"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2021-04-01
+    unit: month
+    rates: {All: {unskilled: 15908, semi_skilled: 17537, skilled: 19291, highly_skilled: null}}
+    notification:
+      number: "F.No.12(142)/02/MW/VII/Partfile/2044-2055"
+      date: "2021-06-18"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/3da.pdf
+    evidence_quote: "Un-Skilled | 15,492/- | 416/- | 15,908/- | 612/-"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2021-10-01
+    unit: month
+    rates: {All: {unskilled: 16064, semi_skilled: 17693, skilled: 19473, highly_skilled: null}}
+    notification:
+      number: "Order No.12(142)/02/MW/VII/Part file/4456"
+      date: "2021-11-11"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/2damworder.pdf
+    evidence_quote: "Rates as on 01/10/2021 (Rupees) ... Un-skilled | 16,064/-"
+    confidence: official
+    verified_by: []
+    notes: "The order of 11/11/2021 is listed on the official page but was not archived; rates are as quoted in the official order of 23/05/2022 ('Rates as on 01/10/2021')."
+  - effective_from: 2022-04-01
+    unit: month
+    rates: {All: {unskilled: 16506, semi_skilled: 18187, skilled: 20019, highly_skilled: null}}
+    notification:
+      number: "F.No.12(142)/02/MW/VII/Partfile/2618-2641"
+      date: "2022-05-23"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/1da.pdf
+    evidence_quote: "Un-skilled | 16,064/- | 442/- | 16,506/- | 635/-"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2022-10-01
+    unit: month
+    rates: {All: {unskilled: 16792, semi_skilled: 18499, skilled: 20357, highly_skilled: null}}
+    notification:
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/minimum_wages_current.pdf
+    evidence_quote: "Rates as on 01/10/2022 (Rupees) ... Un-skilled | 16,792/-"
+    confidence: official
+    verified_by: []
+    notes: "No order for 01.10.2022 is listed on the official page; rates are as quoted in the official order of 20/04/2023 ('Rates as on 01/10/2022'). Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2023-04-01
+    unit: month
+    rates: {All: {unskilled: 17234, semi_skilled: 18993, skilled: 20903, highly_skilled: null}}
+    notification:
+      number: "F.No.(142)/02/MW/VIII/Part file/429-443"
+      date: "2023-04-20"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/minimum_wages_current.pdf
+    evidence_quote: "Un-skilled | 16,792/- | 442/- | 17,234/- | 663/-"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2023-10-01
+    unit: month
+    rates: {All: {unskilled: 17494, semi_skilled: 19279, skilled: 21215, highly_skilled: null}}
+    notification:
+      number: "F.No.(142)/02/MW/VII/Part file/5906-5994"
+      date: "2023-10-23"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/minimum_wages.pdf
+    evidence_quote: "Un-skilled | 17,234/- | 260/- | 17,494/- | 673/-"
+    confidence: official
+    verified_by: []
+    notes: "The official page lists this order as 5206-5224; the order text reads 5906-5994. Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2024-04-01
+    unit: month
+    rates: {All: {unskilled: 17988, semi_skilled: 19825, skilled: 21813, highly_skilled: null}}
+    notification:
+      number: "F.No.(142)/02/MW/VII/Part file/3502-3519"
+      date: "2024-09-26"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da_april_24.pdf
+    evidence_quote: "Un-skilled | 17,494/- | 494/- | 17,988/- | 692/-"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2024-10-01
+    unit: month
+    rates: {All: {unskilled: 18066, semi_skilled: 19929, skilled: 21917, highly_skilled: null}}
+    notification:
+      number: "F.No.(142)/02/MW/VII/Part file/3478-3495"
+      date: "2024-09-26"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da_oct_2024.pdf
+    evidence_quote: "Un-skilled | 17,988/- | 78/- | 18,066/- | 695/-"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official file (2026); file hash not recorded (archive not downloadable from the build environment)."
+  - effective_from: 2025-04-01
+    unit: month
+    rates: {All: {unskilled: 18456, semi_skilled: 20371, skilled: 22411, highly_skilled: null}}
+    notification:
+      number: "F.No.(142)/02/MW/VII/Part file/211-241"
+      date: "2025-04-15"
+      url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da15april2025.pdf
+    evidence_quote: "Un-skilled 18066 390 18456 710"
+    sha256: ecb24b6d068ee93143b779f758e67c68caec0e46285bcc42fe006f878320cbf6
+    confidence: secondary
+    verified_by: []
+    notes: "Listed on the official page (archived 27 Jul 2026) as the latest order. Text and hash are from a copy hosted by a compliance site (comply4hr.com/noti/2016/DEMWA2025Apr15.pdf); the official file itself was not retrieved."
+gaps:
+  - "Before 1 Apr 2019: not loaded. The 2017 notification was quashed by the Delhi High Court (4 Aug 2018) and partly restored by the Supreme Court (31 Oct 2018); the applicable rate for accidents before April 2019 needs a separate check."
+  - "1 Oct 2025 and 1 Apr 2026: no DA order found. The official list (archived 27 Jul 2026) still shows the 1 Apr 2025 order as the latest. Accidents after 1 Apr 2025 use the 1 Apr 2025 rates until an official order is found."
+  - "FORGED ORDER - do not use: F.No.(143)/02/MW/VII/Partfile/212-261 dated 13.10.2025 (Rs 19,846 / 21,813 / 23,905). Declared fraudulent by Labour Department circular Lab-L011/5/2025-Addl.LC-II/3616 dated 14/10/2025, which says no DA order had been issued for the period from 1 Oct 2025 and that the last official increase was effective 1 Apr 2025 (circular seen as an image reproduced on hrsoftwaredelhi.com; official copy not retrieved)."
+  - "1 Oct 2026 revision due; check the official page."
+  - "The Code on Wages, 2019 is reported (secondary sources) to be in force from 21 Nov 2025; its effect on Delhi rates and on the national floor wage is not checked or modelled."

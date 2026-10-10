@@ -182,6 +182,8 @@ export const MinimumWageStateSchema = z.object({
   zones: z.array(z.string()).min(1),
   category_notes: z.string().optional(),
   days_per_month: z.number().default(26),
+  /** Date the official source was last checked and found to have no newer revision than those listed. */
+  last_checked: isoDate.optional(),
   revisions: z.array(MinimumWageRevisionSchema),
   gaps: z.array(z.string()).default([]),
 });

@@ -77,11 +77,17 @@ export function validateRules(
       }
     }
     if (opts.asOf && st.revisions.length > 0) {
+      // Stale = neither a newer revision nor a recorded check of the official source within the window.
       const latest = [...dates].sort().at(-1)!;
-      const months = monthsBetween(latest, opts.asOf);
+      const fresh = st.last_checked && st.last_checked > latest ? st.last_checked : latest;
+      const months = monthsBetween(fresh, opts.asOf);
       if (months > (opts.staleMonths ?? 7))
-        problems.push(`${where}: latest revision ${latest} is ${months} months old (stale)`);
+        problems.push(
+          `${where}: latest revision ${latest}${st.last_checked ? `, last checked ${st.last_checked}` : ""} - ${months} months without a check (stale)`,
+        );
     }
+    if (st.last_checked && opts.asOf && st.last_checked > opts.asOf)
+      problems.push(`${where}: last_checked ${st.last_checked} is after the as-of date`);
   }
   return problems;
 }

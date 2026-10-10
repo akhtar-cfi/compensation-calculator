@@ -1,5 +1,5 @@
 import type { RulesBundle, SkillCategory } from "../rules/schema.js";
-import { financialYear, type ISODate } from "./dates.js";
+import { financialYear, wholeMonthsBetween, type ISODate } from "./dates.js";
 import { homemakerDomesticCare, type FpClass } from "./formula.js";
 import { minimumWage } from "./minimumWage.js";
 import { formatINR } from "./money.js";
@@ -7,6 +7,9 @@ import { rangeValue, type ParamChooser } from "./params.js";
 import { annualIncomeTax } from "./tax.js";
 import type { EstimateInput } from "./types.js";
 import type { WarningSink } from "./warnings.js";
+
+/** States revise minimum wages about every six months; beyond this, a newer rate may exist. */
+const MW_FRESH_MONTHS = 7;
 
 export interface IncomeResult {
   monthly: number;
@@ -64,6 +67,17 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
     );
   }
   const r = hit.revision;
+  const checked = st?.last_checked;
+  if (
+    wholeMonthsBetween(r.effective_from, input.accidentDate) > MW_FRESH_MONTHS &&
+    !(checked && checked >= input.accidentDate)
+  ) {
+    ctx.warn.add(
+      "MW_MAY_BE_OUTDATED",
+      "caution",
+      `The latest ${hit.state} minimum wage on file took effect on ${r.effective_from}, more than ${MW_FRESH_MONTHS} months before the accident, and the official source has not been checked since the accident date. A later revision may apply.`,
+    );
+  }
   return {
     monthly: hit.monthly,
     note: `Minimum wage ${hit.state}/${hit.zone}/${hit.category} in force on ${input.accidentDate}: ${formatINR(hit.monthly)}/month (effective ${r.effective_from}, ${r.confidence} source).`,

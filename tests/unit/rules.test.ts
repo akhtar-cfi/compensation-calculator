@@ -24,7 +24,16 @@ describe("rules files", () => {
   });
   it("flag stale wage schedules", () => {
     expect(validateRules(testRules(), { asOf: "2026-10-10" }).join("\n")).toMatch(
-      /minimum-wages\/TS: latest revision 2025-04-01 is 18 months old/,
+      /minimum-wages\/TS: latest revision 2025-04-01 - 18 months without a check \(stale\)/,
     );
+  });
+  it("a recorded check of the official source resets staleness, until it is old too", () => {
+    const r = testRules();
+    const checked = { ...r, minimumWages: { TS: { ...TEST_STATE, last_checked: "2026-07-27" } } };
+    expect(validateRules(checked, { asOf: "2026-10-10" })).toEqual([]);
+    expect(validateRules(checked, { asOf: "2027-03-01" }).join("\n")).toMatch(
+      /latest revision 2025-04-01, last checked 2026-07-27 - 8 months without a check/,
+    );
+    expect(validateRules(checked, { asOf: "2026-07-01" }).join("\n")).toMatch(/after the as-of date/);
   });
 });
