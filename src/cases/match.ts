@@ -65,7 +65,8 @@ export function summariseJourney(c: Case): JourneySummary {
     final: last.amount,
     finalForum: last.forum,
     ...(base !== undefined && base > 0 && last.amount !== base && { multiple: last.amount / base }),
-    ...(last.date !== undefined && { years: yearsBetween(c.facts.accident_date, last.date) }),
+    ...(last.date !== undefined &&
+      c.facts.accident_date !== undefined && { years: yearsBetween(c.facts.accident_date, last.date) }),
   };
 }
 
@@ -93,17 +94,20 @@ export function matchCases(
     let score = 0;
     const similar: string[] = [];
     const different: string[] = [];
-    const cg = employmentGroup(c.facts.employment);
+    const cg = c.facts.employment && employmentGroup(c.facts.employment);
     if (cg === group) {
       score += 3;
       similar.push(`also ${groupLabel[cg] ?? cg}`);
     } else different.push(`work: ${c.facts.occupation}`);
-    const gap = Math.abs(c.facts.age - age);
-    if (gap <= 5) {
-      score += 2;
-      similar.push(`similar age (${c.facts.age})`);
-    } else if (gap <= 12) score += 1;
-    else different.push(`age ${c.facts.age}`);
+    if (c.facts.age === undefined) different.push("age not stated in the judgment");
+    else {
+      const gap = Math.abs(c.facts.age - age);
+      if (gap <= 5) {
+        score += 2;
+        similar.push(`similar age (${c.facts.age})`);
+      } else if (gap <= 12) score += 1;
+      else different.push(`age ${c.facts.age}`);
+    }
     if (input.kind === "injury" && disability !== undefined && c.facts.disability_pct !== undefined) {
       if (Math.abs(c.facts.disability_pct - disability) <= 20) {
         score += 2;
@@ -118,7 +122,10 @@ export function matchCases(
       score += 1;
       similar.push("victim's own negligence was in issue");
     }
-    if (c.facts.accident_date < PRANAY_SETHI && c.journey.some((s) => s.forum === "mact"))
+    const firstTribunal = c.journey.find((s) => s.forum === "mact")?.date;
+    // The tribunal's own decision date shows which law it applied; the accident date is only a fallback.
+    const decidedBy = firstTribunal ?? c.facts.accident_date;
+    if (decidedBy !== undefined && decidedBy < PRANAY_SETHI && c.journey.some((s) => s.forum === "mact"))
       different.push("the tribunal decided it under older law");
     if (c.court === "MACT") different.push("a single tribunal award; it may still be appealed");
     if (score >= minScore) out.push({ case: c, score, similar, different });

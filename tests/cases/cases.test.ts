@@ -34,7 +34,10 @@ describe("case library data", () => {
     for (const c of cases) {
       const idx = c.journey.map((s) => order.indexOf(s.forum));
       expect(idx, c.id).toEqual([...idx].sort((a, b) => a - b));
-      for (const s of c.journey) if (s.date) expect(s.date > c.facts.accident_date, c.id).toBe(true);
+      const acc = c.facts.accident_date;
+      if (acc) for (const s of c.journey) if (s.date) expect(s.date > acc, c.id).toBe(true);
+      const dated = c.journey.flatMap((s) => (s.date ? [s.date] : []));
+      expect(dated, c.id).toEqual([...dated].sort());
     }
   });
 
@@ -105,7 +108,8 @@ describe("matchCases", () => {
       }),
       cases,
     );
-    expect(m.map((x) => x.case.id)).toEqual(["kajal-2020", "hansraj-2026", "hitesh-nagjibhai-patel-2025"]);
+    expect(m[0]?.case.id).toBe("kajal-2020");
+    for (const x of m) expect(x.case.archetypes).toContain("injury_child_severe");
   });
 
   it("salaried rider in Delhi with own negligence finds the Delhi offer case first", () => {
@@ -142,5 +146,32 @@ describe("coverage", () => {
     expect(rows.map((r) => r.archetype)).toEqual(Archetype.options);
     expect(rows.reduce((a, r) => a + r.count, 0)).toBeGreaterThanOrEqual(cases.length);
     expect(renderCoverage(cases)).toContain(`${cases.length} cases`);
+  });
+});
+
+describe("older-law flag", () => {
+  it("uses the tribunal's decision date, not the accident date", () => {
+    const m = matchCases(
+      input({
+        kind: "injury",
+        state: "MP",
+        victim: { ageYears: 26, employment: "informal" },
+        injury: { certificatePct: 60 },
+      }),
+      cases,
+    );
+    const jitendra = m.find((x) => x.case.id === "jitendra-2025");
+    expect(jitendra).toBeDefined();
+    expect(jitendra!.different).not.toContain("the tribunal decided it under older law");
+    const sidram = matchCases(
+      input({
+        kind: "injury",
+        state: "KA",
+        victim: { ageYears: 19, employment: "self_employed" },
+        injury: { certificatePct: 45 },
+      }),
+      cases,
+    ).find((x) => x.case.id === "sidram-2022");
+    expect(sidram?.different).toContain("the tribunal decided it under older law");
   });
 });

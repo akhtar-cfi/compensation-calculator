@@ -1,0 +1,38 @@
+id: mohd-sabuddin-dhc-2024
+title: Meat shop owner without income proof, 39, Delhi, head injury (injury)
+citation: Mohd Sabuddin v. Mohd Zakir, Delhi High Court, MAC.APP. 763/2016 (judgment pronounced 8 October 2024)
+court: HC
+source_url: https://indiankanoon.org/doc/54531782/
+kind: injury
+archetypes:
+- injury_head
+- injury_partial_disability_self_employed_or_manual
+- uninsured_vehicle
+- contributory_negligence
+state: DL
+facts:
+  accident_date: '2004-06-01'
+  age: 39
+  employment: self_employed
+  occupation: said he ran a meat shop; no documents, so the Tribunal used the minimum wage for unskilled work
+  family: the injured man himself
+journey:
+- forum: mact
+  date: '2016-02-20'
+  amount: 372922
+  note: the tribunal's table totals Rs 3,72,922; the High Court's text calls it Rs 2,72,922
+- forum: high_court
+  date: '2024-10-08'
+  amount: 1859466
+  note: amount from the High Court's companion judgment of the same date (MAC APPL. 425/2016)
+what_mattered:
+- Riding without a licence or insurance is not contributory negligence unless it caused the accident or worsened
+  the injuries.
+- The registered owner of an uninsured vehicle stays liable until a transfer is recorded with the registering authority.
+- Without documents, income was taken at the minimum wage.
+summary: A 39-year-old who said he ran a meat shop suffered a serious head injury in Delhi in 2004, hit by an uninsured
+  scooter. The tribunal awarded Rs 3.73 lakh, payable by the driver. In 2024, 20 years after the accident, the Delhi
+  High Court raised the award to Rs 18.59 lakh and made the registered owner liable too.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

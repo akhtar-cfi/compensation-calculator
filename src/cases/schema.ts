@@ -49,14 +49,19 @@ export const CaseSchema = z.object({
   /** Golden-test fixture with the same judgment, when one exists (tests/golden/cases/<id>.yaml). */
   golden_id: z.string().optional(),
   kind: z.enum(["death", "injury"]),
-  archetypes: z.array(Archetype).min(1),
-  /** Two-letter state code, as used by the estimate input. */
-  state: z.string().regex(/^[A-Z]{2}$/),
+  /** May be empty when the judgment does not say enough to classify the case. */
+  archetypes: z.array(Archetype),
+  /** Two-letter state code, as used by the estimate input. Omitted when the judgment does not say. */
+  state: z
+    .string()
+    .regex(/^[A-Z]{2}$/)
+    .optional(),
+  /** Facts the judgment does not state are left out, never estimated. */
   facts: z.object({
-    accident_date: isoDate,
+    accident_date: isoDate.optional(),
     claim_filed: isoDate.optional(),
-    age: z.number().int().min(0).max(110),
-    employment: Employment,
+    age: z.number().int().min(0).max(110).optional(),
+    employment: Employment.optional(),
     occupation: z.string(),
     disability_pct: z.number().min(0).max(100).optional(),
     family: z.string().optional(),
