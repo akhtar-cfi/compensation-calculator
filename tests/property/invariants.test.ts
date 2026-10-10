@@ -1,6 +1,7 @@
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { estimate, sumPayable } from "../../src/engine/index.js";
+import { annualIncomeTax } from "../../src/engine/tax.js";
 import { testRules } from "../helpers.js";
 
 const rules = testRules();
@@ -77,7 +78,7 @@ describe("engine invariants", () => {
     );
   });
 
-  it("a higher proved salary never lowers the estimate", () => {
+  it("a higher income after tax never lowers the estimate", () => {
     fc.assert(
       fc.property(fc.integer({ min: 0, max: 300000 }), fc.integer({ min: 1, max: 100000 }), (a, d) => {
         const mk = (sal: number) => ({
@@ -88,7 +89,7 @@ describe("engine invariants", () => {
           victim: {
             ageYears: 33,
             employment: "permanent" as const,
-            income: { proof: "salary_slip" as const, monthlySalary: sal },
+            income: { proof: "salary_slip" as const, monthlySalary: sal, monthlyTax: 0 },
           },
           family: { married: true, spouse: true, children: 2 },
         });
@@ -97,6 +98,34 @@ describe("engine invariants", () => {
         expect(hi).toBeGreaterThanOrEqual(lo);
       }),
       { numRuns: 200 },
+    );
+  });
+
+  it("income tax takes at most the cess on a rise, plus the old-regime rebate cliff", () => {
+    // Take-home income can dip only where the law makes it dip: cess on marginal-relief tax (new regime),
+    // or losing the s.87A rebate just above its threshold (old regime, no marginal relief).
+    const years = rules.tax.years;
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 0, max: years.length - 1 }),
+        fc.boolean(),
+        fc.integer({ min: 0, max: 5_000_000 }),
+        fc.integer({ min: -150_000, max: 150_000 }),
+        fc.integer({ min: 1, max: 200_000 }),
+        fc.boolean(),
+        (i, nearThreshold, anywhere, offset, d, salaried) => {
+          const y = years[i]!;
+          // Half the cases straddle the rebate threshold, where a dip would show.
+          const t = nearThreshold
+            ? Math.max(0, y.rebate_upto + (salaried ? y.standard_deduction : 0) + offset)
+            : anywhere;
+          const net = (x: number) => x - annualIncomeTax(rules, x, y.fy, salaried).annualTax;
+          const cess = rules.tax.cess_pct / 100;
+          const cliff = y.marginal_relief ? 0 : y.rebate_max * (1 + cess);
+          expect(net(t + d)).toBeGreaterThanOrEqual(net(t) - cess * d - cliff - 1);
+        },
+      ),
+      { numRuns: 500 },
     );
   });
 

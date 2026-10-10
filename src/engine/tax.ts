@@ -24,6 +24,7 @@ export function annualIncomeTax(
     if (taxable <= top) break;
   }
   if (taxable <= year.rebate_upto) tax = Math.max(0, tax - year.rebate_max);
+  else if (year.marginal_relief) tax = Math.min(tax, taxable - year.rebate_upto);
   tax = tax * (1 + rules.tax.cess_pct / 100);
   return { annualTax: Math.round(tax), found: year.fy === fy };
 }

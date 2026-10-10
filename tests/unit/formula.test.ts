@@ -88,6 +88,17 @@ describe("income tax (approximate)", () => {
     expect(annualIncomeTax(rules, 300000, "2025-26", true).annualTax).toBe(0);
     expect(annualIncomeTax(rules, 1275000, "2025-26", true).annualTax).toBe(0);
   });
+  it("applies s.87A marginal relief just above the new-regime threshold", () => {
+    // FY 2025-26: 12,85,000 - 75,000 = 12,10,000 taxable; slab tax 61,500 is capped at 10,000 above 12 lakh; + 4% cess
+    expect(annualIncomeTax(rules, 1285000, "2025-26", true).annualTax).toBe(10400);
+    // 14,00,000 - 75,000 = 13,25,000: slab tax 78,750 is below the 1,25,000 excess, so no relief; + 4% cess
+    expect(annualIncomeTax(rules, 1400000, "2025-26", true).annualTax).toBe(81900);
+  });
+  it("has no marginal relief under the old regime (real cliff at the rebate threshold)", () => {
+    // FY 2022-23: 5,50,000 - 50,000 = 5,00,000 taxable -> full rebate; 1 rupee more loses it
+    expect(annualIncomeTax(rules, 550000, "2022-23", true).annualTax).toBe(0);
+    expect(annualIncomeTax(rules, 550001, "2022-23", true).annualTax).toBe(13000);
+  });
   it("computes old-regime tax with cess", () => {
     // FY 2021-22: 10,00,000 - 50,000 std = 9,50,000 taxable -> 12,500 + 90,000 = 1,02,500 + 4% = 1,06,600
     expect(annualIncomeTax(rules, 1000000, "2021-22", true).annualTax).toBe(106600);
