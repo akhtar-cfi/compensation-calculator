@@ -187,9 +187,11 @@ export function predict(rules: RulesBundle, r: AwardRow): PredictResult {
         ...(r.occupation_code !== undefined && { occupationCode: r.occupation_code }),
         income,
       },
+      ...(r.medical_bills !== undefined && { medical: { bills: r.medical_bills } }),
       ...(r.kind === "injury" && {
         injury: {
           ...(r.certificate_pct !== undefined && { certificatePct: r.certificate_pct }),
+          ...(r.certificate_basis !== undefined && { certificateBasis: r.certificate_basis }),
           ...(r.months_off_work !== undefined && { monthsOffWork: r.months_off_work }),
           ...(r.hospital_days !== undefined && { hospitalDays: r.hospital_days }),
         },

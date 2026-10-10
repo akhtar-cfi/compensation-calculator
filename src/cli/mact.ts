@@ -2,6 +2,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
+import { calibrate, loadInjuryHeads, renderCalibration } from "../backtest/calibrate.js";
 import { loadAwardsCsv } from "../backtest/load.js";
 import { renderBacktest } from "../backtest/report.js";
 import { runRow, summarise } from "../backtest/run.js";
@@ -22,6 +23,7 @@ const USAGE = `Usage:
   mact cases match <input.json|yaml> [--limit 3] [--format md|json]
   mact cases coverage
   mact backtest <awards.csv> [--format md|json]
+  mact backtest calibrate <injury_heads.csv> [--format md|json]
   mact ik search "<terms>" [--doctypes delhidc] [--from YYYY-MM-DD] [--to YYYY-MM-DD] [--page 0] [--budget 5]
   mact ik fetch <tid...> [--ids-from file] [--budget 5]
       (needs IK_API_TOKEN; responses are cached in .cache/indiankanoon and spend is logged there;
@@ -138,6 +140,11 @@ async function main(argv: string[]): Promise<number> {
   if (cmd === "ik" && sub === "search" && rest[0]) return ikSearch(args, rest[0]);
   if (cmd === "ik" && sub === "fetch") return ikFetch(args);
   if (cmd === "watch") return watch(args);
+  if (cmd === "backtest" && sub === "calibrate" && rest[0]) {
+    const c = calibrate(loadRules().injuryBands, loadInjuryHeads(rest[0]));
+    console.log(flag(args, "format") === "json" ? JSON.stringify(c, null, 2) : renderCalibration(c));
+    return 0;
+  }
   if (cmd === "backtest" && sub) {
     const rules = loadRules();
     const { rows, errors } = loadAwardsCsv(sub);

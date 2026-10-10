@@ -65,6 +65,11 @@ export const AwardRowSchema = z.object({
     .optional()
     .transform((v) => v || undefined),
   certificate_pct: num,
+  certificate_basis: z
+    .enum(["whole_body", "limb", "unclear", ""])
+    .optional()
+    .transform((v) => (v === "whole_body" || v === "limb" ? v : undefined)),
+  medical_bills: num, // past medical expenses (the tribunal's figure stands in for the family's bills)
   months_off_work: num,
   hospital_days: num,
   notes: z.string().optional(),
