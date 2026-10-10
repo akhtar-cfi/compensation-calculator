@@ -1,5 +1,5 @@
 # EXPERIMENTAL injury bands, calibrated on Delhi tribunal awards (2024-26, Indian Kanoon) plus Supreme Court anchors.
-# Reproduce: npm run mact -- backtest calibrate data/backtest/injury_heads.csv (88 injury awards, 10 Oct 2026).
+# Reproduce: npm run mact -- backtest calibrate data/backtest/injury_heads.csv (89 injury awards, 10 Oct 2026).
 # Rule used: conservative = tribunal 25th percentile, standard = tribunal median, claimant_max = the higher of the
 # tribunal 75th percentile and the Supreme Court anchor; values never fall as disability rises; bands with fewer
 # than 5 awards keep their earlier values. Delhi only: other states are not calibrated. Not legally signed off.
@@ -18,29 +18,29 @@ sources:
   ]
 # Functional disability when only a limb / unspecified certificate exists (Raj Kumar: functional loss of earning
 # capacity may differ from the physical disability). Factor applied to the certificate percentage.
-# Delhi tribunals (n = 67 limb certificates): p25 0.5, median 0.54, p75 1.0. Earlier: 0.3333 / 0.5 / 1.0.
-limb_to_functional: { conservative: 0.5, standard: 0.54, claimant_max: 1.0 }
+# Delhi tribunals (n = 68 limb certificates): p25 0.5, median 0.53, p75 1.0. Earlier: 0.3333 / 0.5 / 1.0.
+limb_to_functional: { conservative: 0.5, standard: 0.53, claimant_max: 1.0 }
 # Pain, suffering, loss of amenities and disfigurement, by functional disability (lower bound inclusive).
-# Delhi tribunals (p25 / median / p75, n): 0-9% 53k/83k/195k (22); 10-29% 105k/150k/200k (35); 30-49% 150k/200k/250k (9);
+# Delhi tribunals (p25 / median / p75, n): 0-9% 53k/83k/195k (22); 10-29% 108k/150k/200k (36); 30-49% 150k/200k/250k (9);
 # 50-79% 300k/350k/400k (9); 80%+ 169k/375k/525k (10).
 # Supreme Court anchors kept for claimant_max: Baiju 65% -> Rs 3 lakh; Hitesh 90% -> Rs 5 lakh; Hansraj 100% (child)
 # -> Rs 10 lakh; Kajal Rs 15 lakh (outlier). The 80%+ conservative value is held at the 50-79% value (monotonic).
 # Earlier anchor-only bands were 2-3x below Delhi practice at 0-49%.
 pain_suffering_amenities:
   - { from_pct: 0, conservative: 53000, standard: 83000, claimant_max: 195000 }
-  - { from_pct: 10, conservative: 105000, standard: 150000, claimant_max: 200000 }
+  - { from_pct: 10, conservative: 108000, standard: 150000, claimant_max: 200000 }
   - { from_pct: 30, conservative: 150000, standard: 200000, claimant_max: 250000 }
   - { from_pct: 50, conservative: 300000, standard: 350000, claimant_max: 500000 }
   - { from_pct: 80, conservative: 300000, standard: 375000, claimant_max: 1500000 }
-# Conveyance and special diet. Awarded in 94% of Delhi injury awards (n = 88): p25 34k, median 50k, p75 77k.
-# The hospital stay is stated in only 5 of 88 awards, so dependence on days cannot be measured yet: one flat band.
+# Conveyance and special diet. Awarded in 94% of Delhi injury awards (n = 89): p25 30k, median 50k, p75 77k.
+# The hospital stay is stated in only 6 of 89 awards, so dependence on days cannot be measured yet: one flat band.
 conveyance_special_diet:
-  - { from_days: 0, conservative: 34000, standard: 50000, claimant_max: 77000 }
+  - { from_days: 0, conservative: 30000, standard: 50000, claimant_max: 77000 }
 # Attendant during treatment when the number of attendant days is not given (with days: days x unskilled wage).
-# Awarded in 82% of Delhi injury awards (n = 88): p25 14k, median 30k, p75 50k.
-attendant_during_treatment: { conservative: 14000, standard: 30000, claimant_max: 50000 }
+# Awarded in 82% of Delhi injury awards (n = 89): p25 15k, median 30k, p75 50k.
+attendant_during_treatment: { conservative: 15000, standard: 30000, claimant_max: 50000 }
 # Loss of marriage prospects: unmarried victim up to this age with functional disability at least this %.
-# Not recalibrated: awarded in only a handful of the 88 Delhi awards.
+# Not recalibrated: awarded in only a handful of the 89 Delhi awards.
 marriage_prospects:
   max_age: 35
   min_functional_pct: 50
