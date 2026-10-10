@@ -53,6 +53,12 @@ describe("replicate", () => {
   it("skips rows without the tribunal's findings", () => {
     expect(byId("fx-injury-nomw").replicate.status).toBe("skipped");
   });
+  it("skips, rather than fails, when the future-prospects % is unknown", () => {
+    const row = fixture.rows.find((r) => r.id === "fx-death-ok")!;
+    const r = runRow(rules, { ...row, fp_pct_applied: undefined }).replicate;
+    expect(r.status).toBe("skipped");
+    expect(r.reason).toMatch(/future-prospects/);
+  });
 });
 
 describe("conformity", () => {

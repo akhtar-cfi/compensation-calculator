@@ -82,9 +82,12 @@ export function replicate(r: AwardRow): ReplicateResult {
     return { status: "skipped", reason: "needs accepted income, multiplier and the awarded formula head" };
   if (r.kind === "injury" && r.disability_pct_applied === undefined)
     return { status: "skipped", reason: "needs the disability % applied" };
+  // An unknown future-prospects % is not 0%: guessing it would turn missing data into a false failure.
+  if (r.fp_pct_applied === undefined && awarded > 0)
+    return { status: "skipped", reason: "needs the future-prospects % applied" };
   const common = {
     monthlyIncome: r.income_monthly_accepted,
-    futureProspectsPct: r.fp_pct_applied ?? 0,
+    futureProspectsPct: r.fp_pct_applied ?? 0, // 0 only when the formula head is 0
     multiplier: r.multiplier_applied,
     medical: 0,
     incomeSources: [],
