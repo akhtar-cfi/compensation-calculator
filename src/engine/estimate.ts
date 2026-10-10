@@ -214,7 +214,7 @@ function runScenario(
     functionalPct = Math.min(100, functionalPct);
     const np = ch.choose(
       "non_pecuniary_band",
-      "Pain, suffering, amenities, conveyance and diet (discretionary bands)",
+      "Pain, suffering, amenities, conveyance, diet and attendant (discretionary bands)",
     );
     const band = [...b.pain_suffering_amenities].reverse().find((x) => functionalPct >= x.from_pct);
     const conv = [...b.conveyance_special_diet].reverse().find((x) => (inj.hospitalDays ?? 0) >= x.from_days);
@@ -246,7 +246,9 @@ function runScenario(
       monthsOffWork: inj.monthsOffWork ?? 0,
       medical: medicalBills,
       futureMedical: inj.futureMedical ?? 0,
-      attendantDuringTreatment: (inj.attendantDaysDuringTreatment ?? 0) * dailyUnskilled,
+      ...(inj.attendantDaysDuringTreatment === undefined && b.attendant_during_treatment
+        ? { attendantDuringTreatment: pickTriple(b.attendant_during_treatment, np), attendantFromBand: true }
+        : { attendantDuringTreatment: (inj.attendantDaysDuringTreatment ?? 0) * dailyUnskilled }),
       futureAttendantMonthly,
       attendants: inj.attendants ?? 1,
       conveyanceDiet: conv ? pickTriple(conv, np) : 0,

@@ -197,6 +197,8 @@ export const InjuryBandsSchema = z.object({
   limb_to_functional: triple,
   pain_suffering_amenities: z.array(triple.extend({ from_pct: z.number() })),
   conveyance_special_diet: z.array(triple.extend({ from_days: z.number() })),
+  /** Used only when the number of attendant days during treatment is not given. */
+  attendant_during_treatment: triple.optional(),
   marriage_prospects: triple.extend({ max_age: z.number(), min_functional_pct: z.number() }),
 });
 

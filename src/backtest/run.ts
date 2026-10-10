@@ -88,6 +88,9 @@ export function replicate(r: AwardRow): ReplicateResult {
   // An unknown future-prospects % or deduction is not 0: guessing would turn missing data into a false failure.
   if (r.fp_pct_applied === undefined && awarded > 0)
     return { status: "skipped", reason: "needs the future-prospects % applied" };
+  // Nil dependency means the tribunal found no dependants; there is no multiplier arithmetic to reproduce.
+  if (r.kind === "death" && awarded === 0)
+    return { status: "skipped", reason: "no loss of dependency awarded (no dependants)" };
   if (r.kind === "death" && r.deduction_applied === undefined && awarded > 0)
     return { status: "skipped", reason: "needs the personal-expenses deduction applied" };
   const common = {

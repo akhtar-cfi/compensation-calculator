@@ -56,6 +56,12 @@ describe("replicate", () => {
   it("skips rows without the tribunal's findings", () => {
     expect(byId("fx-injury-nomw").replicate.status).toBe("skipped");
   });
+  it("skips a death with nil dependency (no dependants found)", () => {
+    const row = fixture.rows.find((r) => r.id === "fx-death-ok")!;
+    const r = runRow(rules, { ...row, awarded_formula_head: 0 }).replicate;
+    expect(r.status).toBe("skipped");
+    expect(r.reason).toMatch(/no dependants/);
+  });
   it("skips, rather than fails, when the future-prospects % is unknown", () => {
     const row = fixture.rows.find((r) => r.id === "fx-death-ok")!;
     const r = runRow(rules, { ...row, fp_pct_applied: undefined }).replicate;

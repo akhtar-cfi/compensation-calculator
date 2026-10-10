@@ -10,6 +10,8 @@ export interface InjuryParams {
   medical: number;
   futureMedical: number;
   attendantDuringTreatment: number;
+  /** True when attendantDuringTreatment is the tribunal-practice default, not days x wage. */
+  attendantFromBand?: boolean;
   futureAttendantMonthly: number;
   attendants: number;
   conveyanceDiet: number;
@@ -81,7 +83,9 @@ export function computeInjury(p: InjuryParams): { intermediates: Intermediate[];
     id: "attendant_during_treatment",
     label: "Attendant during treatment",
     amount: rupees(p.attendantDuringTreatment),
-    formula: "days x daily minimum wage",
+    formula: p.attendantFromBand
+      ? "attendant days not given: Delhi tribunal practice (experimental band)"
+      : "days x daily minimum wage",
     sources: ["kajal_2020"],
   });
   push({
