@@ -1,5 +1,10 @@
 # Methodology (draft v0.1)
 
+**Everything is public.** Every rule, value, assumption and data source the calculator uses is published: this page
+explains the method, and the [rules reference](rules-reference.md) lists every value with its source, generated from the
+rule files (a test fails if the two disagree). The back-test data and the extraction checks are in `data/backtest/`.
+Nothing here is legally signed off yet.
+
 ## 1. What the number means
 
 The headline is **"your legal entitlement on your facts"**: the amount the Supreme Court's method gives for the facts

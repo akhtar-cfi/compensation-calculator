@@ -12,6 +12,7 @@ import { IndianKanoonClient, buildQuery, htmlToText, ledgerTotal } from "../inge
 import { matchCases } from "../cases/match.js";
 import { checkOffer, estimate, EstimateInputSchema } from "../engine/index.js";
 import { REPO_ROOT, loadRules } from "../rules/load.js";
+import { renderRulesReference } from "../rules/reference.js";
 import { validateRules } from "../rules/validate.js";
 import { loadWatchSources } from "../watch/registry.js";
 import { firecrawlSearch, loadSeen, renderWatch, runWatch, saveSeen } from "../watch/search.js";
@@ -30,7 +31,8 @@ const USAGE = `Usage:
        fetch writes each judgment's plain text to .cache/indiankanoon/text/<tid>.txt)
   mact watch [--update-seen] [--max-queries 20] [--format md|json]
       (needs FR_API; searches for new official minimum-wage orders listed in sources/watch.yaml)
-  mact rules validate [--as-of YYYY-MM-DD]`;
+  mact rules validate [--as-of YYYY-MM-DD]
+  mact rules doc [--write]   (public rules reference; --write updates docs/rules-reference.md)`;
 
 function flag(args: string[], name: string): string | undefined {
   const i = args.indexOf(`--${name}`);
@@ -135,6 +137,12 @@ async function main(argv: string[]): Promise<number> {
     console.log(
       `✓ rules ${rules.version}: ${rules.sources.length} sources, ${Object.keys(rules.minimumWages).length} minimum-wage schedules`,
     );
+    return 0;
+  }
+  if (cmd === "rules" && sub === "doc") {
+    const md = renderRulesReference(loadRules());
+    if (args.includes("--write")) writeFileSync(join(REPO_ROOT, "docs", "rules-reference.md"), md);
+    else console.log(md);
     return 0;
   }
   if (cmd === "ik" && sub === "search" && rest[0]) return ikSearch(args, rest[0]);
