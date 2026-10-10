@@ -1,6 +1,7 @@
 import { computeDeath, computeInjury, estimate, type EstimateOutput } from "../engine/index.js";
 import { parseFraction } from "../engine/money.js";
 import type { RulesBundle } from "../rules/schema.js";
+import { quantile } from "./calibrate.js";
 import type { AwardRow } from "./schema.js";
 
 /** Replicate passes when the formula head is within max(Rs 100, 1%) of the tribunal's figure. */
@@ -248,16 +249,25 @@ export interface PredictStats {
   coverage?: number;
   medianAbsErrorPct?: number;
   medianSignedErrorPct?: number;
+  /** Award ÷ standard estimate: the middle half of awards (feeds rules/practice/spread.yaml). */
+  awardToEstimate?: { p25: number; median: number; p75: number };
 }
 
 function predictStats(rows: readonly RowResult[]): PredictStats {
   const errs = rows.map((r) => r.predict.errorPct!);
+  const ratios = rows.map((r) => r.predict.awarded! / r.predict.standard!);
+  const r2 = (x: number) => Math.round(x * 100) / 100;
   return {
     n: rows.length,
     ...(rows.length && {
       coverage: rows.filter((r) => r.predict.inRange).length / rows.length,
       medianAbsErrorPct: median(errs.map(Math.abs))!,
       medianSignedErrorPct: median(errs)!,
+      awardToEstimate: {
+        p25: r2(quantile(ratios, 0.25)),
+        median: r2(quantile(ratios, 0.5)),
+        p75: r2(quantile(ratios, 0.75)),
+      },
     }),
   };
 }

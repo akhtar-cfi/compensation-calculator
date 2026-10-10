@@ -23,6 +23,7 @@ export function validateRules(
     ["statutory.s161", rules.statutory.hit_and_run_s161.sources],
     ["statutory.limitation", rules.statutory.limitation_s166_3.sources],
     ["injury_bands", rules.injuryBands.sources],
+    ["practice_spread", rules.practiceSpread?.sources ?? []],
     ...rules.rangeParameters.map((p): [string, readonly string[]] => [`range.${p.id}`, p.sources]),
   ];
   for (const [where, ids] of refs) {
@@ -62,6 +63,12 @@ export function validateRules(
       for (const k of ["conservative", "standard", "claimant_max"] as const)
         if (x[k] < prev[k]) problems.push(`injury_bands.${name}[${i}].${k}: falls below the band before it`);
     });
+  }
+
+  for (const kind of ["death", "injury"] as const) {
+    const q = rules.practiceSpread?.[kind];
+    if (q && !(q.p25 > 0 && q.p25 <= q.median && q.median <= q.p75 && q.n >= 30))
+      problems.push(`practice_spread.${kind}: needs 0 < p25 <= median <= p75 and n >= 30`);
   }
 
   const occ = new Set<string>();

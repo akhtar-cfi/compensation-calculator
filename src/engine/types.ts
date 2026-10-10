@@ -212,6 +212,14 @@ export interface EstimateOutput {
     readonly claimantMax: number;
     readonly showBar: boolean;
   };
+  /** Award ÷ estimate in real awards of this kind (middle half), when measured. Not part of the entitlement. */
+  readonly practiceSpread?: {
+    readonly p25: number;
+    readonly median: number;
+    readonly p75: number;
+    readonly n: number;
+    readonly label: string;
+  };
   readonly swingFactors: readonly SwingFactor[];
   readonly sensitivity: readonly SensitivityCard[];
   readonly interest?: {

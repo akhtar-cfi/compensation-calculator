@@ -488,6 +488,9 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
     },
     headline: { amount: stdNet, approx: formatApprox(stdNet) },
     range: { conservative: c, standard: stdNet, claimantMax: m, showBar },
+    ...(rules.practiceSpread && {
+      practiceSpread: { ...rules.practiceSpread[input.kind], label: rules.practiceSpread.label },
+    }),
     swingFactors: swing,
     sensitivity,
     interest,

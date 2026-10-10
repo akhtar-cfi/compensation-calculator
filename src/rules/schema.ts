@@ -202,7 +202,26 @@ export const InjuryBandsSchema = z.object({
   marriage_prospects: triple.extend({ max_age: z.number(), min_functional_pct: z.number() }),
 });
 
+const ratioQuartiles = z.object({
+  n: z.number().int(),
+  p25: z.number(),
+  median: z.number(),
+  p75: z.number(),
+});
+/** Award ÷ standard estimate in real awards (practice and evidence risk, not legal uncertainty). */
+export const PracticeSpreadSchema = z.object({
+  id: z.literal("practice_spread"),
+  verified: z.boolean(),
+  /** Short name shown to families. */
+  label: z.string(),
+  basis: z.string(),
+  sources: z.array(z.string()),
+  death: ratioQuartiles,
+  injury: ratioQuartiles,
+});
+
 export type Source = z.infer<typeof SourceSchema>;
+export type PracticeSpread = z.infer<typeof PracticeSpreadSchema>;
 export type InjuryBands = z.infer<typeof InjuryBandsSchema>;
 export type MultiplierRule = z.infer<typeof MultiplierRuleSchema>;
 export type FutureProspectsRule = z.infer<typeof FutureProspectsRuleSchema>;
@@ -230,5 +249,6 @@ export interface RulesBundle {
   tax: TaxRule;
   occupations: Occupations;
   injuryBands: InjuryBands;
+  practiceSpread?: PracticeSpread;
   minimumWages: Record<string, MinimumWageState>;
 }

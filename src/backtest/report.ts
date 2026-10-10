@@ -31,6 +31,17 @@ export function renderBacktest(
       })
       .join("; ")}.`,
   );
+  L.push(
+    "",
+    `Award / estimate (middle half; feeds rules/practice/spread.yaml): ${(["death", "injury"] as const)
+      .map((k) => {
+        const a = s.predict.byKind[k].awardToEstimate;
+        return a
+          ? `${k} n = ${s.predict.byKind[k].n}, p25 ${a.p25}, median ${a.median}, p75 ${a.p75}`
+          : `${k} –`;
+      })
+      .join("; ")}.`,
+  );
   if (Object.keys(s.conformity.byParam).length)
     L.push(
       "",

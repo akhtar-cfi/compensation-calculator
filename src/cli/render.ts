@@ -1,6 +1,6 @@
 import { summariseJourney, type CaseMatch } from "../cases/match.js";
 import type { EstimateOutput, OfferCheck } from "../engine/index.js";
-import { formatINR } from "../engine/money.js";
+import { formatApprox, formatINR } from "../engine/money.js";
 
 const label: Record<string, string> = {
   conservative: "Conservative",
@@ -28,6 +28,16 @@ export function renderEstimate(o: EstimateOutput): string {
   for (const s of ["conservative", "standard", "claimantMax"] as const)
     L.push(`| ${label[s]} | ${formatINR(o.range[s])} |`);
   if (!o.range.showBar) L.push("", "_The contested points move this a lot — read the swing factors below._");
+  if (o.practiceSpread) {
+    const p = o.practiceSpread;
+    const pct = (x: number) => `${Math.round(Math.abs(x - 1) * 100)}% ${x < 1 ? "below" : "above"}`;
+    L.push(
+      "",
+      `**How far real awards land:** in ${p.n} ${o.kind} awards (${p.label}), half came between ` +
+        `${pct(p.p25)} and ${pct(p.p75)} an estimate like this (about ${formatApprox(o.range.standard * p.p25)} to ` +
+        `${formatApprox(o.range.standard * p.p75)} here). This reflects evidence and practice, not your legal entitlement.`,
+    );
+  }
   L.push(
     "",
     "## How it is built (standard scenario)",
