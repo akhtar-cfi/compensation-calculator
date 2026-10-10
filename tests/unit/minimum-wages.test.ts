@@ -66,3 +66,33 @@ describe("outdated minimum wage warning", () => {
     expect(codes(checked, "2026-09-01")).toContain("MW_MAY_BE_OUTDATED");
   });
 });
+
+describe("Central sphere minimum wages (construction schedule)", () => {
+  const c = (category: "unskilled" | "skilled", on: string, zone?: string) =>
+    minimumWage(rules, { state: "CENTRAL", zone, category, on });
+
+  it("converts the per-day order rate to a month of 26 days, by area", () => {
+    expect(c("unskilled", "2025-06-01", "A")?.monthly).toBe(805 * 26);
+    expect(c("unskilled", "2025-06-01", "C")?.monthly).toBe(541 * 26);
+    expect(c("skilled", "2026-05-01", "A")?.monthly).toBe(1008 * 26);
+  });
+
+  it("defaults to the lowest area (C) when none is given", () => {
+    expect(c("unskilled", "2025-06-01")?.zone).toBe("C");
+  });
+
+  it("October 2025 left VDA unchanged (corrigendum: increase NIL)", () => {
+    expect(c("unskilled", "2025-10-15", "A")?.monthly).toBe(c("unskilled", "2025-06-01", "A")?.monthly);
+  });
+
+  it("never uses basic-only figures (Rs 13,599 / 15,057 / 20,361 a month)", () => {
+    const monthly = rules.minimumWages["CENTRAL"]!.revisions.flatMap((r) =>
+      Object.values(r.rates).flatMap((z) => Object.values(z).map((v) => (v ?? 0) * 26)),
+    );
+    for (const wrong of [13599, 15057, 20361]) expect(monthly).not.toContain(wrong);
+  });
+
+  it("has no rate before October 2022 (gap flagged)", () => {
+    expect(c("unskilled", "2022-09-30", "A")).toBeUndefined();
+  });
+});

@@ -32,7 +32,8 @@
   access: wayback
   search_queries:
     - site:clc.gov.in minimum wages VDA order
-  notes: Applies to central-sphere employments only; a labelled fallback for state accidents, never silent.
+    - site:labourbureau.gov.in VDA order minimum wages
+  notes: Loaded (sources/minimum-wages/CENTRAL.yaml, construction schedule). From 1 Oct 2026 VDA orders come from the Labour Bureau, Chandigarh (Code on Wages s.69(2)); find its official URL. Central rates are a labelled fallback for state accidents, never silent.
 
 - code: HR
   name: Haryana

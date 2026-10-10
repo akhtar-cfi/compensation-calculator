@@ -126,7 +126,10 @@ Sampling bias is stated on every report: published awards over-represent Delhi, 
   - A weekly CI job fails when a schedule has had neither a new revision nor a recorded check of the official source (`last_checked`) for 7 months.
   - The engine warns when an accident is more than 7 months after the latest revision on file and the official source has not been checked since the accident date.
   - **Only official orders are loaded.** Aggregator and news figures are never used as rates. Example: a forged Delhi order for 1 Oct 2025 (Rs 19,846 unskilled) was reported by compliance publishers. The Delhi Labour Department declared it fake by a circular of 14 Oct 2025. Loading it would have overstated every no-proof Delhi estimate by about 7.5%.
-  - Coverage: Delhi from 1 Apr 2019 (14 orders). Haryana, Rajasthan, Uttar Pradesh, Madhya Pradesh and the Central sphere are not loaded yet; estimates without income proof stop there with a clear message.
+  - Coverage: Delhi from 1 Apr 2019 (14 orders). Central sphere (construction schedule, Areas A/B/C) from 1 Oct 2022 (9 orders), as a labelled fallback only.
+    - Haryana, Rajasthan, Uttar Pradesh and Madhya Pradesh are not loaded yet. Their sites refuse automated access, so the orders are collected by hand (`docs/minimum-wage-intake.md`). Until then, estimates without income proof stop with a clear message.
+    - Central figures quoted elsewhere (₹13,599 / ₹15,057 / ₹20,361 a month) are basic rates without VDA. They understate the wage by about a third.
+    - From 1 Oct 2026 the Central VDA order is issued by the Labour Bureau under s.69(2) of the Code on Wages, 2019 (read from a published copy).
 - **Case law and statute.** Monthly review of new Supreme Court and High Court motor-accident judgments and Gazette notifications. Watch list:
   - the larger-bench reference on escalation of conventional heads (_Hasina Yasmin_);
   - the s.166(3) limitation challenge;
