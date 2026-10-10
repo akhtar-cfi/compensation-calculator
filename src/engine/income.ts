@@ -18,6 +18,8 @@ export interface IncomeResult {
   sources: string[];
   /** Kurvan-type notional income carries its own multiplier. */
   multiplierOverride?: number;
+  /** Kurvan Ansari applied no personal-expenses deduction to the notional income (para 16). */
+  deductionOverride?: number;
   assumptions: string[];
 }
 
@@ -113,8 +115,9 @@ function minorIncome(ctx: IncomeContext): IncomeResult | undefined {
       fpClass: "none",
       sources: k.sources,
       multiplierOverride: k.multiplier,
+      deductionOverride: 0,
       assumptions: [
-        `Notional income ${formatINR(k.annual)}/year with multiplier ${k.multiplier} (Kurvan Ansari line).`,
+        `Notional income ${formatINR(k.annual)}/year with multiplier ${k.multiplier} and no personal deduction (Kurvan Ansari, para 16).`,
       ],
     };
   }

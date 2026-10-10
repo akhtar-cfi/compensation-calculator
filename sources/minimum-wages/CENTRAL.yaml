@@ -142,10 +142,11 @@ revisions:
     notification:
       number: "File No. 6/1/2026-VDA (Labour Bureau, Chandigarh)"
       date: "2026-09-30"
+      url: https://www.labourbureau.gov.in/uploads/public/notice/VDA-orders-October-2026-1pdf-f1c4d10c67a017bf34cd65319b294b99.pdf
     evidence_quote: "| Unskilled | 523 + 317 = 840 | 437 + 267 = 704 | 350 + 215 = 565 |"
-    confidence: secondary
+    confidence: official
     verified_by: []
-    notes: "Issued under S.O. 2451(E) of 12 May 2026 and s.69(2) of the Code on Wages, 2019. Text read from a copy published by staffnews.in (https://www.staffnews.in/wp-content/uploads/2026/10/VDA-orders-October-2026-1pdf-9791964ced2b51542c85580f7aec897b-6.pdf); the official Labour Bureau file was not retrieved."
+    notes: "Issued under S.O. 2451(E) of 12 May 2026 and s.69(2) of the Code on Wages, 2019 (CPI-IW average 424.80 to 431.42). Read from the Labour Bureau's own file (checked 10 Oct 2026); an earlier copy on staffnews.in gave the same figures."
 gaps:
   - "Before 1 Oct 2022: not loaded. Older orders are on paged listings (clc.gov.in/clc/min-wages/minimum-wages-1..3) in Wayback captures from 2016 onwards."
   - "1 Oct 2026: read from a published copy only; replace with the official Labour Bureau file when found."

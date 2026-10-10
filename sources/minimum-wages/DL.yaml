@@ -312,11 +312,11 @@ revisions:
       number: "F.No.(142)/02/MW/VII/Part file/211-241"
       date: "2025-04-15"
       url: https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da15april2025.pdf
-    evidence_quote: "Un-skilled 18066 390 18456 710"
+    evidence_quote: "| Un-skilled | 18066 | 390 | 18456 | 710 |"
     sha256: ecb24b6d068ee93143b779f758e67c68caec0e46285bcc42fe006f878320cbf6
-    confidence: secondary
+    confidence: official
     verified_by: []
-    notes: "Listed on the official page (archived 27 Jul 2026) as the latest order. Text and hash are from a copy hosted by a compliance site (comply4hr.com/noti/2016/DEMWA2025Apr15.pdf); the official file itself was not retrieved."
+    notes: "Rates read from the Wayback copy (23 Jul 2026) of the official file: https://web.archive.org/web/20260723094539id_/https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da15april2025.pdf (semi-skilled 19929 + 442 = 20371; skilled 21917 + 494 = 22411). The order number and date are from a copy on a compliance site (comply4hr.com), because the official file's heading is an image; the sha256 is of that copy."
 gaps:
   - "Before 1 Oct 2011: not loaded."
   - "1 Apr 2012 - 31 Mar 2013: no rate. The DA orders of 1 Apr and 1 Oct 2012 were not found (the official page was not updated May 2012 - Oct 2013 and the order PDFs are not archived). Estimates for accidents in this year say so instead of using the 2011 rates."
@@ -325,4 +325,4 @@ gaps:
   - "1 Oct 2025 and 1 Apr 2026: no DA order found. The official list (archived 27 Jul 2026) still shows the 1 Apr 2025 order as the latest. Accidents after 1 Apr 2025 use the 1 Apr 2025 rates until an official order is found."
   - "FORGED ORDER - do not use: F.No.(143)/02/MW/VII/Partfile/212-261 dated 13.10.2025 (Rs 19,846 / 21,813 / 23,905). Declared fraudulent by Labour Department circular Lab-L011/5/2025-Addl.LC-II/3616 dated 14/10/2025, which says no DA order had been issued for the period from 1 Oct 2025 and that the last official increase was effective 1 Apr 2025 (circular seen as an image reproduced on hrsoftwaredelhi.com; official copy not retrieved)."
   - "1 Oct 2026 revision due; check the official page."
-  - "The Code on Wages, 2019 is reported (secondary sources) to be in force from 21 Nov 2025; its effect on Delhi rates and on the national floor wage is not checked or modelled."
+  - "The Code on Wages, 2019 came into force on 21 Nov 2025 (S.O. 5322(E), https://egazette.gov.in/WriteReadData/2025/267885.pdf); its effect on Delhi rates and on the national floor wage is not checked or modelled."

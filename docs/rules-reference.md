@@ -9,12 +9,8 @@ a test fails if this page and the rule files disagree. How the rules fit togethe
 
 Not yet confirmed against a primary source:
 
-- Sources without a link to the text yet (18): Raj Kumar v Ajay Kumar; Magma General Insurance Co. Ltd. v Nanu Ram; United India Insurance Co. Ltd. v Satinder Kaur; Kirti v Oriental Insurance Co. Ltd.; Kajal v Jagdish Chand; Kurvan Ansari v Shyam Kishore Murmu; Meenakshi v Oriental Insurance Co. Ltd.; Sidram v Divisional Manager, United India Insurance Co. Ltd.; Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari; Hasina Yasmin (reference to a larger bench on escalation of conventional heads); Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation); Mohinder Kaur v Brij Lal Arora; New India Assurance Co. Ltd. v Dolly Satish Gandhi; Sarla Devi v Reliance General Insurance (three-judge bench, ex-gratia deduction); Rashmirekha Tripathy (income assessment from ITRs); Vimal Kanwar v Kishore Dan; Helen C. Rebello v Maharashtra SRTC; Khenyei v New India Assurance Co. Ltd.
-- Central sphere - construction schedule minimum wage from 2026-10-01: read from a secondary copy; official file not yet retrieved.
 - Delhi (NCT) minimum wage from 2012-04-01: no official order found (no rate used).
-- Delhi (NCT) minimum wage from 2025-04-01: read from a secondary copy; official file not yet retrieved.
 - Income tax FY 2019-20: Not found in a source for this year: slabs, cess (same values as the checked years either side).
-- Notional income, minor (death): Reported (secondary source) as notional Rs 25,000 a year with multiplier 15. To be verified.
 
 ## Multiplier (death and injury)
 
@@ -46,7 +42,7 @@ Addition for future prospects, by age and nature of employment (percent of incom
 | 50 | 30% | 25% |
 | 61 | 15% | 10% |
 
-Sources: [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); Kirti v Oriental Insurance Co. Ltd.; [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf). Confidence: settled. Signed off: **no — awaiting legal sign-off**.
+Sources: [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/); [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf). Confidence: settled. Signed off: **no — awaiting legal sign-off**.
 
 ## Personal-expenses deduction (death)
 
@@ -68,15 +64,15 @@ Loss of estate, funeral expenses and loss of consortium (per claimant: spousal, 
 
 Base amounts on 2017-10-31: loss of estate ₹15,000, funeral ₹15,000, consortium ₹40,000 per claimant; +10% every 3 years.
 
-Sources: [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); Magma General Insurance Co. Ltd. v Nanu Ram; United India Insurance Co. Ltd. v Satinder Kaur; [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); Hasina Yasmin (reference to a larger bench on escalation of conventional heads). Confidence: contested. Signed off: **no — awaiting legal sign-off**.
+Sources: [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Magma General Insurance Co. Ltd. v Nanu Ram](https://indiankanoon.org/doc/175246407/); [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/). Confidence: contested. Signed off: **no — awaiting legal sign-off**.
 
 ## Notional incomes
 
 Income used when the victim did not earn, or earnings cannot be proved.
 
 - **Homemaker (loss of domestic care):** ₹30,000 a month from 2026-06-11, +10% every 3 years. Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years. Sources: [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/).
-- **Student, professional course:** ₹12,000 a month. Engineering student (Mohinder Kaur 2026). Used only if higher than the skilled minimum wage. Sources: Mohinder Kaur v Brij Lal Arora.
-- **Minor (death), conservative:** ₹25,000 a year × 15. Reported (secondary source) as notional Rs 25,000 a year with multiplier 15. To be verified. Sources: Kurvan Ansari v Shyam Kishore Murmu.
+- **Student, professional course:** ₹12,000 a month. Engineering student (Mohinder Kaur 2026). Used only if higher than the skilled minimum wage. Sources: [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/).
+- **Minor (death), conservative:** ₹25,000 a year × 15. Kurvan Ansari (SC, 16 Nov 2021, para 16): notional income Rs 25,000 a year x multiplier 15 = Rs 3,75,000 loss of dependency, with no personal-expenses deduction, for a 7-year-old (the 15 is the s.163A Second Schedule multiplier). Checked against the judgment text, 10 Oct 2026. Sources: [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/).
 
 Confidence: contested. Signed off: **no — awaiting legal sign-off**.
 
@@ -86,11 +82,11 @@ Only legal uncertainty moves the range. Each row is one contested point.
 
 | Point | Conservative | Standard | Claimant-max | Sources |
 |---|---|---|---|---|
-| Multiplier for a victim aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | Kurvan Ansari v Shyam Kishore Murmu; Kajal v Jagdish Chand; Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari; [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) |
-| Number of 10% steps applied to the Pranay Sethi conventional heads. (SC awards in 2025-26 mostly use Rs 18,150 / Rs 48,400 (two steps). "clock" = full 3-year steps since 31 Oct 2017 up to the as-of date (three steps from 31 Oct 2026). A larger-bench reference is pending.) | 0 | 2 | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); Hasina Yasmin (reference to a larger bench on escalation of conventional heads) |
+| Multiplier for a victim aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) |
+| Number of 10% steps applied to the Pranay Sethi conventional heads. (SC awards in 2025-26 mostly use Rs 18,150 / Rs 48,400 (two steps). "clock" = full 3-year steps since 31 Oct 2017 up to the as-of date (three steps from 31 Oct 2026). A larger-bench reference is pending.) | 0 | 2 | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/) |
 | Personal deduction for a married deceased whose only dependant is the spouse. | 1/2 | 1/3 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) |
-| Monthly income for a homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); Kirti v Oriental Insurance Co. Ltd. |
-| Income basis for the death of a minor. (The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.) | kurvan_notional | skilled_minimum_wage | skilled_minimum_wage | Kurvan Ansari v Shyam Kishore Murmu; Kajal v Jagdish Chand; [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) |
+| Monthly income for a homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) |
+| Income basis for the death of a minor. (The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.) | kurvan_notional | skilled_minimum_wage | skilled_minimum_wage | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) |
 
 ## Injury: discretionary heads (experimental)
 
@@ -113,7 +109,7 @@ Limb certificate → functional disability factor: 0.5 / 0.53 / 1.
 Attendant during treatment, when days are not given: ₹14,000 / ₹30,000 / ₹50,000.
 Loss of marriage prospects (unmarried, age ≤ 35, functional disability ≥ 50%): ₹1,00,000 / ₹3,00,000 / ₹5,00,000.
 
-Sources: Raj Kumar v Ajay Kumar; Sidram v Divisional Manager, United India Insurance Co. Ltd.; [Baiju v (final order of 28 Nov 2025)](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari; [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf); Kajal v Jagdish Chand; Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv. Signed off: **no — awaiting legal sign-off**.
+Sources: [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); [Baiju v (final order of 28 Nov 2025)](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv. Signed off: **no — awaiting legal sign-off**.
 
 ## How far real awards land (shown next to an estimate; not part of it)
 
@@ -130,7 +126,7 @@ Sources: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), ba
 
 - **No-fault compensation (s.164):** death ₹5,00,000, grievous hurt ₹2,50,000. s.164 no-fault compensation. If it is accepted through the insurer's settlement route (s.149), the s.166 claim petition lapses (s.166(1) proviso). If awarded, it is adjusted against the s.166 award (s.164(3)). Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf).
 - **Hit and run (s.161):** death ₹2,00,000, grievous hurt ₹50,000. Compensation to Victims of Hit and Run Motor Accidents Scheme, 2022 (amounts unchanged by the 2026 amendment). Refundable from any later award (s.163). Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf).
-- **Limitation (s.166(3)):** 6 months. The Supreme Court's interim order (4 Nov 2025) directs that no claim be dismissed as time-barred while the challenge is pending. Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf); Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation).
+- **Limitation (s.166(3)):** 6 months. The Supreme Court's interim order (4 Nov 2025) directs that no claim be dismissed as time-barred while the challenge is pending. Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf); [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/).
 - **Interest illustration:** 6 / 7.5 / 9% over 6 years. No fixed rate; recent awards range 6-9% simple interest from the date of filing. Shown separately, never added to the headline.
 - **Typical time to award:** 6 years at tribunals, 8 at High Courts. Sources: [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/).
 
@@ -223,9 +219,9 @@ Basic rates fixed by notifications of 19 Jan 2017; VDA revised every 1 April and
 | 2026-04-01 | C | ₹556/day | ₹650/day | ₹781/day | ₹918/day | [F.No.1/6(3)/2025-LS-II](https://clc.gov.in/clc/sites/default/files/mygov_17751372721.pdf) | official |
 | 2026-04-01 | B | ₹693/day | ₹781/day | ₹918/day | ₹1,008/day | [F.No.1/6(3)/2025-LS-II](https://clc.gov.in/clc/sites/default/files/mygov_17751372721.pdf) | official |
 | 2026-04-01 | A | ₹827/day | ₹918/day | ₹1,008/day | ₹1,094/day | [F.No.1/6(3)/2025-LS-II](https://clc.gov.in/clc/sites/default/files/mygov_17751372721.pdf) | official |
-| 2026-10-01 | C | ₹565/day | ₹661/day | ₹794/day | ₹933/day | File No. 6/1/2026-VDA (Labour Bureau, Chandigarh) | secondary |
-| 2026-10-01 | B | ₹704/day | ₹794/day | ₹933/day | ₹1,024/day | File No. 6/1/2026-VDA (Labour Bureau, Chandigarh) | secondary |
-| 2026-10-01 | A | ₹840/day | ₹933/day | ₹1,024/day | ₹1,111/day | File No. 6/1/2026-VDA (Labour Bureau, Chandigarh) | secondary |
+| 2026-10-01 | C | ₹565/day | ₹661/day | ₹794/day | ₹933/day | [File No. 6/1/2026-VDA (Labour Bureau, Chandigarh)](https://www.labourbureau.gov.in/uploads/public/notice/VDA-orders-October-2026-1pdf-f1c4d10c67a017bf34cd65319b294b99.pdf) | official |
+| 2026-10-01 | B | ₹704/day | ₹794/day | ₹933/day | ₹1,024/day | [File No. 6/1/2026-VDA (Labour Bureau, Chandigarh)](https://www.labourbureau.gov.in/uploads/public/notice/VDA-orders-October-2026-1pdf-f1c4d10c67a017bf34cd65319b294b99.pdf) | official |
+| 2026-10-01 | A | ₹840/day | ₹933/day | ₹1,024/day | ₹1,111/day | [File No. 6/1/2026-VDA (Labour Bureau, Chandigarh)](https://www.labourbureau.gov.in/uploads/public/notice/VDA-orders-October-2026-1pdf-f1c4d10c67a017bf34cd65319b294b99.pdf) | official |
 
 Gaps:
 
@@ -270,7 +266,7 @@ Base rates last fixed by notification of 22.10.2019; dearness allowance (DA) add
 | 2023-10-01 | All | ₹17,494 | ₹19,279 | ₹21,215 | – | [F.No.(142)/02/MW/VII/Part file/5906-5994](https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/minimum_wages.pdf) | official |
 | 2024-04-01 | All | ₹17,988 | ₹19,825 | ₹21,813 | – | [F.No.(142)/02/MW/VII/Part file/3502-3519](https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da_april_24.pdf) | official |
 | 2024-10-01 | All | ₹18,066 | ₹19,929 | ₹21,917 | – | [F.No.(142)/02/MW/VII/Part file/3478-3495](https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da_oct_2024.pdf) | official |
-| 2025-04-01 | All | ₹18,456 | ₹20,371 | ₹22,411 | – | [F.No.(142)/02/MW/VII/Part file/211-241](https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da15april2025.pdf) | secondary |
+| 2025-04-01 | All | ₹18,456 | ₹20,371 | ₹22,411 | – | [F.No.(142)/02/MW/VII/Part file/211-241](https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/da15april2025.pdf) | official |
 
 Gaps:
 
@@ -281,7 +277,7 @@ Gaps:
 - 1 Oct 2025 and 1 Apr 2026: no DA order found. The official list (archived 27 Jul 2026) still shows the 1 Apr 2025 order as the latest. Accidents after 1 Apr 2025 use the 1 Apr 2025 rates until an official order is found.
 - FORGED ORDER - do not use: F.No.(143)/02/MW/VII/Partfile/212-261 dated 13.10.2025 (Rs 19,846 / 21,813 / 23,905). Declared fraudulent by Labour Department circular Lab-L011/5/2025-Addl.LC-II/3616 dated 14/10/2025, which says no DA order had been issued for the period from 1 Oct 2025 and that the last official increase was effective 1 Apr 2025 (circular seen as an image reproduced on hrsoftwaredelhi.com; official copy not retrieved).
 - 1 Oct 2026 revision due; check the official page.
-- The Code on Wages, 2019 is reported (secondary sources) to be in force from 21 Nov 2025; its effect on Delhi rates and on the national floor wage is not checked or modelled.
+- The Code on Wages, 2019 came into force on 21 Nov 2025 (S.O. 5322(E), https://egazette.gov.in/WriteReadData/2025/267885.pdf); its effect on Delhi rates and on the national floor wage is not checked or modelled.
 
 ## Sources
 
@@ -290,28 +286,28 @@ Gaps:
 | mv_act_1988 | [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf) | statute |  |
 | sarla_verma_2009 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | (2009) 6 SCC 121 |  |
 | pranay_sethi_2017 | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/) | (2017) 16 SCC 680 | 2017-10-31 |
-| raj_kumar_2011 | Raj Kumar v Ajay Kumar | (2011) 1 SCC 343 |  |
-| magma_2018 | Magma General Insurance Co. Ltd. v Nanu Ram | (2018) 18 SCC 130 |  |
-| satinder_kaur_2020 | United India Insurance Co. Ltd. v Satinder Kaur | SC |  |
-| kirti_2021 | Kirti v Oriental Insurance Co. Ltd. | SC |  |
-| kajal_2020 | Kajal v Jagdish Chand | (2020) 4 SCC 413 |  |
-| kurvan_ansari_2021 | Kurvan Ansari v Shyam Kishore Murmu | SC |  |
-| meenakshi_2024 | Meenakshi v Oriental Insurance Co. Ltd. | 2024 INSC 573 |  |
-| sidram_2022 | Sidram v Divisional Manager, United India Insurance Co. Ltd. | SC | 2022-11-16 |
-| hitesh_patel_2025 | Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari | 2025 INSC 1070 |  |
+| raj_kumar_2011 | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/) | (2011) 1 SCC 343 |  |
+| magma_2018 | [Magma General Insurance Co. Ltd. v Nanu Ram](https://indiankanoon.org/doc/175246407/) | (2018) 18 SCC 130 |  |
+| satinder_kaur_2020 | [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/) | SC |  |
+| kirti_2021 | [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) | SC |  |
+| kajal_2020 | [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/) | (2020) 4 SCC 413 |  |
+| kurvan_ansari_2021 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/) | SC |  |
+| meenakshi_2024 | [Meenakshi v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/72618714/) | 2024 INSC 573 |  |
+| sidram_2022 | [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/) | SC | 2022-11-16 |
+| hitesh_patel_2025 | [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf) | 2025 INSC 1070 |  |
 | preetha_krishnan_2025 | [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf) | 2025 INSC 1293 | 2025-11-06 |
 | baiju_2025 | [Baiju v (final order of 28 Nov 2025)](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf) | SC | 2025-11-28 |
-| hasina_yasmin_2025 | Hasina Yasmin (reference to a larger bench on escalation of conventional heads) | SC | 2025-12-17 |
-| bhagirathi_dash_2025 | Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation) | SC | 2025-11-04 |
+| hasina_yasmin_2025 | [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/) | SC | 2025-12-17 |
+| bhagirathi_dash_2025 | [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/) | SC | 2025-11-04 |
 | sushila_2026 | [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf) | SC | 2026-03-10 |
-| mohinder_kaur_2026 | Mohinder Kaur v Brij Lal Arora | 2026 INSC 477 |  |
+| mohinder_kaur_2026 | [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/) | 2026 INSC 477 |  |
 | hansraj_2026 | [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | SC | 2026-05-06 |
-| dolly_satish_gandhi_2026 | New India Assurance Co. Ltd. v Dolly Satish Gandhi | 2026 INSC 498 |  |
-| sarla_devi_2026 | Sarla Devi v Reliance General Insurance (three-judge bench, ex-gratia deduction) | SC | 2026-05-26 |
+| dolly_satish_gandhi_2026 | [New India Assurance Co. Ltd. v Dolly Satish Gandhi](https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf) | 2026 INSC 498 |  |
+| sarla_devi_2026 | [Sarla Devi v Reliance General Insurance (three-judge bench, ex-gratia deduction)](https://indiankanoon.org/doc/57068626/) | SC | 2026-05-26 |
 | shishu_pal_2026 | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/) | 2026 INSC 634 | 2026-06-11 |
-| rashmirekha_2026 | Rashmirekha Tripathy (income assessment from ITRs) | 2026 INSC 661 | 2026-07-01 |
-| vimal_kanwar_2013 | Vimal Kanwar v Kishore Dan | (2013) 7 SCC 476 |  |
-| helen_rebello_1998 | Helen C. Rebello v Maharashtra SRTC | SC |  |
-| khenyei_2015 | Khenyei v New India Assurance Co. Ltd. | (2015) 9 SCC 273 |  |
+| rashmirekha_2026 | [Rashmirekha Tripathy (income assessment from ITRs)](https://indiankanoon.org/doc/164414205/) | 2026 INSC 661 | 2026-07-01 |
+| vimal_kanwar_2013 | [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/) | (2013) 7 SCC 476 |  |
+| helen_rebello_1998 | [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/) | SC |  |
+| khenyei_2015 | [Khenyei v New India Assurance Co. Ltd.](https://indiankanoon.org/doc/79441201/) | (2015) 9 SCC 273 |  |
 | karan_singh_bisht_2026 | [Karan Singh Bisht v Ravi Singh (MACT-01, Patiala House Courts, New Delhi; DAR 350/2020)](https://indiankanoon.org/doc/105820332/) | MACT Delhi | 2026-08-17 |
 | delhi_awards_backtest_2026 | Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | dataset | 2026-10-10 |

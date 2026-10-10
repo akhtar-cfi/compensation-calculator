@@ -171,7 +171,7 @@ function runScenario(
   let intermediates: Intermediate[];
   let heads: PayableHead[];
   if (input.kind === "death") {
-    const deduction = resolveDeduction(rules, input, ch);
+    const deduction = income.deductionOverride ?? resolveDeduction(rules, input, ch);
     const s = ch.choose(
       "conventional_escalation_steps",
       "Number of 10% increases applied to conventional heads",

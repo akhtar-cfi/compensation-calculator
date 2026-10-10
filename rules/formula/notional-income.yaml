@@ -20,4 +20,4 @@ minor_death_conservative:
   annual: 25000
   multiplier: 15
   sources: [kurvan_ansari_2021]
-  note: Reported (secondary source) as notional Rs 25,000 a year with multiplier 15. To be verified.
+  note: "Kurvan Ansari (SC, 16 Nov 2021, para 16): notional income Rs 25,000 a year x multiplier 15 = Rs 3,75,000 loss of dependency, with no personal-expenses deduction, for a 7-year-old (the 15 is the s.163A Second Schedule multiplier). Checked against the judgment text, 10 Oct 2026."
