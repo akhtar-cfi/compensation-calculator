@@ -1,6 +1,54 @@
 import { formatINR } from "../engine/money.js";
 import type { RulesBundle } from "./schema.js";
 
+/** Everything not yet confirmed against a primary source, listed so readers can see it (and so it shrinks). */
+export function openChecks(rules: RulesBundle): string[] {
+  const items: string[] = [];
+  const noUrl = rules.sources.filter((s) => !s.url && s.kind !== "dataset").map((s) => s.title);
+  if (noUrl.length)
+    items.push(
+      `Sources without a link to the text yet (${noUrl.length}): ${noUrl.join("; ").replace(/\.$/, "")}.`,
+    );
+  for (const st of Object.values(rules.minimumWages))
+    for (const r of st.revisions) {
+      if (r.confidence === "secondary")
+        items.push(
+          `${st.name} minimum wage from ${r.effective_from}: read from a secondary copy; official file not yet retrieved.`,
+        );
+      if (r.confidence === "gap")
+        items.push(
+          `${st.name} minimum wage from ${r.effective_from}: no official order found (no rate used).`,
+        );
+    }
+  for (const y of rules.tax.years) {
+    if (!y.checked_against.length)
+      items.push(`Income tax FY ${y.fy}: not checked against an official source.`);
+    if (y.check_note) items.push(`Income tax FY ${y.fy}: ${y.check_note}`);
+  }
+  const n = rules.notional;
+  for (const [label, note] of [
+    ["Notional income, homemaker", n.homemaker_domestic_care.note],
+    ["Notional income, student", n.student_course_precedent.professional.note],
+    ["Notional income, minor (death)", n.minor_death_conservative.note],
+  ] as const)
+    if (/to be verified/i.test(note)) items.push(`${label}: ${note}`);
+  return items.length
+    ? [
+        "## Open checks",
+        "",
+        "Not yet confirmed against a primary source:",
+        "",
+        ...items.map((i) => `- ${i}`),
+        "",
+      ]
+    : [
+        "## Open checks",
+        "",
+        "None: every value is linked to a primary source (legal sign-off still pending).",
+        "",
+      ];
+}
+
 /**
  * The public rules reference (docs/rules-reference.md): every value the engine uses, with its source,
  * generated from the rule files so the published page can never drift from the code.
@@ -23,6 +71,7 @@ export function renderRulesReference(rules: RulesBundle): string {
     "",
     "**Status:** draft. No rule has been signed off by the legal reviewers yet; every rule below says so.",
     "",
+    ...openChecks(rules),
   ];
 
   const m = rules.multiplier;

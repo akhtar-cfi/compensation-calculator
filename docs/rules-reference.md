@@ -5,6 +5,17 @@ a test fails if this page and the rule files disagree. How the rules fit togethe
 
 **Status:** draft. No rule has been signed off by the legal reviewers yet; every rule below says so.
 
+## Open checks
+
+Not yet confirmed against a primary source:
+
+- Sources without a link to the text yet (18): Raj Kumar v Ajay Kumar; Magma General Insurance Co. Ltd. v Nanu Ram; United India Insurance Co. Ltd. v Satinder Kaur; Kirti v Oriental Insurance Co. Ltd.; Kajal v Jagdish Chand; Kurvan Ansari v Shyam Kishore Murmu; Meenakshi v Oriental Insurance Co. Ltd.; Sidram v Divisional Manager, United India Insurance Co. Ltd.; Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari; Hasina Yasmin (reference to a larger bench on escalation of conventional heads); Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation); Mohinder Kaur v Brij Lal Arora; New India Assurance Co. Ltd. v Dolly Satish Gandhi; Sarla Devi v Reliance General Insurance (three-judge bench, ex-gratia deduction); Rashmirekha Tripathy (income assessment from ITRs); Vimal Kanwar v Kishore Dan; Helen C. Rebello v Maharashtra SRTC; Khenyei v New India Assurance Co. Ltd.
+- Central sphere - construction schedule minimum wage from 2026-10-01: read from a secondary copy; official file not yet retrieved.
+- Delhi (NCT) minimum wage from 2012-04-01: no official order found (no rate used).
+- Delhi (NCT) minimum wage from 2025-04-01: read from a secondary copy; official file not yet retrieved.
+- Income tax FY 2019-20: Not found in a source for this year: slabs, cess (same values as the checked years either side).
+- Notional income, minor (death): Reported (secondary source) as notional Rs 25,000 a year with multiplier 15. To be verified.
+
 ## Multiplier (death and injury)
 
 Multiplier by age of the deceased / injured (never by age of the claimants; never split).
