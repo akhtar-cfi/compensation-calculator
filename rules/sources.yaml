@@ -117,3 +117,7 @@
   court: MACT Delhi
   date: 2026-08-17
   url: https://indiankanoon.org/doc/105820332/
+- id: delhi_awards_backtest_2026
+  title: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
+  kind: dataset
+  date: 2026-10-10

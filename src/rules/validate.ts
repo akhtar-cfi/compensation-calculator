@@ -41,6 +41,29 @@ export function validateRules(
     }
   }
 
+  // Injury bands: C <= L <= M inside each band, and no value falls as disability rises.
+  const b = rules.injuryBands;
+  const ordered = (where: string, t: { conservative: number; standard: number; claimant_max: number }) => {
+    if (!(t.conservative <= t.standard && t.standard <= t.claimant_max))
+      problems.push(`injury_bands.${where}: needs conservative <= standard <= claimant_max`);
+  };
+  ordered("limb_to_functional", b.limb_to_functional);
+  if (b.attendant_during_treatment) ordered("attendant_during_treatment", b.attendant_during_treatment);
+  ordered("marriage_prospects", b.marriage_prospects);
+  for (const [name, bands] of [
+    ["pain_suffering_amenities", b.pain_suffering_amenities.map((x) => ({ ...x, from: x.from_pct }))],
+    ["conveyance_special_diet", b.conveyance_special_diet.map((x) => ({ ...x, from: x.from_days }))],
+  ] as const) {
+    bands.forEach((x, i) => {
+      ordered(`${name}[${i}]`, x);
+      const prev = bands[i - 1];
+      if (!prev) return;
+      if (x.from <= prev.from) problems.push(`injury_bands.${name}[${i}]: lower bounds must increase`);
+      for (const k of ["conservative", "standard", "claimant_max"] as const)
+        if (x[k] < prev[k]) problems.push(`injury_bands.${name}[${i}].${k}: falls below the band before it`);
+    });
+  }
+
   const occ = new Set<string>();
   for (const o of rules.occupations.occupations) {
     if (occ.has(o.code)) problems.push(`occupations: duplicate code ${o.code}`);

@@ -17,6 +17,22 @@ describe("rules files", () => {
     const problems = validateRules({ ...testRules(), minimumWages: { TS: bad } });
     expect(problems.join("\n")).toMatch(/skilled \(8438\) is lower than the category below it \(11701\)/);
   });
+  it("flag injury bands that are out of order or fall as disability rises", () => {
+    const r = testRules();
+    const [first, second, ...rest] = r.injuryBands.pain_suffering_amenities;
+    const bad = {
+      ...r,
+      injuryBands: {
+        ...r.injuryBands,
+        pain_suffering_amenities: [first!, { ...second!, standard: first!.standard - 1 }, ...rest],
+        attendant_during_treatment: { conservative: 5, standard: 4, claimant_max: 6 },
+      },
+    };
+    const problems = validateRules(bad, { asOf: "2026-10-10" }).join("\n");
+    expect(problems).toMatch(/pain_suffering_amenities\[1\]\.standard: falls below/);
+    expect(problems).toMatch(/attendant_during_treatment: needs conservative <= standard <= claimant_max/);
+  });
+
   it("flag unknown source ids", () => {
     const r = testRules();
     const problems = validateRules({ ...r, multiplier: { ...r.multiplier, sources: ["no_such_case"] } });

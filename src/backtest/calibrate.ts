@@ -57,6 +57,11 @@ export interface Calibration {
   rows: number;
   painSufferingAmenities: BandFit[];
   conveyanceDiet: BandFit[];
+  /** All awards, whatever the hospital stay: used when the stay (or attendant days) is not known. */
+  overall: {
+    conveyanceDiet: { n: number; observed?: BandFit["observed"] };
+    attendant: { n: number; observed?: BandFit["observed"] };
+  };
   /** Functional % the tribunal used ÷ the certificate %, where the certificate is for a limb. */
   limbToFunctional: { n: number; current: InjuryBands["limb_to_functional"]; observed?: BandFit["observed"] };
 }
@@ -105,6 +110,11 @@ export function calibrate(current: InjuryBands, rows: readonly InjuryHeadsRow[])
       : [],
   );
   const observedRatio = fit(ratios, (x) => Math.round(x * 100) / 100);
+  const all = (v: (r: InjuryHeadsRow) => number | undefined) => {
+    const xs = rows.flatMap((r) => (v(r) !== undefined ? [v(r)!] : []));
+    const observed = fit(xs, round1000);
+    return { n: xs.length, ...(observed && { observed }) };
+  };
   return {
     rows: rows.length,
     painSufferingAmenities: bands(
@@ -121,6 +131,7 @@ export function calibrate(current: InjuryBands, rows: readonly InjuryHeadsRow[])
       (r) => r.hospital_days,
       (r) => r.conveyance_diet,
     ),
+    overall: { conveyanceDiet: all((r) => r.conveyance_diet), attendant: all((r) => r.attendant) },
     limbToFunctional: {
       n: ratios.length,
       current: current.limb_to_functional,
@@ -156,6 +167,11 @@ export function renderCalibration(c: Calibration): string {
       c.painSufferingAmenities,
     ),
     ...table("Conveyance and special diet, by days in hospital", "Days", c.conveyanceDiet),
+    "### When the hospital stay or attendant days are not known (all awards)",
+    "",
+    `- Conveyance and special diet: n = ${c.overall.conveyanceDiet.n}; tribunals ${triple(c.overall.conveyanceDiet.observed, formatINR)}`,
+    `- Attendant during treatment: n = ${c.overall.attendant.n}; tribunals ${triple(c.overall.attendant.observed, formatINR)}`,
+    "",
     "### Limb certificate → functional disability factor",
     "",
     `n = ${r.n}; current ${triple(r.current, String)}; tribunals ${r.observed ? triple(r.observed, String) : `n < ${MIN_BAND_N}`}`,
