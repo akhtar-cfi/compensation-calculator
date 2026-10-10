@@ -13,7 +13,7 @@ the figure, and whether a settlement offer is fair.
 - **Entitlement (normative, not a prediction).** Applies Sarla Verma (multiplier, personal deduction), Pranay Sethi
   (future prospects, conventional heads), Magma / Satinder Kaur (consortium per claimant), Raj Kumar (injury heads),
   Shishu Pal 2026 (homemakers: "loss of domestic care"), and the state minimum wage **in force on the accident date**.
-- **A range, honestly.** Only *legal* uncertainty varies the conservative / standard / claimant-max scenarios. Every
+- **A range, honestly.** Only _legal_ uncertainty varies the conservative / standard / claimant-max scenarios. Every
   contested point is a cited parameter (`rules/range-parameters.yaml`) and is reported as a **swing factor**: how much the
   total moves if that one point goes against you or your way.
 - **Eligibility first.** Stops (with an explanation) where an s.166 estimate would mislead: s.164 compensation accepted
@@ -36,15 +36,15 @@ Input format: see `src/engine/types.ts` (`EstimateInputSchema`) and `examples/`.
 
 ## Layout
 
-| Path | What |
-|---|---|
-| `rules/` | Legal rules as data, every value with its authority (`sources.yaml`) |
+| Path                     | What                                                                     |
+| ------------------------ | ------------------------------------------------------------------------ |
+| `rules/`                 | Legal rules as data, every value with its authority (`sources.yaml`)     |
 | `sources/minimum-wages/` | State minimum-wage schedules with dated revisions and notification links |
-| `src/engine/` | Pure calculation engine (no I/O, no clock) |
-| `src/rules/` | Loading and validation of the rules files |
-| `src/cli/` | `mact` command-line tool |
-| `tests/` | Unit, persona, eligibility and property-based tests |
-| `docs/` | Methodology and law notes |
+| `src/engine/`            | Pure calculation engine (no I/O, no clock)                               |
+| `src/rules/`             | Loading and validation of the rules files                                |
+| `src/cli/`               | `mact` command-line tool                                                 |
+| `tests/`                 | Unit, persona, eligibility and property-based tests                      |
+| `docs/`                  | Methodology and law notes                                                |
 
 ## Keeping it current
 
