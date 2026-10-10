@@ -33,6 +33,7 @@ npm run mact -- estimate examples/death-salaried.yaml --as-of 2026-10-10
 npm run mact -- offer examples/death-salaried.yaml --offer 1500000
 npm run mact -- cases match examples/death-homemaker.yaml
 npm run mact -- backtest data/backtest/awards.csv
+FR_API=... npm run mact -- watch   # search for new official minimum-wage orders
 IK_API_TOKEN=... npm run mact -- ik search '"legal offer"' --doctypes delhidc --from 2025-01-01 --budget 5
 npm run mact -- rules validate --as-of 2026-10-10
 npm run ci   # typecheck, lint, tests, rules validation
@@ -46,6 +47,7 @@ Input format: see `src/engine/types.ts` (`EstimateInputSchema`) and `examples/`.
 | ------------------------ | -------------------------------------------------------------------------- |
 | `rules/`                 | Legal rules as data, every value with its authority (`sources.yaml`)       |
 | `sources/minimum-wages/` | State minimum-wage schedules with dated revisions and notification links   |
+| `sources/watch.yaml`     | Where each state publishes its wage orders, and the weekly watch list      |
 | `data/cases/`            | Case-journey library: real public judgments, anonymised summaries          |
 | `src/engine/`            | Pure calculation engine (no I/O, no clock)                                 |
 | `src/cases/`             | Case-library schema, loading and similarity matching                       |
@@ -56,6 +58,8 @@ Input format: see `src/engine/types.ts` (`EstimateInputSchema`) and `examples/`.
 
 ## Keeping it current
 
-Minimum wages are revised by states (often every April and October) and Supreme Court case law moves. Rules changes go
+Minimum wages are revised by states (often every April and October) and Supreme Court case law moves. Rates are taken
+only from official orders (never aggregator sites, which have carried forged orders); most state sites must be
+downloaded by hand from India (`docs/minimum-wage-intake.md`), and a weekly job searches for new official orders. Rules changes go
 through pull requests with the source cited; `npm run mact -- rules validate --as-of <date>` flags stale wage schedules.
 See `docs/methodology.md`.

@@ -1,0 +1,48 @@
+{
+  "CENTRAL": [
+    "https://clc.gov.in",
+    "https://clc.gov.in/clc/min-wages",
+    "https://clc.gov.in/wp-content/uploads/2026/09/mygov_17751372721.pdf"
+  ],
+  "DL": [
+    "https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/1da.pdf",
+    "https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/4da.pdf"
+  ],
+  "HR": [
+    "https://audit.hrylabour.gov.in/home/readmore?cat_id=53&status=1",
+    "https://hrylabour.gov.in/content/cms/MTE",
+    "https://hrylabour.gov.in/home/readmore?cat_id=53&status=0",
+    "https://hrylabour.gov.in/home/readmore?cat_id=53&status=1",
+    "https://hrylabour.gov.in/home/readmore?cat_id=53&status=1&keyword=&sdate=&edate=&per_page=10",
+    "https://hrylabour.gov.in/staticdocs/labourActpdfdocs/The_Minimum_Wages_Rules.pdf",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2016/Dec/W1/D02/NotificationMW21.10.15.PDF",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2017/Jan/W3/D19/1484801751.PDF",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2018/Oct/W2/D08/1538978682.PDF",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2019/Sep/W2/D13/1568353106.PDF",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2022/Oct/W2/D14/1665746988.pdf",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2023/Aug/W4/D28/1693223381.pdf",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2025/April/W1/D04/1743764559.pdf",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2025/Oct/W4/D30/1761820413.pdf",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2026/April/W2/D09/1775725409.pdf",
+    "https://storage.hrylabour.gov.in/uploads/labour_laws/Y2026/May/W1/D04/1777895433.pdf"
+  ],
+  "MP": [
+    "https://labour.mp.gov.in"
+  ],
+  "RJ": [
+    "https://labour.rajasthan.gov.in/Circulars.aspx",
+    "https://labour.rajasthan.gov.in/DisplayNews.aspx",
+    "https://labour.rajasthan.gov.in/DisplayNews.aspx/CopyRightPolicy.aspx",
+    "https://labour.rajasthan.gov.in/DisplayNews.aspx/Documents/Documents/ScreenReaderAccess.aspx",
+    "https://labour.rajasthan.gov.in/DisplayNews.aspx/Documents/RTI.aspx",
+    "https://labour.rajasthan.gov.in/FeeShop.aspx",
+    "https://labour.rajasthan.gov.in/Inspection_Procedure.aspx/Documents/Documents/BOCWNotifications.aspx",
+    "https://labour.rajasthan.gov.in/Notification.aspx",
+    "https://labour.rajasthan.gov.in/SingleReturn.aspx",
+    "https://labour.rajasthan.gov.in/actsandrules.aspx"
+  ],
+  "UP": [
+    "https://uplabour.gov.in/Index.aspx/MediaGallery/StaffDirectory/Pages/MediaGallery/index",
+    "https://uplabour.gov.in/Pages/MWA.aspx"
+  ]
+}

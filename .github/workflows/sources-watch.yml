@@ -1,0 +1,40 @@
+name: Minimum-wage watch
+
+# Weekly: searches for new official minimum-wage orders (sources/watch.yaml) and opens or updates an issue listing
+# official URLs not yet in sources/watch-seen.json. Needs the FR_API repository secret (Firecrawl); skips without it.
+on:
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Search for new official orders
+        id: watch
+        env:
+          FR_API: ${{ secrets.FR_API }}
+        run: |
+          if [ -z "$FR_API" ]; then echo "FR_API secret not set; skipping"; exit 0; fi
+          npm run -s mact -- watch --format md > watch-report.md
+          cat watch-report.md
+          if grep -q '^## New official URLs' watch-report.md; then echo "found=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Open or update the review issue
+        if: steps.watch.outputs.found == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Minimum-wage watch: new official URLs to review"
+          n=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$n" ]; then gh issue comment "$n" --body-file watch-report.md; else gh issue create --title "$title" --body-file watch-report.md; fi

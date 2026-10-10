@@ -11,6 +11,8 @@ import { matchCases } from "../cases/match.js";
 import { checkOffer, estimate, EstimateInputSchema } from "../engine/index.js";
 import { REPO_ROOT, loadRules } from "../rules/load.js";
 import { validateRules } from "../rules/validate.js";
+import { loadWatchSources } from "../watch/registry.js";
+import { firecrawlSearch, loadSeen, renderWatch, runWatch, saveSeen } from "../watch/search.js";
 import { renderCases, renderEstimate, renderOffer } from "./render.js";
 
 const USAGE = `Usage:
@@ -20,6 +22,8 @@ const USAGE = `Usage:
   mact backtest <awards.csv> [--format md|json]
   mact ik search "<terms>" [--doctypes delhidc] [--from YYYY-MM-DD] [--to YYYY-MM-DD] [--page 0] [--budget 5]
       (needs IK_API_TOKEN; responses are cached in .cache/indiankanoon and spend is logged there)
+  mact watch [--update-seen] [--max-queries 20] [--format md|json]
+      (needs FR_API; searches for new official minimum-wage orders listed in sources/watch.yaml)
   mact rules validate [--as-of YYYY-MM-DD]`;
 
 function flag(args: string[], name: string): string | undefined {
@@ -56,6 +60,21 @@ async function ikSearch(args: string[], terms: string): Promise<number> {
   return 0;
 }
 
+async function watch(args: string[]): Promise<number> {
+  const sources = loadWatchSources();
+  const seenPath = join(REPO_ROOT, "sources", "watch-seen.json");
+  const key = process.env["FR_API"] ?? process.env["FIRECRAWL_API_KEY"] ?? "";
+  const result = await runWatch(sources, firecrawlSearch(key), loadSeen(seenPath), {
+    maxQueries: Number(flag(args, "max-queries") ?? 20),
+  });
+  if (args.includes("--update-seen")) saveSeen(seenPath, result.seen);
+  console.log(
+    flag(args, "format") === "json" ? JSON.stringify(result, null, 2) : renderWatch(result, sources),
+  );
+  // Fail only when every search failed (key, quota or outage), so the weekly job surfaces it.
+  return result.queried > 0 && result.errors.length === result.queried ? 1 : 0;
+}
+
 async function main(argv: string[]): Promise<number> {
   const [cmd, sub, ...rest] = argv;
   const args = [sub ?? "", ...rest];
@@ -73,6 +92,7 @@ async function main(argv: string[]): Promise<number> {
     return 0;
   }
   if (cmd === "ik" && sub === "search" && rest[0]) return ikSearch(args, rest[0]);
+  if (cmd === "watch") return watch(args);
   if (cmd === "backtest" && sub) {
     const rules = loadRules();
     const { rows, errors } = loadAwardsCsv(sub);
