@@ -4,7 +4,7 @@ import { parseCsv } from "../../src/backtest/csv.js";
 import { loadAwardsCsv } from "../../src/backtest/load.js";
 import { renderBacktest } from "../../src/backtest/report.js";
 import { median, runRow, summarise, type RowResult } from "../../src/backtest/run.js";
-import { REPO_ROOT } from "../../src/rules/load.js";
+import { REPO_ROOT, loadRules } from "../../src/rules/load.js";
 import { testRules } from "../helpers.js";
 
 const rules = testRules();
@@ -36,6 +36,9 @@ describe("loading awards", () => {
     const real = loadAwardsCsv(join(REPO_ROOT, "data", "backtest", "awards.csv"));
     expect(real.errors).toEqual([]);
     expect(real.rows.length).toBeGreaterThanOrEqual(1);
+    // Every real row runs through all four checks without throwing (e.g. a "0" deduction).
+    const live = loadRules();
+    for (const r of real.rows) expect(() => runRow(live, r)).not.toThrow();
   });
 });
 

@@ -48,6 +48,9 @@ export interface RowResult {
 
 const FORMULA_HEAD = { death: "loss_of_dependency", injury: "loss_of_earning_capacity" } as const;
 
+/** "0" (no deduction) is a valid finding; parseFraction only reads n/d. */
+const deductionOf = (d: string) => (d === "0" ? 0 : parseFraction(d));
+
 function family(r: AwardRow) {
   return {
     married: r.married ?? false,
@@ -82,9 +85,11 @@ export function replicate(r: AwardRow): ReplicateResult {
     return { status: "skipped", reason: "needs accepted income, multiplier and the awarded formula head" };
   if (r.kind === "injury" && r.disability_pct_applied === undefined)
     return { status: "skipped", reason: "needs the disability % applied" };
-  // An unknown future-prospects % is not 0%: guessing it would turn missing data into a false failure.
+  // An unknown future-prospects % or deduction is not 0: guessing would turn missing data into a false failure.
   if (r.fp_pct_applied === undefined && awarded > 0)
     return { status: "skipped", reason: "needs the future-prospects % applied" };
+  if (r.kind === "death" && r.deduction_applied === undefined && awarded > 0)
+    return { status: "skipped", reason: "needs the personal-expenses deduction applied" };
   const common = {
     monthlyIncome: r.income_monthly_accepted,
     futureProspectsPct: r.fp_pct_applied ?? 0, // 0 only when the formula head is 0
@@ -96,7 +101,7 @@ export function replicate(r: AwardRow): ReplicateResult {
     r.kind === "death"
       ? computeDeath({
           ...common,
-          deduction: parseFraction(r.deduction_applied ?? "0"),
+          deduction: deductionOf(r.deduction_applied ?? "0"),
           conventional: { lossOfEstate: 0, funeral: 0, consortiumPerClaimant: 0, steps: 0 },
           consortiumClaimants: 0,
         })
@@ -154,7 +159,7 @@ export function conformity(rules: RulesBundle, r: AwardRow): ConformityResult {
   check("multiplier", r.multiplier_applied, "multiplier");
   check("future_prospects", r.fp_pct_applied, "future_prospects");
   if (r.kind === "death" && r.married !== undefined && r.deduction_applied !== undefined)
-    check("deduction", parseFraction(r.deduction_applied), "personal_deduction");
+    check("deduction", deductionOf(r.deduction_applied), "personal_deduction");
   const ruleHead = headOf(out, r);
   return {
     status: "computed",
