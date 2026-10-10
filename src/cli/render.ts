@@ -1,3 +1,4 @@
+import { summariseJourney, type CaseMatch } from "../cases/match.js";
 import type { EstimateOutput, OfferCheck } from "../engine/index.js";
 import { formatINR } from "../engine/money.js";
 
@@ -95,4 +96,49 @@ export function renderOffer(c: OfferCheck): string {
     "",
     ...c.notes.map((n) => `- ${n}`),
   ].join("\n");
+}
+
+const forumLabel: Record<string, string> = {
+  insurer_offer: "Insurer's offer",
+  lok_adalat: "Lok Adalat",
+  mact: "Tribunal (MACT)",
+  high_court: "High Court",
+  supreme_court: "Supreme Court",
+};
+
+/** Similar real cases, each as a journey from offer/tribunal to the final amount. */
+export function renderCases(matches: readonly CaseMatch[]): string {
+  const L: string[] = ["## Similar real cases", ""];
+  if (!matches.length) {
+    L.push("_No similar case in the library yet._");
+    return L.join("\n");
+  }
+  L.push(
+    "_Real, public judgments. Every case turns on its own evidence: these show what happened, not what you will get._",
+  );
+  for (const m of matches) {
+    const c = m.case;
+    const j = summariseJourney(c);
+    L.push("", `### ${c.title}`, "");
+    L.push(c.summary, "");
+    L.push("| Step | Amount |", "|---|---:|");
+    for (const s of c.journey)
+      L.push(
+        `| ${forumLabel[s.forum]}${s.date ? ` (${s.date.slice(0, 4)})` : ""}${s.note ? ` — ${s.note}` : ""} | ${formatINR(s.amount)} |`,
+      );
+    const facts = [
+      j.years !== undefined ? `${j.years} years from accident to final decision` : undefined,
+      j.multiple !== undefined
+        ? `final amount ${j.multiple.toFixed(1)}× the ${j.finalForum === "mact" ? "offer" : "tribunal award"}`
+        : undefined,
+      c.interest_pct !== undefined ? `plus ${c.interest_pct}% a year interest` : undefined,
+    ].filter(Boolean);
+    if (facts.length) L.push("", facts.join(" · "));
+    L.push("", "What mattered:");
+    for (const w of c.what_mattered) L.push(`- ${w}`);
+    if (m.similar.length) L.push(`- _Similar to you:_ ${m.similar.join("; ")}`);
+    if (m.different.length) L.push(`- _Different:_ ${m.different.join("; ")}`);
+    L.push("", `Source: ${c.citation} — ${c.source_url}`);
+  }
+  return L.join("\n");
 }

@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 import { readFileSync } from "node:fs";
 import { parse } from "yaml";
-import { checkOffer, estimate } from "../engine/index.js";
+import { loadCases } from "../cases/load.js";
+import { matchCases } from "../cases/match.js";
+import { checkOffer, estimate, EstimateInputSchema } from "../engine/index.js";
 import { loadRules } from "../rules/load.js";
 import { validateRules } from "../rules/validate.js";
-import { renderEstimate, renderOffer } from "./render.js";
+import { renderCases, renderEstimate, renderOffer } from "./render.js";
 
 const USAGE = `Usage:
   mact estimate <input.json|yaml> [--as-of YYYY-MM-DD] [--format md|json]
   mact offer <input.json|yaml> --offer <rupees> [--years 6] [--interest 7.5] [--discount 7] [--fee 0] [--as-of YYYY-MM-DD]
+  mact cases match <input.json|yaml> [--limit 3] [--format md|json]
   mact rules validate [--as-of YYYY-MM-DD]`;
 
 function flag(args: string[], name: string): string | undefined {
@@ -38,6 +41,12 @@ function main(argv: string[]): number {
     console.log(
       `✓ rules ${rules.version}: ${rules.sources.length} sources, ${Object.keys(rules.minimumWages).length} minimum-wage schedules`,
     );
+    return 0;
+  }
+  if (cmd === "cases" && sub === "match" && rest[0]) {
+    const input = EstimateInputSchema.parse(readInput(rest[0]));
+    const matches = matchCases(input, loadCases(), Number(flag(args, "limit") ?? 3));
+    console.log(flag(args, "format") === "json" ? JSON.stringify(matches, null, 2) : renderCases(matches));
     return 0;
   }
   if ((cmd === "estimate" || cmd === "offer") && sub) {

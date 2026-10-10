@@ -19,6 +19,9 @@ the figure, and whether a settlement offer is fair.
 - **Eligibility first.** Stops (with an explanation) where an s.166 estimate would mislead: s.164 compensation accepted
   through the insurer (the claim lapses), untraced vehicles (hit-and-run scheme instead), owner-driver single-vehicle crashes.
 - **Offer check.** Compares an insurer / Lok Adalat offer with the estimate, including time to award, interest and fees.
+- **Case journeys.** Shows up to three similar real, public cases (`data/cases/`): the offer or tribunal award, each
+  appeal, the final amount, how long it took and what evidence mattered. Matching is rule-based and says how each case
+  differs from yours; weak matches are not shown.
 - **Correct totals by construction.** Working figures (income, multiplier...) are a different type from payable heads;
   only `sumPayable()` produces a total.
 
@@ -28,6 +31,7 @@ the figure, and whether a settlement offer is fair.
 npm install
 npm run mact -- estimate examples/death-salaried.yaml --as-of 2026-10-10
 npm run mact -- offer examples/death-salaried.yaml --offer 1500000
+npm run mact -- cases match examples/death-homemaker.yaml
 npm run mact -- rules validate --as-of 2026-10-10
 npm run ci   # typecheck, lint, tests, rules validation
 ```
@@ -36,15 +40,17 @@ Input format: see `src/engine/types.ts` (`EstimateInputSchema`) and `examples/`.
 
 ## Layout
 
-| Path                     | What                                                                     |
-| ------------------------ | ------------------------------------------------------------------------ |
-| `rules/`                 | Legal rules as data, every value with its authority (`sources.yaml`)     |
-| `sources/minimum-wages/` | State minimum-wage schedules with dated revisions and notification links |
-| `src/engine/`            | Pure calculation engine (no I/O, no clock)                               |
-| `src/rules/`             | Loading and validation of the rules files                                |
-| `src/cli/`               | `mact` command-line tool                                                 |
-| `tests/`                 | Unit, persona, eligibility and property-based tests                      |
-| `docs/`                  | Methodology and law notes                                                |
+| Path                     | What                                                                       |
+| ------------------------ | -------------------------------------------------------------------------- |
+| `rules/`                 | Legal rules as data, every value with its authority (`sources.yaml`)       |
+| `sources/minimum-wages/` | State minimum-wage schedules with dated revisions and notification links   |
+| `data/cases/`            | Case-journey library: real public judgments, anonymised summaries          |
+| `src/engine/`            | Pure calculation engine (no I/O, no clock)                                 |
+| `src/cases/`             | Case-library schema, loading and similarity matching                       |
+| `src/rules/`             | Loading and validation of the rules files                                  |
+| `src/cli/`               | `mact` command-line tool                                                   |
+| `tests/`                 | Unit, persona, property-based, golden (SC judgment) and case-library tests |
+| `docs/`                  | Methodology and law notes                                                  |
 
 ## Keeping it current
 

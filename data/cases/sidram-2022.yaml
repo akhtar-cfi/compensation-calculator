@@ -1,0 +1,29 @@
+id: sidram-2022
+title: Street vendor, 19, Karnataka, paraplegia (injury)
+citation: "Sidram v The Divisional Manager, United India Insurance Co. Ltd. & Anr., (2023) 3 SCC 439"
+court: SC
+source_url: "https://api.sci.gov.in/supremecourt/2018/26338/26338_2018_1_1502_39777_Judgement_16-Nov-2022.pdf"
+golden_id: sidram-2022
+kind: injury
+archetypes: [injury_paraplegia, injury_partial_disability_self_employed_or_manual]
+state: KA
+facts:
+  accident_date: 2012-07-18
+  age: 19
+  employment: self_employed
+  occupation: itinerant utensil seller
+  disability_pct: 45
+journey:
+  - {forum: mact, amount: 613000}
+  - {forum: high_court, amount: 926800}
+  - {forum: supreme_court, date: 2022-11-16, amount: 2178600}
+interest_pct: 6
+what_mattered:
+  - "Without income proof, the Court fixed a notional income of Rs 8,000 a month."
+  - "Lifelong costs were capitalised: future medical Rs 1,000 a month and an attendant Rs 2,000 a month, each x 12 x 18."
+  - "The Court used the 45% disability certificate for lost earnings and added no future prospects."
+summary: >-
+  A 19-year-old street vendor became paraplegic in 2012. The tribunal awarded Rs 6.13 lakh and the High Court
+  Rs 9.27 lakh. In 2022 the Supreme Court awarded Rs 21.79 lakh, more than 10 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []
