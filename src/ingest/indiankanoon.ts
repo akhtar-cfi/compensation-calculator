@@ -117,6 +117,36 @@ export class IndianKanoonClient {
   }
 }
 
+/** Rupees recorded in a cache directory's ledger, across every run. */
+export function ledgerTotal(cacheDir: string): number {
+  const file = join(cacheDir, "ledger.jsonl");
+  if (!existsSync(file)) return 0;
+  const total = readFileSync(file, "utf8")
+    .split("\n")
+    .filter(Boolean)
+    .reduce((sum, line) => sum + (JSON.parse(line) as { rupees: number }).rupees, 0);
+  return Math.round(total * 100) / 100;
+}
+
+const ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
+
+/** Plain text of a judgment's HTML: one line per block, entities decoded, blank runs collapsed. */
+export function htmlToText(html: string): string {
+  return html
+    .replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, "")
+    .replace(/<br\s*\/?>|<\/(p|div|pre|h\d|li|tr|blockquote)>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e: string) => {
+      if (e[0] !== "#") return ENTITIES[e.toLowerCase()] ?? m;
+      const code = e[1] === "x" || e[1] === "X" ? parseInt(e.slice(2), 16) : Number(e.slice(1));
+      return String.fromCodePoint(code);
+    })
+    .split("\n")
+    .map((l) => l.replace(/[ \t\u00a0]+/g, " ").trim())
+    .filter(Boolean)
+    .join("\n");
+}
+
 /** DD-MM-YYYY, the date format the search API expects. */
 export function ikDate(iso: string): string {
   const [y, m, d] = iso.split("-");

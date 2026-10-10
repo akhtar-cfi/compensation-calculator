@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
 import { loadAwardsCsv } from "../backtest/load.js";
@@ -7,7 +7,7 @@ import { renderBacktest } from "../backtest/report.js";
 import { runRow, summarise } from "../backtest/run.js";
 import { renderCoverage } from "../cases/coverage.js";
 import { loadCases } from "../cases/load.js";
-import { IndianKanoonClient, buildQuery } from "../ingest/indiankanoon.js";
+import { IndianKanoonClient, buildQuery, htmlToText, ledgerTotal } from "../ingest/indiankanoon.js";
 import { matchCases } from "../cases/match.js";
 import { checkOffer, estimate, EstimateInputSchema } from "../engine/index.js";
 import { REPO_ROOT, loadRules } from "../rules/load.js";
@@ -23,7 +23,9 @@ const USAGE = `Usage:
   mact cases coverage
   mact backtest <awards.csv> [--format md|json]
   mact ik search "<terms>" [--doctypes delhidc] [--from YYYY-MM-DD] [--to YYYY-MM-DD] [--page 0] [--budget 5]
-      (needs IK_API_TOKEN; responses are cached in .cache/indiankanoon and spend is logged there)
+  mact ik fetch <tid...> [--ids-from file] [--budget 5]
+      (needs IK_API_TOKEN; responses are cached in .cache/indiankanoon and spend is logged there;
+       fetch writes each judgment's plain text to .cache/indiankanoon/text/<tid>.txt)
   mact watch [--update-seen] [--max-queries 20] [--format md|json]
       (needs FR_API; searches for new official minimum-wage orders listed in sources/watch.yaml)
   mact rules validate [--as-of YYYY-MM-DD]`;
@@ -41,12 +43,17 @@ function readInput(path: string): unknown {
   return parse(readFileSync(path, "utf8"));
 }
 
-async function ikSearch(args: string[], terms: string): Promise<number> {
-  const client = new IndianKanoonClient({
+const IK_CACHE = join(REPO_ROOT, ".cache", "indiankanoon");
+
+const ikClient = (args: string[]) =>
+  new IndianKanoonClient({
     token: process.env["IK_API_TOKEN"] ?? "",
     budgetRupees: Number(flag(args, "budget") ?? 5),
-    cacheDir: join(REPO_ROOT, ".cache", "indiankanoon"),
+    cacheDir: IK_CACHE,
   });
+
+async function ikSearch(args: string[], terms: string): Promise<number> {
+  const client = ikClient(args);
   const doctypes = flag(args, "doctypes");
   const from = flag(args, "from");
   const to = flag(args, "to");
@@ -56,9 +63,44 @@ async function ikSearch(args: string[], terms: string): Promise<number> {
     ...(to !== undefined && { to }),
   });
   const res = await client.search(q, Number(flag(args, "page") ?? 0));
-  console.log(`# ${q}\n# found: ${res.found ?? "?"} · spent Rs ${client.spentRupees}`);
+  console.log(
+    `# ${q}\n# found: ${res.found ?? "?"} · spent Rs ${client.spentRupees} (ledger total Rs ${ledgerTotal(IK_CACHE)})`,
+  );
   for (const d of res.docs)
     console.log(`${d.tid}\t${d.publishdate ?? ""}\t${d.docsource ?? ""}\t${d.title.replace(/<[^>]+>/g, "")}`);
+  return 0;
+}
+
+/** Downloads judgments (cached) and writes their plain text, with title, court, date and link on top. */
+async function ikFetch(args: string[]): Promise<number> {
+  const listFile = flag(args, "ids-from");
+  const listed = listFile
+    ? readFileSync(listFile, "utf8")
+        .split("\n")
+        .map((l) => l.split(/\s/)[0])
+    : [];
+  // Bare numbers on the command line, except a flag's value (e.g. --budget 50).
+  const given = args.slice(1).filter((a, i) => !args[i]?.startsWith("--"));
+  const tids = new Set([...given, ...listed].filter((t) => t && /^\d+$/.test(t)).map(Number));
+  const client = ikClient(args);
+  const dir = join(IK_CACHE, "text");
+  mkdirSync(dir, { recursive: true });
+  let written = 0;
+  for (const tid of tids) {
+    const file = join(dir, `${tid}.txt`);
+    if (existsSync(file)) continue;
+    const d = await client.doc(tid);
+    const head = [
+      htmlToText(d.title),
+      [d.docsource, d.publishdate].filter(Boolean).join(" · "),
+      `https://indiankanoon.org/doc/${tid}/`,
+    ];
+    writeFileSync(file, [...head, "", htmlToText(d.doc)].join("\n") + "\n");
+    written++;
+  }
+  console.log(
+    `wrote ${written} of ${tids.size} text file(s) to ${dir} · spent Rs ${client.spentRupees} (ledger total Rs ${ledgerTotal(IK_CACHE)})`,
+  );
   return 0;
 }
 
@@ -94,6 +136,7 @@ async function main(argv: string[]): Promise<number> {
     return 0;
   }
   if (cmd === "ik" && sub === "search" && rest[0]) return ikSearch(args, rest[0]);
+  if (cmd === "ik" && sub === "fetch") return ikFetch(args);
   if (cmd === "watch") return watch(args);
   if (cmd === "backtest" && sub) {
     const rules = loadRules();

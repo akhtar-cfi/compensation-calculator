@@ -6,7 +6,9 @@ import {
   BudgetExceededError,
   IndianKanoonClient,
   buildQuery,
+  htmlToText,
   ikDate,
+  ledgerTotal,
   type FetchLike,
 } from "../../src/ingest/indiankanoon.js";
 
@@ -83,5 +85,27 @@ describe("query building", () => {
     expect(buildQuery('"legal offer"', { doctypes: "delhidc", from: "2025-01-01", to: "2026-09-30" })).toBe(
       '"legal offer" doctypes: delhidc fromdate: 1-1-2025 todate: 30-9-2026',
     );
+  });
+});
+
+describe("judgment text", () => {
+  it("keeps one line per block, decodes entities and drops markup", () => {
+    const html =
+      '<div class="judgments"><h2>A v. B</h2><p>Rs.&nbsp;1,00,000/- &amp; interest @ 7.5%</p>' +
+      "<pre>Loss of income\n  Rs. 2,000</pre><script>x()</script><p>&#8377;5 &#x20B9;6</p></div>";
+    expect(htmlToText(html)).toBe(
+      "A v. B\nRs. 1,00,000/- & interest @ 7.5%\nLoss of income\nRs. 2,000\n₹5 ₹6",
+    );
+  });
+});
+
+describe("ledger", () => {
+  it("totals spend across runs and reads 0 with no ledger", async () => {
+    const dir = tmp();
+    expect(ledgerTotal(dir)).toBe(0);
+    const m = mockFetch({ tid: 5, title: "x", doc: "<p/>" });
+    await new IndianKanoonClient({ token: "t", budgetRupees: 1, cacheDir: dir, fetch: m.fetch }).doc(1);
+    await new IndianKanoonClient({ token: "t", budgetRupees: 1, cacheDir: dir, fetch: m.fetch }).search("q");
+    expect(ledgerTotal(dir)).toBe(0.7);
   });
 });
