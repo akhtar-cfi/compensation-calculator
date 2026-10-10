@@ -167,8 +167,11 @@ export const MinimumWageRevisionSchema = z.object({
   }),
   evidence_quote: z.string().optional(),
   sha256: z.string().optional(),
-  confidence: z.enum(["official", "secondary"]),
+  /** "gap": no rate could be found for this period; all rates are null and estimates stop rather than guess. */
+  confidence: z.enum(["official", "secondary", "gap"]),
   verified_by: z.array(z.string()).default([]),
+  /** Shown to the user as a warning whenever this revision is used (e.g. a legally contested period). */
+  caution: z.string().optional(),
   notes: z.string().optional(),
 });
 

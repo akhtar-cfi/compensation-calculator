@@ -110,8 +110,8 @@ Award ÷ standard estimate, middle half. Delhi motor accident claims tribunal aw
 
 | Claim | Awards | 25th percentile | Median | 75th percentile |
 |---|---:|---:|---:|---:|
-| Death | 75 | 0.71 | 1 | 1.11 |
-| Injury | 91 | 0.92 | 1.25 | 1.79 |
+| Death | 112 | 0.69 | 1 | 1.15 |
+| Injury | 113 | 0.89 | 1.19 | 1.82 |
 
 Sources: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv. Signed off: **no — awaiting legal sign-off**.
 
@@ -231,6 +231,21 @@ Base rates last fixed by notification of 22.10.2019; dearness allowance (DA) add
 
 | From | Zone | Unskilled | Semi-skilled | Skilled | Highly skilled | Order | Source quality |
 |---|---|---:|---:|---:|---:|---|---|
+| 2011-10-01 | All | ₹6,656 | ₹7,356 | ₹8,112 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
+| 2012-04-01 | All | – | – | – | – | – | gap |
+| 2013-04-01 | All | ₹7,722 | ₹8,528 | ₹9,386 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/4626e80041514d1ea15aa9ac8fd59c37/order+-minwages.pdf) | official |
+| 2013-10-01 | All | ₹8,086 | ₹8,918 | ₹9,802 | – | [F.No.12 (142)/02/MW/VII 3124](http://www.delhi.gov.in/wps/wcm/connect/4626e80041514d1ea15aa9ac8fd59c37/order+-minwages.pdf) | official |
+| 2014-04-01 | All | ₹8,554 | ₹9,438 | ₹10,374 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
+| 2014-10-01 | All | ₹8,632 | ₹9,542 | ₹10,478 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
+| 2015-04-01 | All | ₹9,048 | ₹10,010 | ₹10,998 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
+| 2015-10-01 | All | ₹9,178 | ₹10,140 | ₹11,154 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
+| 2016-04-01 | All | ₹9,568 | ₹10,582 | ₹11,622 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
+| 2016-10-01 | All | ₹9,724 | ₹10,764 | ₹11,830 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
+| 2017-03-03 | All | ₹13,350 | ₹14,698 | ₹16,182 | – | [No. F. Addl.LC/Lab/MW/2016/4859](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
+| 2017-04-01 | All | ₹13,584 | ₹14,958 | ₹16,468 | – | [order](http://labour.delhi.gov.in/sites/default/files/All-PDF/Odr2018631057_0.pdf) | official |
+| 2018-04-01 | All | ₹13,896 | ₹15,296 | ₹16,858 | – | [F.No. 12(142)/02/MW/VII/201](http://labour.delhi.gov.in/sites/default/files/All-PDF/Odr2018631057_0.pdf) | official |
+| 2018-08-04 | All | ₹13,896 | ₹15,296 | ₹16,858 | – | [F.No. 12(142)/02/MW/VII/201](http://labour.delhi.gov.in/sites/default/files/All-PDF/Odr2018631057_0.pdf) | official |
+| 2018-11-01 | All | ₹14,000 | ₹15,400 | ₹16,962 | – | [order](http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages) | official |
 | 2019-04-01 | All | ₹14,468 | ₹15,920 | ₹17,508 | – | [Order No.12(142)/02/MW/VII/3636](https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/5da.pdf) | official |
 | 2019-10-01 | All | ₹14,806 | ₹16,284 | ₹17,924 | – | [Order No.12(142)/02/MW/VII/3636](https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/5da.pdf) | official |
 | 2019-10-22 | All | ₹14,842 | ₹16,341 | ₹17,991 | – | [Notification No.12(142)/02/MW/VII/3636](https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/4da.pdf) | official |
@@ -248,7 +263,10 @@ Base rates last fixed by notification of 22.10.2019; dearness allowance (DA) add
 
 Gaps:
 
-- Before 1 Apr 2019: not loaded. The 2017 notification was quashed by the Delhi High Court (4 Aug 2018) and partly restored by the Supreme Court (31 Oct 2018); the applicable rate for accidents before April 2019 needs a separate check.
+- Before 1 Oct 2011: not loaded.
+- 1 Apr 2012 - 31 Mar 2013: no rate. The DA orders of 1 Apr and 1 Oct 2012 were not found (the official page was not updated May 2012 - Oct 2013 and the order PDFs are not archived). Estimates for accidents in this year say so instead of using the 2011 rates.
+- 3 Mar 2017 - 31 Oct 2018: legally contested. The 3 Mar 2017 notification was quashed by the Delhi High Court (4 Aug 2018) and its rates restored by the Supreme Court's interim order (31 Oct 2018, from 1 Nov 2018). No lower official series was published for the period. The official series is loaded with a caution; Delhi tribunals in the back-test applied it. For legal sign-off.
+- Notification numbers are known only for the orders of Oct 2013, Mar 2017 and Apr 2018; other 2011-2018 rates are read from the Labour Department's own rate page (Wayback copies). The 1 Oct 2011 table prints semi-skilled 7,356 although 7,098 + 260 = 7,358 (recorded as printed).
 - 1 Oct 2025 and 1 Apr 2026: no DA order found. The official list (archived 27 Jul 2026) still shows the 1 Apr 2025 order as the latest. Accidents after 1 Apr 2025 use the 1 Apr 2025 rates until an official order is found.
 - FORGED ORDER - do not use: F.No.(143)/02/MW/VII/Partfile/212-261 dated 13.10.2025 (Rs 19,846 / 21,813 / 23,905). Declared fraudulent by Labour Department circular Lab-L011/5/2025-Addl.LC-II/3616 dated 14/10/2025, which says no DA order had been issued for the period from 1 Oct 2025 and that the last official increase was effective 1 Apr 2025 (circular seen as an image reproduced on hrsoftwaredelhi.com; official copy not retrieved).
 - 1 Oct 2026 revision due; check the official page.

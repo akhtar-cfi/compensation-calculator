@@ -17,9 +17,53 @@ describe("Delhi minimum wages (official orders)", () => {
     expect(dl("skilled", "2025-06-01")?.monthly).toBe(22411);
   });
 
-  it("has no rate before April 2019 (gap is flagged, not guessed)", () => {
-    expect(dl("unskilled", "2019-03-31")).toBeUndefined();
-    expect(rules.minimumWages["DL"]?.gaps.join(" ")).toMatch(/Before 1 Apr 2019/);
+  it("covers Oct 2011 - Mar 2019 from the Labour Department's own rate page and orders", () => {
+    expect(dl("unskilled", "2013-05-01")?.monthly).toBe(7722);
+    expect(dl("skilled", "2016-08-15")?.monthly).toBe(11622);
+    expect(dl("unskilled", "2017-03-03")?.monthly).toBe(13350);
+    expect(dl("semi_skilled", "2017-06-17")?.monthly).toBe(14958);
+    expect(dl("unskilled", "2018-12-19")?.monthly).toBe(14000);
+    expect(dl("unskilled", "2019-03-31")?.monthly).toBe(14000);
+  });
+
+  it("agrees with the minimum wage Delhi tribunals applied (cross-check against published awards)", () => {
+    // [accident date, category, monthly rate stated in the award, Indian Kanoon id]
+    const awards: [string, "unskilled" | "semi_skilled" | "skilled", number, string][] = [
+      ["2013-04-22", "unskilled", 7722, "45313649"],
+      ["2015-10-22", "unskilled", 9178, "192466551"],
+      ["2016-06-09", "unskilled", 9568, "145021682"],
+      ["2016-12-31", "unskilled", 9724, "14817611"],
+      ["2017-05-26", "unskilled", 13584, "8840041"],
+      ["2018-09-07", "skilled", 16858, "123863415"],
+      ["2018-12-07", "skilled", 16962, "115431444"],
+    ];
+    for (const [on, cat, rate] of awards) expect(dl(cat, on)?.monthly).toBe(rate);
+  });
+
+  it("has no rate where no official order was found (gap is flagged, not guessed)", () => {
+    expect(dl("unskilled", "2011-09-30")).toBeUndefined();
+    expect(dl("unskilled", "2012-06-01")).toBeUndefined();
+    expect(dl("skilled", "2013-03-31")).toBeUndefined();
+    expect(rules.minimumWages["DL"]?.gaps.join(" ")).toMatch(/1 Apr 2012 - 31 Mar 2013: no rate/);
+  });
+
+  it("warns when a rate falls in the legally contested 2017-18 period", () => {
+    const codes = (accidentDate: string) =>
+      estimate(
+        rules,
+        {
+          kind: "death",
+          accidentDate,
+          state: "DL",
+          victim: { ageYears: 30, employment: "informal" },
+          family: { married: true, spouse: true, children: 1 },
+        },
+        { asOf: "2026-10-10" },
+      ).warnings.map((w) => w.code);
+    expect(codes("2018-09-01")).toContain("MW_CONTESTED");
+    expect(codes("2017-06-01")).toContain("MW_CONTESTED");
+    expect(codes("2019-06-01")).not.toContain("MW_CONTESTED");
+    expect(codes("2016-06-01")).not.toContain("MW_CONTESTED");
   });
 
   it("has no highly-skilled category, so falls back to skilled", () => {
@@ -34,9 +78,17 @@ describe("Delhi minimum wages (official orders)", () => {
     expect(rules.minimumWages["DL"]!.revisions.map((r) => r.effective_from)).not.toContain("2025-10-01");
   });
 
-  it("every revision cites a labour.delhi.gov.in order", () => {
-    for (const r of rules.minimumWages["DL"]!.revisions)
-      expect(r.notification.url).toMatch(/^https:\/\/labour\.delhi\.gov\.in\//);
+  it("every revision cites the Delhi Labour Department's own site (or is a declared gap)", () => {
+    for (const r of rules.minimumWages["DL"]!.revisions) {
+      if (r.confidence === "gap") {
+        expect(Object.values(r.rates.All ?? {}).every((v) => v === null)).toBe(true);
+        continue;
+      }
+      expect(r.notification.url).toMatch(
+        /^https?:\/\/(labour\.delhi\.gov\.in\/|(www\.)?delhi\.gov\.in\/wps\/wcm\/connect\/)/,
+      );
+      expect(r.evidence_quote).toBeTruthy();
+    }
   });
 });
 

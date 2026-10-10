@@ -1,5 +1,5 @@
 # Delhi (NCT) minimum wages: dated revisions from official Labour Department orders.
-# Rates are monthly (per-day rate = monthly / 26). Every row checked: previous rate + DA = new rate.
+# Rates are monthly (per-day rate = monthly / 26). Every row checked: previous rate + DA = new rate (exceptions in notes).
 # Do NOT add a rate from an aggregator or news site without the official order: a FORGED order for 1 Oct 2025
 # (Rs 19,846 unskilled) circulated widely and was reported by compliance publishers (see gaps).
 code: DL
@@ -20,6 +20,150 @@ days_per_month: 26
 # The official order list (Wayback capture of 27 Jul 2026) shows no order after 1 Apr 2025.
 last_checked: 2026-07-27
 revisions:
+  - effective_from: 2011-10-01
+    unit: month
+    rates: {All: {unskilled: 6656, semi_skilled: 7356, skilled: 8112, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| Un-skilled | 6422.00 | 234.00 | 6656.00 | 256.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20120801102849/http://delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages of the Labour Department's own page/order. Arithmetic: mismatch: DA 01.10.2011 semi_skilled: 7098 + 260 = 7358, printed 7356. Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 8,814. Rate in force on 1 Apr 2012 (window start). Shown on the official 'Current Minimum Wage' page, which was NOT updated for the DA steps of 01.04.2012, 01.10.2012 or 01.04.2013: captures of May 2012, Aug 2012, Jan 2013, Jul 2013, Sep 2013 and 5 Oct 2013 all still show this table. Base: notification F.12(1)142/11/MW/Lab/2023-2047 dated 26.07.2011 (cited in the 2013 order and the 2017 notification); the 01.10.2011 DA order itself was not fetched. Semi-skilled (and non-matriculate) printed 7356 although 7098 + 260 = 7358; same page has another obvious typo (shops/clubs semi-skilled (ii) 6973 + 260 printed as 6531). Lower separate rates existed for shops & establishments and clubs where meals/lodging are provided (not recorded)."
+  - effective_from: 2012-04-01
+    unit: month
+    rates: {All: {unskilled: null, semi_skilled: null, skilled: null, highly_skilled: null}}
+    notification: {}
+    confidence: gap
+    verified_by: []
+    notes: "GAP, 1 Apr 2012 - 31 Mar 2013: DA orders of 1 Apr and 1 Oct 2012 not found. The official page was not updated May 2012 - Oct 2013; the order PDFs could not be retrieved from the archive. No rate is used rather than the 2011 rates."
+  - effective_from: 2013-04-01
+    unit: month
+    rates: {All: {unskilled: 7722, semi_skilled: 8528, skilled: 9386, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/4626e80041514d1ea15aa9ac8fd59c37/order+-minwages.pdf
+    evidence_quote: "| Un-skilled | 7722.00 | 364.00 | 8086.00 | 311.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20131021135527id_/http://www.delhi.gov.in:80/wps/wcm/connect/4626e80041514d1ea15aa9ac8fd59c37/order+-minwages.pdf?MOD=AJPERES&lmod=-2107731956&CACHEID=4626e80041514d1ea15aa9ac8fd59c37&lmod=-2107731956&CACHEID=4626e80041514d1ea15aa9ac8fd59c37 of the Labour Department's own page/order. Arithmetic: not checkable (the 01.04.2012, 01.10.2012 and 01.04.2013 DA amounts were not found). Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 10,218. Rates 'as on 01.04.2013' as printed in the official DA order for 01.10.2013 (and on the official page, captures Nov 2013 - Oct 2014). The DA order that set them (w.e.f. 01.04.2013) was not found, so effective_from 2013-04-01 is inferred from the column heading 'Rates as on 01.04.2013'. Per-day rate not printed for this step."
+  - effective_from: 2013-10-01
+    unit: month
+    rates: {All: {unskilled: 8086, semi_skilled: 8918, skilled: 9802, highly_skilled: null}}
+    notification:
+      number: "F.No.12 (142)/02/MW/VII 3124"
+      url: http://www.delhi.gov.in/wps/wcm/connect/4626e80041514d1ea15aa9ac8fd59c37/order+-minwages.pdf
+    evidence_quote: "| Un-skilled | 7722.00 | 364.00 | 8086.00 | 311.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20131021135527id_/http://www.delhi.gov.in:80/wps/wcm/connect/4626e80041514d1ea15aa9ac8fd59c37/order+-minwages.pdf?MOD=AJPERES&lmod=-2107731956&CACHEID=4626e80041514d1ea15aa9ac8fd59c37&lmod=-2107731956&CACHEID=4626e80041514d1ea15aa9ac8fd59c37 of the Labour Department's own page/order. Arithmetic: ok. Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 10,686. Official DA order PDF (Addl. Labour Commissioner, Rajender Dhar). The order date is not in the extracted text; the PDF was captured by the Wayback Machine on 21.10.2013, so it was issued on or before that day. CPI Jan-Jun 2013 average 225.50, +9.67 points. The order also gives lower shops/clubs rates where meals/lodging are provided."
+  - effective_from: 2014-04-01
+    unit: month
+    rates: {All: {unskilled: 8554, semi_skilled: 9438, skilled: 10374, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| Un-skilled | 8554.00 | 78.00 | 8632.00 | 332.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20150109110436/http://www.delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages of the Labour Department's own page/order. Arithmetic: not directly checkable: the DA w.e.f. 01.04.2014 is not printed anywhere fetched; implied DA = 8554-8086 = 468, 9438-8918 = 520, 10374-9802 = 572, graduate 11310-10686 = 624 (consistent multiples of 26). Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 11,310. Rates 'as on 01.04.2014' printed on the official page (capture 9 Jan 2015) as the base for the 01.10.2014 DA. The official page skipped the 01.04.2014 step (captures Jun, Jul, Oct 2014 still show the 01.10.2013 table). The 01.04.2014 DA order itself was not found."
+  - effective_from: 2014-10-01
+    unit: month
+    rates: {All: {unskilled: 8632, semi_skilled: 9542, skilled: 10478, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| Un-skilled | 8554.00 | 78.00 | 8632.00 | 332.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20150109110436/http://www.delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages of the Labour Department's own page/order. Arithmetic: ok. Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 11,414. Official page table (DA order number/date not shown on the page; order PDF not found)."
+  - effective_from: 2015-04-01
+    unit: month
+    rates: {All: {unskilled: 9048, semi_skilled: 10010, skilled: 10998, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| Un-skilled | 8632.00 | 416.00 | 9048.00 | 348.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20150814035911/http://www.delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages of the Labour Department's own page/order. Arithmetic: ok. Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 11,986. Official page table (DA order number/date not shown on the page; order PDF not found)."
+  - effective_from: 2015-10-01
+    unit: month
+    rates: {All: {unskilled: 9178, semi_skilled: 10140, skilled: 11154, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| Un-skilled | 9048.00 | 130.00 | 9178.00 | 353.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20160204180848/http://www.delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages of the Labour Department's own page/order. Arithmetic: ok. Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 12,142. Official page table (DA order number/date not shown on the page; order PDF not found)."
+  - effective_from: 2016-04-01
+    unit: month
+    rates: {All: {unskilled: 9568, semi_skilled: 10582, skilled: 11622, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| Un-skilled | 9178.00 | 390.00 | 9568.00 | 368.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20160806234629/http://www.delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages of the Labour Department's own page/order. Arithmetic: ok. Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 12,662. Official page table. Typo on the page: non-matriculate DA printed '44200' (should be 442.00; 10140 + 442 = 10582 as printed). From this step the page gives lower rates for establishments providing meals/lodging instead of the shops/clubs split."
+  - effective_from: 2016-10-01
+    unit: month
+    rates: {All: {unskilled: 9724, semi_skilled: 10764, skilled: 11830, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| Un-skilled | 9568.00 | 156.00 | 9724.00 | 374.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20170122142426/http://www.delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages/ of the Labour Department's own page/order. Arithmetic: ok. Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 12,870. Official page table, last DA under the 26.07.2011 notification; in force until the 3 March 2017 notification. A Wayback CDX search found an official PDF named MW-30-09-2016.pdf (Dec 2016 capture) that was not fetched (budget)."
+  - effective_from: 2017-03-03
+    unit: month
+    rates: {All: {unskilled: 13350, semi_skilled: 14698, skilled: 16182, highly_skilled: null}}
+    notification:
+      number: "No. F. Addl.LC/Lab/MW/2016/4859"
+      date: "2017-03-03"
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| All Schedule employments | Unskilled | 13,350/- | 513/- |"
+    confidence: official
+    verified_by: []
+    caution: "Legally contested period: the 3 Mar 2017 notification was quashed by the Delhi High Court on 4 Aug 2018 and its rates were restored by the Supreme Court's interim order of 31 Oct 2018 (from 1 Nov 2018). Delhi tribunals in the back-test applied these rates; which rate applies is a question for legal sign-off."
+    notes: "Read from the Wayback copy https://web.archive.org/web/20170503071249/http://www.delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages of the Labour Department's own page/order. Arithmetic: ok (new base rates, no DA to add; per-day = monthly/26 rounded matches). Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 17,604. Full notification text reproduced on the official page (Cabinet Decision no. 2466 dated 25.02.2017). 'These rates shall come into force with effect from the date of notification in the Official Gazette.' effective_from 2017-03-03 is the date printed in the notification ('Delhi, the 3rd March, 2017'); the separate Gazette publication date was not independently checked. This notification was later quashed by the Delhi High Court (judgment of 4 Aug 2018) and restored for the period from 01.11.2018 after the Supreme Court order of 31.10.2018 (see 2018-11-01 row); the official page was not changed in Aug-Oct 2018."
+  - effective_from: 2017-04-01
+    unit: month
+    rates: {All: {unskilled: 13584, semi_skilled: 14958, skilled: 16468, highly_skilled: null}}
+    notification:
+      url: http://labour.delhi.gov.in/sites/default/files/All-PDF/Odr2018631057_0.pdf
+    evidence_quote: "| Un-skilled | 13584.00 | 312.00 | 13896.00 | 534.00 |"
+    confidence: official
+    verified_by: []
+    caution: "Legally contested period: the 3 Mar 2017 notification was quashed by the Delhi High Court on 4 Aug 2018 and its rates were restored by the Supreme Court's interim order of 31 Oct 2018 (from 1 Nov 2018). Delhi tribunals in the back-test applied these rates; which rate applies is a question for legal sign-off."
+    notes: "Read from the Wayback copy https://web.archive.org/web/20190819140757id_/http://labour.delhi.gov.in:80/sites/default/files/All-PDF/Odr2018631057_0.pdf of the Labour Department's own page/order. Arithmetic: ok (13350+234, 14698+260, 16182+286, 17604+312 using the DA column of the Feb 2019 page). Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 17,916. No separate DA order for 01.04.2017 was found. The rates are printed as 'Rates as on 01.04.2017' in the official order dated 04.04.2018, and the DA amounts (234/260/286/312) appear in the 'D.A w.e.f 01.04.2017' column of the official page (capture 4 Feb 2019). The official page did not show this DA while it applied: captures of 3 May 2017 and 5 Feb 2018 still show the bare 3 March 2017 rates (13,350 etc.), so the DA was apparently declared/published late. No DA w.e.f. 01.10.2017 exists in the official record: the 04.04.2018 order builds on 'Rates as on 01.04.2017' and the Feb 2019 page lists DA columns only for 01.04.2017, 01.04.2018 and 01.10.2018."
+  - effective_from: 2018-04-01
+    unit: month
+    rates: {All: {unskilled: 13896, semi_skilled: 15296, skilled: 16858, highly_skilled: null}}
+    notification:
+      number: "F.No. 12(142)/02/MW/VII/201"
+      date: "2018-04-04"
+      url: http://labour.delhi.gov.in/sites/default/files/All-PDF/Odr2018631057_0.pdf
+    evidence_quote: "| Un-skilled | 13584.00 | 312.00 | 13896.00 | 534.00 |"
+    confidence: official
+    verified_by: []
+    caution: "Legally contested period: the 3 Mar 2017 notification was quashed by the Delhi High Court on 4 Aug 2018 and its rates were restored by the Supreme Court's interim order of 31 Oct 2018 (from 1 Nov 2018). Delhi tribunals in the back-test applied these rates; which rate applies is a question for legal sign-off."
+    notes: "Read from the Wayback copy https://web.archive.org/web/20190819140757id_/http://labour.delhi.gov.in:80/sites/default/files/All-PDF/Odr2018631057_0.pdf of the Labour Department's own page/order. Arithmetic: ok. Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 18,332. Official DA order (Dr. Rajender Dhar, Addl. Labour Commissioner), CPI Jul-Dec 2017 average 286, +8.5 points; file found on labour.delhi.gov.in (Wayback capture 19 Aug 2019). The official delhi.gov.in page showed these same rates on 7 Jul, 5 Sep and 2 Oct 2018, i.e. it was NOT changed after the Delhi High Court judgment of 4 Aug 2018 that quashed the 3 March 2017 notification. No Labour Department order or circular about the HC judgment was found; a sub-page 'Order for Minimum Wages' (captured 25 Oct 2018) exists but could not be retrieved."
+  - effective_from: 2018-08-04
+    unit: month
+    rates: {All: {unskilled: 13896, semi_skilled: 15296, skilled: 16858, highly_skilled: null}}
+    notification:
+      number: "F.No. 12(142)/02/MW/VII/201"
+      date: "2018-04-04"
+      url: http://labour.delhi.gov.in/sites/default/files/All-PDF/Odr2018631057_0.pdf
+    evidence_quote: "| Un-skilled | 13584.00 | 312.00 | 13896.00 | 534.00 |"
+    confidence: official
+    verified_by: []
+    caution: "Legally contested period: the 3 Mar 2017 notification was quashed by the Delhi High Court on 4 Aug 2018 and its rates were restored by the Supreme Court's interim order of 31 Oct 2018 (from 1 Nov 2018). Delhi tribunals in the back-test applied these rates; which rate applies is a question for legal sign-off."
+    notes: "Same rates as 1 Apr 2018: the official page still showed them on 5 Sep and 2 Oct 2018 captures. Separate entry only to mark the period after the Delhi High Court judgment of 4 Aug 2018."
+  - effective_from: 2018-11-01
+    unit: month
+    rates: {All: {unskilled: 14000, semi_skilled: 15400, skilled: 16962, highly_skilled: null}}
+    notification:
+      url: http://www.delhi.gov.in/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages
+    evidence_quote: "| Un-skilled | 13350.00 | 234.00 | 312.00 | 104.00 | 14000.00 | 538.00 |"
+    confidence: official
+    verified_by: []
+    notes: "Read from the Wayback copy https://web.archive.org/web/20190204021240/http://delhi.gov.in:80/wps/wcm/connect/doit_labour/Labour/Home/Minimum+Wages of the Labour Department's own page/order. Arithmetic: ok (13350+234+312+104=14000; 14698+260+338+104=15400; 16182+286+390+104=16962; 17604+312+416+130=18462; also 01.04.2018 rate + 104). Clerical: non-matriculate = semi-skilled, matriculate = skilled, graduate and above Rs 18,462. Official page notice (posted 'Last Updated : 02 Nov,2018'): 'Consequent upon Hon'ble Supreme Court order dated 31.10.2018 applicable rates of Minimum Wages w.e.f. 01.11.2018 (including D.A. w.e.f. 01.04.2017, 01.04.2018 and 01.10.2018)'. No order number is given on the page. The DA 'w.e.f. 01.10.2018' (104/104/104/130) is included but the page makes the total applicable only from 01.11.2018; no separate 01.10.2018 DA order was found, so the rate for 01.10.2018-31.10.2018 (and the legal position between the HC judgment of 04.08.2018 and 31.10.2018) is not established by the official record fetched here. These rates continue to 31.03.2019 (the repo's DL.yaml row for 01.04.2019 uses 14,000 as the base)."
   - effective_from: 2019-04-01
     unit: month
     rates: {All: {unskilled: 14468, semi_skilled: 15920, skilled: 17508, highly_skilled: null}}
@@ -174,7 +318,10 @@ revisions:
     verified_by: []
     notes: "Listed on the official page (archived 27 Jul 2026) as the latest order. Text and hash are from a copy hosted by a compliance site (comply4hr.com/noti/2016/DEMWA2025Apr15.pdf); the official file itself was not retrieved."
 gaps:
-  - "Before 1 Apr 2019: not loaded. The 2017 notification was quashed by the Delhi High Court (4 Aug 2018) and partly restored by the Supreme Court (31 Oct 2018); the applicable rate for accidents before April 2019 needs a separate check."
+  - "Before 1 Oct 2011: not loaded."
+  - "1 Apr 2012 - 31 Mar 2013: no rate. The DA orders of 1 Apr and 1 Oct 2012 were not found (the official page was not updated May 2012 - Oct 2013 and the order PDFs are not archived). Estimates for accidents in this year say so instead of using the 2011 rates."
+  - "3 Mar 2017 - 31 Oct 2018: legally contested. The 3 Mar 2017 notification was quashed by the Delhi High Court (4 Aug 2018) and its rates restored by the Supreme Court's interim order (31 Oct 2018, from 1 Nov 2018). No lower official series was published for the period. The official series is loaded with a caution; Delhi tribunals in the back-test applied it. For legal sign-off."
+  - "Notification numbers are known only for the orders of Oct 2013, Mar 2017 and Apr 2018; other 2011-2018 rates are read from the Labour Department's own rate page (Wayback copies). The 1 Oct 2011 table prints semi-skilled 7,356 although 7,098 + 260 = 7,358 (recorded as printed)."
   - "1 Oct 2025 and 1 Apr 2026: no DA order found. The official list (archived 27 Jul 2026) still shows the 1 Apr 2025 order as the latest. Accidents after 1 Apr 2025 use the 1 Apr 2025 rates until an official order is found."
   - "FORGED ORDER - do not use: F.No.(143)/02/MW/VII/Partfile/212-261 dated 13.10.2025 (Rs 19,846 / 21,813 / 23,905). Declared fraudulent by Labour Department circular Lab-L011/5/2025-Addl.LC-II/3616 dated 14/10/2025, which says no DA order had been issued for the period from 1 Oct 2025 and that the last official increase was effective 1 Apr 2025 (circular seen as an image reproduced on hrsoftwaredelhi.com; official copy not retrieved)."
   - "1 Oct 2026 revision due; check the official page."

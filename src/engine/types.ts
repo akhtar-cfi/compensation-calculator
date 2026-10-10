@@ -166,6 +166,7 @@ export type WarningCode =
   | "MW_MISSING"
   | "MW_CATEGORY_FALLBACK"
   | "MW_MAY_BE_OUTDATED"
+  | "MW_CONTESTED"
   | "ZONE_ASSUMED"
   | "RULE_UNVERIFIED"
   | "AGE_OUTSIDE_TABLE"

@@ -67,6 +67,7 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
     );
   }
   const r = hit.revision;
+  if (r.caution) ctx.warn.add("MW_CONTESTED", "caution", `${hit.state} minimum wage: ${r.caution}`);
   const checked = st?.last_checked;
   if (
     wholeMonthsBetween(r.effective_from, input.accidentDate) > MW_FRESH_MONTHS &&
