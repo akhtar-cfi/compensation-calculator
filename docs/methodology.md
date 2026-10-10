@@ -58,7 +58,11 @@ The engine never reads the clock; both dates are inputs.
   - conveyance and special diet
   - pain, suffering and amenities
   - marriage prospects
-- **Non-pecuniary bands** are anchored to a few Supreme Court awards and are marked experimental until calibrated on tribunal data.
+- **Discretionary heads** (pain, suffering and amenities; conveyance and diet; attendant when days are not given; the limb-certificate factor) are calibrated on 89 Delhi tribunal injury awards (2024–26):
+  - conservative = tribunal 25th percentile, standard = median, claimant-max = the higher of the 75th percentile and the Supreme Court anchor;
+  - values never fall as disability rises (checked by the rules validator);
+  - reproduce with `npm run mact -- backtest calibrate data/backtest/injury_heads.csv`.
+- Injury results stay **experimental**: Delhi-only calibration, no legal sign-off yet.
 
 ## 6. Eligibility and adjustments
 
@@ -110,26 +114,35 @@ Four checks run on every row:
 
 Sampling bias is stated on every report: published awards over-represent Delhi, and appeals over-represent contested, low awards.
 
-**First back-test (26 Delhi tribunal awards, 2025–26, from Indian Kanoon; not a random sample):**
+**Back-test on 217 Delhi tribunal awards (10 Oct 2026)**
 
-| Check                    | Result                                                              | Reading                                                           |
-| ------------------------ | ------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Replicate                | 21/22 within 1% (K2 passed)                                         | Tribunals' arithmetic matches the formula                         |
-| Conformity               | Multiplier, future prospects and deduction match the rules in 25/26 | The one exception took the multiplier at the end of naval service |
-| Predict, injury (n = 20) | Median abs error 43%, bias −43%, award inside the range in 55%      | Estimates are too low                                             |
-| Predict, death (n = 2)   | Too few to read                                                     | —                                                                 |
-| Offers (n = 12)          | Median offer = 0.08 × the final award                               | Selection-biased: settled cases never reach an award              |
+How the sample was drawn:
 
-**Why injury estimates are low (median engine ÷ tribunal):**
+- Indian Kanoon API, Delhi district courts (`doctypes: delhidc`), awards dated Jan 2024–Oct 2026.
+- Three searches (legal offer / loss of dependency / functional disability) × six half-year strata; page 0 plus one seeded random page per stratum, so the sample is not only the "most relevant" results.
+- 338 judgments fetched (Rs 89.30 in API charges, logged in the cache ledger); 251 extracted; after removing unusable orders (fixed no-fault s.164 awards) and duplicates, 191 rows were added to the 26 earlier ones.
+- **Duplicates:** Indian Kanoon publishes one multi-claim judgment once per claimant. Rows are de-duplicated by judgment text, accident date, age and claim type, and each published copy is extracted for the claimant it names.
 
-- **Loss of earning capacity: 0.96 (n = 16).**
-  - Halving a limb certificate matches what Delhi tribunals usually do (75→35, 90→45, 51→25).
-  - The spread is wide (0.3–1.6), so the range must stay wide.
-  - This corrects the earlier n = 1 reading, which suggested the factor was too low.
-- **All other heads: 0.30 (n = 19).**
-  - Part of this is the back-test input: medical bills were not extracted, and tribunals award proven bills in full.
-  - The rest is the experimental bands for pain and suffering, conveyance, diet and attendant, which are far below Delhi practice.
-- **Next step:** extract the per-head amounts from these awards and calibrate the bands. This needs about 60 injury awards before the experimental label comes off.
+How each award was extracted:
+
+- An AI agent reads only the local judgment text. Every number and date must carry a verbatim single-line quote; a script checks each quote against the text and each number against its quotes. Values the judgment does not state are left blank, never estimated.
+- **Double coding:** 16 awards re-extracted blind by a second agent. On the 15 where both took the same claim, 196 of 197 fields agree (99.5%); every number agrees, and the one difference is an employment classification.
+- Raw judgment text is not committed; rows link to the public judgment.
+
+| Check                    | Result                                                                                                                                                     | Reading                                                                                                                                                                                                                                                                     |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Replicate                | 178/183 within 1% (97.3%); **K2 passed**                                                                                                                   | Every award whose own arithmetic is consistent is reproduced exactly. The 5 misses are 3 tribunal arithmetic slips (a stated parameter not applied, or garbled), 1 award that taxed income before the formula (extracted gross), and 1 earlier case                         |
+| Conformity               | 33/209 awards set a parameter differently from the rules (deduction 18, future prospects 12, multiplier 5); median formula-head gap 0.0%                   | Delhi tribunals apply the Supreme Court formula as written in most awards                                                                                                                                                                                                   |
+| Predict, death (n = 71)  | Median abs error 17%, bias 0%; award inside the range in 28%                                                                                               | The centre is right; the range is too narrow for practice because it carries only legal uncertainty, not evidence risk (e.g. a claimed income not accepted)                                                                                                                 |
+| Predict, injury (n = 89) | Before calibration: median abs error 43%, bias −42%. After: 28%, −20%. Held-out check (fit on a random half, test on the other, 5 splits): 37–50% → 25–35% | Calibration generalises within Delhi; the remaining gap is mostly heads the inputs do not carry (future medical, special items)                                                                                                                                             |
+| Not computable           | 57 awards                                                                                                                                                  | Accident before Apr 2019: no official Delhi wage orders loaded yet                                                                                                                                                                                                          |
+| Offers (n = 44)          | Offer ÷ award after negligence cut: p25 0.05, median 0.10, p75 0.23; 91% below 0.5; **K1 not triggered**                                                   | **Biased low and cannot be fixed from published awards:** an accepted offer ends in a settlement order that is not published as a judgment, so every offer in the sample was rejected. K1 cannot be properly evaluated without settlement data (insurer, Lok Adalat or RTI) |
+
+Other findings:
+
+- **Discretionary injury heads are awarded in most cases:** conveyance and diet in 94% (median Rs 50,000), attendant during treatment in 82% (median Rs 30,000), pain, suffering and amenities in 100% (median Rs 1.5 lakh at 10–29% disability). The earlier anchor-only bands were 2–3× too low.
+- **Limb certificates:** Delhi tribunals took a median 0.53 of a limb certificate as functional disability (n = 68), close to the earlier ½ rule.
+- **Minimum wage of another state:** some Delhi awards used the minimum wage of the state where the victim lived or worked (Uttar Pradesh, Haryana), not Delhi's. The engine takes one state for the wage; which state applies is a question for legal sign-off.
 
 ## 8. Keeping it current
 
@@ -158,4 +171,7 @@ Sampling bias is stated on every report: published awards over-represent Delhi, 
   - working homemakers (Shishu Pal's add-on);
   - adult-children consortium variations;
   - apportionment between claimants.
-- **Injury non-formula heads are too low.** On 19 Delhi awards they came to a median 30% of what tribunals gave (see section 7).
+- **Injury estimates still run low** (median −20% on 89 Delhi awards after calibration) and the calibration is Delhi-only (see section 7).
+- **Delhi minimum wages before April 2019** are not loaded, so estimates without income proof for older accidents are not computable (57 of 217 back-test awards).
+- **Offer evidence covers rejected offers only**: accepted offers are not published, so the offer ÷ award ratio (median 0.10) cannot show how good accepted offers are.
+- **The range is legal uncertainty only.** Death estimates are centred well (bias 0%) but most awards fall outside the range, because evidence risk (e.g. an income claim not accepted) is not in it.
