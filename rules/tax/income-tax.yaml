@@ -1,0 +1,63 @@
+# Approximate personal income-tax for resident individuals below 60, used ONLY when actual tax (TDS) is unknown.
+# Courts deduct the tax actually payable (Pranay Sethi). Surcharge and professional tax are ignored (warning).
+# Regime: old regime up to FY 2022-23; new (default) regime from FY 2023-24.
+# verified: false - slabs are from the drafter's knowledge and must be checked against the Finance Acts.
+id: income_tax
+verified: false
+cess_pct: 4
+years:
+  - fy: "2018-19"
+    regime: old
+    standard_deduction: 40000
+    rebate_upto: 350000
+    rebate_max: 2500
+    slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+  - fy: "2019-20"
+    regime: old
+    standard_deduction: 50000
+    rebate_upto: 500000
+    rebate_max: 12500
+    slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+  - fy: "2020-21"
+    regime: old
+    standard_deduction: 50000
+    rebate_upto: 500000
+    rebate_max: 12500
+    slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+  - fy: "2021-22"
+    regime: old
+    standard_deduction: 50000
+    rebate_upto: 500000
+    rebate_max: 12500
+    slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+  - fy: "2022-23"
+    regime: old
+    standard_deduction: 50000
+    rebate_upto: 500000
+    rebate_max: 12500
+    slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+  - fy: "2023-24"
+    regime: new
+    standard_deduction: 50000
+    rebate_upto: 700000
+    rebate_max: 25000
+    slabs: [[300000, 0], [600000, 5], [900000, 10], [1200000, 15], [1500000, 20], [null, 30]]
+  - fy: "2024-25"
+    regime: new
+    standard_deduction: 75000
+    rebate_upto: 700000
+    rebate_max: 25000
+    slabs: [[300000, 0], [700000, 5], [1000000, 10], [1200000, 15], [1500000, 20], [null, 30]]
+  - fy: "2025-26"
+    regime: new
+    standard_deduction: 75000
+    rebate_upto: 1200000
+    rebate_max: 60000
+    slabs: [[400000, 0], [800000, 5], [1200000, 10], [1600000, 15], [2000000, 20], [2400000, 25], [null, 30]]
+  - fy: "2026-27"
+    regime: new
+    standard_deduction: 75000
+    rebate_upto: 1200000
+    rebate_max: 60000
+    slabs: [[400000, 0], [800000, 5], [1200000, 10], [1600000, 15], [2000000, 20], [2400000, 25], [null, 30]]
+    note: Assumed unchanged from FY 2025-26 - NOT verified.

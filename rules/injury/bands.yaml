@@ -1,0 +1,31 @@
+# EXPERIMENTAL injury bands. Anchored to a handful of Supreme Court awards, NOT calibrated on tribunal data.
+# To be replaced by empirical bands from Delhi Form IV-B awards (see docs/methodology.md, milestone M2).
+id: injury_bands
+verified: false
+experimental: true
+sources: [raj_kumar_2011, sidram_2022, baiju_2025, hitesh_patel_2025, hansraj_2026, kajal_2020]
+# Functional disability when only a limb / unspecified certificate exists (Raj Kumar: functional loss of earning
+# capacity may differ from the physical disability). Factor applied to the certificate percentage.
+limb_to_functional: { conservative: 0.3333, standard: 0.5, claimant_max: 1.0 }
+# Pain, suffering and loss of amenities, by functional disability (lower bound inclusive).
+# Anchors: Sidram ~45% -> Rs 1 lakh; Baiju 65% -> Rs 3 lakh; Hitesh 90% -> Rs 5 lakh; Hansraj 100% (child) -> Rs 10 lakh
+# incl. amenities; Kajal Rs 15 lakh (outlier).
+pain_suffering_amenities:
+  - { from_pct: 0, conservative: 10000, standard: 25000, claimant_max: 50000 }
+  - { from_pct: 10, conservative: 25000, standard: 50000, claimant_max: 100000 }
+  - { from_pct: 30, conservative: 50000, standard: 100000, claimant_max: 200000 }
+  - { from_pct: 50, conservative: 150000, standard: 300000, claimant_max: 500000 }
+  - { from_pct: 80, conservative: 300000, standard: 500000, claimant_max: 1500000 }
+# Conveyance and special diet, by days in hospital (lower bound inclusive).
+conveyance_special_diet:
+  - { from_days: 0, conservative: 0, standard: 0, claimant_max: 0 }
+  - { from_days: 1, conservative: 5000, standard: 15000, claimant_max: 25000 }
+  - { from_days: 15, conservative: 10000, standard: 25000, claimant_max: 50000 }
+  - { from_days: 61, conservative: 25000, standard: 50000, claimant_max: 100000 }
+# Loss of marriage prospects: unmarried victim up to this age with functional disability at least this %.
+marriage_prospects:
+  max_age: 35
+  min_functional_pct: 50
+  conservative: 100000
+  standard: 300000
+  claimant_max: 500000

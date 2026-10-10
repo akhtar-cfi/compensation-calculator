@@ -1,0 +1,23 @@
+id: notional_income
+description: Income used when the victim did not earn, or earnings cannot be proved.
+confidence: contested
+verified: false
+homemaker_domestic_care:
+  monthly: 30000
+  base_date: 2026-06-11
+  step_years: 3
+  step_pct: 10
+  sources: [shishu_pal_2026]
+  note: >-
+    Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without
+    monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years.
+student_course_precedent:
+  professional:
+    monthly: 12000
+    sources: [mohinder_kaur_2026]
+    note: Engineering student (Mohinder Kaur 2026). Used only if higher than the skilled minimum wage.
+minor_death_conservative:
+  annual: 25000
+  multiplier: 15
+  sources: [kurvan_ansari_2021]
+  note: Reported (secondary source) as notional Rs 25,000 a year with multiplier 15. To be verified.

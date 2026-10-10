@@ -1,0 +1,26 @@
+id: statutory
+verified: false
+no_fault_s164:
+  death: 500000
+  grievous_hurt: 250000
+  sources: [mv_act_1988]
+  note: >-
+    s.164 no-fault compensation. If it is accepted through the insurer's settlement route (s.149), the s.166
+    claim petition lapses (s.166(1) proviso). If awarded, it is adjusted against the s.166 award (s.164(3)).
+hit_and_run_s161:
+  death: 200000
+  grievous_hurt: 50000
+  sources: [mv_act_1988]
+  note: Compensation to Victims of Hit and Run Motor Accidents Scheme, 2022 (amounts unchanged by the 2026 amendment). Refundable from any later award (s.163).
+limitation_s166_3:
+  months: 6
+  sources: [mv_act_1988, bhagirathi_dash_2025]
+  note: The Supreme Court's interim order (4 Nov 2025) directs that no claim be dismissed as time-barred while the challenge is pending.
+interest_illustration:
+  rates_pct: [6, 7.5, 9]
+  default_years: 6
+  note: No fixed rate; recent awards range 6-9% simple interest from the date of filing. Shown separately, never added to the headline.
+pendency:
+  tribunal_years: 6
+  high_court_years: 8
+  sources: [shishu_pal_2026]
