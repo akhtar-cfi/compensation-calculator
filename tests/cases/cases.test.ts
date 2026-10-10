@@ -2,7 +2,9 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
+import { archetypeCoverage, renderCoverage } from "../../src/cases/coverage.js";
 import { loadCases } from "../../src/cases/load.js";
+import { Archetype } from "../../src/cases/schema.js";
 import { matchCases, summariseJourney, yearsBetween } from "../../src/cases/match.js";
 import { renderCases } from "../../src/cli/render.js";
 import { EstimateInputSchema, type EstimateInput } from "../../src/engine/index.js";
@@ -131,5 +133,14 @@ describe("matchCases", () => {
     expect(md).toContain("₹62,77,900");
     expect(md).toContain("2026 INSC 634");
     expect(md).toContain("not what you will get");
+  });
+});
+
+describe("coverage", () => {
+  it("lists every archetype with its count", () => {
+    const rows = archetypeCoverage(cases);
+    expect(rows.map((r) => r.archetype)).toEqual(Archetype.options);
+    expect(rows.reduce((a, r) => a + r.count, 0)).toBeGreaterThanOrEqual(cases.length);
+    expect(renderCoverage(cases)).toContain(`${cases.length} cases`);
   });
 });

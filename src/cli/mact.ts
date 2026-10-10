@@ -5,6 +5,7 @@ import { parse } from "yaml";
 import { loadAwardsCsv } from "../backtest/load.js";
 import { renderBacktest } from "../backtest/report.js";
 import { runRow, summarise } from "../backtest/run.js";
+import { renderCoverage } from "../cases/coverage.js";
 import { loadCases } from "../cases/load.js";
 import { IndianKanoonClient, buildQuery } from "../ingest/indiankanoon.js";
 import { matchCases } from "../cases/match.js";
@@ -19,6 +20,7 @@ const USAGE = `Usage:
   mact estimate <input.json|yaml> [--as-of YYYY-MM-DD] [--format md|json]
   mact offer <input.json|yaml> --offer <rupees> [--years 6] [--interest 7.5] [--discount 7] [--fee 0] [--as-of YYYY-MM-DD]
   mact cases match <input.json|yaml> [--limit 3] [--format md|json]
+  mact cases coverage
   mact backtest <awards.csv> [--format md|json]
   mact ik search "<terms>" [--doctypes delhidc] [--from YYYY-MM-DD] [--to YYYY-MM-DD] [--page 0] [--budget 5]
       (needs IK_API_TOKEN; responses are cached in .cache/indiankanoon and spend is logged there)
@@ -104,6 +106,10 @@ async function main(argv: string[]): Promise<number> {
         : renderBacktest(summary, results, errors),
     );
     return errors.length ? 1 : 0;
+  }
+  if (cmd === "cases" && sub === "coverage") {
+    console.log(renderCoverage(loadCases()));
+    return 0;
   }
   if (cmd === "cases" && sub === "match" && rest[0]) {
     const input = EstimateInputSchema.parse(readInput(rest[0]));
