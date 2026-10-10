@@ -1,0 +1,40 @@
+id: delhi-mact-2020-108366108
+title: Building-material supplier whose income was not proved, 30, Noida (death)
+citation: 'Nasreen Begum vs Anoop Kumar, Petition No. 76505/2016 (MACT-02, West District, Tis Hazari Courts, Delhi)'
+court: MACT
+source_url: https://indiankanoon.org/doc/108366108/
+kind: death
+archetypes:
+- death_informal_no_proof
+state: DL
+facts:
+  accident_date: '2013-07-21'
+  claim_filed: '2014-03-20'
+  age: 30
+  employment: informal
+  occupation: said to be a building-material supplier (work and income not proved); U.P. unskilled minimum wage used
+  family: wife and seven minor children
+journey:
+- forum: mact
+  date: '2020-02-18'
+  amount: 1487000
+  note: Loss of dependency Rs.11,37,000 + consortium Rs.3,20,000 + funeral Rs.15,000 + loss of estate Rs.15,000; no
+    negligence cut; any interim award paid is to be deducted; insurer pays, with recovery rights against driver and owner
+interest_pct: 9
+what_mattered:
+- His claimed work as a building-material supplier earning Rs.15,000/month was not proved, and nothing showed he lived
+  or earned in Delhi (his voter ID had a U.P. address), so the U.P. unskilled minimum wage was used (Rs.191.38 x 26
+  days = Rs.4,976/month)
+- Age 30 taken from the voter-ID year of birth (the claimants said 35), giving multiplier 17; 40% future prospects and
+  a 1/5 personal-expense deduction for eight dependants gave loss of dependency of Rs.11,37,000
+- Rs.40,000 consortium to each of the eight claimants (spousal for the wife, parental for each child) = Rs.3,20,000,
+  plus Rs.15,000 each for funeral expenses and loss of estate
+- Negligence held proved although the claimed eyewitness was disbelieved, because the undisputed site plan showed all
+  three vehicles burnt at the spot and the driver and owner never testified
+- Insurer must pay first but may recover from the driver and owner, because the licence number had been issued to
+  someone else and the tanker's permit and fitness were never produced
+summary: A 30-year-old man whose income was not proved died of burn injuries in 2013 after a collision between a
+  chemical tanker and the dumper he was travelling in at Noida set the vehicles on fire. The Delhi tribunal awarded
+  Rs 14.87 lakh in 2020, 6.6 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []
