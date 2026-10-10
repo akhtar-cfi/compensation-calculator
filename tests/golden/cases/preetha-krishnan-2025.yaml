@@ -1,6 +1,6 @@
 id: preetha-krishnan-2025
 title: "Preetha Krishnan & Ors. v The United India Insurance Co. Ltd. & Ors."
-citation: "2025 INSC 1293"   # C.As @ SLP(C) Nos. 9753-56 of 2025
+citation: "2025 INSC 1293" # C.As @ SLP(C) Nos. 9753-56 of 2025
 court: SC
 judgment_date: 2025-11-06
 source_url: "https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf"
@@ -8,18 +8,19 @@ kind: death
 facts:
   accident_date: 2012-08-03
   age_at_accident: 51
-  state: Kerala                  # MACT Pala; Kerala HC
+  state: Kerala # MACT Pala; Kerala HC
   occupation: "Assistant Engineer, Public Works Department"
   employment: permanent
-  claimants: {spouse: 1, children: 3, parents: 0}   # "wife and children"; HC disbursed to claimants 1-4 in ratio 70:10:10:10 (children count derived)
+  claimants: { spouse: 1, children: 3, parents: 0 } # "wife and children"; HC disbursed to claimants 1-4 in ratio 70:10:10:10 (children count derived)
   disability: null
 judgment_params:
-  monthly_income: 45408          # post-tax (Rs.2,453/month tax deducted by Tribunal)
+  monthly_income: 45408 # post-tax (Rs.2,453/month tax deducted by Tribunal)
   future_prospects_pct: 15
-  personal_deduction: "1/3"      # Court's table is LABELLED "Deduction (1/4)" but the arithmetic deducts 1/3 (see notes)
+  personal_deduction: "1/3" # Court's table is LABELLED "Deduction (1/4)" but the arithmetic deducts 1/3 (see notes)
   multiplier: 11
-  conventional: {loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 3}
-  interest_pct: 7.5              # "Interest on the amount is to be paid as awarded by the Tribunal" (7.5% p.a.)
+  conventional:
+    { loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 3 }
+  interest_pct: 7.5 # "Interest on the amount is to be paid as awarded by the Tribunal" (7.5% p.a.)
 expected:
   heads:
     loss_of_dependency: 4595294
@@ -27,7 +28,7 @@ expected:
     funeral: 18150
     consortium: 145200
   total: 4776794
-  lower_forums: {mact: 4404912, high_court: 3510144}
+  lower_forums: { mact: 4404912, high_court: 3510144 }
 computation_quote: |
   [para 18] ... In other words, split multiplier is a concept foreign to the Motor Vehicles
   Act, 1988 and is not to be used by the Tribunal and/or Courts in calculation of the

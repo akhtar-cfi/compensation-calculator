@@ -1,6 +1,6 @@
 id: hitesh-nagjibhai-patel-2025
 title: "Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari & Anr."
-citation: "2025 INSC 1070"   # C.A. No. 10278 of 2025 (@ SLP(C) No. 14444 of 2025)
+citation: "2025 INSC 1070" # C.A. No. 10278 of 2025 (@ SLP(C) No. 14444 of 2025)
 court: SC
 judgment_date: 2025-08-08
 source_url: "https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf"
@@ -8,32 +8,32 @@ kind: injury
 facts:
   accident_date: 2012-10-14
   age_at_accident: 8
-  state: Gujarat                  # MACT Banaskantha at Deesa; Gujarat HC
+  state: Gujarat # MACT Banaskantha at Deesa; Gujarat HC
   occupation: child
   employment: minor
   claimants: null
-  disability: {certificate_pct: null, functional_pct: 90}   # HC: 70% physical impairment/mental disability -> 90% total; SC affirmed 90% functional
+  disability: { certificate_pct: null, functional_pct: 90 } # HC: 70% physical impairment/mental disability -> 90% total; SC affirmed 90% functional
 judgment_params:
-  monthly_income: 6836            # Gujarat skilled MW 2012 = Rs.227.85/day -> Rs.6,835.5/month, rounded to 6,836
+  monthly_income: 6836 # Gujarat skilled MW 2012 = Rs.227.85/day -> Rs.6,835.5/month, rounded to 6,836
   future_prospects_pct: 40
   personal_deduction: null
   multiplier: 18
   disability_pct_applied: 90
   conventional: null
-  interest_pct: 9                 # as awarded by the Tribunal, from date of claim petition
+  interest_pct: 9 # as awarded by the Tribunal, from date of claim petition
 expected:
   heads:
     loss_of_earning_capacity: 1860489
     medical: 30000
     future_medical: 50000
-    conveyance_special_diet: 100000   # "Special diet and Transportation"
+    conveyance_special_diet: 100000 # "Special diet and Transportation"
     marriage_prospects: 300000
     loss_of_income_during_treatment: 50000
     pain_and_suffering: 500000
     loss_of_amenities: 200000
     artificial_limb: 500000
   total: 3590489
-  lower_forums: {mact: 390000, high_court: 865000}
+  lower_forums: { mact: 390000, high_court: 865000 }
 computation_quote: |
   [para 10] Adverting to the facts at hand, the appellant was an 8-year-old child at the time
   of the accident. In view of the above exposition of law, we must advert to the prevailing

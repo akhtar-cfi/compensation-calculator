@@ -32,6 +32,8 @@ npm install
 npm run mact -- estimate examples/death-salaried.yaml --as-of 2026-10-10
 npm run mact -- offer examples/death-salaried.yaml --offer 1500000
 npm run mact -- cases match examples/death-homemaker.yaml
+npm run mact -- backtest data/backtest/awards.csv
+IK_API_TOKEN=... npm run mact -- ik search '"legal offer"' --doctypes delhidc --from 2025-01-01 --budget 5
 npm run mact -- rules validate --as-of 2026-10-10
 npm run ci   # typecheck, lint, tests, rules validation
 ```

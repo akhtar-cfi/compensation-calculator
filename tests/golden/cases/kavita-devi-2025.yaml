@@ -1,6 +1,6 @@
 id: kavita-devi-2025
 title: "Kavita Devi & Ors. v Sunil Kumar & Anr."
-citation: "2025 INSC 938"   # C.A. @ SLP(C) Diary No. 47285 of 2018
+citation: "2025 INSC 938" # C.A. @ SLP(C) Diary No. 47285 of 2018
 court: SC
 judgment_date: 2025-08-06
 source_url: "https://api.sci.gov.in/supremecourt/2018/47285/47285_2018_7_1501_63035_Judgement_06-Aug-2025.pdf"
@@ -8,18 +8,19 @@ kind: death
 facts:
   accident_date: 2009-02-16
   age_at_accident: 35
-  state: Haryana                 # MACT Gurgaon; P&H High Court
+  state: Haryana # MACT Gurgaon; P&H High Court
   occupation: "operator, R.M. Manpower Services, Gurgaon (salaried, Rs.6,500/month incl. allowances)"
-  employment: permanent          # Court applied 50% FP without classifying the employment (see notes)
-  claimants: {spouse: 1, children: 2, parents: 0}
+  employment: permanent # Court applied 50% FP without classifying the employment (see notes)
+  claimants: { spouse: 1, children: 2, parents: 0 }
   disability: null
 judgment_params:
-  monthly_income: 6500           # full salary incl. HRA (1,100) and other allowances (1,735)
+  monthly_income: 6500 # full salary incl. HRA (1,100) and other allowances (1,735)
   future_prospects_pct: 50
   personal_deduction: "1/3"
   multiplier: 16
-  conventional: {loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 3}
-  interest_pct: 7                # from filing of petition till deposit, excluding the 1855 + 75 days of appeal delay
+  conventional:
+    { loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 3 }
+  interest_pct: 7 # from filing of petition till deposit, excluding the 1855 + 75 days of appeal delay
 expected:
   heads:
     loss_of_dependency: 1248000
@@ -28,7 +29,7 @@ expected:
     loss_of_estate: 18150
     funeral: 18150
   total: 1429500
-  lower_forums: {mact: 254720, high_court: 723680}
+  lower_forums: { mact: 254720, high_court: 723680 }
 computation_quote: |
   [para 18] ... we are of the opinion that income which the deceased was earning at the time
   of the accident was Rs. 6,500/- p.m and same ought to have been taken into consideration.

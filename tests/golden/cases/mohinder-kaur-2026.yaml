@@ -1,6 +1,6 @@
 id: mohinder-kaur-2026
 title: "Mohinder Kaur (D) through L.R. v Brij Lal Arora & Ors."
-citation: "2026 INSC 477"   # C.A. @ SLP(C) No. 580 of 2020
+citation: "2026 INSC 477" # C.A. @ SLP(C) No. 580 of 2020
 court: SC
 judgment_date: 2026-05-12
 source_url: "https://www.verdictum.in/pdf_upload/2026/05/13/mohinder-kaur-v-brij-lal-arora-1777513.pdf"
@@ -9,27 +9,28 @@ kind: death
 facts:
   accident_date: 2000-05-28
   age_at_accident: 22
-  state: Punjab                   # forum: MACT Hoshiarpur / P&H HC; accident on Delhi-Mathura road (UP)
+  state: Punjab # forum: MACT Hoshiarpur / P&H HC; accident on Delhi-Mathura road (UP)
   occupation: "3rd-year B.E. (Mechanical) student"
   employment: student
-  claimants: {spouse: 0, children: 0, parents: 1}   # mother (aged 48), now represented by daughter as LR
+  claimants: { spouse: 0, children: 0, parents: 1 } # mother (aged 48), now represented by daughter as LR
   disability: null
 judgment_params:
-  monthly_income: 12000           # notional, "considering that the death occurred in the year 2000"
+  monthly_income: 12000 # notional, "considering that the death occurred in the year 2000"
   future_prospects_pct: 40
   personal_deduction: "1/2"
   multiplier: 18
-  conventional: {loss_of_estate: 15000, funeral: 30000, consortium_per_claimant: 40000, consortium_claimants: 1}
+  conventional:
+    { loss_of_estate: 15000, funeral: 30000, consortium_per_claimant: 40000, consortium_claimants: 1 }
   interest_pct: 7.5
 expected:
   heads:
     loss_of_dependency: 1814400
     loss_of_estate: 15000
-    consortium: 40000               # filial consortium
+    consortium: 40000 # filial consortium
     funeral: 30000
-    vehicle_damage: 25670           # motorcycle damage per surveyor's report
+    vehicle_damage: 25670 # motorcycle damage per surveyor's report
   total: 1925070
-  lower_forums: {mact: 223000, high_court: 1344000}
+  lower_forums: { mact: 223000, high_court: 1344000 }
 computation_quote: |
   [para 26] ... Having regard to the aforesaid, we deem it appropriate to assess the monthly
   income of the deceased at ₹12,000/-, considering that the death occurred in the year 2000.

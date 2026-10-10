@@ -1,6 +1,6 @@
 id: meenakshi-2024
 title: "Meenakshi v The Oriental Insurance Co. Ltd"
-citation: "2024 INSC 573"   # C.A. @ SLP(C) Diary No. 39746 of 2018
+citation: "2024 INSC 573" # C.A. @ SLP(C) Diary No. 39746 of 2018
 court: SC
 judgment_date: 2024-07-23
 source_url: "https://api.sci.gov.in/supremecourt/2018/39746/39746_2018_9_16_53935_Judgement_23-Jul-2024.pdf"
@@ -8,26 +8,26 @@ kind: death
 facts:
   accident_date: 2013-08-29
   age_at_accident: 26
-  state: Karnataka               # MACT Kalaburagi; Karnataka HC Kalaburagi Bench
+  state: Karnataka # MACT Kalaburagi; Karnataka HC Kalaburagi Bench
   occupation: "service consultant (private company), salaried"
-  employment: permanent          # Court applied 50% FP (both forums fixed 50%); private salaried employee
-  claimants: {spouse: 0, children: 0, parents: 1}   # mother = sole claimant/dependant; deceased unmarried
+  employment: permanent # Court applied 50% FP (both forums fixed 50%); private salaried employee
+  claimants: { spouse: 0, children: 0, parents: 1 } # mother = sole claimant/dependant; deceased unmarried
   disability: null
 judgment_params:
-  monthly_income: 45668          # 50,942 gross (incl. HRA, FBP, employer PF) - 200 prof. tax - 5,074 income tax (10%)
+  monthly_income: 45668 # 50,942 gross (incl. HRA, FBP, employer PF) - 200 prof. tax - 5,074 income tax (10%)
   gross_monthly_income: 50942
   future_prospects_pct: 50
   personal_deduction: "1/2"
   multiplier: 17
-  conventional: {funeral: 25000, loss_of_love_and_affection: 25000}   # no loss of estate / Pranay Sethi consortium awarded
-  interest_pct: null             # SC silent; Tribunal had awarded 6% p.a.
+  conventional: { funeral: 25000, loss_of_love_and_affection: 25000 } # no loss of estate / Pranay Sethi consortium awarded
+  interest_pct: null # SC silent; Tribunal had awarded 6% p.a.
 expected:
   heads:
     loss_of_dependency: 9316272
     funeral: 25000
     loss_of_love_and_affection: 25000
   total: 9366272
-  lower_forums: {mact: 10401000, high_court: 4957035}
+  lower_forums: { mact: 10401000, high_court: 4957035 }
 computation_quote: |
   [para 10] Therefore, components of house rent allowance, flexible benefit plan and company
   contribution to provident fund have to be included in the salary of the deceased while

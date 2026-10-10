@@ -1,0 +1,7 @@
+id,source_url,court,kind,accident_date,award_date,state,zone,age,employment,income_monthly_accepted,fp_pct_applied,deduction_applied,multiplier_applied,disability_pct_applied,consortium_claimants,awarded_formula_head,awarded_total,cn_pct,offer_amount,married,spouse,children,parents,dependent_parents,proof,claimed_monthly_income,occupation_code,certificate_pct,months_off_work,hospital_days,notes
+fx-death-ok,https://example.org/fictional/1,MACT,death,2021-03-01,2025-06-01,TS,,30,permanent,20000,50,1/3,17,,,4080000,4300000,,1200000,true,true,2,,,salary_slip,20000,,,,,"fictional: matches the rules exactly"
+fx-death-old,https://example.org/fictional/2,MACT,death,2021-03-01,2025-06-01,TS,,30,permanent,20000,30,1/3,16,,,3328000,3500000,,,true,true,2,,,salary_slip,20000,,,,,"fictional: FP 30 and multiplier 16 instead of 50 and 17"
+fx-death-typo,https://example.org/fictional/3,MACT,death,2021-03-01,2025-06-01,TS,,30,permanent,20000,50,1/3,17,,,3600000,3800000,,,true,true,2,,,salary_slip,20000,,,,,"fictional: formula head not reproducible"
+fx-injury-nomw,https://example.org/fictional/4,MACT,injury,2021-03-01,2025-06-01,XX,,25,informal,,,,,,,,500000,,,false,,,,,none,,,30,,,"fictional: state without wage data"
+fx-injury-mw,https://example.org/fictional/5,MACT,injury,2021-03-01,2025-06-01,TS,,25,informal,10000,40,,18,30,,907200,1100000,,,false,,,,,none,9000,,30,4,10,"fictional"
+"fx-quoted, comma",https://example.org/fictional/6,MACT,death,2021-03-01,2025-06-01,TS,,40,unknown_job,,,,,,,,,,,,,,,,,,,,,,"invalid employment"

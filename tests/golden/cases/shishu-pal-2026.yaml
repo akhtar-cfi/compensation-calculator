@@ -1,6 +1,6 @@
 id: shishu-pal-2026
 title: "Shishu Pal @ Shish Ram & Ors. v Surjeet & Ors."
-citation: "2026 INSC 634"   # C.A. @ SLP(C) No. 33915 of 2025; SCO.LR cite 2026 SCO.LR 6(3)[13]
+citation: "2026 INSC 634" # C.A. @ SLP(C) No. 33915 of 2025; SCO.LR cite 2026 SCO.LR 6(3)[13]
 court: SC
 judgment_date: 2026-06-11
 source_url: "https://www.verdictum.in/pdf_upload/2026/06/11/4969820252026-06-11watermark-1779118.pdf"
@@ -9,19 +9,20 @@ source_url: "https://www.verdictum.in/pdf_upload/2026/06/11/4969820252026-06-11w
 kind: death
 facts:
   accident_date: 2001-11-25
-  age_at_accident: 35            # only stated in the Court's table: "Future Prospects (Age-35 years)"
-  state: Haryana                 # MACT Sirsa; P&H High Court
-  occupation: homemaker          # claimed Rs.3,000/month from knitting/stitching rejected as unproved
+  age_at_accident: 35 # only stated in the Court's table: "Future Prospects (Age-35 years)"
+  state: Haryana # MACT Sirsa; P&H High Court
+  occupation: homemaker # claimed Rs.3,000/month from knitting/stitching rejected as unproved
   employment: homemaker
-  claimants: {spouse: 1, children: null, parents: null}   # composition NOT stated; "legal heirs"; consortium x4
+  claimants: { spouse: 1, children: null, parents: null } # composition NOT stated; "legal heirs"; consortium x4
   disability: null
 judgment_params:
-  monthly_income: 30000          # 'loss of domestic care' Rs.30,000 used as stand-in monthly income
+  monthly_income: 30000 # 'loss of domestic care' Rs.30,000 used as stand-in monthly income
   future_prospects_pct: 40
   personal_deduction: "1/4"
   multiplier: 16
-  conventional: {loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 4}
-  interest_pct: 7.5              # HC's rate left unchanged (7.5%, rising to 9% / 12% if unpaid within 3 / 6 months)
+  conventional:
+    { loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 4 }
+  interest_pct: 7.5 # HC's rate left unchanged (7.5%, rising to 9% / 12% if unpaid within 3 / 6 months)
 expected:
   heads:
     loss_of_dependency: 6048000
@@ -29,7 +30,7 @@ expected:
     loss_of_estate: 18150
     funeral: 18150
   total: 6277900
-  lower_forums: {mact: 242000, high_court: 843400}
+  lower_forums: { mact: 242000, high_court: 843400 }
 computation_quote: |
   [para 20] ... a composite sum of Rs.30,000/- shall be added under the head of 'loss of
   domestic care', provided that all three of these heads are met in the given case. This

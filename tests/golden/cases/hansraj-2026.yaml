@@ -1,6 +1,6 @@
 id: hansraj-2026
 title: "Hansraj v Mukesh Nath & Ors."
-citation: "2026 INSC 454"   # also reported as 2026 LiveLaw (SC) 468; C.A. @ SLP(C) No. 13122 of 2024
+citation: "2026 INSC 454" # also reported as 2026 LiveLaw (SC) 468; C.A. @ SLP(C) No. 13122 of 2024
 court: SC
 judgment_date: 2026-05-06
 source_url: "https://api.sci.gov.in/supremecourt/2024/24731/24731_2024_3_1501_70801_Judgement_06-May-2026.pdf"
@@ -10,30 +10,30 @@ facts:
   accident_date: 2016-11-08
   age_at_accident: 14
   state: Rajasthan
-  occupation: student            # 14-year-old pillion rider
+  occupation: student # 14-year-old pillion rider
   employment: minor
   claimants: null
-  disability: {certificate_pct: 100, functional_pct: null}   # "suffered 100% permanent disability"; no separate functional %
+  disability: { certificate_pct: 100, functional_pct: null } # "suffered 100% permanent disability"; no separate functional %
 judgment_params:
-  monthly_income: 5800           # Rajasthan skilled-workman minimum wage 2016 = Rs.5,746, rounded off to Rs.5,800
+  monthly_income: 5800 # Rajasthan skilled-workman minimum wage 2016 = Rs.5,746, rounded off to Rs.5,800
   future_prospects_pct: 40
   personal_deduction: null
   multiplier: 18
-  disability_pct_applied: 100    # implicit; loss of income taken in full
-  attendant: {attendants: 2, monthly_per_attendant: 5000, multiplier: 18}   # Rs.5,000 = semi-skilled wage
+  disability_pct_applied: 100 # implicit; loss of income taken in full
+  attendant: { attendants: 2, monthly_per_attendant: 5000, multiplier: 18 } # Rs.5,000 = semi-skilled wage
   conventional: null
   interest_pct: 6
 expected:
   heads:
     loss_of_earning_capacity: 1753920
     attendant: 2160000
-    medical: 69743                       # medical bills 49,743 (MACT) + operation 20,000 (HC)
+    medical: 69743 # medical bills 49,743 (MACT) + operation 20,000 (HC)
     pain_suffering_and_loss_of_amenities: 1000000
     future_medical: 300000
     marriage_prospects: 300000
-    conveyance_special_diet: 100000      # "Special Diet & Transportation"
+    conveyance_special_diet: 100000 # "Special Diet & Transportation"
   total: 5683663
-  lower_forums: {mact: 776543, high_court: 1217543}
+  lower_forums: { mact: 776543, high_court: 1217543 }
 computation_quote: |
   [para 8] ... The High Court has considered the notional annual income as ₹30,000/-. This
   amount is on a lower side. The notional income would have to be determined on the basis of

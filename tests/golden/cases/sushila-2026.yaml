@@ -1,34 +1,39 @@
 id: sushila-2026
 title: "Sushila & Ors. v Sudhakar & Anr."
-citation: "2026 LiveLaw (SC) 343"   # Order; C.A. @ SLP(C) No. 21717 of 2025; no INSC citation printed or found
+citation: "2026 LiveLaw (SC) 343" # Order; C.A. @ SLP(C) No. 21717 of 2025; no INSC citation printed or found
 court: SC
 judgment_date: 2026-03-10
 source_url: "https://api.sci.gov.in/supremecourt/2025/30689/30689_2025_14_48_69153_Order_10-Mar-2026.pdf"
 # Also read: https://indiankanoon.org/doc/176427577/
 kind: death
 facts:
-  accident_date: 2013-01-06       # died 07.01.2013
+  accident_date: 2013-01-06 # died 07.01.2013
   age_at_accident: 59
-  state: Karnataka                # forum: MACT Belagavi / Karnataka HC Dharwad; accident on Sangli-Miraj Road
+  state: Karnataka # forum: MACT Belagavi / Karnataka HC Dharwad; accident on Sangli-Miraj Road
   occupation: "Railway Department employee (permanent), ~6 months of service left"
   employment: permanent
-  claimants: {spouse: 1, children: 3, parents: 0}   # widow + married son (30) + 2 married daughters; only widow held dependent
+  claimants: { spouse: 1, children: 3, parents: 0 } # widow + married son (30) + 2 married daughters; only widow held dependent
   disability: null
 judgment_params:
-  monthly_income: 25415           # gross 31,893 less 6,478 (festival advance + DA arrears), as fixed by the Tribunal
+  monthly_income: 25415 # gross 31,893 less 6,478 (festival advance + DA arrears), as fixed by the Tribunal
   future_prospects_pct: 15
   personal_deduction: "1/3"
   multiplier: 9
-  conventional: {loss_of_estate: 19500, funeral: 19500, consortium_per_claimant: 52000, consortium_claimants: 4}   # HC's figures, left undisturbed
+  conventional: {
+      loss_of_estate: 19500,
+      funeral: 19500,
+      consortium_per_claimant: 52000,
+      consortium_claimants: 4,
+    } # HC's figures, left undisturbed
   interest_pct: 6
 expected:
   heads:
     loss_of_dependency: 2104362
     loss_of_estate: 19500
     consortium: 208000
-    funeral: 19500                 # "Transportation of Dead Body & Funeral expenses"
+    funeral: 19500 # "Transportation of Dead Body & Funeral expenses"
   total: 2351362
-  lower_forums: {mact: 1137466, high_court: 1405942}
+  lower_forums: { mact: 1137466, high_court: 1405942 }
 computation_quote: |
   [para 23] Thus, while deciding Issue No. 1, we are of the opinion that no deduction ought to
   have been made from the salary of the deceased on account of duration of service left. The

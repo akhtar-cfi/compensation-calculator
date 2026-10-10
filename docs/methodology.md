@@ -96,6 +96,28 @@ The engine never reads the clock; both dates are inputs.
 | Legal sign-off on every rule used                                | Complete                                                |
 | Comprehension testing with families and paralegals               | At most 20% read the figure as a promise                |
 
+### How the back-test works (`mact backtest <awards.csv>`)
+
+Each award is extracted into one de-identified CSV row (columns: `src/backtest/schema.ts`; seed: `data/backtest/awards.csv`).
+Four checks run on every row:
+
+| Check      | Input                                                                                     | Question                                                                   |
+| ---------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Replicate  | The tribunal's own findings (income, future prospects, deduction, multiplier, disability) | Does the engine's arithmetic reproduce the tribunal's formula head?        |
+| Conformity | The income the tribunal accepted, with the rules as of the award date                     | Which parameters did the tribunal set differently from the rules?          |
+| Predict    | Only what a family knows (claimed income, proof, family, certificate, time off work)      | How far is the estimate from the award, and is the award inside the range? |
+| Offer      | The insurer's legal offer recorded in the award                                           | Offer ÷ award after any negligence cut (kill criterion K1)                 |
+
+Sampling bias is stated on every report: published awards over-represent Delhi, and appeals over-represent contested, low awards.
+
+**First data point (one Delhi tribunal injury award, Aug 2026; n = 1, not a calibration):**
+
+- Replicate and conformity: exact. The tribunal's loss of earning capacity matches the formula and the rules.
+- Predict from family facts: standard estimate about Rs 5.7 lakh against an award of Rs 11.9 lakh before the negligence cut, and outside the range. Two causes:
+  - The tribunal took a 15% limb certificate as 15% whole-body functional disability; the standard scenario halves a limb percentage.
+  - The discretionary heads were much higher than the experimental bands: Rs 1.25 lakh for shock, pain and amenities against Rs 25,000, and Rs 1.65 lakh for conveyance, diet and family attendant against Rs 15,000.
+- Decision: no change on one award. Recalibrate the limb-to-functional factor and the injury bands on at least 60 Delhi injury awards (milestone M2). Until then, injury results stay experimental and the range for low-disability injuries is likely too low.
+
 ## 8. Keeping it current
 
 - **Minimum wages** (`sources/minimum-wages/<STATE>.yaml`):
@@ -117,4 +139,4 @@ The engine never reads the clock; both dates are inputs.
   - working homemakers (Shishu Pal's add-on);
   - adult-children consortium variations;
   - apportionment between claimants.
-- **Injury bands are uncalibrated.**
+- **Injury bands are uncalibrated** and, on the first Delhi award checked, too low (see the back-test notes in section 7).
