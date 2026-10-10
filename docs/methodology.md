@@ -172,7 +172,7 @@ Other findings:
 ## 9. Known limitations (v0.1)
 
 - **Not signed off.** No rule has been reviewed by the legal reviewers yet.
-- **Tax** slabs are approximate. FY 2026-27 is assumed unchanged. Surcharge and professional tax are ignored.
+- **Tax:** slabs, rebate and standard deduction for FY 2018-19 to 2026-27 were checked against official sources on 10 Oct 2026 (listed per year in the [rules reference](rules-reference.md)); FY 2019-20 slabs and cess rest on the neighbouring years. From 1 Apr 2026 the Income-tax Act, 2025 applies with the same rates. Surcharge and professional tax are ignored.
 - **Not modelled yet:**
   - working homemakers (Shishu Pal's add-on);
   - adult-children consortium variations;

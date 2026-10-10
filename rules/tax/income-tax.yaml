@@ -4,7 +4,10 @@
 # Rebate (s.87A): full rebate up to rebate_upto of taxable income. Under the new regime (FY 2023-24 on), marginal relief
 # caps the tax just above that threshold at the income above it; cess is then added. The old regime has no such relief,
 # so its take-home income really does dip just above the threshold.
-# verified: false - slabs are from the drafter's knowledge and must be checked against the Finance Acts.
+# Checked 10 Oct 2026 against official sources (CBDT circulars, incometax.gov.in, Finance Bill memoranda, PIB):
+# every value matches; FY 2019-20 slabs and cess were not found in a source for that year (same as the checked years
+# either side). From 1 Apr 2026 the Income-tax Act, 2025 applies (rebate s.156, new-regime rates s.202; 'tax year').
+# verified: false = not yet signed off by the legal reviewers.
 id: income_tax
 verified: false
 cess_pct: 4
@@ -15,30 +18,51 @@ years:
     rebate_upto: 350000
     rebate_max: 2500
     slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+    checked_against:
+      - https://www.indiabudget.gov.in/budget2023-24/doc/Budget_Speech.pdf
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular_1_2019.pdf/32084fa9-506a-9f0f-b207-5a631e2190f3?t=1762868318230
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064
   - fy: "2019-20"
     regime: old
     standard_deduction: 50000
     rebate_upto: 500000
     rebate_max: 12500
     slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+    checked_against:
+      - https://www.indiabudget.gov.in/budget2023-24/doc/Budget_Speech.pdf
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/circular_20_2020.pdf/e2c142ae-028c-047c-a2ef-a1e712fdd1c8?t=1762868544963
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064
+    check_note: "Not found in a source for this year: slabs, cess (same values as the checked years either side)."
   - fy: "2020-21"
     regime: old
     standard_deduction: 50000
     rebate_upto: 500000
     rebate_max: 12500
     slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+    checked_against:
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/circular_20_2020.pdf/e2c142ae-028c-047c-a2ef-a1e712fdd1c8?t=1762868544963
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064
   - fy: "2021-22"
     regime: old
     standard_deduction: 50000
     rebate_upto: 500000
     rebate_max: 12500
     slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+    checked_against:
+      - https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-24-2022.pdf/d27dd45f-94ba-f69f-3acc-32a8b31e43aa?t=1762868713421
+      - https://www.indiabudget.gov.in/budget2021-22/doc/memo.pdf
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064
   - fy: "2022-23"
     regime: old
     standard_deduction: 50000
     rebate_upto: 500000
     rebate_max: 12500
     slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+    checked_against:
+      - https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-24-2022.pdf/d27dd45f-94ba-f69f-3acc-32a8b31e43aa?t=1762868713421
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064
   - fy: "2023-24"
     regime: new
     marginal_relief: true
@@ -46,6 +70,11 @@ years:
     rebate_upto: 700000
     rebate_max: 25000
     slabs: [[300000, 0], [600000, 5], [900000, 10], [1200000, 15], [1500000, 20], [null, 30]]
+    checked_against:
+      - https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1
+      - https://www.incometax.gov.in/iec/foportal/help/new-tax-vs-old-tax-regime-faqs
+      - https://www.indiabudget.gov.in/budget2023-24/doc/Budget_Speech.pdf
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064
   - fy: "2024-25"
     regime: new
     marginal_relief: true
@@ -53,6 +82,10 @@ years:
     rebate_upto: 700000
     rebate_max: 25000
     slabs: [[300000, 0], [700000, 5], [1000000, 10], [1200000, 15], [1500000, 20], [null, 30]]
+    checked_against:
+      - https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1
+      - https://www.indiabudget.gov.in/budget2024-25/doc/Budget_Speech.pdf
+      - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064
   - fy: "2025-26"
     regime: new
     marginal_relief: true
@@ -60,6 +93,10 @@ years:
     rebate_upto: 1200000
     rebate_max: 60000
     slabs: [[400000, 0], [800000, 5], [1200000, 10], [1600000, 15], [2000000, 20], [2400000, 25], [null, 30]]
+    checked_against:
+      - https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1
+      - https://www.pib.gov.in/PressReleasePage.aspx?PRID=2098406
+      - https://www.incometaxindia.gov.in/documents/20117/15766092/FAQs-Budget-2026%2BUpdated.pdf/daf54d14-aca9-c4ea-b786-598fd2f8d4c4
   - fy: "2026-27"
     regime: new
     marginal_relief: true
@@ -67,4 +104,8 @@ years:
     rebate_upto: 1200000
     rebate_max: 60000
     slabs: [[400000, 0], [800000, 5], [1200000, 10], [1600000, 15], [2000000, 20], [2400000, 25], [null, 30]]
-    note: Assumed unchanged from FY 2025-26 - NOT verified.
+    note: "Confirmed unchanged: Finance Bill 2026 memorandum ('There is no change proposed in tax rates'); Income-tax Act, 2025 in force from 1 Apr 2026 (PIB, 1 Apr 2026)."
+    checked_against:
+      - https://www.indiabudget.gov.in/doc/memo.pdf
+      - https://www.incometaxindia.gov.in/documents/20117/15766092/FAQs-Budget-2026%2BUpdated.pdf/daf54d14-aca9-c4ea-b786-598fd2f8d4c4
+      - https://www.incometaxindia.gov.in/documents/d/guest/faqs-on-computation-of-tax

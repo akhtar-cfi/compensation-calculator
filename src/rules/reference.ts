@@ -177,14 +177,18 @@ export function renderRulesReference(rules: RulesBundle): string {
     "",
   );
   L.push(
-    "| Financial year | Regime | Standard deduction | Rebate up to | Slabs (upper limit: rate) |",
-    "|---|---|---:|---:|---|",
+    "| Financial year | Regime | Standard deduction | Rebate up to | Slabs (upper limit: rate) | Checked against |",
+    "|---|---|---:|---:|---|---|",
   );
   for (const y of t.years)
     L.push(
       `| ${y.fy} | ${y.regime} | ${formatINR(y.standard_deduction)} | ${formatINR(y.rebate_upto)}${y.marginal_relief ? " (marginal relief)" : ""} | ${y.slabs
         .map(([up, r]) => `${up === null ? "above" : formatINR(up)}: ${r}%`)
-        .join(", ")} |`,
+        .join(", ")} | ${
+        y.checked_against.length
+          ? y.checked_against.map((u, i) => `[${i + 1}](${u})`).join(" ")
+          : "not checked"
+      }${y.check_note ? ` (${y.check_note})` : ""} |`,
     );
   L.push("", `Signed off: ${yes(t.verified)}.`, "");
 

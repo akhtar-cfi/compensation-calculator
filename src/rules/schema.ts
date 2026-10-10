@@ -135,6 +135,9 @@ export const TaxRuleSchema = z.object({
       marginal_relief: z.boolean().default(false),
       slabs: z.array(z.tuple([z.number().nullable(), z.number()])),
       note: z.string().optional(),
+      /** Official pages the year's values were checked against. */
+      checked_against: z.array(z.string()).default([]),
+      check_note: z.string().optional(),
     }),
   ),
 });
