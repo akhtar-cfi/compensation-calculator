@@ -1,0 +1,81 @@
+id: sushila-2026
+title: "Sushila & Ors. v Sudhakar & Anr."
+citation: "2026 LiveLaw (SC) 343"   # Order; C.A. @ SLP(C) No. 21717 of 2025; no INSC citation printed or found
+court: SC
+judgment_date: 2026-03-10
+source_url: "https://api.sci.gov.in/supremecourt/2025/30689/30689_2025_14_48_69153_Order_10-Mar-2026.pdf"
+# Also read: https://indiankanoon.org/doc/176427577/
+kind: death
+facts:
+  accident_date: 2013-01-06       # died 07.01.2013
+  age_at_accident: 59
+  state: Karnataka                # forum: MACT Belagavi / Karnataka HC Dharwad; accident on Sangli-Miraj Road
+  occupation: "Railway Department employee (permanent), ~6 months of service left"
+  employment: permanent
+  claimants: {spouse: 1, children: 3, parents: 0}   # widow + married son (30) + 2 married daughters; only widow held dependent
+  disability: null
+judgment_params:
+  monthly_income: 25415           # gross 31,893 less 6,478 (festival advance + DA arrears), as fixed by the Tribunal
+  future_prospects_pct: 15
+  personal_deduction: "1/3"
+  multiplier: 9
+  conventional: {loss_of_estate: 19500, funeral: 19500, consortium_per_claimant: 52000, consortium_claimants: 4}   # HC's figures, left undisturbed
+  interest_pct: 6
+expected:
+  heads:
+    loss_of_dependency: 2104362
+    loss_of_estate: 19500
+    consortium: 208000
+    funeral: 19500                 # "Transportation of Dead Body & Funeral expenses"
+  total: 2351362
+  lower_forums: {mact: 1137466, high_court: 1405942}
+computation_quote: |
+  [para 23] Thus, while deciding Issue No. 1, we are of the opinion that no deduction ought to
+  have been made from the salary of the deceased on account of duration of service left. The
+  Tribunal rightly assessed the net salary of the deceased to be ₹25,415/- per month and the
+  same would be considered for the computation of loss of income.
+  [para 25] Taking into consideration the aforesaid, the income of the deceased is to be taken
+  as ₹25,415/- per month, which would make his annual income amount to ₹3,04,980. As far as the
+  future prospects are concerned, the High Court erroneously ascertained them to be 10%. As per
+  the law laid down in Pranay Sethi's case (supra), an addition of 15% towards future prospects
+  was mandated while computation of the compensation of the deceased who fall in the category
+  of salaried permanent employees within the age bracket of 50-60 years. In the present case,
+  the deceased was working in railways as a permanent employee and was 59 years of age,
+  therefore, the addition towards future prospects should be @15%.
+  [para 27] Now that the annual income has been computed at ₹3,04,980/-, and after adding
+  future prospects @15%, the gross annual income becomes ₹3,50,727/- Out of the said annual
+  income, 1/3rd, i.e. ₹1,16,909/- would be deductible towards the personal expenses of the
+  deceased, and as per the law laid down in Sarla Verma's case (supra), the applicable
+  multiplier ought to be 9. In terms of the aforesaid, the loss of dependency would be
+  calculated as follows:
+  (₹3,50,727 - ₹1,16,909) x 9 = ₹21,04,362/-.
+  [para 28] The compensation awarded by the High Court under the head of loss of earning of six
+  months would now be not awarded, since the computation of the salary of the deceased has now
+  been made on the basis of his annual income.
+  [para 29] We are of the view that apart from the above computation regarding the income, loss
+  of dependency and future prospects, the compensation awarded by the High Court under the
+  non-pecuniary heads and the liability of the Respondents to pay the compensation does not
+  call for interference. In light of the above discussion, the claimants are entitled to
+  compensation as follows:
+  Heads                                        | Compensation Awarded (₹)
+  Loss of Dependency                           | 21,04,362/-
+  Loss to the Estate                           | 19,500/-
+  Towards Consortium to Appellants             | 2,08,000/-
+  Transportation of Dead Body & Funeral expenses | 19,500/-
+  TOTAL                                        | 23,51,362/-
+  [para 31] On the said amount, the claimants shall be entitled to interest @6% per annum from
+  the date of filing of the petition till the payment of the amount. ...
+paragraphs: ["5", "6", "8", "9", "22", "23", "24", "25", "27", "28", "29", "31"]
+notes: >-
+  Arithmetic verified: 3,04,980 x 1.15 = 3,50,727 exactly; 1/3 = 1,16,909; (3,50,727 - 1,16,909)
+  x 9 = 21,04,362; total 23,51,362 (matches). Multiplier 9 for age 59 (Sarla Verma 56-60).
+  The HC's 'loss of six months salary' (1,52,490) head was dropped. CONVENTIONAL HEADS are the
+  HC's, left undisturbed: estate 19,500 and funeral 19,500 (15,000 + 30%) and consortium 52,000
+  x 4 appellants (40,000 + 30%; the HC described it as '10% every year i.e. 30%') - these are NOT
+  the Pranay Sethi 10%-per-3-years figures (18,150 / 48,400) used in other 2025-26 SC fixtures.
+  Consortium paid to all 4 appellants although the SC held only the widow was dependent
+  (para 24). 1/3 deduction retained with a single dependant (claimants argued for 1/4).
+  Income 25,415 is the Tribunal's figure after deducting festival advance and DA arrears from
+  gross 31,893 (the SC accepted it as 'net salary'; no income tax deduction discussed).
+  Order signed 07.04.2026. Wording verbatim; layout normalised.
+verified: false

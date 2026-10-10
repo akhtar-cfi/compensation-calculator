@@ -1,0 +1,82 @@
+id: mohinder-kaur-2026
+title: "Mohinder Kaur (D) through L.R. v Brij Lal Arora & Ors."
+citation: "2026 INSC 477"   # C.A. @ SLP(C) No. 580 of 2020
+court: SC
+judgment_date: 2026-05-12
+source_url: "https://www.verdictum.in/pdf_upload/2026/05/13/mohinder-kaur-v-brij-lal-arora-1777513.pdf"
+# Also listed: https://indiankanoon.org/doc/14044956/ (not read)
+kind: death
+facts:
+  accident_date: 2000-05-28
+  age_at_accident: 22
+  state: Punjab                   # forum: MACT Hoshiarpur / P&H HC; accident on Delhi-Mathura road (UP)
+  occupation: "3rd-year B.E. (Mechanical) student"
+  employment: student
+  claimants: {spouse: 0, children: 0, parents: 1}   # mother (aged 48), now represented by daughter as LR
+  disability: null
+judgment_params:
+  monthly_income: 12000           # notional, "considering that the death occurred in the year 2000"
+  future_prospects_pct: 40
+  personal_deduction: "1/2"
+  multiplier: 18
+  conventional: {loss_of_estate: 15000, funeral: 30000, consortium_per_claimant: 40000, consortium_claimants: 1}
+  interest_pct: 7.5
+expected:
+  heads:
+    loss_of_dependency: 1814400
+    loss_of_estate: 15000
+    consortium: 40000               # filial consortium
+    funeral: 30000
+    vehicle_damage: 25670           # motorcycle damage per surveyor's report
+  total: 1925070
+  lower_forums: {mact: 223000, high_court: 1344000}
+computation_quote: |
+  [para 26] ... Having regard to the aforesaid, we deem it appropriate to assess the monthly
+  income of the deceased at ₹12,000/-, considering that the death occurred in the year 2000.
+  [para 27] The High Court erroneously denied future prospects and deduction towards personal
+  and living expenses solely on grounds that the income of the deceased in the instant case was
+  notional. This approach is contrary to the well-settled principles enunciated in Sarla Verma
+  (supra), and affirmed in Pranay Sethi (supra). Resultantly, 40% future prospects ought to be
+  added to the notional monthly income of ₹12,000/-, as the deceased fell within the bracket of
+  less than 40 years of age as per the law in Pranay Sethi (supra). This would render an amount
+  of ₹16,800/-, and one-half of the said amount ought to be deducted towards personal and living
+  expenses, since the deceased was a bachelor, which brings the monthly dependency to ₹8,400/-
+  and the annual dependency to ₹1,00,800/- (₹8,400 x 12). When a multiplier of 18, as rightly
+  adopted by the High Court, is applied to the said multiplicand, the annual loss of dependency
+  is computed at ₹18,14,400/- (₹1,00,800 x 18).
+  [para 29] Accordingly, we award a sum of ₹15,000/- towards loss of estate. Further, a sum of
+  ₹40,000/- is deemed just and reasonable under the head of filial consortium, particularly in
+  view of the law laid down in Magma General Insurance (supra). In our considered view, the
+  Appellant-Claimant is also entitled to an amount of ₹30,000/- under the head of funeral
+  expenses, especially when we take stock of the fact that expenses were also incurred in
+  transporting the dead body from Agra to the deceased's hometown in Hoshiarpur, Punjab.
+  [para 30] Insofar as the compensation towards damage to the motorcycle is concerned, we are of
+  the opinion that the loss ought to be ascertained at ₹25,670/- in terms of the surveyor's
+  report, ...
+  [para 31] In light of the above discussion, the Appellant-Claimant is entitled to compensation
+  as follows:
+  Heads               | Compensation Awarded
+  Loss of Dependency  | ₹18,14,400/- (₹8,400 x 12 x 18)
+  Loss to the Estate  | ₹15,000/-
+  Filial Consortium   | ₹40,000/-
+  Funeral Expenses    | ₹30,000/-
+  Motorcycle Damage   | ₹25,670/-
+  TOTAL               | ₹19,25,070/-
+  [para 33] Thus, on the total compensation amount, the Appellant-Claimant shall be entitled to
+  interest @7.5% per annum from the date of filing of the petition till the realization of the
+  enhanced compensation. ...
+paragraphs: ["3", "8", "10", "13", "14", "26", "27", "28", "29", "30", "31", "32", "33"]
+notes: >-
+  Arithmetic verified: 12,000 x 1.4 x 1/2 x 12 x 18 = 18,14,400; total 19,25,070 (matches).
+  Multiplier 18 by the deceased's age 22 (Sarla Verma 21-25), not the mother's age (the Tribunal
+  had used 11). CONVENTIONAL HEADS are Pranay Sethi base figures WITHOUT the 10%/3-year
+  escalation (estate 15,000; consortium 40,000) even though decided in 2026, and funeral is
+  30,000 (double the Pranay Sethi 15,000) because of body transport from Agra - a calculator
+  that applies standard conventional amounts will not reproduce this. Includes a property-damage
+  head (motorcycle 25,670) outside the usual death heads. Lower forums: MACT heads in para 10
+  (1,98,000 + 18,000 + 2,500 + 5,000) sum to 2,23,500, but the judgment states the MACT total as
+  2,23,000 (both in para 2 and the para 10 table) - Rs.500 discrepancy in the judgment. HC total
+  13,44,000 = 6,000 x 12 x 18 (12,96,000, no FP, no deduction) + 30,000 conventional + 18,000
+  motorcycle. Source is Verdictum's copy of the signed SC judgment (official SCI PDF URL not
+  located). Wording verbatim; layout normalised.
+verified: false

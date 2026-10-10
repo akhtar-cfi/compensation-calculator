@@ -1,0 +1,73 @@
+id: preetha-krishnan-2025
+title: "Preetha Krishnan & Ors. v The United India Insurance Co. Ltd. & Ors."
+citation: "2025 INSC 1293"   # C.As @ SLP(C) Nos. 9753-56 of 2025
+court: SC
+judgment_date: 2025-11-06
+source_url: "https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf"
+kind: death
+facts:
+  accident_date: 2012-08-03
+  age_at_accident: 51
+  state: Kerala                  # MACT Pala; Kerala HC
+  occupation: "Assistant Engineer, Public Works Department"
+  employment: permanent
+  claimants: {spouse: 1, children: 3, parents: 0}   # "wife and children"; HC disbursed to claimants 1-4 in ratio 70:10:10:10 (children count derived)
+  disability: null
+judgment_params:
+  monthly_income: 45408          # post-tax (Rs.2,453/month tax deducted by Tribunal)
+  future_prospects_pct: 15
+  personal_deduction: "1/3"      # Court's table is LABELLED "Deduction (1/4)" but the arithmetic deducts 1/3 (see notes)
+  multiplier: 11
+  conventional: {loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 3}
+  interest_pct: 7.5              # "Interest on the amount is to be paid as awarded by the Tribunal" (7.5% p.a.)
+expected:
+  heads:
+    loss_of_dependency: 4595294
+    loss_of_estate: 18150
+    funeral: 18150
+    consortium: 145200
+  total: 4776794
+  lower_forums: {mact: 4404912, high_court: 3510144}
+computation_quote: |
+  [para 18] ... In other words, split multiplier is a concept foreign to the Motor Vehicles
+  Act, 1988 and is not to be used by the Tribunal and/or Courts in calculation of the
+  compensation.
+  [para 19] Concluding the issue of income, we hold that the income as on the date of death is
+  to be taken to calculate the compensation. We further notice that the High Court failed to
+  comply with the directives issued in Pranay Sethi (supra) i.e., granting 10% enhancement,
+  every three years under the conventional heads. In accordance with the above discussion, the
+  compensation now payable to the claimant-appellant is as under:
+  CALCULATION OF COMPENSATION
+  Compensation Heads             | Amount Awarded
+  Monthly Income                 | Rs.45,408/-
+  Yearly Income                  | Rs.5,44,896/-
+  Future Prospects (15%) (Age being 51 years) | 5,44,896 + 81,734 = Rs.6,26,630/-
+  Deduction (1/4)                | 6,26,630 – 2,08,876 = Rs.4,17,754/-
+  Multiplier (11)                | 4,17,754 X 11 = Rs.45,95,294/-
+  Loss of Income of the Deceased | Rs.45,95,294/-
+  Loss of Estate                 | Rs.18,150/-
+  Loss of Funeral Expenses       | Rs.18,150/-
+  Loss of Consortium             | 48,400 X 3 = Rs.1,45,200/-
+  Total                          | Rs.47,76,794/-
+  Thus, the difference in compensation is as under:
+  MACT Rs.44,04,912/- | High Court Rs.35,10,144/- | This Court Rs.47,76,794/-
+  [para 20] ... Interest on the amount is to be paid as awarded by the Tribunal.
+paragraphs: ["5", "7", "16", "17", "18", "19", "20"]
+notes: >-
+  Stated total verified: 45,95,294 + 18,150 + 18,150 + 1,45,200 = 47,76,794 (matches).
+  DEDUCTION MISMATCH: the row is labelled 'Deduction (1/4)' but 2,08,876 is one-third of
+  6,26,630 (6,26,630/3 = 2,08,876.67); one-quarter would be 1,56,657.50. So the award actually
+  applies a 1/3 deduction. Had 1/4 been applied: 6,26,630 x 3/4 = 4,69,972.50 x 11 = ~51,69,698
+  dependency, total ~53,51,198. Fixture params use '1/3' so the expected numbers are reproducible.
+  ROUNDING: FP 15% of 5,44,896 = 81,734.40 -> 81,734; multiplicand 4,17,753.33 -> 4,17,754
+  (rounded up); a calculator that does not round the multiplicand gets 45,95,286.67.
+  Consortium x3 although 4 claimant-appellants appear (wife + children; HC ratio 70:10:10:10).
+  Conventional heads use 48,400 / 18,150 (two 10% steps), not three. Lower forums: the 'High
+  Court Rs.35,10,144' in the Court's comparison table is the HC's loss-of-dependency figure only;
+  the HC also awarded consortium + love & affection 1,60,000, funeral 15,000, estate 15,000
+  (para 7), i.e. ~37,00,144 in all (not stated as a total in the judgment). MACT heads recited in
+  para 5 (dependency 42,29,712 + consortium 1,00,000 + funeral 25,000 + love & affection 40,000
+  + estate 5,000 = 43,99,712) fall 5,200 short of the stated MACT total 44,04,912 (unexplained).
+  Holding: split multiplier barred; superannuation is not an exceptional circumstance.
+  Wording verbatim; table layout normalised.
+verified: false

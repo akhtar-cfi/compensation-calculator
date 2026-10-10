@@ -1,0 +1,81 @@
+id: shishu-pal-2026
+title: "Shishu Pal @ Shish Ram & Ors. v Surjeet & Ors."
+citation: "2026 INSC 634"   # C.A. @ SLP(C) No. 33915 of 2025; SCO.LR cite 2026 SCO.LR 6(3)[13]
+court: SC
+judgment_date: 2026-06-11
+source_url: "https://www.verdictum.in/pdf_upload/2026/06/11/4969820252026-06-11watermark-1779118.pdf"
+# Also read: https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/
+# (SCO renders the para-22 table as an image; it matches the PDF table exactly.)
+kind: death
+facts:
+  accident_date: 2001-11-25
+  age_at_accident: 35            # only stated in the Court's table: "Future Prospects (Age-35 years)"
+  state: Haryana                 # MACT Sirsa; P&H High Court
+  occupation: homemaker          # claimed Rs.3,000/month from knitting/stitching rejected as unproved
+  employment: homemaker
+  claimants: {spouse: 1, children: null, parents: null}   # composition NOT stated; "legal heirs"; consortium x4
+  disability: null
+judgment_params:
+  monthly_income: 30000          # 'loss of domestic care' Rs.30,000 used as stand-in monthly income
+  future_prospects_pct: 40
+  personal_deduction: "1/4"
+  multiplier: 16
+  conventional: {loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 4}
+  interest_pct: 7.5              # HC's rate left unchanged (7.5%, rising to 9% / 12% if unpaid within 3 / 6 months)
+expected:
+  heads:
+    loss_of_dependency: 6048000
+    consortium: 193600
+    loss_of_estate: 18150
+    funeral: 18150
+  total: 6277900
+  lower_forums: {mact: 242000, high_court: 843400}
+computation_quote: |
+  [para 20] ... a composite sum of Rs.30,000/- shall be added under the head of 'loss of
+  domestic care', provided that all three of these heads are met in the given case. This
+  determination shall be revised by 10%, cumulatively, every three years. It may be clearly
+  stated that this amount of Rs.30,000/- i.e., loss of domestic care is to be taken as a
+  'stand-in' (basic minimum monthly income) for monthly income in those cases where the
+  homemaker does not have an input into the house, in strictly conventional, monetary terms.
+  In those cases where the homemaker is part of the workforce, the component of loss of
+  domestic care shall be in addition to the monthly income as may be proved before the
+  Tribunal/Courts.
+
+  [para 22] Turning back to the facts of this case, the deceased's claimed income of
+  Rs.3000/- per month from knitting and stitching, in the facts and circumstances of this
+  case is a mere statement without any backing. As such, we take this to a case where the
+  homemaker has no income in monetary terms and pursuant to the above discussion, the
+  compensation under the head loss of domestic care stands in as monthly income. Thus, the
+  compensation payable to the claimants is as under:
+
+  Compensation Heads                      | As per law
+  Loss of domestic care/Monthly Income    | 30,000
+  Yearly Income                           | 3,60,000
+  Future Prospects (Age-35 years)         | 40% of 3,60,000 =1,44,000/-
+                                          | 3,60,000+1,44,000 =5,04,000
+  Multiplier (16)                         | 5,04,000 X 16= 80,64,000/-
+  Deduction (1/4)                         | 1/4 X 80,64,000= 20,16,000/-
+                                          | 60,48,000/-
+  Loss of Consortium                      | 48,400 X 4 = 1,93,600
+  Loss of Estate                          | 18,150
+  Funeral Expenses                        | 18,150
+  Total                                   | 62,77,900/-
+
+  The award is to be met by the respondent-Insurance Company. The interest rates and
+  conditions as awarded and stipulated by the High Court remain unchanged.
+paragraphs: ["3", "17", "20", "22"]
+notes: >-
+  Arithmetic verified: 60,48,000 + 1,93,600 + 18,150 + 18,150 = 62,77,900 (matches stated total).
+  Order of operations: Court applies the multiplier BEFORE the 1/4 personal deduction
+  (5,04,000 x 16 = 80,64,000; less 1/4 = 60,48,000); mathematically identical to deducting first.
+  40% future prospects applied to a homemaker aged 35 (i.e. treated like self-employed/fixed-wage
+  under Pranay Sethi). Conventional heads use 48,400 / 18,150 (two 10% steps over 40,000 / 15,000);
+  para 17 states "so in 2026 the compensation awarded under this head is Rs.48,400/-" even though
+  three 3-year steps since 2017 would give 53,240 / 19,965 - a calculator that auto-escalates by date
+  will NOT reproduce this award. The Rs.30,000 'loss of domestic care' figure is the 2026 base
+  (revisable 10% cumulatively every 3 years) and was applied to a 2001 accident without
+  back-dating. Claimant composition is not stated beyond 'legal heirs' of the deceased (wife of
+  appellant Shishu Pal); Court counted 4 consortium claimants and used 1/4 deduction.
+  The Rs.8,43,400 HC figure (task brief said 8,43,000) is from para 3. Table whitespace
+  normalised; wording verbatim.
+verified: false

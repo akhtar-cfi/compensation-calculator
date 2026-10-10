@@ -1,0 +1,80 @@
+id: baiju-2025
+title: "Baiju v The United India Insurance Company Ltd & Ors."
+citation: "C.A. @ SLP(C) No. 29251 of 2025 (Order)"   # no neutral (INSC) citation printed or found
+court: SC
+judgment_date: 2025-11-28
+source_url: "https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf"
+kind: injury
+facts:
+  accident_date: 2007-08-09
+  age_at_accident: 25
+  state: Kerala                  # MACT Thrissur; Kerala HC MACA No. 1293/2014
+  occupation: "Sales Manager, Portland Distributors"
+  employment: self_employed_or_fixed   # private employment; Court applied 40% FP
+  claimants: null
+  disability: {certificate_pct: null, functional_pct: 65}   # Tribunal assessed whole-body disability 65%; concurrently affirmed
+judgment_params:
+  monthly_income: 6000
+  future_prospects_pct: 40
+  personal_deduction: null
+  multiplier: 18
+  disability_pct_applied: 65
+  conventional: null
+  interest_pct: 7.5              # "Interest is to be paid as awarded by the Tribunal" (7.5% p.a.)
+expected:
+  heads:
+    loss_of_earning_capacity: 1179360
+    medical: 131500
+    attendant_conveyance_incidental: 300000   # "Attendant Charges, Conveyance and Other Incidental Charges"
+    future_medical: 60000
+    pain_and_suffering: 300000
+    conveyance_special_diet: 35000            # "Special Diet and Transportation"
+    loss_of_income_during_treatment: 36000
+    loss_of_amenities: 200000
+  total: 2241860
+  lower_forums: {mact: 1266600, high_court: 1787360}
+computation_quote: |
+  [para 11] ... Therefore, we affirm the view taken by the High Court of considering his
+  income at Rs.6,000/- per month.
+
+  [para 12] Coming to the assessment of the disability suffered by the claimant-appellant, we
+  are in agreement with the concurrent findings returned by the High Court and the Tribunal of
+  determining the same to be 65%. ...
+
+  [para 13] ... we deem it appropriate to enhance the compensation under the aforementioned
+  heads, as a result the compensation under the heads of pain and suffering and attendant
+  charges is re-fixed at Rs.3,00,000/- each.
+
+  [para 14] As a result of the discussion above, the compensation payable to the
+  claimant-appellant in accordance with the law is as follows:
+  CALCULATION OF COMPENSATION
+  Compensation Heads          | Amount Awarded
+  Monthly Income              | Rs.6,000/-
+  Yearly Income               | Rs.72,000/-
+  Future Prospects (40%)      | 72,000/- + 28,800/- = Rs. 1,00,800/-
+  Multiplier (18)             | 1,00,800 X 18 = Rs. 18,14,400/-
+  Permanent Disability (65%)  | 65% of 18,14,400/- = Rs.11,79,360/-
+  Loss of Income/Future Earnings due to Disability | Rs.11,79,360/-
+  Medical Expenses            | Rs.1,31,500
+  Attendant Charges, Conveyance and Other Incidental Charges | 3,00,000/-
+  Future Medical Expenses     | Rs.60,000/-
+  Pain and Suffering          | Rs.3,00,000/-
+  Special Diet and Transportation | Rs.35,000
+  Loss of Income during treatment | Rs.36,000/-
+  Loss of Amenities           | Rs.2,00,000/-
+  TOTAL                       | Rs.22,41,860/-
+  Thus, the difference in compensation is as under:
+  MACT Rs. 12,66,600/- | High Court Rs. 17,87,360/- | This Court Rs.22,41,860/-
+paragraphs: ["6", "8", "11", "12", "13", "14", "15"]
+notes: >-
+  Arithmetic verified: heads sum to 22,41,860 (matches). 6,000 x 12 x 1.4 x 18 x 65% = 11,79,360
+  exactly (no rounding). Multiplier 18 for age 25 (Sarla Verma band 21-25). Only the pain &
+  suffering and attendant heads were re-fixed by the SC; the other non-income heads
+  (medical 1,31,500; future medical 60,000; special diet 35,000; loss of income during treatment
+  36,000; loss of amenities 2,00,000) appear to be carried over from the courts below but the
+  order does not itemise the lower-forum heads, so their provenance is not verifiable. Loss of
+  income during treatment 36,000 = 6 x 6,000 (inferred, not stated). The attendant head is a
+  lump sum (no multiplier). Lower forums give totals only. Order dated 28 Nov 2025, digitally
+  signed 22 Dec 2025. Full title on the order: "BAIJU ... VERSUS THE UNITED INDIA INSURANCE
+  COMPANY, LTD & ORS." Wording verbatim; table layout normalised.
+verified: false
