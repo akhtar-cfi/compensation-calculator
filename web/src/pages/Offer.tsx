@@ -1,17 +1,8 @@
 import { useState } from "preact/hooks";
 import { checkOffer, type EstimateOutput, type OfferCheck } from "../../../src/engine/index.js";
 import { formatINR } from "../../../src/engine/money.js";
-import {
-  Button,
-  Card,
-  Eyebrow,
-  Headline,
-  Lead,
-  LinkButton,
-  Notice,
-  Section,
-  TextField,
-} from "../components/ui";
+import { Button, Card, Eyebrow, Headline, Lead, LinkButton, Notice, Section } from "../components/ui";
+import { MoneyInput, TextInput } from "../components/form";
 import { rules } from "../data";
 import { useLang, useT } from "../i18n";
 
@@ -109,10 +100,12 @@ export function Offer(props: {
     );
   };
 
-  const field = (k: keyof OfferForm, label: string) => (
-    <TextField
+  const field = (k: keyof OfferForm, label: string, suffix: string) => (
+    <TextInput
       id={`offer-${k}`}
       numeric
+      width="xs"
+      suffix={suffix}
       label={label}
       value={f[k]}
       error={errors[k] ? t(errors[k]) : undefined}
@@ -130,15 +123,21 @@ export function Offer(props: {
           <strong class="text-foreground">{formatINR(est.range.conservative)}</strong>
         </p>
         <form class="mt-8 grid max-w-2xl gap-6" noValidate onSubmit={submit}>
-          {field("amount", t("offer.amount"))}
+          <MoneyInput
+            id="offer-amount"
+            label={t("offer.amount")}
+            value={f.amount}
+            error={errors.amount ? t(errors.amount) : undefined}
+            onInput={(v) => set("amount", v)}
+          />
           <div class="grid gap-6 sm:grid-cols-2">
-            {field("years", t("offer.years"))}
-            {field("interest", t("offer.interest"))}
-            {field("discount", t("offer.discount"))}
-            {field("fee", t("offer.fee"))}
+            {field("years", t("offer.years"), t("unit.years"))}
+            {field("interest", t("offer.interest"), "%")}
+            {field("discount", t("offer.discount"), "%")}
+            {field("fee", t("offer.fee"), "%")}
           </div>
           <div>
-            <Button type="submit" arrow>
+            <Button type="submit" arrow full>
               {t("offer.check")}
             </Button>
           </div>

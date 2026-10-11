@@ -22,6 +22,21 @@ export function Section(props: {
   );
 }
 
+/**
+ * A tool page (question, check, stop, result): the standard 7xl container, with content held to a readable
+ * column (about 65 characters) and tighter padding than marketing sections, so the question sits in the first
+ * screen of a 360x800 phone. A documented exception to the CFI section padding.
+ */
+export function ToolPage(props: { children: ComponentChildren; wide?: boolean }) {
+  return (
+    <section class="border-t border-border bg-background">
+      <div class="mx-auto w-full max-w-7xl px-6 py-8 md:px-10 md:py-12">
+        <div class={props.wide ? "max-w-4xl" : "max-w-2xl"}>{props.children}</div>
+      </div>
+    </section>
+  );
+}
+
 export function Eyebrow(props: { children: ComponentChildren }) {
   return <p class="text-xs font-medium tracking-[0.25em] text-brand">{props.children}</p>;
 }
@@ -73,14 +88,18 @@ const btnBase =
 const btnPrimary = `${btnBase} bg-brand text-brand-foreground shadow-lg shadow-brand/30 hover:bg-brand/90`;
 const btnSecondary = `${btnBase} border border-border bg-background text-foreground hover:border-brand/40`;
 
+const fullCls = " w-full sm:w-auto";
+
 export function LinkButton(props: {
   href: string;
   secondary?: boolean;
   arrow?: boolean;
+  /** Full width on a phone (the main action of a tool page). */
+  full?: boolean;
   children: ComponentChildren;
 }) {
   return (
-    <a href={props.href} class={props.secondary ? btnSecondary : btnPrimary}>
+    <a href={props.href} class={(props.secondary ? btnSecondary : btnPrimary) + (props.full ? fullCls : "")}>
       {props.children}
       {props.arrow !== false && !props.secondary && <ArrowRight aria-hidden="true" class="h-4 w-4" />}
     </a>
@@ -91,13 +110,14 @@ export function Button(
   props: {
     secondary?: boolean;
     arrow?: boolean;
+    full?: boolean;
     type?: "button" | "submit";
     children: ComponentChildren;
   } & Omit<JSX.HTMLAttributes<HTMLButtonElement>, "class" | "type">,
 ) {
-  const { secondary, arrow, children, ...rest } = props;
+  const { secondary, arrow, full, children, ...rest } = props;
   return (
-    <button type="button" {...rest} class={secondary ? btnSecondary : btnPrimary}>
+    <button type="button" {...rest} class={(secondary ? btnSecondary : btnPrimary) + (full ? fullCls : "")}>
       {children}
       {arrow && <ArrowRight aria-hidden="true" class="h-4 w-4" />}
     </button>
@@ -146,180 +166,5 @@ export function Notice(props: {
         <div class="mt-2 pl-7 text-sm leading-relaxed text-muted-foreground">{props.children}</div>
       )}
     </div>
-  );
-}
-
-/* ---------- form controls: every control has a visible label, help and error wired by id ---------- */
-
-const inputCls =
-  "mt-2 block min-h-12 w-full rounded-xl border bg-background px-4 text-base text-foreground focus:outline-2 focus:outline-offset-1 focus:outline-brand";
-// Field borders use the muted grey at 80% (about 3.5:1), not the hairline token: a form field's edge must be visible
-// (WCAG 1.4.11 asks for 3:1).
-const borderCls = (err?: string) => (err ? "border-danger border-2" : "border-muted-foreground/80");
-
-interface FieldBase {
-  id: string;
-  label: string;
-  help?: string | undefined;
-  error?: string | undefined;
-  optional?: boolean;
-}
-
-function Label(props: FieldBase) {
-  const t = useT();
-  return (
-    <label for={props.id} class="block font-medium text-foreground">
-      {props.label}
-      {props.optional && <span class="font-normal text-muted-foreground"> ({t("wiz.optional")})</span>}
-    </label>
-  );
-}
-
-function HelpAndError(props: FieldBase) {
-  return (
-    <>
-      {props.help && (
-        <p id={`${props.id}-help`} class="mt-1 text-sm text-muted-foreground">
-          {props.help}
-        </p>
-      )}
-      {props.error && (
-        <p id={`${props.id}-error`} class="mt-1 flex items-center gap-1 text-sm font-medium text-foreground">
-          <CircleAlert aria-hidden="true" class="h-4 w-4 text-danger" />
-          {props.error}
-        </p>
-      )}
-    </>
-  );
-}
-
-const describedBy = (p: FieldBase) =>
-  [p.help && `${p.id}-help`, p.error && `${p.id}-error`].filter(Boolean).join(" ") || undefined;
-
-export function TextField(
-  props: FieldBase & {
-    value: string;
-    onInput: (v: string) => void;
-    type?: "text" | "date";
-    numeric?: boolean;
-    max?: string;
-    min?: string;
-  },
-) {
-  return (
-    <div>
-      <Label {...props} />
-      <HelpAndError {...props} />
-      <input
-        id={props.id}
-        name={props.id}
-        type={props.type ?? "text"}
-        inputMode={props.numeric ? "numeric" : undefined}
-        autoComplete="off"
-        value={props.value}
-        max={props.max}
-        min={props.min}
-        aria-invalid={props.error ? "true" : undefined}
-        aria-describedby={describedBy(props)}
-        onInput={(e) => props.onInput((e.currentTarget as HTMLInputElement).value)}
-        class={`${inputCls} ${borderCls(props.error)} ${props.numeric ? "max-w-xs" : ""}`}
-      />
-    </div>
-  );
-}
-
-export function SelectField(
-  props: FieldBase & {
-    value: string;
-    onChange: (v: string) => void;
-    options: { value: string; label: string }[];
-  },
-) {
-  return (
-    <div>
-      <Label {...props} />
-      <HelpAndError {...props} />
-      <select
-        id={props.id}
-        name={props.id}
-        value={props.value}
-        aria-invalid={props.error ? "true" : undefined}
-        aria-describedby={describedBy(props)}
-        onChange={(e) => props.onChange((e.currentTarget as HTMLSelectElement).value)}
-        class={`${inputCls} ${borderCls(props.error)}`}
-      >
-        {props.options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-export function RadioGroup(
-  props: FieldBase & {
-    value: string;
-    onChange: (v: string) => void;
-    options: { value: string; label: string }[];
-  },
-) {
-  const t = useT();
-  return (
-    <fieldset id={props.id} aria-describedby={describedBy(props)}>
-      <legend class="font-medium text-foreground">
-        {props.label}
-        {props.optional && <span class="font-normal text-muted-foreground"> ({t("wiz.optional")})</span>}
-      </legend>
-      <HelpAndError {...props} />
-      <div class="mt-2 grid gap-2 sm:grid-cols-2">
-        {props.options.map((o) => {
-          const checked = props.value === o.value;
-          return (
-            <label
-              key={o.value}
-              class={`flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border px-4 py-2 ${
-                checked ? "border-brand bg-brand-lite" : "border-muted-foreground/80 bg-background"
-              } focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-brand`}
-            >
-              <input
-                type="radio"
-                name={props.id}
-                value={o.value}
-                checked={checked}
-                onChange={() => props.onChange(o.value)}
-                class="h-5 w-5 shrink-0 accent-brand"
-              />
-              <span class="text-foreground">{o.label}</span>
-            </label>
-          );
-        })}
-      </div>
-    </fieldset>
-  );
-}
-
-export function Checkbox(props: {
-  id: string;
-  label: string;
-  checked: boolean;
-  onChange: (v: boolean) => void;
-}) {
-  return (
-    <label
-      for={props.id}
-      class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-muted-foreground/80 px-4 py-2 focus-within:outline-2 focus-within:outline-brand"
-    >
-      <input
-        id={props.id}
-        name={props.id}
-        type="checkbox"
-        checked={props.checked}
-        onChange={(e) => props.onChange((e.currentTarget as HTMLInputElement).checked)}
-        class="h-5 w-5 shrink-0 accent-brand"
-      />
-      <span class="text-foreground">{props.label}</span>
-    </label>
   );
 }

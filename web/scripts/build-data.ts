@@ -20,8 +20,30 @@ const ROUTES: Record<string, string> = {
   "rules-reference.md": "#/rules",
   "offer-study.md": "#/offer-study",
 };
+/**
+ * Tables become responsive: each cell carries its column name (data-label), so on a phone a row stacks as a
+ * labelled card (styles.css) and nothing scrolls sideways.
+ */
+function labelTables(html: string): string {
+  return html.replace(/<table>([\s\S]*?)<\/table>/g, (_m, inner: string) => {
+    const head = /<thead>([\s\S]*?)<\/thead>/.exec(inner)?.[1] ?? "";
+    const labels = [...head.matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)].map((m) =>
+      m[1]!
+        .replace(/<[^>]+>/g, "")
+        .replace(/"/g, "&quot;")
+        .trim(),
+    );
+    const body = inner.replace(/<tr>([\s\S]*?)<\/tr>/g, (row: string, cells: string) => {
+      if (cells.includes("<th")) return row;
+      let i = 0;
+      return `<tr>${cells.replace(/<td(\s[^>]*)?>/g, (_t, attrs = "") => `<td${attrs} data-label="${labels[i++] ?? ""}">`)}</tr>`;
+    });
+    return `<table>${body}</table>`;
+  });
+}
+
 function render(md: string): string {
-  const html = marked.parse(md, { async: false });
+  const html = labelTables(marked.parse(md, { async: false }));
   return html
     .replace(/href="([^"#]+\.md)(#[^"]*)?"/g, (m, file: string) =>
       ROUTES[file] ? `href="${ROUTES[file]}"` : m,

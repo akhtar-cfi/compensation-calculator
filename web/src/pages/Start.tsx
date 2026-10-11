@@ -1,8 +1,8 @@
 import { BookOpen, Scale, ShieldCheck } from "lucide-preact";
-import { Card, Eyebrow, Headline, Lead, LinkButton, Section } from "../components/ui";
+import { Button, Card, Eyebrow, Headline, Lead, LinkButton, Section } from "../components/ui";
 import { useT } from "../i18n";
 
-export function Start() {
+export function Start(props: { resume: boolean; onRestart: () => void }) {
   const t = useT();
   const points = [
     { Icon: Scale, k: "start.p1" },
@@ -16,11 +16,20 @@ export function Start() {
         <Headline id="page-title" a={t("start.h1a")} b={t("start.h1b")} />
         <Lead>{t("start.lead")}</Lead>
         <div class="mt-8 flex flex-wrap gap-3">
-          <LinkButton href="#/estimate">{t("start.cta")}</LinkButton>
-          <LinkButton href="#/how" secondary>
-            {t("start.cta2")}
+          <LinkButton href="#/estimate" full>
+            {props.resume ? t("start.resume") : t("start.cta")}
           </LinkButton>
+          {props.resume ? (
+            <Button secondary full onClick={props.onRestart}>
+              {t("app.restart")}
+            </Button>
+          ) : (
+            <LinkButton href="#/how" secondary full>
+              {t("start.cta2")}
+            </LinkButton>
+          )}
         </div>
+        <p class="mt-4 text-sm text-muted-foreground">{t("start.time")}</p>
       </Section>
       <Section tone="brand-lite">
         <div class="grid gap-5 md:grid-cols-3">

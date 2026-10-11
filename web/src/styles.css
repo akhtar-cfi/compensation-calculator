@@ -88,13 +88,69 @@ body {
   @apply rounded bg-muted px-1 py-0.5 text-sm;
 }
 .doc table {
-  @apply mt-6 block w-full overflow-x-auto border-collapse text-sm;
+  @apply mt-6 w-full border-collapse text-sm;
+}
+.doc th,
+.doc td {
+  overflow-wrap: anywhere;
 }
 .doc th {
   @apply border-b border-border bg-brand-lite px-3 py-2 text-left font-semibold text-foreground;
 }
 .doc td {
   @apply border-b border-border px-3 py-2 align-top text-muted-foreground;
+}
+/* On a phone each table row stacks as a labelled card; the page never scrolls sideways. */
+@media (max-width: 767px) {
+  .doc table,
+  .doc tbody,
+  .doc tr,
+  .doc td {
+    display: block;
+  }
+  .doc thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .doc tr {
+    @apply mt-3 rounded-2xl border border-border py-2;
+  }
+  .doc td {
+    @apply border-0 px-4 py-1;
+  }
+  .doc td[data-label]::before {
+    content: attr(data-label);
+    @apply block text-xs font-semibold text-foreground;
+  }
+}
+/* Links packed into a table cell (sources) get a 24 px target (WCAG 2.2, 2.5.8). */
+.doc td a {
+  display: inline-block;
+  min-width: 24px;
+  min-height: 24px;
+  line-height: 24px;
+  text-align: center;
+}
+
+/* Devanagari needs room above and below the line for vowel signs. */
+html:lang(hi) h1,
+html:lang(hi) h2,
+html:lang(hi) h3,
+html:lang(hi) .leading-tight {
+  line-height: 1.4;
+}
+
+/* Collapsed result sections print in full. In the base layer: Tailwind's base hides [hidden] with !important,
+   and an important rule outside the layer would lose to it. */
+@layer base {
+  @media print {
+    [data-panel][hidden] {
+      display: block !important;
+    }
+  }
 }
 
 @media print {

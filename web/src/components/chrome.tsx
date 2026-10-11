@@ -1,18 +1,23 @@
 import { ENGINE_VERSION } from "../../../src/engine/index.js";
-import { docs } from "../data";
+import { rules } from "../data";
 import { useLang, useT, LangContext } from "../i18n";
 import { useContext } from "preact/hooks";
+import type { Route } from "../route";
 
-const NAV = [
-  { href: "#/estimate", key: "nav.estimate", routes: ["estimate", "result"] },
-  { href: "#/offer", key: "nav.offer", routes: ["offer"] },
-  { href: "#/how", key: "nav.how", routes: ["how", "offer-study"] },
-  { href: "#/rules", key: "nav.rules", routes: ["rules"] },
+const NAV: { href: string; key: string; active: (r: Route) => boolean }[] = [
+  { href: "#/estimate", key: "nav.estimate", active: (r) => r.name === "result" },
+  { href: "#/offer", key: "nav.offer", active: (r) => r.name === "offer" },
+  { href: "#/how", key: "nav.how", active: (r) => r.name === "doc" && r.page !== "rules" },
+  { href: "#/rules", key: "nav.rules", active: (r) => r.name === "doc" && r.page === "rules" },
 ];
 
-export function Header(props: { route: string }) {
+/** While answering questions the menu is hidden: only the wordmark and the language switch remain. */
+const QUIET = new Set(["q", "check", "stop", "estimate"]);
+
+export function Header(props: { route: Route }) {
   const t = useT();
   const { lang, setLang } = useContext(LangContext);
+  const quiet = QUIET.has(props.route.name);
   return (
     <header class="no-print border-b border-border bg-background">
       <a
@@ -33,26 +38,28 @@ export function Header(props: { route: string }) {
         >
           {t("lang.switch")}
         </button>
-        <nav aria-label="Main" class="w-full lg:w-auto">
-          <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
-            {NAV.map((n) => {
-              const current = n.routes.includes(props.route);
-              return (
-                <li key={n.href}>
-                  <a
-                    href={n.href}
-                    aria-current={current ? "page" : undefined}
-                    class={`inline-flex min-h-11 items-center underline-offset-4 hover:underline ${
-                      current ? "font-semibold text-brand" : "text-foreground"
-                    }`}
-                  >
-                    {t(n.key)}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        {!quiet && (
+          <nav aria-label="Main" class="w-full lg:w-auto">
+            <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
+              {NAV.map((n) => {
+                const current = n.active(props.route);
+                return (
+                  <li key={n.href}>
+                    <a
+                      href={n.href}
+                      aria-current={current ? "page" : undefined}
+                      class={`inline-flex min-h-11 items-center underline-offset-4 hover:underline ${
+                        current ? "font-semibold text-brand" : "text-foreground"
+                      }`}
+                    >
+                      {t(n.key)}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        )}
       </div>
     </header>
   );
@@ -105,7 +112,7 @@ export function Footer() {
           </a>
         </p>
         <p class="text-xs">
-          {t("footer.version")} {docs.rulesVersion} · {t("footer.engine")} {ENGINE_VERSION}
+          {t("footer.version")} {rules.version} · {t("footer.engine")} {ENGINE_VERSION}
         </p>
       </div>
     </footer>

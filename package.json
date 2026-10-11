@@ -21,7 +21,8 @@
     "web:typecheck": "tsc --noEmit -p web",
     "web:build": "npm run web:data && vite build --config web/vite.config.ts",
     "web:preview": "vite preview --config web/vite.config.ts",
-    "web:e2e": "playwright test -c web/playwright.config.ts"
+    "web:e2e": "playwright test -c web/playwright.config.ts",
+    "web:design-doc": "tsx web/scripts/design-doc.ts"
   },
   "dependencies": {
     "yaml": "^2.9.1",
