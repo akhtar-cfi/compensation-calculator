@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import { rules } from "../data";
 import { incomeFields, type FormState } from "../form-to-input";
 import { useLang, useT } from "../i18n";
@@ -51,9 +51,10 @@ export function Estimate(props: {
   const heading = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Move focus to the step heading on every step change (not on first load), so screen-reader and keyboard users
-    // start at the top of the new questions.
+    // start at the top of the new questions. A layout effect, so it happens with the render: a deferred one could
+    // land after the person has already tabbed to a field and pull focus away from it.
     if (first.current) first.current = false;
     else heading.current?.focus();
     window.scrollTo(0, 0);

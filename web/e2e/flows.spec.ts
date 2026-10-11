@@ -76,16 +76,19 @@ test("the wizard can be completed with the keyboard alone", async ({ page }) => 
   await tabTo('a[href="#/estimate"].rounded-full');
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#\/estimate$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The accident");
   await tabTo('input[name="kind"][value="death"]');
   await tabTo("#accidentDate");
   await page.keyboard.type("06012025"); // mm dd yyyy in the en-US date field
   await expect(page.locator("#accidentDate")).toHaveValue("2025-06-01");
   await page.keyboard.press("Enter");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The person");
   await tabTo("#age");
   await page.keyboard.type("35");
   await tabTo("#employment");
   await tabTo('button[type="submit"]');
   await page.keyboard.press("Enter");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Family");
   await tabTo('input[name="married"][value="no"]');
   await page.keyboard.press("ArrowUp"); // radio groups move with the arrow keys
   await expect(page.locator('input[name="married"][value="yes"]')).toBeChecked();
@@ -94,6 +97,7 @@ test("the wizard can be completed with the keyboard alone", async ({ page }) => 
   await tabTo("#children");
   await page.keyboard.type("2");
   await page.keyboard.press("Enter");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Medical expenses");
   await tabTo("#medicalBills");
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#\/result$/);

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { estimate } from "../../src/engine/index.js";
 import { DraftBanner, Footer, Header } from "./components/chrome";
 import { rules } from "./data";
@@ -49,9 +49,9 @@ export function App() {
   }, [lang]);
 
   const firstRender = useRef(true);
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Each page change starts at the top, with focus on the page's title for keyboard and screen-reader users
-    // (not on first load, where focus belongs to the browser).
+    // (not on first load, where focus belongs to the browser). Done with the render, not after the next paint.
     window.scrollTo(0, 0);
     if (firstRender.current) {
       firstRender.current = false;
