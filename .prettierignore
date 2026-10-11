@@ -3,3 +3,7 @@ dist
 coverage
 package-lock.json
 docs/rules-reference.md
+web/dist
+web/src/generated
+web/test-results
+web/playwright-report

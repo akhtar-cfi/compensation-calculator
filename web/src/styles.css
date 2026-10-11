@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import "@fontsource/montserrat/500.css";
+@import "@fontsource/montserrat/600.css";
+@import "@fontsource/montserrat/700.css";
+
+/* Geist, self-hosted (no font CDN: nothing about the visitor leaves the page). */
+@font-face {
+  font-family: "Geist";
+  font-weight: 400;
+  font-display: swap;
+  src: url("../../node_modules/geist/dist/fonts/geist-sans/Geist-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist";
+  font-weight: 500;
+  font-display: swap;
+  src: url("../../node_modules/geist/dist/fonts/geist-sans/Geist-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist";
+  font-weight: 700;
+  font-display: swap;
+  src: url("../../node_modules/geist/dist/fonts/geist-sans/Geist-Bold.woff2") format("woff2");
+}
+
+/* Crashfree India design tokens: the ONLY place colours are defined. */
+@theme {
+  --color-brand: #4a35ff;
+  --color-brand-foreground: #ffffff;
+  --color-brand-lite: #f8f7ff;
+  --color-danger: #f10015;
+  --color-warning: #f57c00;
+  --color-success: #00aa44;
+  --color-foreground: #1a1c1c;
+  /* Brand grey is #777589, which is 4.48:1 on white: just under WCAG AA (4.5:1) for body text. Darkened here so
+     every paragraph passes; flagged for the design owner. */
+  --color-muted-foreground: #6c6a7e;
+  --color-muted: #eeeeee;
+  --color-border: #edeef2;
+  --color-background: #ffffff;
+  --color-card: #ffffff;
+  /* Devanagari is not in Montserrat/Geist: Hindi falls back to the device's Devanagari font. */
+  --font-heading: "Montserrat", "Noto Sans Devanagari", sans-serif;
+  --font-sans:
+    "Geist", "Noto Sans Devanagari", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif;
+}
+
+body {
+  @apply bg-background text-foreground font-sans antialiased;
+}
+
+/* Rendered public documents (methodology, rules reference, offer study). */
+.doc {
+  @apply text-base leading-relaxed text-foreground;
+  overflow-wrap: anywhere;
+}
+.doc h1 {
+  @apply mt-2 font-heading text-3xl font-bold tracking-tight sm:text-4xl;
+}
+.doc h2 {
+  @apply mt-12 font-heading text-2xl font-bold tracking-tight;
+}
+.doc h3 {
+  @apply mt-8 font-heading text-xl font-semibold;
+}
+.doc p,
+.doc ul,
+.doc ol {
+  @apply mt-4 text-muted-foreground;
+}
+.doc ul {
+  @apply list-disc pl-6;
+}
+.doc ol {
+  @apply list-decimal pl-6;
+}
+.doc li {
+  @apply mt-1;
+}
+.doc strong {
+  @apply text-foreground;
+}
+.doc a {
+  @apply text-brand underline underline-offset-2;
+}
+.doc code {
+  @apply rounded bg-muted px-1 py-0.5 text-sm;
+}
+.doc table {
+  @apply mt-6 block w-full overflow-x-auto border-collapse text-sm;
+}
+.doc th {
+  @apply border-b border-border bg-brand-lite px-3 py-2 text-left font-semibold text-foreground;
+}
+.doc td {
+  @apply border-b border-border px-3 py-2 align-top text-muted-foreground;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    font-size: 11pt;
+  }
+  section {
+    break-inside: avoid;
+  }
+}
