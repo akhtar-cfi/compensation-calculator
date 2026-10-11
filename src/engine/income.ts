@@ -49,7 +49,7 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
     ctx.warn.add(
       "ZONE_ASSUMED",
       "caution",
-      `No zone given for ${st.name}; used ${st.zones[0]}. Choose the zone of the victim's place of work.`,
+      `No zone given for ${st.name}; used ${st.zones[0]}. Choose the zone of the person's place of work.`,
     );
   }
   const hit = minimumWage(rules, { state: input.state, zone: input.zone, category, on: input.accidentDate });

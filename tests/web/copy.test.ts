@@ -64,6 +64,20 @@ describe("web copy (EN/HI)", () => {
     }
   });
 
+  it("avoids the words the CFI tone rules forbid (the people affected are not 'victims')", () => {
+    const forbidden = [
+      /\bvictims?\b/i,
+      /\btragic\b/i,
+      /heartbreaking/i,
+      /unfortunately/i,
+      /\bhelp us\b/i,
+      /pray for/i,
+    ];
+    for (const [k, v] of Object.entries(en))
+      for (const re of forbidden) expect(re.test(v), `${k}: ${v}`).toBe(false);
+    for (const [k, v] of Object.entries(hi)) expect(v.includes("पीड़ित"), `${k}: ${v}`).toBe(false);
+  });
+
   it("fills placeholders and falls back to English, then to the key", () => {
     const d = { en: { a: "Step {n} of {total}", b: "B" }, hi: { a: "चरण {n} / {total}", b: "" } };
     expect(translate(d, "hi", "a", { n: 1, total: 4 })).toBe("चरण 1 / 4");

@@ -1,7 +1,7 @@
 # Contested legal points. Each parameter gives the value used in the conservative (C), standard (L) and
 # claimant-max (M) scenarios, with the authority for each. Factual uncertainty is NOT modelled here.
 - id: under_15_multiplier
-  description: Multiplier for a victim aged under 15.
+  description: Multiplier for a person aged under 15.
   conservative: 15
   standard: 18
   claimant_max: 18

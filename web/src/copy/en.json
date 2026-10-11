@@ -260,7 +260,7 @@
   "warn.UNIDENTIFIED_USE_HIT_AND_RUN": "Use the hit-and-run scheme",
   "warn.UNINSURED": "The vehicle was not insured",
   "warn.LIMITATION": "More than six months since the accident",
-  "warn.CONTRIBUTORY_NEGLIGENCE": "Compensation may be reduced for the victim's own negligence",
+  "warn.CONTRIBUTORY_NEGLIGENCE": "Compensation may be reduced for the person's own negligence",
   "warn.MW_MISSING": "Minimum wage not available",
   "warn.MW_CATEGORY_FALLBACK": "A different wage category was used",
   "warn.MW_MAY_BE_OUTDATED": "The minimum wage may be out of date",

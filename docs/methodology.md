@@ -54,7 +54,7 @@ The engine never reads the clock; both dates are inputs.
 - **Loss of earning capacity** = monthly income × 12 × (1 + future prospects) × **functional** disability × multiplier (Raj Kumar).
 - **Functional disability:**
   - Uses a functional assessment if one is supplied.
-  - Otherwise it is estimated from the certificate (flagged): ½ of a limb percentage as standard, ⅓ conservative, the full percentage claimant-max, or 100% if the victim cannot do any earlier work.
+  - Otherwise it is estimated from the certificate (flagged): ½ of a limb percentage as standard, ⅓ conservative, the full percentage claimant-max, or 100% if the person cannot do any earlier work.
   - It is **never floored at the medical percentage**.
 - **Other heads:**
   - medical (less cashless-scheme payments) and future medical
@@ -81,7 +81,7 @@ The engine never reads the clock; both dates are inputs.
 
 - Uninsured vehicle.
 - Claim not filed within 6 months. The Supreme Court's interim order of 4 Nov 2025 says such claims should not be dismissed as time-barred.
-- The victim was driving a vehicle involved in the crash (possible contributory negligence).
+- The person was driving a vehicle involved in the crash (possible contributory negligence).
 
 **Deducted:**
 
@@ -148,7 +148,7 @@ Other findings:
 - **Discretionary injury heads are awarded in most cases:** conveyance and diet in 93% (median Rs 50,000), attendant during treatment in 82% (median Rs 30,000), pain, suffering and amenities in 99% (median Rs 1.5 lakh at 10–29% disability). The earlier anchor-only bands were 2–3× too low.
 - **Limb certificates:** Delhi tribunals took a median 0.53 of a limb certificate as functional disability (n = 70), close to the earlier ½ rule.
 - **Delhi minimum wages 2011–19 (loaded 10 Oct 2026):** read from Wayback copies of the Labour Department's own rate page and orders. Where tribunals used Delhi's wage, the official rate matched the figure in the award (checked by test against 7 awards). For accidents between 3 Mar 2017 and 31 Oct 2018 the rate is legally contested (High Court quashing of 4 Aug 2018, Supreme Court interim restoration of 31 Oct 2018); the official series is used with a warning, as tribunals did.
-- **Minimum wage of another state:** some Delhi awards used the minimum wage of the state where the victim lived or worked (Uttar Pradesh, Haryana), not Delhi's. The engine takes one state for the wage; which state applies is a question for legal sign-off.
+- **Minimum wage of another state:** some Delhi awards used the minimum wage of the state where the person lived or worked (Uttar Pradesh, Haryana), not Delhi's. The engine takes one state for the wage; which state applies is a question for legal sign-off.
 
 ## 8. Keeping it current
 

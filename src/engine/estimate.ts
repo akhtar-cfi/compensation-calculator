@@ -57,7 +57,7 @@ function consortiumClaimantsOf(input: EstimateInput): number {
 
 function resolveMultiplier(rules: RulesBundle, age: number, ch: ParamChooser, warn: WarningSink): number {
   if (age < 15) {
-    const s = ch.choose("under_15_multiplier", "Multiplier for a victim under 15 (15 vs 18)");
+    const s = ch.choose("under_15_multiplier", "Multiplier for a person under 15 (15 vs 18)");
     return Number(rangeValue(rules, "under_15_multiplier", s));
   }
   const m = tableMultiplier(rules, age);
@@ -409,7 +409,7 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
     warn.add(
       "CONTRIBUTORY_NEGLIGENCE",
       "caution",
-      "The victim was driving a vehicle involved in the crash: the tribunal may reduce compensation for contributory negligence.",
+      "The person was driving a vehicle involved in the crash: the tribunal may reduce compensation for contributory negligence.",
     );
     for (const pct of [25, 50]) {
       const r = runScenario(rules, input, asOf, allOf("standard"), "standard", new WarningSink(), {

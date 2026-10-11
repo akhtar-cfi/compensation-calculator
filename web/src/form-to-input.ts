@@ -1,10 +1,18 @@
 import { EstimateInputSchema, type EstimateInput } from "../../src/engine/types.js";
 import type { Employment } from "../../src/engine/types.js";
 
-/** What the wizard collects. Numbers are kept as the strings typed, so an empty box stays "not given". */
+/** An answer to a yes/no question, or "" while it is unanswered. */
+export type YesNo = "" | "yes" | "no";
+
+/**
+ * What the questions collect. Every answer starts empty (""): nothing is pre-selected, so a person cannot accept a
+ * default by tapping Continue. Numbers are kept as typed, dates as "Y-M-D" parts as typed (they may be unpadded or
+ * empty), and "unknown" records an explicit "Not sure".
+ */
 export interface FormState {
-  kind: "death" | "injury";
+  kind: "" | "death" | "injury";
   accidentDate: string;
+  claimFiled: YesNo;
   claimFiledDate: string;
   state: string;
   zone: string;
@@ -17,21 +25,21 @@ export interface FormState {
     | "driver_of_involved_vehicle"
     | "owner_driver_single_vehicle"
     | "other";
-  offendingVehicle: "" | "identified_insured" | "identified_uninsured" | "unidentified";
-  s164: "" | "none" | "accepted_via_insurer" | "awarded_by_tribunal";
+  offendingVehicle: "" | "unknown" | "identified_insured" | "identified_uninsured" | "unidentified";
+  s164: "" | "unknown" | "none" | "accepted_via_insurer" | "awarded_by_tribunal";
   age: string;
-  employment: Employment;
+  employment: "" | Employment;
   occupationCode: string;
-  studentCourse: "" | "school" | "college" | "professional";
-  proof: "none" | "salary_slip" | "itr";
+  studentCourse: "" | "unknown" | "school" | "college" | "professional";
+  proof: "" | "none" | "salary_slip" | "itr";
   monthlySalary: string;
   monthlyTax: string;
   itrAnnualIncome: string;
   claimedMonthly: string;
   pensionMonthly: string;
   familyPensionMonthly: string;
-  married: boolean;
-  spouse: boolean;
+  married: YesNo;
+  spouse: YesNo;
   children: string;
   parents: string;
   dependentParents: string;
@@ -39,34 +47,35 @@ export interface FormState {
   cashlessPaid: string;
   certificatePct: string;
   certificateBasis: "" | "whole_body" | "limb" | "unknown";
-  workCapacity: "" | "full" | "with_difficulty" | "lighter_only" | "none";
+  workCapacity: "" | "unknown" | "full" | "with_difficulty" | "lighter_only" | "none";
   monthsOffWork: string;
   hospitalDays: string;
   permanentAttendant: boolean;
 }
 
 export const EMPTY_FORM: FormState = {
-  kind: "death",
+  kind: "",
   accidentDate: "",
+  claimFiled: "",
   claimFiledDate: "",
-  state: "DL",
+  state: "",
   zone: "",
   victimRole: "",
   offendingVehicle: "",
   s164: "",
   age: "",
-  employment: "informal",
+  employment: "",
   occupationCode: "",
   studentCourse: "",
-  proof: "none",
+  proof: "",
   monthlySalary: "",
   monthlyTax: "",
   itrAnnualIncome: "",
   claimedMonthly: "",
   pensionMonthly: "",
   familyPensionMonthly: "",
-  married: false,
-  spouse: false,
+  married: "",
+  spouse: "",
   children: "",
   parents: "",
   dependentParents: "",
@@ -80,9 +89,9 @@ export const EMPTY_FORM: FormState = {
   permanentAttendant: false,
 };
 
-/** Which income questions apply to an employment type (the engine ignores the others). */
+/** Which income questions apply to a type of work (the engine ignores the others). */
 export function incomeFields(
-  e: Employment,
+  e: FormState["employment"],
 ): ("salary" | "itr" | "claimed" | "occupation" | "course" | "pension")[] {
   switch (e) {
     case "permanent":
@@ -102,12 +111,37 @@ export function incomeFields(
   }
 }
 
+export type ParsedDate = { status: "empty" } | { status: "invalid" } | { status: "ok"; iso: string };
+
+/** Reads a "Y-M-D" date as typed (parts unpadded or missing) and checks it is a real calendar date. */
+export function parseDate(raw: string): ParsedDate {
+  const parts = raw.split("-").map((p) => p.trim());
+  if (parts.every((p) => p === "")) return { status: "empty" };
+  if (parts.length !== 3 || !parts.every((p) => /^\d+$/.test(p))) return { status: "invalid" };
+  const [y, m, d] = parts.map(Number) as [number, number, number];
+  if (parts[0]!.length !== 4 || y < 1900 || m < 1 || m > 12 || d < 1) return { status: "invalid" };
+  const days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  if (d > days) return { status: "invalid" };
+  const p = (n: number) => String(n).padStart(2, "0");
+  return { status: "ok", iso: `${y}-${p(m)}-${p(d)}` };
+}
+
+const isoOrRaw = (raw: string) => {
+  const d = parseDate(raw);
+  return d.status === "ok" ? d.iso : raw;
+};
+
 const num = (s: string): number | undefined => {
   const t = s.replace(/[,\s₹]/g, "");
   if (t === "") return undefined;
   const n = Number(t);
   return Number.isFinite(n) ? n : NaN;
 };
+
+const known = <T extends string>(v: T): Exclude<T, "" | "unknown"> | undefined =>
+  v === "" || v === "unknown" ? undefined : (v as Exclude<T, "" | "unknown">);
+
+const yesNo = (v: YesNo): boolean | undefined => (v === "" ? undefined : v === "yes");
 
 /** Drops keys whose value is undefined (the schema uses exact optional properties). */
 function compact<T extends object>(o: T): T {
@@ -116,7 +150,10 @@ function compact<T extends object>(o: T): T {
 
 export type FormResult = { ok: true; input: EstimateInput } | { ok: false; errors: Record<string, string> };
 
-/** Turns the wizard's answers into the engine's input, validated by the engine's own schema. */
+/**
+ * Turns the answers into the engine's input, validated by the engine's own schema. Only answers that apply are
+ * sent: income questions by type of work, family counts for a death, injury details for an injury.
+ */
 export function formToInput(f: FormState): FormResult {
   const fields = incomeFields(f.employment);
   const salaryProof = fields.includes("salary") && f.proof === "salary_slip";
@@ -133,29 +170,31 @@ export function formToInput(f: FormState): FormResult {
     pensionMonthly: fields.includes("pension") ? num(f.pensionMonthly) : undefined,
     familyPensionMonthly: fields.includes("pension") ? num(f.familyPensionMonthly) : undefined,
   });
+  const married = yesNo(f.married);
+  const death = f.kind === "death";
   const raw = compact({
-    kind: f.kind,
-    accidentDate: f.accidentDate,
-    claimFiledDate: f.claimFiledDate || undefined,
+    kind: f.kind || undefined,
+    accidentDate: isoOrRaw(f.accidentDate),
+    claimFiledDate: f.claimFiled === "yes" ? isoOrRaw(f.claimFiledDate) : undefined,
     state: f.state,
     zone: f.zone || undefined,
     victimRole: f.victimRole || undefined,
-    offendingVehicle: f.offendingVehicle || undefined,
-    s164: f.s164 || undefined,
+    offendingVehicle: known(f.offendingVehicle),
+    s164: known(f.s164),
     victim: compact({
       ageYears: num(f.age),
-      employment: f.employment,
+      employment: f.employment || undefined,
       occupationCode: fields.includes("occupation") && f.occupationCode ? f.occupationCode : undefined,
-      studentCourse: fields.includes("course") && f.studentCourse ? f.studentCourse : undefined,
+      studentCourse: fields.includes("course") ? known(f.studentCourse) : undefined,
       // "No proof and nothing claimed" is the engine's default: leave the block out.
       income: Object.keys(income).length === 1 && income.proof === "none" ? undefined : income,
     }),
     family: compact({
-      married: f.married,
-      spouse: f.married ? f.spouse : undefined,
-      children: num(f.children),
-      parents: num(f.parents),
-      dependentParents: num(f.dependentParents),
+      married,
+      spouse: married ? yesNo(f.spouse) : undefined,
+      children: death ? num(f.children) : undefined,
+      parents: death ? num(f.parents) : undefined,
+      dependentParents: death ? num(f.dependentParents) : undefined,
     }),
     medical:
       num(f.medicalBills) !== undefined
@@ -166,7 +205,7 @@ export function formToInput(f: FormState): FormResult {
         ? compact({
             certificatePct: num(f.certificatePct),
             certificateBasis: f.certificateBasis || undefined,
-            workCapacity: f.workCapacity || undefined,
+            workCapacity: known(f.workCapacity),
             monthsOffWork: num(f.monthsOffWork),
             hospitalDays: num(f.hospitalDays),
             permanentAttendant: f.permanentAttendant || undefined,

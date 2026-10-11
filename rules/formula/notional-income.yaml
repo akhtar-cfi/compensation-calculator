@@ -1,5 +1,5 @@
 id: notional_income
-description: Income used when the victim did not earn, or earnings cannot be proved.
+description: Income used when the person did not earn, or earnings cannot be proved.
 confidence: contested
 verified: false
 homemaker_domestic_care:

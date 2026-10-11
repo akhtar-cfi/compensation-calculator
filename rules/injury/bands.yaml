@@ -39,7 +39,7 @@ conveyance_special_diet:
 # Attendant during treatment when the number of attendant days is not given (with days: days x unskilled wage).
 # Awarded in most Delhi injury awards (n = 92): p25 14k, median 30k, p75 50k.
 attendant_during_treatment: { conservative: 14000, standard: 30000, claimant_max: 50000 }
-# Loss of marriage prospects: unmarried victim up to this age with functional disability at least this %.
+# Loss of marriage prospects: unmarried person up to this age with functional disability at least this %.
 # Not recalibrated: awarded in only a handful of the 92 Delhi awards.
 marriage_prospects:
   max_age: 35

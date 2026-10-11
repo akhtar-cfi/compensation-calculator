@@ -260,7 +260,7 @@
   "warn.UNIDENTIFIED_USE_HIT_AND_RUN": "हिट-एंड-रन योजना में आवेदन करें",
   "warn.UNINSURED": "वाहन का बीमा नहीं था",
   "warn.LIMITATION": "दुर्घटना को छह महीने से अधिक हो गए",
-  "warn.CONTRIBUTORY_NEGLIGENCE": "पीड़ित की अपनी लापरवाही के लिए मुआवज़ा घट सकता है",
+  "warn.CONTRIBUTORY_NEGLIGENCE": "व्यक्ति की अपनी लापरवाही के लिए मुआवज़ा घट सकता है",
   "warn.MW_MISSING": "न्यूनतम वेतन उपलब्ध नहीं",
   "warn.MW_CATEGORY_FALLBACK": "दूसरी वेतन श्रेणी का इस्तेमाल हुआ",
   "warn.MW_MAY_BE_OUTDATED": "न्यूनतम वेतन पुराना हो सकता है",

@@ -16,5 +16,5 @@ bands:
   - { min_age: 66, max_age: 70, multiplier: 5 }
 above_table:
   multiplier: 5
-  note: Sarla Verma's table stops at 70; courts vary for older victims. Flagged as low confidence.
+  note: Sarla Verma's table stops at 70; courts vary for older people. Flagged as low confidence.
 # Under-15 is contested and resolved through range-parameters.yaml (under_15_multiplier).

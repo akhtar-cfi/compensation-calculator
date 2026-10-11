@@ -1,31 +1,69 @@
 import { describe, expect, it } from "vitest";
 import { EMPTY_FORM, type FormState } from "../../web/src/form-to-input.js";
 import { proofItems } from "../../web/src/prove.js";
-import { STEP_FIELDS, fieldOfPath, stepErrors, validate } from "../../web/src/validate.js";
+import { errorsFor } from "../../web/src/questions.js";
+import { fieldOfPath, validate } from "../../web/src/validate.js";
 
 const TODAY = "2026-10-11";
-const ok: FormState = { ...EMPTY_FORM, accidentDate: "2025-06-01", age: "30" };
+const ok: FormState = {
+  ...EMPTY_FORM,
+  kind: "death",
+  accidentDate: "2025-6-1",
+  victimRole: "pedestrian",
+  offendingVehicle: "identified_insured",
+  s164: "none",
+  claimFiled: "no",
+  state: "DL",
+  age: "30",
+  employment: "homemaker",
+  married: "no",
+  children: "0",
+  parents: "2",
+};
 
-describe("wizard validation", () => {
-  it("accepts a minimal complete form", () => {
+describe("validation", () => {
+  it("accepts a complete set of answers", () => {
     const v = validate(ok, TODAY);
     expect(v.errors).toEqual({});
     expect(v.input?.victim.ageYears).toBe(30);
   });
 
-  it("puts each missing answer on the step that asks it", () => {
+  it("puts each missing answer on the page that asks it", () => {
     const v = validate(EMPTY_FORM, TODAY);
     expect(v.input).toBeUndefined();
-    expect(stepErrors(v, 0)).toEqual({ accidentDate: "err.required" });
-    expect(stepErrors(v, 1)).toEqual({ age: "err.required" });
+    expect(errorsFor(v, "kind")).toEqual({ kind: "err.required" });
+    expect(errorsFor(v, "accidentDate")).toEqual({ accidentDate: "err.required" });
+    expect(errorsFor(v, "role")).toEqual({ victimRole: "err.required" });
+    expect(errorsFor(v, "vehicle")).toEqual({ offendingVehicle: "err.required" });
+    expect(errorsFor(v, "claim")).toEqual({ claimFiled: "err.required" });
+    expect(errorsFor(v, "age")).toEqual({ age: "err.required" });
+    expect(errorsFor(v, "work")).toEqual({ employment: "err.required" });
+    expect(errorsFor(v, "family")).toEqual({ married: "err.required" });
   });
 
-  it("rejects future dates and a claim filed before the accident", () => {
+  it("asks a death claim for the number of children and parents (0 if none)", () => {
+    const v = validate({ ...ok, children: "", parents: "" }, TODAY);
+    expect(errorsFor(v, "family")).toEqual({ children: "err.count", parents: "err.count" });
+    expect(validate({ ...ok, kind: "injury", children: "", parents: "" }, TODAY).errors).toEqual({});
+  });
+
+  it("needs the spouse answer only for a married person", () => {
+    expect(validate({ ...ok, married: "yes" }, TODAY).errors).toEqual({ spouse: "err.required" });
+    expect(validate({ ...ok, married: "yes", spouse: "no" }, TODAY).errors).toEqual({});
+  });
+
+  it("rejects impossible, future and out-of-order dates", () => {
+    expect(validate({ ...ok, accidentDate: "2025-2-30" }, TODAY).errors.accidentDate).toBe("err.date");
     expect(validate({ ...ok, accidentDate: "2026-10-12" }, TODAY).errors.accidentDate).toBe("err.future");
-    expect(validate({ ...ok, claimFiledDate: "2025-05-01" }, TODAY).errors.claimFiledDate).toBe(
+    const filed = { ...ok, claimFiled: "yes" as const };
+    expect(validate(filed, TODAY).errors.claimFiledDate).toBe("err.required");
+    expect(validate({ ...filed, claimFiledDate: "2025-5-1" }, TODAY).errors.claimFiledDate).toBe(
       "err.beforeAccident",
     );
-    expect(validate({ ...ok, claimFiledDate: "2026-12-01" }, TODAY).errors.claimFiledDate).toBe("err.future");
+    expect(validate({ ...filed, claimFiledDate: "2026-12-1" }, TODAY).errors.claimFiledDate).toBe(
+      "err.future",
+    );
+    expect(validate({ ...filed, claimFiledDate: "2025-7-1" }, TODAY).errors).toEqual({});
   });
 
   it("flags text and out-of-range numbers as invalid, not missing", () => {
@@ -37,12 +75,20 @@ describe("wizard validation", () => {
     );
   });
 
-  it("needs an amount once a proof of income is chosen", () => {
-    const f: FormState = { ...ok, employment: "permanent", proof: "salary_slip" };
-    expect(validate(f, TODAY).errors.monthlySalary).toBe("err.required");
-    expect(validate({ ...f, monthlySalary: "25,000" }, TODAY).errors).toEqual({});
+  it("needs a proof answer, then an amount, where income can be proved", () => {
+    const f: FormState = { ...ok, employment: "permanent" };
+    expect(validate(f, TODAY).errors.proof).toBe("err.required");
+    expect(validate({ ...f, proof: "salary_slip" }, TODAY).errors.monthlySalary).toBe("err.required");
+    expect(validate({ ...f, proof: "salary_slip", monthlySalary: "25,000" }, TODAY).errors).toEqual({});
+    expect(validate({ ...f, proof: "none" }, TODAY).errors).toEqual({});
     const s: FormState = { ...ok, employment: "self_employed", proof: "itr" };
     expect(validate(s, TODAY).errors.itrAnnualIncome).toBe("err.required");
+  });
+
+  it("ignores stale answers from a branch the person left", () => {
+    // Answered as an injury with an invalid certificate, then switched to death: nothing blocks.
+    const v = validate({ ...ok, certificatePct: "999", monthsOffWork: "x", studentCourse: "school" }, TODAY);
+    expect(v.errors).toEqual({});
   });
 
   it("does not accept a cashless payment larger than the bills", () => {
@@ -51,12 +97,11 @@ describe("wizard validation", () => {
     );
   });
 
-  it("maps every schema path the form can produce back to a question", () => {
+  it("maps every schema path the form can produce back to an answer", () => {
     expect(fieldOfPath("victim.ageYears")).toBe("age");
     expect(fieldOfPath("victim.income.itrAnnualIncomes.0.income")).toBe("itrAnnualIncome");
     expect(fieldOfPath("medical.paidByCashlessScheme")).toBe("cashlessPaid");
     expect(fieldOfPath("injury.monthsOffWork")).toBe("monthsOffWork");
-    expect(new Set(STEP_FIELDS.flat()).size).toBe(STEP_FIELDS.flat().length);
   });
 });
 
@@ -78,7 +123,14 @@ describe("what to prove", () => {
 
   it("lists injury documents for the facts entered", () => {
     const v = validate(
-      { ...ok, kind: "injury", certificatePct: "40", monthsOffWork: "6", claimedMonthly: "15000" },
+      {
+        ...ok,
+        kind: "injury",
+        employment: "informal",
+        certificatePct: "40",
+        monthsOffWork: "6",
+        claimedMonthly: "15000",
+      },
       TODAY,
     );
     expect(proofItems(v.input!)).toEqual([

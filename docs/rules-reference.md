@@ -28,7 +28,7 @@ Multiplier by age of the deceased / injured (never by age of the claimants; neve
 | 56–60 | 9 |
 | 61–65 | 7 |
 | 66–70 | 5 |
-| above the table | 5 (Sarla Verma's table stops at 70; courts vary for older victims. Flagged as low confidence.) |
+| above the table | 5 (Sarla Verma's table stops at 70; courts vary for older people. Flagged as low confidence.) |
 
 Sources: [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/); [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf). Confidence: settled. Signed off: **no — awaiting legal sign-off**.
 
@@ -68,7 +68,7 @@ Sources: [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https
 
 ## Notional incomes
 
-Income used when the victim did not earn, or earnings cannot be proved.
+Income used when the person did not earn, or earnings cannot be proved.
 
 - **Homemaker (loss of domestic care):** ₹30,000 a month from 2026-06-11, +10% every 3 years. Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years. Sources: [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/).
 - **Student, professional course:** ₹12,000 a month. Engineering student (Mohinder Kaur 2026). Used only if higher than the skilled minimum wage. Sources: [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/).
@@ -82,7 +82,7 @@ Only legal uncertainty moves the range. Each row is one contested point.
 
 | Point | Conservative | Standard | Claimant-max | Sources |
 |---|---|---|---|---|
-| Multiplier for a victim aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) |
+| Multiplier for a person aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) |
 | Number of 10% steps applied to the Pranay Sethi conventional heads. (SC awards in 2025-26 mostly use Rs 18,150 / Rs 48,400 (two steps). "clock" = full 3-year steps since 31 Oct 2017 up to the as-of date (three steps from 31 Oct 2026). A larger-bench reference is pending.) | 0 | 2 | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/) |
 | Personal deduction for a married deceased whose only dependant is the spouse. | 1/2 | 1/3 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) |
 | Monthly income for a homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) |
