@@ -360,5 +360,6 @@
   "share.copied": "Copied",
   "stop.hnr": "Under the hit-and-run scheme (section 161) the amounts are {death} for a death and {hurt} for grievous hurt.",
   "start.resume": "Continue where you left off",
-  "start.time": "12 to 15 short questions. Your answers stay on this device."
+  "start.time": "12 to 15 short questions. Your answers stay on this device.",
+  "footer.analytics": "We count visits to five pages (start, check, result, offer, documents) to see how the tool is used. We never record what you type."
 }

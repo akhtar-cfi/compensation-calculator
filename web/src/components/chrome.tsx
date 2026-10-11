@@ -3,6 +3,7 @@ import { rules } from "../data";
 import { useLang, useT, LangContext } from "../i18n";
 import { useContext } from "preact/hooks";
 import type { Route } from "../route";
+import { analyticsOn } from "../analytics";
 
 const NAV: { href: string; key: string; active: (r: Route) => boolean }[] = [
   { href: "#/estimate", key: "nav.estimate", active: (r) => r.name === "result" },
@@ -91,6 +92,7 @@ export function Footer() {
       <div class="mx-auto grid w-full max-w-7xl gap-4 px-6 py-12 text-sm leading-relaxed text-muted-foreground md:px-10">
         <p class="font-heading text-base font-bold text-brand">Crashfree India</p>
         <p>{t("footer.private")}</p>
+        {analyticsOn && <p>{t("footer.analytics")}</p>}
         <p>{t("footer.notAdvice")}</p>
         <p>{t("footer.aid")}</p>
         <p class="no-print">

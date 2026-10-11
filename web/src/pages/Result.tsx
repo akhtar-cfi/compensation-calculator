@@ -14,7 +14,7 @@ import {
   Tag,
 } from "../components/result";
 import { SourceLinks } from "../components/sources";
-import { cases } from "../data";
+import { loadCases, useLoaded } from "../data";
 import { hasKey, useLang, useT } from "../i18n";
 import { proofItems } from "../prove";
 import { shareText } from "../share";
@@ -88,7 +88,8 @@ export function Result(props: { input: EstimateInput; est: EstimateOutput; onRes
   const r = est.range;
   const ps = est.practiceSpread;
   const rel = (x: number) => t(x < 1 ? "res.below" : "res.above", { p: Math.round(Math.abs(x - 1) * 100) });
-  const matches = matchCases(input, cases);
+  const cases = useLoaded(loadCases);
+  const matches = cases ? matchCases(input, cases) : undefined;
   const important = warnings.filter((w) => w.severity !== "info");
   const notes = warnings.filter((w) => w.severity === "info");
 
@@ -271,7 +272,7 @@ export function Result(props: { input: EstimateInput; est: EstimateOutput; onRes
         )}
 
         <Disclosure id="cases" title={t("res.cases")}>
-          <Cases matches={matches} />
+          {matches && <Cases matches={matches} />}
         </Disclosure>
 
         {notes.length > 0 && (

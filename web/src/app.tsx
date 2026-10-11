@@ -10,6 +10,7 @@ import { Offer, defaultOfferForm, type OfferForm } from "./pages/Offer";
 import { CheckPage, QuestionPage, StopPage, href } from "./pages/Questions";
 import { Result } from "./pages/Result";
 import { Start } from "./pages/Start";
+import { countView } from "./analytics";
 import { firstIncomplete, resolveQuestion } from "./questions";
 import { parseRoute, routeKey, type Route } from "./route";
 import { todayISO, type Lang } from "./translate";
@@ -109,6 +110,23 @@ export function App() {
     }
     const el = document.getElementById("page-title") ?? document.getElementById("main");
     el?.focus({ preventScroll: true });
+  }, [key]);
+
+  // Visit counts: five page names only (see analytics.ts), never answers.
+  useEffect(() => {
+    const page =
+      route.name === "start"
+        ? "start"
+        : route.name === "check"
+          ? "check"
+          : route.name === "result"
+            ? "result"
+            : route.name === "offer"
+              ? "offer"
+              : route.name === "doc"
+                ? "docs"
+                : undefined;
+    if (page) countView(page);
   }, [key]);
 
   const v = useMemo(() => validate(form, today), [form, today]);

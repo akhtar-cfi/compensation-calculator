@@ -30,6 +30,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run web:build
+      - run: npm run web:budget
       - run: npx playwright install --with-deps chromium
       - run: npm run web:e2e
         env:
