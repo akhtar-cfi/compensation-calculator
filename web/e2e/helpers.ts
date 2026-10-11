@@ -12,6 +12,11 @@ export const rules = loadRules();
 export const test = base.extend<{ pageErrors: string[] }>({
   pageErrors: [
     async ({ page }, use) => {
+      // Against the deployed site, test visits must not be counted: visit reports are answered here instead.
+      if (process.env.E2E_BASE_URL)
+        await page.route("**/_vercel/insights/**", (r) =>
+          r.request().method() === "POST" ? r.fulfill({ status: 204 }) : r.continue(),
+        );
       const errors: string[] = [];
       page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}\n${e.stack ?? ""}`));
       page.on("console", (m) => {

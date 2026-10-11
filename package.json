@@ -22,6 +22,7 @@
     "web:build": "npm run web:data && vite build --config web/vite.config.ts",
     "web:preview": "vite preview --config web/vite.config.ts",
     "web:e2e": "playwright test -c web/playwright.config.ts",
+    "web:smoke": "E2E_BASE_URL=https://mact-compensation-calculator.vercel.app/ playwright test -c web/playwright.config.ts parity flows",
     "web:design-doc": "tsx web/scripts/design-doc.ts",
     "web:budget": "tsx web/scripts/budget.ts"
   },
