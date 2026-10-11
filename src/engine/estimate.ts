@@ -439,7 +439,7 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
     warn.add(
       "INJURY_EXPERIMENTAL",
       "caution",
-      "Injury estimates use experimental bands for non-pecuniary heads and are not yet checked against tribunal awards.",
+      "Injury estimates are experimental: the non-pecuniary heads use bands calibrated on Delhi tribunal awards (2024-26) only, and are not yet legally signed off.",
     );
   warn.add(
     "NOT_A_PREDICTION",

@@ -282,5 +282,6 @@
   "unit.month": "प्रति माह",
   "unit.year": "प्रति वर्ष",
   "unit.years": "वर्ष",
-  "res.intermediate.note": "ये हिसाब के चरण हैं, ताकि गणना जाँची जा सके।"
+  "res.intermediate.note": "ये हिसाब के चरण हैं, ताकि गणना जाँची जा सके।",
+  "res.swing.none": "कोई बदलाव नहीं"
 }

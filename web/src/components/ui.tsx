@@ -153,7 +153,7 @@ export function Notice(props: {
 
 const inputCls =
   "mt-2 block min-h-12 w-full rounded-xl border bg-background px-4 text-base text-foreground focus:outline-2 focus:outline-offset-1 focus:outline-brand";
-// Field borders use the muted grey (about 5:1), not the hairline token: a form field's edge must be visible
+// Field borders use the muted grey at 80% (about 3.5:1), not the hairline token: a form field's edge must be visible
 // (WCAG 1.4.11 asks for 3:1).
 const borderCls = (err?: string) => (err ? "border-danger border-2" : "border-muted-foreground/80");
 

@@ -108,3 +108,8 @@ body {
     break-inside: avoid;
   }
 }
+
+/* Wide tracking splits Devanagari letters apart (it breaks the joined headline stroke): eyebrows in Hindi are untracked. */
+html:lang(hi) [class*="tracking-["] {
+  letter-spacing: normal;
+}

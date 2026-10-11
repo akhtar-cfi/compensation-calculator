@@ -282,5 +282,6 @@
   "unit.month": "a month",
   "unit.year": "a year",
   "unit.years": "years",
-  "res.intermediate.note": "These are steps in the calculation, shown so the arithmetic can be checked."
+  "res.intermediate.note": "These are steps in the calculation, shown so the arithmetic can be checked.",
+  "res.swing.none": "No change"
 }

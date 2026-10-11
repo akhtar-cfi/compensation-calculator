@@ -29,11 +29,11 @@ export function Header(props: { route: string }) {
           type="button"
           lang={lang === "en" ? "hi" : "en"}
           onClick={() => setLang(lang === "en" ? "hi" : "en")}
-          class="min-h-11 rounded-full border border-border px-4 text-sm font-medium text-foreground hover:border-brand/40 focus-visible:outline-2 focus-visible:outline-brand md:order-last"
+          class="min-h-11 rounded-full border border-border px-4 text-sm font-medium text-foreground hover:border-brand/40 focus-visible:outline-2 focus-visible:outline-brand lg:order-last"
         >
           {t("lang.switch")}
         </button>
-        <nav aria-label="Main" class="w-full md:w-auto">
+        <nav aria-label="Main" class="w-full lg:w-auto">
           <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
             {NAV.map((n) => {
               const current = n.routes.includes(props.route);

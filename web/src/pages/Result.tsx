@@ -185,11 +185,15 @@ export function Result(props: { input: EstimateInput; est: EstimateOutput }) {
                   <dl class="mt-2 grid gap-1 text-sm sm:grid-cols-2">
                     <div class="flex justify-between gap-4 sm:block">
                       <dt class="text-muted-foreground">{t("res.swing.down")}</dt>
-                      <dd class="font-semibold">{signed(s.toConservative)}</dd>
+                      <dd class="font-semibold">
+                        {s.toConservative === 0 ? t("res.swing.none") : signed(s.toConservative)}
+                      </dd>
                     </div>
                     <div class="flex justify-between gap-4 sm:block">
                       <dt class="text-muted-foreground">{t("res.swing.up")}</dt>
-                      <dd class="font-semibold">{signed(s.toClaimantMax)}</dd>
+                      <dd class="font-semibold">
+                        {s.toClaimantMax === 0 ? t("res.swing.none") : signed(s.toClaimantMax)}
+                      </dd>
                     </div>
                   </dl>
                 </li>
