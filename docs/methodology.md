@@ -54,7 +54,7 @@ The engine never reads the clock; both dates are inputs.
 - **Loss of earning capacity** = monthly income × 12 × (1 + future prospects) × **functional** disability × multiplier (Raj Kumar).
 - **Functional disability:**
   - Uses a functional assessment if one is supplied.
-  - Otherwise it is estimated from the certificate (flagged): ½ of a limb percentage as standard, ⅓ conservative, the full percentage claimant-max, or 100% if the person cannot do any earlier work.
+  - Otherwise it is estimated from the certificate (flagged): for a limb certificate, 0.53 of the percentage as standard (the median Delhi tribunals used, n = 70), 0.5 conservative and the full percentage claimant-max; 100% if the person cannot do any earlier work.
   - It is **never floored at the medical percentage**.
 - **Other heads:**
   - medical (less cashless-scheme payments) and future medical
@@ -177,7 +177,7 @@ Other findings:
   - working homemakers (Shishu Pal's add-on);
   - adult-children consortium variations;
   - apportionment between claimants.
-- **Injury estimates still run low** (median −20% on 91 Delhi awards after calibration) and the calibration is Delhi-only (see section 7).
+- **Injury estimates still run low** (median bias −16% on 113 Delhi awards after calibration) and the calibration is Delhi-only (see section 7).
 - **Delhi minimum wages:** none before Oct 2011, and none for Apr 2012 – Mar 2013 (orders not found). Accidents in 3 Mar 2017 – 31 Oct 2018 carry a legal-uncertainty warning.
 - **Offer evidence covers rejected offers only**: accepted offers are not published, so the offer ÷ award ratio (median 0.09) cannot show how good accepted offers are.
 - **The range is legal uncertainty only.** Death estimates are centred well (bias 0%) but most awards fall outside the range, because evidence risk (e.g. an income claim not accepted) is not in it.
