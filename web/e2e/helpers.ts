@@ -1,12 +1,29 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { expect, type Page } from "@playwright/test";
+import { test as base, expect, type Page } from "@playwright/test";
 import { parse } from "yaml";
 import { estimate } from "../../src/engine/index.js";
 import { EstimateInputSchema, type EstimateInput } from "../../src/engine/types.js";
 import { REPO_ROOT, loadRules } from "../../src/rules/load.js";
 
 export const rules = loadRules();
+
+/** Every test fails if the page throws or logs an error, and the report shows the message. */
+export const test = base.extend<{ pageErrors: string[] }>({
+  pageErrors: [
+    async ({ page }, use) => {
+      const errors: string[] = [];
+      page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}\n${e.stack ?? ""}`));
+      page.on("console", (m) => {
+        if (m.type() === "error") errors.push(`console.error: ${m.text()}`);
+      });
+      await use(errors);
+      expect(errors, "errors in the page").toEqual([]);
+    },
+    { auto: true },
+  ],
+});
+export { expect };
 
 /** Today in the browser's sense (the page uses the local date as its as-of date). */
 export function today(): string {
@@ -31,7 +48,11 @@ const next = (page: Page) => page.getByRole("button", { name: /^(Next|See the es
 
 /** Answers the wizard with an engine input, the way a person would, and lands on the result page. */
 export async function fillWizard(page: Page, input: EstimateInput) {
+  // Always arrive by a real change of route (never by re-opening the URL already shown), as a person clicking
+  // "Estimate" or "Change answers" would.
+  await page.goto("#/");
   await page.goto("#/estimate");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The accident");
   await radio(page, "kind", input.kind);
   await page.fill("#accidentDate", input.accidentDate);
   if (input.claimFiledDate) await page.fill("#claimFiledDate", input.claimFiledDate);
@@ -78,6 +99,7 @@ export async function fillWizard(page: Page, input: EstimateInput) {
     await page.fill("#cashlessPaid", String(input.medical.paidByCashlessScheme));
   await next(page);
   await expect(page).toHaveURL(/#\/result$/);
+  await expect(page.locator("[data-testid=headline], [data-testid=no-estimate]")).toBeVisible();
 }
 
 /** Fails the test if the page asks for anything outside its own origin (fonts, data and code are all bundled). */

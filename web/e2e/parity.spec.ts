@@ -1,6 +1,5 @@
-import { expect, test } from "@playwright/test";
 import { checkOffer } from "../../src/engine/index.js";
-import { examples, expected, fillWizard, guardRequests, rules } from "./helpers";
+import { examples, expect, expected, fillWizard, guardRequests, rules, test } from "./helpers";
 
 // The page runs the same engine as the CLI and the tests. Each worked example, typed into the wizard, must show
 // exactly what estimate() gives for the same input: headline, range and every head.

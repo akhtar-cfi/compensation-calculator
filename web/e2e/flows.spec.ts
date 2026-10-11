@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-import { examples, fillWizard } from "./helpers";
+import { examples, expect, fillWizard, test } from "./helpers";
 
 test("an eligibility stop is flagged on the first step and gives no number", async ({ page }) => {
   const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
@@ -99,4 +98,15 @@ test("the wizard can be completed with the keyboard alone", async ({ page }) => 
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#\/result$/);
   await expect(page.getByTestId("headline")).toBeVisible();
+});
+
+test('"Change answers" reopens the wizard at the first step with the answers kept', async ({ page }) => {
+  const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
+  await fillWizard(page, input);
+  await page.getByRole("link", { name: "Change answers" }).first().click();
+  await expect(page).toHaveURL(/#\/estimate$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The accident");
+  await expect(page.locator("#accidentDate")).toHaveValue(input.accidentDate);
+  await page.getByRole("button", { name: "Next" }).click();
+  await expect(page.locator("#monthlySalary")).toHaveValue(String(input.victim.income!.monthlySalary));
 });

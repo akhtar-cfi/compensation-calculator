@@ -33,7 +33,13 @@ export function App() {
   const today = todayISO();
 
   useEffect(() => {
-    const on = () => setRoute(readRoute());
+    const on = () => {
+      const r = readRoute();
+      setRoute(r);
+      // Coming back to the wizard (for example "Change answers") starts at the first step, answers kept. Done here,
+      // with the navigation itself, rather than in an effect that runs after the next paint.
+      if (r === "estimate") setStep(0);
+    };
     addEventListener("hashchange", on);
     return () => removeEventListener("hashchange", on);
   }, []);
@@ -41,11 +47,6 @@ export function App() {
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
-
-  useEffect(() => {
-    // Coming back to the wizard (for example "Change answers") starts at the first step, answers kept.
-    if (route === "estimate") setStep(0);
-  }, [route]);
 
   const firstRender = useRef(true);
   useEffect(() => {

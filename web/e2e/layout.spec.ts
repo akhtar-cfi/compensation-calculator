@@ -1,5 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
-import { examples, fillWizard } from "./helpers";
+import type { Page } from "@playwright/test";
+import { examples, expect, fillWizard, test } from "./helpers";
 
 const WIDTHS = [375, 768, 1200];
 const SHOTS = process.env.SCREENSHOTS === "1";
