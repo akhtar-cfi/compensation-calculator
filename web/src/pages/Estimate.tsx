@@ -48,6 +48,14 @@ export function Estimate(props: {
   const lang = useLang();
   const { form: f, step } = props;
   const [shown, setShown] = useState<Partial<Record<FieldName, string>>>({});
+  // The first question with an error gets focus once it has re-rendered with its message (so the message is read
+  // out with it), in a layout effect rather than on the next animation frame, which can stall.
+  const [focusField, setFocusField] = useState<FieldName | undefined>();
+  useLayoutEffect(() => {
+    if (!focusField) return;
+    document.getElementById(focusField)?.focus();
+    setFocusField(undefined);
+  }, [focusField]);
   const heading = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
 
@@ -74,7 +82,7 @@ export function Estimate(props: {
     if (Object.keys(errs).length) {
       setShown(errs);
       const firstField = STEP_FIELDS[step]!.find((k) => errs[k]);
-      requestAnimationFrame(() => document.getElementById(firstField ?? "")?.focus());
+      setFocusField(firstField);
       return;
     }
     setShown({});

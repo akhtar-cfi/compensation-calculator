@@ -32,7 +32,9 @@ export function App() {
   const [offerForm, setOfferForm] = useState<OfferForm>(defaultOfferForm);
   const today = todayISO();
 
-  useEffect(() => {
+  // Listen for route changes from the first render on (a layout effect runs with the render; a plain effect waits
+  // for the next paint, and a click in that gap was lost), then catch up on any change made before this ran.
+  useLayoutEffect(() => {
     const on = () => {
       const r = readRoute();
       setRoute(r);
@@ -41,7 +43,9 @@ export function App() {
       if (r === "estimate") setStep(0);
     };
     addEventListener("hashchange", on);
+    if (readRoute() !== route) on();
     return () => removeEventListener("hashchange", on);
+    // Registered once; `route` is only read to catch up on a change made before the listener existed.
   }, []);
 
   useEffect(() => {

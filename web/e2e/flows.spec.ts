@@ -114,3 +114,17 @@ test('"Change answers" reopens the wizard at the first step with the answers kep
   await page.getByRole("button", { name: "Next" }).click();
   await expect(page.locator("#monthlySalary")).toHaveValue(String(input.victim.income!.monthlySalary));
 });
+
+test("a route change right after the first render is not missed", async ({ page }) => {
+  // Change the route the moment the app has rendered, before any deferred work has run (as a quick click would).
+  await page.addInitScript(() => {
+    new MutationObserver((_, obs) => {
+      if (document.getElementById("page-title")) {
+        obs.disconnect();
+        location.hash = "#/estimate";
+      }
+    }).observe(document, { childList: true, subtree: true });
+  });
+  await page.goto("#/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The accident", { timeout: 2000 });
+});
