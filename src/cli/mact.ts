@@ -2,6 +2,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
+import { AGENT_USAGE, agentCommand } from "../agent/cli.js";
 import { calibrate, loadInjuryHeads, renderCalibration } from "../backtest/calibrate.js";
 import { loadAwardsCsv } from "../backtest/load.js";
 import { renderBacktest } from "../backtest/report.js";
@@ -29,6 +30,7 @@ const USAGE = `Usage:
   mact ik fetch <tid...> [--ids-from file] [--budget 5]
       (needs IK_API_TOKEN; responses are cached in .cache/indiankanoon and spend is logged there;
        fetch writes each judgment's plain text to .cache/indiankanoon/text/<tid>.txt)
+${AGENT_USAGE}
   mact watch [--update-seen] [--max-queries 20] [--format md|json]
       (needs FR_API; searches for new official minimum-wage orders listed in sources/watch.yaml)
   mact rules validate [--as-of YYYY-MM-DD]
@@ -147,6 +149,7 @@ async function main(argv: string[]): Promise<number> {
   }
   if (cmd === "ik" && sub === "search" && rest[0]) return ikSearch(args, rest[0]);
   if (cmd === "ik" && sub === "fetch") return ikFetch(args);
+  if (cmd === "agent") return agentCommand(sub, rest);
   if (cmd === "watch") return watch(args);
   if (cmd === "backtest" && sub === "calibrate" && rest[0]) {
     const c = calibrate(loadRules().injuryBands, loadInjuryHeads(rest[0]));
