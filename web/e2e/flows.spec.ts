@@ -160,6 +160,9 @@ test("the questions can be answered with the keyboard alone", async ({ page }) =
     await tabTo('form button[type="submit"]');
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(next);
+    // The address changes before the next page renders. Wait for the new title to take focus, or the next tabTo
+    // could find the previous page's Continue button still focused and press Enter on a page that is going away.
+    await expect(page.locator("#page-title")).toBeFocused();
   };
   await tabTo('a[href="#/estimate"].rounded-full');
   await page.keyboard.press("Enter");
