@@ -1,7 +1,7 @@
 /**
  * The UI design system for the calculator: principles and every component, with when to use it and when not.
  * One source for both the live gallery (#/design) and docs/ui-design-system.md (generated; a test keeps them in
- * step). Visual tokens come from the Crashfree India design system; deviations are listed with their reason.
+ * step). Visual tokens come from crashfreeindia.org (its own shadcn/slate system); deviations are listed with their reason.
  */
 
 export interface Principle {
@@ -24,28 +24,43 @@ export const EVIDENCE: { finding: string; source: string; consequence: string }[
     finding:
       "The most common phone screen in India is 360×800 CSS pixels (15.3%); the next are 393, 384 and 385 px wide.",
     source: "StatCounter, mobile screen resolution, India, Sept 2026",
-    consequence: "Every page is designed and tested at 360 px first, and at 320 px (the WCAG reflow width).",
-  },
-  {
-    finding:
-      "Ask one question per page; give every question page a back link, a heading and a Continue button; prefer a simple caption to a step bar; use three boxes for dates; avoid sliders; mark optional questions '(optional)'.",
-    source: "GOV.UK Design System, question pages pattern",
-    consequence: "The estimate is asked as short question pages ending in 'Check your answers'.",
-  },
-  {
-    finding:
-      "India's government design system covers patterns Indian users meet in public services (OTP, steppers, grievances).",
-    source: "UX4G Design System 3.0, NeGD / MeitY (ux4g.gov.in)",
     consequence:
-      "Used as a reference for familiar patterns; the Crashfree India design system stays the visual authority.",
+      "Every screen is designed and tested at 360 px first, and at 320 px (the WCAG reflow width).",
+  },
+  {
+    finding:
+      "crashfreeindia.org is built on shadcn 'new-york' with slate neutrals; the CFI blue is an accent (main buttons, eyebrows, one headline word, links, focus). Its own calculator is one card with all questions, in labelled sections.",
+    source: "CFI Main Website source (src/styles.css, components/calculator) and screenshots, 12 Oct 2026",
+    consequence:
+      "This tool uses the same tokens and the same one-page form, so it reads as part of the website and could sit inside it.",
+  },
+  {
+    finding:
+      "One question per screen (tested on PR #1) was judged too slow by the CFI team: people want to see all the questions at once and change any answer in place.",
+    source: "CFI review, 12 Oct 2026",
+    consequence:
+      "All questions on one page, grouped in four sections; the estimate updates beside the form as answers change.",
+  },
+  {
+    finding:
+      "Use three boxes for dates; avoid sliders; mark optional questions '(optional)'; show errors after the person leaves a field, not while typing.",
+    source: "GOV.UK Design System (date input, error messages); Baymard Institute form usability research",
+    consequence: "Dates are day / month / year boxes; errors appear when focus leaves an answer.",
   },
 ];
 
 export const PRINCIPLES: Principle[] = [
   {
-    title: "One topic per page",
-    body: "Each page asks one thing; answers that belong together (state and area, proof and amount, the family) share a page. About 12 pages for a death claim and 15 for an injury, with branches skipped.",
-    source: "GOV.UK question pages",
+    title: "Everything on one page",
+    body: "All questions sit in one card, in four sections (the accident, the person, family, injury and medical). An answer shows or hides only what depends on it, in place; nothing moves to another page.",
+  },
+  {
+    title: "The estimate updates as you go",
+    body: "As soon as the required answers are in, the amount, its range and how far real awards land appear beside the form (below it on a phone) and change with every answer. Until then the panel lists what is still needed, each a link to the question.",
+  },
+  {
+    title: "The right control for each answer",
+    body: "Two to four options are chips in a row; long lists are the phone's own picker; dates are three boxes; rupees have a ₹ prefix and read the amount back in lakh; small counts are − n + counters that start empty.",
   },
   {
     title: "Nothing pre-selected",
@@ -53,15 +68,7 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "Phone first, thumb reach",
-    body: "Designed at 360 px. Controls are at least 48 px tall; the main button is full width on a phone and sits directly under the answers (no sticky bars: they cover the field being typed into when the keyboard opens).",
-  },
-  {
-    title: "The answer first, the working on demand",
-    body: "The result opens with the amount in lakh, its range and how far real awards land. How it is built, what could move it, what to prove, real cases and sources open on demand, and always print in full.",
-  },
-  {
-    title: "Back always works",
-    body: "Every question page is its own entry in the browser history, so the phone's back gesture goes to the previous question with answers kept. 'Check your answers' is the hub for changes.",
+    body: "Designed at 360 px. Controls are at least 44 px tall on a phone. A slim bar at the bottom shows the estimate or the answers left; it hides while a field has focus, so it never covers the keyboard's field.",
   },
   {
     title: "Private by design",
@@ -69,7 +76,7 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "Colour is never the only signal",
-    body: "Status colours mark bars, borders and icons; text stays dark and says what it is ('Stop', 'Caution', 'Error'). Red is used only for a stop or an error.",
+    body: "Status colours mark edges and icons; text stays dark and says what it is ('Stop', 'Caution', 'Error'). Red is used only for a stop or an error. The blue is for the main action, links, focus and the headline figure.",
   },
   {
     title: "Plain, empirical words",
@@ -79,24 +86,20 @@ export const PRINCIPLES: Principle[] = [
 
 export const DEVIATIONS: { what: string; why: string }[] = [
   {
-    what: "Body grey #6c6a7e instead of #777589",
-    why: "#777589 is 4.48:1 on white, just under WCAG AA (4.5:1) for body text; #6c6a7e is about 5.2:1.",
+    what: "Field edges in slate #8391A7, not the website's slate-200 #E2E8F0",
+    why: "A field's edge must be visible (WCAG 1.4.11 asks for 3:1); slate-200 is 1.2:1 on white, #8391A7 is 3.2:1.",
   },
   {
-    what: "Orange #F57C00 used for icons and decorative bars only",
-    why: "It is 2.7:1 on white, below the 3:1 needed for a meaningful border and the 4.5:1 for text.",
+    what: "Controls 44 px tall on a phone (40 px from the small breakpoint), not the website's 36 px",
+    why: "WCAG 2.2 target size and Android's touch guidance; 36 px is easy to mis-tap on a 360 px phone.",
   },
   {
-    what: "Red #F10015 marks form errors (border and icon) as well as stops",
-    why: "An error is a stop for that question. It is about 4.4:1, so error text stays dark.",
+    what: "Orange #F57C00 and red #F10015 used for edges and icons only",
+    why: "They are 2.7:1 and about 4.4:1 on white, below the 4.5:1 needed for small text, so the text beside them stays dark.",
   },
   {
-    what: "Tool pages: a max-w-2xl content column inside the max-w-7xl container, with py-8 / py-12 padding",
-    why: "A readable line length for questions, and the question stays in the first screen of a 360×800 phone (py-24 would use a quarter of it).",
-  },
-  {
-    what: "Form field borders in grey at 80%, not the hairline border token",
-    why: "A field's edge must be visible (WCAG 1.4.11 asks for 3:1; the hairline token is about 1.2:1).",
+    what: "No blue title bar on the calculator card (the website's calculator has one)",
+    why: "The CFI review found the earlier page 'all blue'; the blue is kept for the main action and the headline figure.",
   },
 ];
 
@@ -106,43 +109,35 @@ export const COMPONENTS: ComponentSpec[] = [
     file: "components/chrome.tsx",
     use: "Every page until legal sign-off.",
     avoid: "Removing it before the rules are signed off.",
-    rules: ["One line at 360 px.", "Hindi pages add a second line saying the translation is a draft."],
+    rules: [
+      "One line at 360 px, in the warning tint.",
+      "Hindi pages add a line saying the translation is a draft.",
+    ],
   },
   {
     name: "Header",
     file: "components/chrome.tsx",
-    use: "Wordmark, language switch and, outside the questions, the menu.",
-    avoid: "Showing the menu on question pages (it distracts and competes with Continue).",
-    rules: ["48 px targets.", "The language switch keeps every answer.", "Skip link to the main content."],
+    use: "The website's logo, three links (calculator, how it is calculated, rules and sources) and the language switch.",
+    avoid: "Marketing navigation.",
+    rules: ["44 px targets.", "The language switch keeps every answer.", "Skip link to the main content."],
   },
   {
-    name: "Back link",
-    file: "pages/Questions.tsx",
-    use: "Top of every question, Check and stop page.",
-    avoid: "Start and result pages.",
+    name: "Calculator card and sections",
+    file: "pages/Estimator.tsx",
+    use: "All questions, in four numbered sections with small grey uppercase titles (the website's calculator style).",
+    avoid: "Splitting questions over several pages.",
     rules: [
-      "Goes to the previous question on the person's path, answers kept.",
-      "From a change made on Check, goes back to Check.",
+      "Two columns from the small breakpoint up; a question with several options or answers spans both.",
+      "Only questions that apply to this person are shown; answers to hidden questions are ignored, not lost.",
     ],
   },
   {
-    name: "Question page",
-    file: "pages/Questions.tsx",
-    use: "One topic: the section caption, the question as the h1, the answers, then Continue.",
-    avoid: "Several unrelated questions on one page.",
-    rules: [
-      "When the page asks one question, its label or legend is the h1, so screen readers hear it once.",
-      "Caption shows the section ('The person · part 2 of 4'), which stays stable when the path branches.",
-      "Continue is left-aligned under the answers; full width on a phone.",
-    ],
-  },
-  {
-    name: "Radios (large / compact)",
+    name: "Radio chips (row / stack)",
     file: "components/form.tsx",
-    use: "Up to about 7 either/or choices. Large for a page's main choice (whole card tappable, optional hint); compact for Yes / No.",
+    use: "Two to about five exclusive choices: chips in a row for short answers (Yes / No, death / injury), one per line for longer ones with hints.",
     avoid: "Long lists (use Select) or choices that are not exclusive (use Checkbox).",
     rules: [
-      "Rows at least 48 px (large: 56 px).",
+      "Whole chip tappable, 44 px tall on a phone.",
       "'Not sure' last, where it is a valid answer.",
       "Nothing pre-selected.",
     ],
@@ -150,11 +145,11 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Select",
     file: "components/form.tsx",
-    use: "Long lists: state, occupation.",
-    avoid: "Short lists (use Radios).",
+    use: "Long lists: how the person was involved, work, state, occupation.",
+    avoid: "Short lists (use radio chips).",
     rules: [
       "Native select: it is the most usable list on Android.",
-      "First option is 'Choose' or 'Not in this list'.",
+      "First option is 'Choose' (or 'Not in this list').",
     ],
   },
   {
@@ -171,7 +166,7 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Money input",
     file: "components/form.tsx",
-    use: "Rupee amounts: salary, tax, ITR income, pension, bills.",
+    use: "Rupee amounts: salary, tax, ITR income, pension, bills, an insurer's offer.",
     avoid: "Counts and percentages.",
     rules: [
       "₹ prefix and the numeric keypad; commas allowed.",
@@ -192,7 +187,7 @@ export const COMPONENTS: ComponentSpec[] = [
     avoid: "Numbers that can be large.",
     rules: [
       "Starts unanswered (–); 0 is an answer, not a default.",
-      "− and + buttons are 48 px; the box can also be typed in.",
+      "− and + buttons are 44 px; the box can also be typed in.",
     ],
   },
   {
@@ -205,58 +200,64 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Reveal",
     file: "components/form.tsx",
-    use: "A follow-up that belongs to an answer on the same page (the amount once a proof is chosen; the claim date once 'Yes').",
-    avoid: "Hiding whole questions (the question graph decides which pages are asked).",
-    rules: ["Indented with a brand-tint bar."],
+    use: "A follow-up that belongs to the answer just given (the amount once a proof is chosen; the claim date once 'Yes').",
+    avoid: "Whole questions (the question logic decides which questions are shown).",
+    rules: ["Indented with a hairline rule."],
   },
   {
-    name: "Error summary and inline errors",
-    file: "components/form.tsx",
-    use: "After Continue, when an answer is missing or wrong.",
-    avoid: "Errors while the person is still typing.",
+    name: "Inline errors and 'answers left'",
+    file: "pages/Estimator.tsx",
+    use: "A wrong answer (an impossible date, a number out of range) shows under the field once focus leaves it; unanswered questions are listed in the estimate panel, each a link to its field.",
+    avoid: "Errors while the person is still typing; red on fields nobody has reached yet.",
     rules: [
-      "The summary takes focus and links to each question.",
-      "Each field shows its own message: red border and icon, dark text, prefixed 'Error' for screen readers.",
+      "Red edge and icon, dark text, prefixed 'Error' for screen readers.",
+      "Choosing an item in the list moves focus to that field and shows what it needs.",
     ],
   },
   {
-    name: "Check your answers",
-    file: "components/result.tsx (SummaryList)",
-    use: "The hub before the result, and where 'Change answers' leads.",
-    avoid: "—",
-    rules: ["Each answer with a Change link to its page.", "Stacks as question / answer on a phone."],
+    name: "Stop notice",
+    file: "pages/ResultSummary.tsx",
+    use: "An answer that ends or redirects a section 166 claim: owner-driver alone, vehicle never traced, no-fault compensation taken through the insurer.",
+    avoid: "Cautions (those are notices below the estimate).",
+    rules: [
+      "Shown right under the answer and in the estimate panel, which then shows no number.",
+      "Says why and what to do instead (DLSA, NALSA 15100, the hit-and-run scheme amounts).",
+    ],
   },
   {
-    name: "Stop page",
-    file: "pages/Questions.tsx",
-    use: "An answer that ends or redirects a section 166 claim: owner-driver alone, vehicle never traced, no-fault compensation taken through the insurer.",
-    avoid: "Cautions (those are notices on the result).",
+    name: "Estimate panel",
+    file: "pages/ResultSummary.tsx",
+    use: "The live summary: answers left, or the amount, range, how far real awards land and links to the details.",
+    avoid: "Long explanations (they are in the details below).",
     rules: [
-      "Says why, what to do next (DLSA, NALSA 15100, the hit-and-run scheme amounts) and offers to change the answer.",
+      "Sticky beside the form on a wide screen; below the form on a phone.",
+      "Lakh / crore first in the CFI blue, the exact amount below, one line on what it means.",
+    ],
+  },
+  {
+    name: "Phone bar",
+    file: "pages/Estimator.tsx",
+    use: "On a phone: the estimate once there is one, otherwise the answers left and 'Next question'.",
+    avoid: "Wide screens (the panel is visible there).",
+    rules: [
+      "Hidden while a field has focus (the keyboard is open) and while the estimate panel is on screen.",
     ],
   },
   {
     name: "Notice (info / caution / stop)",
     file: "components/ui.tsx",
-    use: "Warnings on the result and stop pages.",
+    use: "Warnings below the estimate.",
     avoid: "Form errors.",
     rules: [
-      "Colour bar and icon plus a text label; red only for a stop.",
+      "Tinted box, coloured edge and icon, and a text label; red only for a stop.",
       "Stops and cautions shown; notes collapsed.",
     ],
   },
   {
-    name: "Answer panel",
-    file: "components/result.tsx",
-    use: "The one headline amount.",
-    avoid: "Any other figure.",
-    rules: ["Lakh / crore first, the exact amount below, and one line on what it means."],
-  },
-  {
     name: "Range",
-    file: "components/result.tsx (RangeBar)",
-    use: "Conservative, standard and claimant's best, with a bar when the range is narrow enough to read as one.",
-    avoid: "A bar when the range is too wide (the three amounts and the swing factors say more).",
+    file: "pages/ResultSummary.tsx",
+    use: "Conservative, standard and claimant's best as three rows, with a bar when the range is narrow enough to read as one.",
+    avoid: "A bar when the range is too wide (the three amounts and what could move it say more).",
     rules: ["Values always given as text; the bar is decorative."],
   },
   {
@@ -267,18 +268,28 @@ export const COMPONENTS: ComponentSpec[] = [
     rules: ["Stacked rows.", "Working figures listed separately, never added to the total."],
   },
   {
-    name: "Disclosure",
+    name: "Accordion",
     file: "components/result.tsx",
-    use: "Secondary result sections.",
+    use: "Secondary details below the estimate (how it is built, what could move it, what to prove, interest, cases, sources).",
     avoid: "The amount, the range, stops and cautions.",
     rules: ["A button with aria-expanded and a panel.", "Panels always print expanded."],
+  },
+  {
+    name: "Offer check",
+    file: "pages/Offer.tsx",
+    use: "'Got an offer from the insurer?': the offer as a share of the estimate, the award with interest, and the value of waiting today after fees.",
+    avoid: "Advice to accept or refuse.",
+    rules: [
+      "On the same page, below the estimate.",
+      "Assumptions (years, interest, discount, fee) visible and editable.",
+    ],
   },
   {
     name: "Checklist",
     file: "components/result.tsx",
     use: "What to prove.",
     avoid: "—",
-    rules: ["Plain list with a tick icon; to be confirmed by the legal reviewers."],
+    rules: ["Plain list with a green tick; to be confirmed by the legal reviewers."],
   },
   {
     name: "Case card",
@@ -290,9 +301,9 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Buttons",
     file: "components/ui.tsx",
-    use: "Primary: the page's one main action. Secondary: alternatives. Links: navigation.",
-    avoid: "Two primary buttons on one page.",
-    rules: ["48 px tall, rounded; full width on a phone for the main action.", "Primary has the arrow icon."],
+    use: "Primary (blue): the one main action in an area. Outline: alternatives. Links: navigation.",
+    avoid: "Two primary buttons side by side.",
+    rules: ["Rounded 8 px, 44 px tall on a phone.", "Full width on a phone for the main action."],
   },
   {
     name: "Share actions",
@@ -309,7 +320,7 @@ export const COMPONENTS: ComponentSpec[] = [
     file: "pages/Doc.tsx",
     use: "Methodology, rules reference, offer study, rendered from the repository.",
     avoid: "Editing the text here: it is generated from docs/*.md.",
-    rules: ["Tables scroll inside their own box; the page never scrolls sideways."],
+    rules: ["Tables become labelled cards on a phone; the page never scrolls sideways."],
   },
   {
     name: "Footer",
@@ -330,7 +341,7 @@ export function renderDesignDoc(): string {
   );
   L.push("");
   L.push(
-    "Visual tokens (colours, type, radius, spacing) come from the Crashfree India design system. This document adds what a mobile, form-heavy public tool needs: the evidence behind the pattern, principles, every component with when to use it, and the deliberate deviations.",
+    'Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, which uses shadcn "new-york" on slate neutrals with the CFI blue as an accent. This document adds what a mobile, form-heavy public tool needs: the evidence behind the pattern, principles, every component with when to use it, and the deliberate deviations.',
   );
   L.push("", "## Evidence", "", "| Finding | Source | What we do |", "|---|---|---|");
   for (const e of EVIDENCE) L.push(`| ${e.finding} | ${e.source} | ${e.consequence} |`);
@@ -344,7 +355,7 @@ export function renderDesignDoc(): string {
     for (const r of c.rules) L.push(`- ${r}`);
     L.push(`- _Code:_ \`web/src/${c.file}\``, "");
   }
-  L.push("## Deviations from the Crashfree India design system", "", "| What | Why |", "|---|---|");
+  L.push("## Deviations from the website's design system", "", "| What | Why |", "|---|---|");
   for (const d of DEVIATIONS) L.push(`| ${d.what} | ${d.why} |`);
   L.push("");
   return L.join("\n");

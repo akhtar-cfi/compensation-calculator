@@ -58,7 +58,9 @@ export async function fillDate(page: Page, id: string, iso: string) {
   await page.fill(`#${id}-year`, y!);
 }
 
-/** Answers one question page from an engine input, as a person would. */
+const select = (page: Page, id: string, value: string) => page.selectOption(`#${id}`, value);
+
+/** Answers one question on the page from an engine input, as a person would. */
 async function answer(page: Page, q: string, input: EstimateInput) {
   const v = input.victim;
   const inc = v.income;
@@ -70,7 +72,7 @@ async function answer(page: Page, q: string, input: EstimateInput) {
     case "accidentDate":
       return fillDate(page, "accidentDate", input.accidentDate);
     case "role":
-      return radio(page, "victimRole", input.victimRole ?? "other");
+      return select(page, "victimRole", input.victimRole ?? "other");
     case "vehicle":
       return radio(page, "offendingVehicle", input.offendingVehicle ?? "unknown");
     case "s164":
@@ -80,15 +82,15 @@ async function answer(page: Page, q: string, input: EstimateInput) {
       if (input.claimFiledDate) await fillDate(page, "claimFiledDate", input.claimFiledDate);
       return;
     case "state":
-      await page.selectOption("#state", input.state);
-      if (input.zone) await page.selectOption("#zone", input.zone);
+      await select(page, "state", input.state);
+      if (input.zone) await select(page, "zone", input.zone);
       return;
     case "age":
       return page.fill("#age", String(v.ageYears));
     case "work":
-      return radio(page, "employment", v.employment);
+      return select(page, "employment", v.employment);
     case "occupation":
-      return page.selectOption("#occupationCode", v.occupationCode ?? "");
+      return select(page, "occupationCode", v.occupationCode ?? "");
     case "course":
       return radio(page, "studentCourse", v.studentCourse ?? "unknown");
     case "income":
@@ -135,39 +137,33 @@ async function answer(page: Page, q: string, input: EstimateInput) {
         await page.fill("#cashlessPaid", String(input.medical.paidByCashlessScheme));
       return;
     default:
-      throw new Error(`no answer for question page ${q}`);
+      throw new Error(`no answer for question ${q}`);
   }
 }
 
 /**
- * Answers the question pages from an engine input, the way a person would, and returns where it ended: the
- * result page, or a stop page (an answer that ends the claim).
+ * Fills the one-page form from an engine input, the way a person would: top to bottom, answering each question as
+ * it appears (an answer can bring up a follow-up below it). Returns what the estimate panel then shows: an
+ * estimate, or a stop (an answer that ends the claim).
  */
-export async function fillWizard(page: Page, input: EstimateInput): Promise<"result" | "stop"> {
-  // Always arrive by a real change of route (never by re-opening the URL already shown).
+export async function fillForm(page: Page, input: EstimateInput): Promise<"result" | "stop"> {
   await page.goto("#/");
-  await page.goto("#/estimate");
-  const seen: string[] = [];
-  for (let i = 0; i < 30; i++) {
-    const form = page.locator("form[data-question]");
-    const summary = page.getByTestId("summary");
-    const stop = page.locator("[data-stop]");
-    await expect(form.or(summary).or(stop).first()).toBeVisible();
-    if (await stop.count()) return "stop";
-    if (await summary.count()) {
-      await page.getByRole("link", { name: "See the estimate" }).click();
-      await expect(page).toHaveURL(/#\/result$/);
-      await expect(page.locator("[data-testid=headline], [data-testid=no-estimate]")).toBeVisible();
-      return "result";
-    }
-    const q = (await form.getAttribute("data-question"))!;
-    if (seen.includes(q)) throw new Error(`stuck on question page ${q} (answers rejected?)`);
-    seen.push(q);
-    await answer(page, q, input);
-    await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.locator(`form[data-question="${q}"]`)).toHaveCount(0);
+  await page.getByTestId("restart").click(); // from a clean form, whatever an earlier step left
+  await expect(page.locator("[data-question]").first()).toBeVisible();
+  const done = new Set<string>();
+  for (let i = 0; i < 40; i++) {
+    const ids = await page
+      .locator("[data-question]")
+      .evaluateAll((els) => els.map((e) => e.getAttribute("data-question")!));
+    const next = ids.find((id) => !done.has(id));
+    if (!next) break;
+    done.add(next);
+    await answer(page, next, input);
   }
-  throw new Error(`no result after 30 pages: ${seen.join(" → ")}`);
+  const shown = page.locator("#result [data-testid=headline], #result [data-testid=no-estimate]");
+  await expect(shown.first()).toBeVisible();
+  if (await page.locator("#result [data-testid=headline]").count()) return "result";
+  return "stop";
 }
 
 /** Fails the test if the page asks for anything outside its own origin (fonts, data and code are all bundled). */

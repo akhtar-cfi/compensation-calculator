@@ -2,9 +2,9 @@ import { EMPTY_FORM, incomeFields, type FormState } from "./form-to-input.js";
 import type { FieldName, Validation } from "./validate.js";
 
 /**
- * The question pages, in order. One topic per page (answers that belong together share a page, as GOV.UK's "one
- * thing per page" intends). `applies` decides whether a page is on this person's path; nothing here touches the
- * DOM, so the flow is unit-tested on its own.
+ * The questions, in order, each with the answers it collects. `applies` decides whether a question is shown for
+ * this person (the calculator page shows only those); nothing here touches the DOM, so the logic is unit-tested on
+ * its own.
  */
 export type QuestionId =
   | "kind"
@@ -26,14 +26,14 @@ export type QuestionId =
   | "treatment"
   | "medical";
 
-/** Sections shown as the page caption ("The person · part 2 of 4"): stable even when the path branches. */
+/** The four sections of the calculator page. */
 export const SECTIONS = ["accident", "person", "family", "details"] as const;
 export type Section = (typeof SECTIONS)[number];
 
 export interface Question {
   id: QuestionId;
   section: Section;
-  /** Every answer this page can collect (some only appear after an earlier answer on the same page). */
+  /** Every answer this question can collect (some only appear after an earlier answer to it). */
   fields: readonly FieldName[];
   applies: (f: FormState) => boolean;
 }
@@ -93,6 +93,38 @@ export const QUESTIONS: readonly Question[] = [
   { id: "medical", section: "details", fields: ["medicalBills", "cashlessPaid"], applies: always },
 ];
 
+/**
+ * Where each question sits on the calculator page: two columns from the small breakpoint up, a question that needs
+ * room (several options with hints, or several answers) across both. Order within a section follows what people
+ * know first; `applies` still decides which are shown.
+ */
+export const PAGE_LAYOUT: Readonly<Record<Section, readonly { id: QuestionId; wide?: boolean }[]>> = {
+  accident: [
+    { id: "kind" },
+    { id: "accidentDate" },
+    { id: "role" },
+    { id: "state" },
+    { id: "vehicle", wide: true },
+    { id: "s164", wide: true },
+    { id: "claim", wide: true },
+  ],
+  person: [
+    { id: "age" },
+    { id: "work" },
+    { id: "occupation", wide: true },
+    { id: "course", wide: true },
+    { id: "income", wide: true },
+    { id: "pension", wide: true },
+  ],
+  family: [{ id: "family", wide: true }],
+  details: [
+    { id: "disability", wide: true },
+    { id: "workNow", wide: true },
+    { id: "treatment", wide: true },
+    { id: "medical", wide: true },
+  ],
+};
+
 export const ALL_FIELDS: readonly FieldName[] = QUESTIONS.flatMap((q) => q.fields);
 
 export function question(id: QuestionId): Question {
@@ -141,41 +173,6 @@ export function errorsFor(v: Validation, id: QuestionId): Partial<Record<FieldNa
 /** The first page on the path that still needs an answer, if any. */
 export function firstIncomplete(f: FormState, v: Validation): QuestionId | undefined {
   return activePath(f).find((id) => Object.keys(errorsFor(v, id)).length > 0);
-}
-
-export type Destination = QuestionId | "check";
-
-/**
- * Where Continue goes. In order through the path; when the person came from "Check your answers", only through
- * pages that now need an answer (for example a branch their change has opened), then back to Check.
- */
-export function nextAfter(f: FormState, v: Validation, from: QuestionId, fromCheck: boolean): Destination {
-  if (fromCheck) return firstIncomplete(f, v) ?? "check";
-  const path = activePath(f);
-  const i = path.indexOf(from);
-  return (i >= 0 ? path[i + 1] : firstIncomplete(f, v)) ?? "check";
-}
-
-/** The page before this one on the path (undefined on the first page). */
-export function previousOf(f: FormState, id: QuestionId): QuestionId | undefined {
-  const path = activePath(f);
-  const i = path.indexOf(id);
-  return i > 0 ? path[i - 1] : undefined;
-}
-
-/**
- * Guards deep links, reloads and the back button: a page that is no longer on the path sends the person to the
- * first page still needing an answer, or to Check.
- */
-export function resolveQuestion(f: FormState, v: Validation, requested: QuestionId): Destination {
-  if (activePath(f).includes(requested)) return requested;
-  return firstIncomplete(f, v) ?? "check";
-}
-
-/** The page caption: section name and its position. */
-export function sectionOf(id: QuestionId): { section: Section; n: number; total: number } {
-  const section = question(id).section;
-  return { section, n: SECTIONS.indexOf(section) + 1, total: SECTIONS.length };
 }
 
 /** Answers that end or redirect a section 166 claim, and the page that asks each. */

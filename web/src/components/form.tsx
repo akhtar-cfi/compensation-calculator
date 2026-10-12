@@ -1,22 +1,16 @@
 import type { ComponentChildren } from "preact";
-import { CircleAlert, Minus, Plus } from "lucide-preact";
+import { ChevronDown, CircleAlert, Minus, Plus } from "lucide-preact";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { useT } from "../i18n";
 
 /*
- * Form controls for question pages (GOV.UK question-page pattern, CFI look):
- * - every control has a visible label, optional hint and error, wired with ids and aria-describedby;
- * - a page's only question can be its heading (`heading`), so screen readers hear it once;
- * - touch targets are at least 48 px; numbers use the numeric keypad;
- * - errors are a red border and icon with dark text (the CFI red is below AA contrast for small text).
+ * Form controls in the crashfreeindia.org style (shadcn "new-york"): small medium-weight labels, white fields with
+ * a soft shadow and rounded corners, the CFI blue only for focus and the chosen answer.
+ * - Every control has a visible label, optional hint and error, wired with ids and aria-describedby.
+ * - Targets are 44 px tall on a phone (40 px from the small breakpoint up); numbers open the numeric keypad.
+ * - Field edges meet WCAG 1.4.11 (3:1); errors are a red edge and icon with dark text (the red is below AA for
+ *   small text).
  */
-
-export const PAGE_TITLE_ID = "page-title";
-
-const fieldBorder = (error?: string) =>
-  error ? "border-2 border-danger" : "border border-muted-foreground/80";
-const inputBase =
-  "block min-h-12 rounded-xl bg-background px-4 text-base text-foreground focus:outline-2 focus:outline-offset-1 focus:outline-brand";
 
 export interface FieldProps {
   id: string;
@@ -24,43 +18,25 @@ export interface FieldProps {
   hint?: string | undefined;
   error?: string | undefined;
   optional?: boolean | undefined;
-  /** The label is the page's h1 (a page with this one question). */
-  heading?: boolean | undefined;
 }
 
-const describedBy = (p: FieldProps) =>
-  [p.hint && `${p.id}-hint`, p.error && `${p.id}-error`].filter(Boolean).join(" ") || undefined;
+const describedBy = (p: FieldProps, extra?: string) =>
+  [p.hint && `${p.id}-hint`, p.error && `${p.id}-error`, extra].filter(Boolean).join(" ") || undefined;
+
+const edge = (error?: string) => (error ? "border-danger ring-2 ring-danger/15" : "border-input");
+export const inputCls =
+  "block min-h-11 w-full rounded-md border bg-background px-3 text-base text-foreground shadow-sm transition-colors placeholder:text-muted-foreground sm:min-h-10 sm:text-sm focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25";
 
 function Optional(props: { on?: boolean | undefined }) {
   const t = useT();
   return props.on ? <span class="font-normal text-muted-foreground"> ({t("wiz.optional")})</span> : null;
 }
 
-/** Heading-sized label text, or the ordinary label size. */
-const labelText = (heading?: boolean) =>
-  heading
-    ? "block font-heading text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl"
-    : "block font-medium text-foreground";
-
-function LabelFor(props: FieldProps) {
-  const label = (
-    <label for={props.id} class={labelText(props.heading)}>
-      {props.label}
-      <Optional on={props.optional} />
-    </label>
-  );
-  return props.heading ? (
-    <h1 id={PAGE_TITLE_ID} tabIndex={-1} class="outline-none">
-      {label}
-    </h1>
-  ) : (
-    label
-  );
-}
+const labelCls = "block text-sm font-medium leading-snug text-foreground";
 
 export function Hint(props: { id: string; children: ComponentChildren }) {
   return (
-    <p id={`${props.id}-hint`} class="mt-1 text-sm leading-relaxed text-muted-foreground">
+    <p id={`${props.id}-hint`} class="mt-1 text-xs leading-relaxed text-muted-foreground sm:text-sm">
       {props.children}
     </p>
   );
@@ -70,13 +46,28 @@ export function FieldError(props: { id: string; message?: string | undefined }) 
   const t = useT();
   if (!props.message) return null;
   return (
-    <p id={`${props.id}-error`} class="mt-2 flex items-start gap-1.5 text-sm font-semibold text-foreground">
+    <p id={`${props.id}-error`} class="mt-1.5 flex items-start gap-1.5 text-sm font-medium text-foreground">
       <CircleAlert aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-danger" />
       <span>
         <span class="sr-only">{t("err.prefix")}: </span>
         {props.message}
       </span>
     </p>
+  );
+}
+
+/** Label, hint and error around a single control. */
+function Field(props: FieldProps & { children: ComponentChildren; class?: string }) {
+  return (
+    <div class={props.class}>
+      <label for={props.id} class={labelCls}>
+        {props.label}
+        <Optional on={props.optional} />
+      </label>
+      {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
+      <div class="mt-1.5">{props.children}</div>
+      <FieldError id={props.id} message={props.error} />
+    </div>
   );
 }
 
@@ -91,13 +82,10 @@ export function TextInput(
     autoComplete?: string;
   },
 ) {
-  const w = props.width === "xs" ? "w-24" : props.width === "sm" ? "w-40" : "w-full";
+  const w = props.width === "xs" ? "max-w-28" : props.width === "sm" ? "max-w-44" : "";
   return (
-    <div class={props.error ? "border-l-4 border-danger pl-4" : ""}>
-      <LabelFor {...props} />
-      {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
-      <FieldError id={props.id} message={props.error} />
-      <div class="mt-2 flex items-center gap-3">
+    <Field {...props}>
+      <div class="flex items-center gap-2">
         <input
           id={props.id}
           name={props.id}
@@ -109,11 +97,11 @@ export function TextInput(
           aria-invalid={props.error ? "true" : undefined}
           aria-describedby={describedBy(props)}
           onInput={(e) => props.onInput((e.currentTarget as HTMLInputElement).value)}
-          class={`${inputBase} ${fieldBorder(props.error)} ${w}`}
+          class={`${inputCls} ${edge(props.error)} ${w}`}
         />
-        {props.suffix && <span class="text-muted-foreground">{props.suffix}</span>}
+        {props.suffix && <span class="shrink-0 text-sm text-muted-foreground">{props.suffix}</span>}
       </div>
-    </div>
+    </Field>
   );
 }
 
@@ -136,14 +124,14 @@ export function MoneyInput(
   const t = useT();
   const echo = amountEcho(props.value);
   return (
-    <div class={props.error ? "border-l-4 border-danger pl-4" : ""}>
-      <LabelFor {...props} />
-      {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
-      <FieldError id={props.id} message={props.error} />
+    <Field {...props}>
       <div
-        class={`mt-2 flex w-full max-w-xs items-stretch overflow-hidden rounded-xl ${fieldBorder(props.error)}`}
+        class={`flex w-full items-stretch overflow-hidden rounded-md border bg-background shadow-sm focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/25 ${edge(props.error)}`}
       >
-        <span aria-hidden="true" class="flex items-center bg-brand-lite px-4 font-semibold text-foreground">
+        <span
+          aria-hidden="true"
+          class="flex items-center border-r border-border bg-subtle px-3 text-sm font-medium text-muted-foreground"
+        >
           ₹
         </span>
         <input
@@ -155,15 +143,15 @@ export function MoneyInput(
           spellcheck={false}
           value={props.value}
           aria-invalid={props.error ? "true" : undefined}
-          aria-describedby={[describedBy(props), `${props.id}-echo`].filter(Boolean).join(" ")}
+          aria-describedby={describedBy(props, `${props.id}-echo`)}
           onInput={(e) => props.onInput((e.currentTarget as HTMLInputElement).value)}
-          class="min-h-12 w-full min-w-0 bg-background px-3 text-base text-foreground focus:outline-2 focus:-outline-offset-2 focus:outline-brand"
+          class="min-h-11 w-full min-w-0 bg-background px-3 text-base text-foreground focus:outline-none sm:min-h-10 sm:text-sm"
         />
       </div>
-      <p id={`${props.id}-echo`} aria-live="polite" class="mt-1 min-h-5 text-sm text-muted-foreground">
+      <p id={`${props.id}-echo`} aria-live="polite" class="mt-1 min-h-4 text-xs text-muted-foreground">
         {echo ? t("money.echo", { x: echo, per: props.per ?? "" }).trim() : ""}
       </p>
-    </div>
+    </Field>
   );
 }
 
@@ -187,7 +175,7 @@ export function DateInput(props: FieldProps & { value: string; onInput: (v: stri
   };
   const box = (part: 0 | 1 | 2, key: string, value: string, width: string, autoFocus = false) => (
     <div>
-      <label for={`${props.id}-${key}`} class="block text-sm font-medium text-foreground">
+      <label for={`${props.id}-${key}`} class="block text-xs text-muted-foreground">
         {t(`date.${key}`)}
       </label>
       <input
@@ -201,43 +189,28 @@ export function DateInput(props: FieldProps & { value: string; onInput: (v: stri
         aria-invalid={props.error ? "true" : undefined}
         data-autofocus={autoFocus ? "" : undefined}
         onInput={(e) => set(part, (e.currentTarget as HTMLInputElement).value)}
-        class={`${inputBase} ${fieldBorder(props.error)} ${width} mt-1 text-center`}
+        class={`${inputCls} ${edge(props.error)} ${width} mt-1 text-center`}
       />
     </div>
   );
-  const legend = (
-    <>
-      {props.label}
-      <Optional on={props.optional} />
-    </>
-  );
   return (
-    <fieldset
-      id={props.id}
-      role="group"
-      aria-describedby={describedBy(props)}
-      class={props.error ? "border-l-4 border-danger pl-4" : ""}
-    >
-      <legend class={labelText(props.heading)}>
-        {props.heading ? (
-          <h1 id={PAGE_TITLE_ID} tabIndex={-1} class="outline-none">
-            {legend}
-          </h1>
-        ) : (
-          legend
-        )}
+    <fieldset id={props.id} role="group" aria-describedby={describedBy(props)}>
+      <legend class={labelCls}>
+        {props.label}
+        <Optional on={props.optional} />
       </legend>
       {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
-      <FieldError id={props.id} message={props.error} />
-      <div class="mt-2 flex gap-3">
-        {box(2, "day", d, "w-14", true)}
-        {box(1, "month", m, "w-14")}
-        {box(0, "year", y, "w-20")}
+      <div class="mt-1.5 flex gap-2">
+        {box(2, "day", d, "w-14!", true)}
+        {box(1, "month", m, "w-14!")}
+        {box(0, "year", y, "w-20!")}
       </div>
+      <FieldError id={props.id} message={props.error} />
     </fieldset>
   );
 }
 
+/** A long list (state, occupation): the phone's own picker, styled like the website's select. */
 export function Select(
   props: FieldProps & {
     value: string;
@@ -246,26 +219,29 @@ export function Select(
   },
 ) {
   return (
-    <div class={props.error ? "border-l-4 border-danger pl-4" : ""}>
-      <LabelFor {...props} />
-      {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
-      <FieldError id={props.id} message={props.error} />
-      <select
-        id={props.id}
-        name={props.id}
-        value={props.value}
-        aria-invalid={props.error ? "true" : undefined}
-        aria-describedby={describedBy(props)}
-        onChange={(e) => props.onChange((e.currentTarget as HTMLSelectElement).value)}
-        class={`${inputBase} ${fieldBorder(props.error)} mt-2 w-full`}
-      >
-        {props.options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <Field {...props}>
+      <div class="relative">
+        <select
+          id={props.id}
+          name={props.id}
+          value={props.value}
+          aria-invalid={props.error ? "true" : undefined}
+          aria-describedby={describedBy(props)}
+          onChange={(e) => props.onChange((e.currentTarget as HTMLSelectElement).value)}
+          class={`${inputCls} ${edge(props.error)} appearance-none pr-9 ${props.value ? "" : "text-muted-foreground"}`}
+        >
+          {props.options.map((o) => (
+            <option key={o.value} value={o.value} class="text-foreground">
+              {o.label}
+            </option>
+          ))}
+        </select>
+        <ChevronDown
+          aria-hidden="true"
+          class="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+        />
+      </div>
+    </Field>
   );
 }
 
@@ -276,42 +252,26 @@ export interface RadioOption {
 }
 
 /**
- * Either/or choices (up to about 7; longer lists use Select). `large` for a page's main choice: whole card
- * tappable with an optional hint; `compact` for short answers such as Yes / No.
+ * Either/or choices as tappable chips with a visible radio. `row`: short answers side by side (Yes / No, death /
+ * injury); `stack`: one per line, for longer labels or hints. Nothing is pre-selected.
  */
 export function Radios(
   props: FieldProps & {
     value: string;
     onChange: (v: string) => void;
     options: RadioOption[];
-    size?: "large" | "compact";
+    layout?: "row" | "stack";
   },
 ) {
-  const large = props.size !== "compact";
-  const legend = (
-    <>
-      {props.label}
-      <Optional on={props.optional} />
-    </>
-  );
+  const stack = props.layout === "stack";
   return (
-    <fieldset
-      id={props.id}
-      aria-describedby={describedBy(props)}
-      class={props.error ? "border-l-4 border-danger pl-4" : ""}
-    >
-      <legend class={labelText(props.heading)}>
-        {props.heading ? (
-          <h1 id={PAGE_TITLE_ID} tabIndex={-1} class="outline-none">
-            {legend}
-          </h1>
-        ) : (
-          legend
-        )}
+    <fieldset id={props.id} aria-describedby={describedBy(props)}>
+      <legend class={labelCls}>
+        {props.label}
+        <Optional on={props.optional} />
       </legend>
       {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
-      <FieldError id={props.id} message={props.error} />
-      <div class={`mt-3 grid gap-2 ${large ? "" : "sm:grid-cols-2"}`}>
+      <div class={`mt-1.5 ${stack ? "grid gap-2 sm:grid-cols-2" : "flex flex-wrap gap-2"}`}>
         {props.options.map((o, i) => {
           const checked = props.value === o.value;
           const id = `${props.id}-${o.value || "none"}`;
@@ -319,9 +279,13 @@ export function Radios(
             <label
               key={o.value}
               for={id}
-              class={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 ${
-                large ? "min-h-14 py-3" : "min-h-12 py-2.5"
-              } ${checked ? "border-2 border-brand bg-brand-lite" : "border-muted-foreground/80 bg-background"} focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-brand`}
+              class={`flex min-h-11 cursor-pointer items-start gap-2.5 rounded-md border px-3 py-2.5 text-sm shadow-sm transition-colors sm:min-h-10 sm:py-2 ${
+                checked
+                  ? "border-brand bg-brand-lite"
+                  : props.error
+                    ? "border-danger bg-background"
+                    : "border-input bg-background hover:bg-subtle"
+              } focus-within:ring-2 focus-within:ring-brand/25`}
             >
               <input
                 id={id}
@@ -332,12 +296,12 @@ export function Radios(
                 data-autofocus={i === 0 ? "" : undefined}
                 aria-describedby={o.hint ? `${id}-hint` : undefined}
                 onChange={() => props.onChange(o.value)}
-                class="mt-0.5 h-5 w-5 shrink-0 accent-brand"
+                class="mt-0.5 h-4 w-4 shrink-0 accent-brand"
               />
               <span>
-                <span class={`block text-foreground ${large ? "font-medium" : ""}`}>{o.label}</span>
+                <span class={`block text-foreground ${checked ? "font-medium" : ""}`}>{o.label}</span>
                 {o.hint && (
-                  <span id={`${id}-hint`} class="mt-0.5 block text-sm text-muted-foreground">
+                  <span id={`${id}-hint`} class="mt-0.5 block text-xs text-muted-foreground">
                     {o.hint}
                   </span>
                 )}
@@ -346,6 +310,7 @@ export function Radios(
           );
         })}
       </div>
+      <FieldError id={props.id} message={props.error} />
     </fieldset>
   );
 }
@@ -365,13 +330,10 @@ export function Counter(
     props.onInput(String(Math.min(max, Math.max(0, cur + d))));
   };
   const btn =
-    "flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-muted-foreground/80 bg-background text-foreground hover:border-brand focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-40";
+    "flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-input bg-background text-foreground shadow-sm hover:bg-subtle focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-40 sm:h-10 sm:w-10";
   return (
-    <div class={props.error ? "border-l-4 border-danger pl-4" : ""}>
-      <LabelFor {...props} />
-      {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
-      <FieldError id={props.id} message={props.error} />
-      <div class="mt-2 flex items-center gap-3">
+    <Field {...props}>
+      <div class="flex items-center gap-2">
         <button
           type="button"
           class={btn}
@@ -380,7 +342,7 @@ export function Counter(
           disabled={n === 0}
           onClick={() => step(-1)}
         >
-          <Minus aria-hidden="true" class="h-5 w-5" />
+          <Minus aria-hidden="true" class="h-4 w-4" />
         </button>
         <input
           id={props.id}
@@ -393,7 +355,7 @@ export function Counter(
           aria-invalid={props.error ? "true" : undefined}
           aria-describedby={describedBy(props)}
           onInput={(e) => props.onInput((e.currentTarget as HTMLInputElement).value.replace(/\D/g, ""))}
-          class={`${inputBase} ${fieldBorder(props.error)} w-20 text-center text-lg font-semibold`}
+          class={`${inputCls} ${edge(props.error)} w-16! text-center font-semibold`}
         />
         <button
           type="button"
@@ -403,10 +365,10 @@ export function Counter(
           disabled={n !== undefined && n >= max}
           onClick={() => step(1)}
         >
-          <Plus aria-hidden="true" class="h-5 w-5" />
+          <Plus aria-hidden="true" class="h-4 w-4" />
         </button>
       </div>
-    </div>
+    </Field>
   );
 }
 
@@ -420,7 +382,9 @@ export function Checkbox(props: {
   return (
     <label
       for={props.id}
-      class="flex min-h-12 cursor-pointer items-start gap-3 rounded-xl border border-muted-foreground/80 px-4 py-3 focus-within:outline-2 focus-within:outline-brand"
+      class={`flex min-h-11 cursor-pointer items-start gap-2.5 rounded-md border px-3 py-2.5 text-sm shadow-sm sm:min-h-10 sm:py-2 ${
+        props.checked ? "border-brand bg-brand-lite" : "border-input bg-background hover:bg-subtle"
+      } focus-within:ring-2 focus-within:ring-brand/25`}
     >
       <input
         id={props.id}
@@ -429,12 +393,12 @@ export function Checkbox(props: {
         checked={props.checked}
         aria-describedby={props.hint ? `${props.id}-hint` : undefined}
         onChange={(e) => props.onChange((e.currentTarget as HTMLInputElement).checked)}
-        class="mt-0.5 h-5 w-5 shrink-0 accent-brand"
+        class="mt-0.5 h-4 w-4 shrink-0 accent-brand"
       />
       <span>
         <span class="block text-foreground">{props.label}</span>
         {props.hint && (
-          <span id={`${props.id}-hint`} class="mt-0.5 block text-sm text-muted-foreground">
+          <span id={`${props.id}-hint`} class="mt-0.5 block text-xs text-muted-foreground">
             {props.hint}
           </span>
         )}
@@ -443,52 +407,9 @@ export function Checkbox(props: {
   );
 }
 
-/** A follow-up that belongs to an answer on the same page (for example the amount once a proof is chosen). */
+/** A follow-up that belongs to an answer just given (the amount once a proof is chosen; the filing date). */
 export function Reveal(props: { children: ComponentChildren }) {
-  return <div class="mt-4 border-l-4 border-brand-lite pl-4">{props.children}</div>;
-}
-
-/**
- * The list of problems at the top of a page after Continue (GOV.UK error summary). It takes focus, and each item
- * moves focus to its question. Links do not change the address: the address carries the page.
- */
-export function ErrorSummary(props: { items: { id: string; message: string }[] }) {
-  const t = useT();
-  if (!props.items.length) return null;
-  return (
-    <div
-      id="error-summary"
-      role="alert"
-      tabIndex={-1}
-      aria-labelledby="error-summary-title"
-      class="mb-8 rounded-2xl border-2 border-danger bg-background p-5 outline-none"
-    >
-      <h2
-        id="error-summary-title"
-        class="flex items-center gap-2 font-heading text-lg font-bold text-foreground"
-      >
-        <CircleAlert aria-hidden="true" class="h-5 w-5 text-danger" />
-        {t("err.summary")}
-      </h2>
-      <ul class="mt-3 grid gap-2">
-        {props.items.map((i) => (
-          <li key={i.id}>
-            <a
-              href={`#${i.id}`}
-              data-inpage=""
-              onClick={(e) => {
-                e.preventDefault();
-                focusField(i.id);
-              }}
-              class="font-medium text-brand underline underline-offset-2"
-            >
-              {i.message}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return <div class="border-l-2 border-border pl-4">{props.children}</div>;
 }
 
 /** Focuses a question's first input (a group's first radio or date box), scrolling it into view. */
@@ -499,6 +420,6 @@ export function focusField(id: string) {
     el instanceof HTMLInputElement || el instanceof HTMLSelectElement
       ? el
       : (el.querySelector<HTMLElement>("[data-autofocus]") ?? el.querySelector<HTMLElement>("input,select"));
-  (target ?? el).focus();
+  (target ?? el).focus({ preventScroll: true });
   (target ?? el).scrollIntoView({ block: "center" });
 }

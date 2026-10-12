@@ -1,48 +1,35 @@
-import { isQuestionId, isStopCode, type QuestionId, type StopCode } from "./questions.js";
+import { isQuestionId, isStopCode, question, STOP_QUESTION } from "./questions.js";
 
 export type DocPage = "how" | "rules" | "offer-study";
 
-export type Route =
-  | { name: "start" }
-  | { name: "estimate" }
-  | { name: "q"; id: QuestionId; fromCheck: boolean }
-  | { name: "check" }
-  | { name: "stop"; code: StopCode }
-  | { name: "result" }
-  | { name: "offer" }
-  | { name: "doc"; page: DocPage }
-  | { name: "design" };
-
 /**
- * Reads the page from the address. Pages live after "#/" (each question its own entry, so the phone's back
- * gesture works). Anything else after "#" is an in-page anchor, not a page: undefined.
+ * The calculator is one page. Older addresses (one page per question, Check, stop pages, the result and the offer
+ * page) still work: they open the calculator at the matching place (`target`, an element id).
  */
+export type Route =
+  { name: "calc"; target?: string | undefined } | { name: "doc"; page: DocPage } | { name: "design" };
+
+/** Reads the page from the address. Anything after "#" that is not "#/…" is an in-page anchor: undefined. */
 export function parseRoute(hash: string): Route | undefined {
-  if (hash === "" || hash === "#") return { name: "start" };
+  if (hash === "" || hash === "#") return { name: "calc" };
   if (!hash.startsWith("#/")) return undefined;
-  const [path = "", query = ""] = hash.slice(2).split("?");
-  const parts = path.split("/").filter(Boolean);
-  const fromCheck = new URLSearchParams(query).get("from") === "check";
-  const [a, b] = parts;
-  if (!a) return { name: "start" };
-  if (a === "q" && b && isQuestionId(b)) return { name: "q", id: b, fromCheck };
-  if (a === "stop" && b && isStopCode(b)) return { name: "stop", code: b };
+  const [path = ""] = hash.slice(2).split("?");
+  const [a, b] = path.split("/").filter(Boolean);
   if (a === "how" || a === "rules" || a === "offer-study") return { name: "doc", page: a };
-  if (a === "estimate" || a === "check" || a === "result" || a === "offer" || a === "design")
-    return { name: a };
-  return { name: "start" };
+  if (a === "design") return { name: "design" };
+  if (a === "q" && b && isQuestionId(b)) return { name: "calc", target: question(b).fields[0] };
+  if (a === "stop" && b && isStopCode(b))
+    return { name: "calc", target: question(STOP_QUESTION[b]).fields[0] };
+  if (a === "result") return { name: "calc", target: "result" };
+  if (a === "offer") return { name: "calc", target: "offer" };
+  return { name: "calc" };
 }
 
 /** A stable key for a route (effects that run once per page change). */
 export function routeKey(r: Route): string {
-  switch (r.name) {
-    case "q":
-      return `q/${r.id}${r.fromCheck ? "?check" : ""}`;
-    case "stop":
-      return `stop/${r.code}`;
-    case "doc":
-      return r.page;
-    default:
-      return r.name;
-  }
+  return r.name === "doc" ? r.page : r.name;
 }
+
+/** True when the address is an older one that should be rewritten to the calculator's own. */
+export const isLegacy = (hash: string): boolean =>
+  /^#\/(q|stop|check|estimate|result|offer)(\/|$|\?)/.test(hash);

@@ -2,25 +2,26 @@
 
 _Generated from `web/src/design/catalog.ts` by `npm run web:design-doc`. Do not edit by hand: a test fails if this file and the catalogue disagree. The live gallery is at `#/design` on the site._
 
-Visual tokens (colours, type, radius, spacing) come from the Crashfree India design system. This document adds what a mobile, form-heavy public tool needs: the evidence behind the pattern, principles, every component with when to use it, and the deliberate deviations.
+Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, which uses shadcn "new-york" on slate neutrals with the CFI blue as an accent. This document adds what a mobile, form-heavy public tool needs: the evidence behind the pattern, principles, every component with when to use it, and the deliberate deviations.
 
 ## Evidence
 
 | Finding | Source | What we do |
 |---|---|---|
-| The most common phone screen in India is 360×800 CSS pixels (15.3%); the next are 393, 384 and 385 px wide. | StatCounter, mobile screen resolution, India, Sept 2026 | Every page is designed and tested at 360 px first, and at 320 px (the WCAG reflow width). |
-| Ask one question per page; give every question page a back link, a heading and a Continue button; prefer a simple caption to a step bar; use three boxes for dates; avoid sliders; mark optional questions '(optional)'. | GOV.UK Design System, question pages pattern | The estimate is asked as short question pages ending in 'Check your answers'. |
-| India's government design system covers patterns Indian users meet in public services (OTP, steppers, grievances). | UX4G Design System 3.0, NeGD / MeitY (ux4g.gov.in) | Used as a reference for familiar patterns; the Crashfree India design system stays the visual authority. |
+| The most common phone screen in India is 360×800 CSS pixels (15.3%); the next are 393, 384 and 385 px wide. | StatCounter, mobile screen resolution, India, Sept 2026 | Every screen is designed and tested at 360 px first, and at 320 px (the WCAG reflow width). |
+| crashfreeindia.org is built on shadcn 'new-york' with slate neutrals; the CFI blue is an accent (main buttons, eyebrows, one headline word, links, focus). Its own calculator is one card with all questions, in labelled sections. | CFI Main Website source (src/styles.css, components/calculator) and screenshots, 12 Oct 2026 | This tool uses the same tokens and the same one-page form, so it reads as part of the website and could sit inside it. |
+| One question per screen (tested on PR #1) was judged too slow by the CFI team: people want to see all the questions at once and change any answer in place. | CFI review, 12 Oct 2026 | All questions on one page, grouped in four sections; the estimate updates beside the form as answers change. |
+| Use three boxes for dates; avoid sliders; mark optional questions '(optional)'; show errors after the person leaves a field, not while typing. | GOV.UK Design System (date input, error messages); Baymard Institute form usability research | Dates are day / month / year boxes; errors appear when focus leaves an answer. |
 
 ## Principles
 
-- **One topic per page.** Each page asks one thing; answers that belong together (state and area, proof and amount, the family) share a page. About 12 pages for a death claim and 15 for an injury, with branches skipped. _(GOV.UK question pages)_
+- **Everything on one page.** All questions sit in one card, in four sections (the accident, the person, family, injury and medical). An answer shows or hides only what depends on it, in place; nothing moves to another page.
+- **The estimate updates as you go.** As soon as the required answers are in, the amount, its range and how far real awards land appear beside the form (below it on a phone) and change with every answer. Until then the panel lists what is still needed, each a link to the question.
+- **The right control for each answer.** Two to four options are chips in a row; long lists are the phone's own picker; dates are three boxes; rupees have a ₹ prefix and read the amount back in lakh; small counts are − n + counters that start empty.
 - **Nothing pre-selected.** No answer is filled in for the person. Where 'I don't know' is a valid answer it is offered as 'Not sure', which is recorded as no answer, never as a guess.
-- **Phone first, thumb reach.** Designed at 360 px. Controls are at least 48 px tall; the main button is full width on a phone and sits directly under the answers (no sticky bars: they cover the field being typed into when the keyboard opens).
-- **The answer first, the working on demand.** The result opens with the amount in lakh, its range and how far real awards land. How it is built, what could move it, what to prove, real cases and sources open on demand, and always print in full.
-- **Back always works.** Every question page is its own entry in the browser history, so the phone's back gesture goes to the previous question with answers kept. 'Check your answers' is the hub for changes.
+- **Phone first, thumb reach.** Designed at 360 px. Controls are at least 44 px tall on a phone. A slim bar at the bottom shows the estimate or the answers left; it hides while a field has focus, so it never covers the keyboard's field.
 - **Private by design.** Answers stay in this browser tab (they survive a reload, and vanish when the tab is closed). Nothing typed is sent anywhere; visit counts never include answers.
-- **Colour is never the only signal.** Status colours mark bars, borders and icons; text stays dark and says what it is ('Stop', 'Caution', 'Error'). Red is used only for a stop or an error.
+- **Colour is never the only signal.** Status colours mark edges and icons; text stays dark and says what it is ('Stop', 'Caution', 'Error'). Red is used only for a stop or an error. The blue is for the main action, links, focus and the headline figure.
 - **Plain, empirical words.** Short sentences, numbers first, no emoji, no 'victim' (people affected). Hindi is offered on every page and labelled as a draft until reviewed by a native legal-language reviewer.
 
 ## Components
@@ -29,51 +30,42 @@ Visual tokens (colours, type, radius, spacing) come from the Crashfree India des
 
 - **Use for:** Every page until legal sign-off.
 - **Not for:** Removing it before the rules are signed off.
-- One line at 360 px.
-- Hindi pages add a second line saying the translation is a draft.
+- One line at 360 px, in the warning tint.
+- Hindi pages add a line saying the translation is a draft.
 - _Code:_ `web/src/components/chrome.tsx`
 
 ### Header
 
-- **Use for:** Wordmark, language switch and, outside the questions, the menu.
-- **Not for:** Showing the menu on question pages (it distracts and competes with Continue).
-- 48 px targets.
+- **Use for:** The website's logo, three links (calculator, how it is calculated, rules and sources) and the language switch.
+- **Not for:** Marketing navigation.
+- 44 px targets.
 - The language switch keeps every answer.
 - Skip link to the main content.
 - _Code:_ `web/src/components/chrome.tsx`
 
-### Back link
+### Calculator card and sections
 
-- **Use for:** Top of every question, Check and stop page.
-- **Not for:** Start and result pages.
-- Goes to the previous question on the person's path, answers kept.
-- From a change made on Check, goes back to Check.
-- _Code:_ `web/src/pages/Questions.tsx`
+- **Use for:** All questions, in four numbered sections with small grey uppercase titles (the website's calculator style).
+- **Not for:** Splitting questions over several pages.
+- Two columns from the small breakpoint up; a question with several options or answers spans both.
+- Only questions that apply to this person are shown; answers to hidden questions are ignored, not lost.
+- _Code:_ `web/src/pages/Estimator.tsx`
 
-### Question page
+### Radio chips (row / stack)
 
-- **Use for:** One topic: the section caption, the question as the h1, the answers, then Continue.
-- **Not for:** Several unrelated questions on one page.
-- When the page asks one question, its label or legend is the h1, so screen readers hear it once.
-- Caption shows the section ('The person · part 2 of 4'), which stays stable when the path branches.
-- Continue is left-aligned under the answers; full width on a phone.
-- _Code:_ `web/src/pages/Questions.tsx`
-
-### Radios (large / compact)
-
-- **Use for:** Up to about 7 either/or choices. Large for a page's main choice (whole card tappable, optional hint); compact for Yes / No.
+- **Use for:** Two to about five exclusive choices: chips in a row for short answers (Yes / No, death / injury), one per line for longer ones with hints.
 - **Not for:** Long lists (use Select) or choices that are not exclusive (use Checkbox).
-- Rows at least 48 px (large: 56 px).
+- Whole chip tappable, 44 px tall on a phone.
 - 'Not sure' last, where it is a valid answer.
 - Nothing pre-selected.
 - _Code:_ `web/src/components/form.tsx`
 
 ### Select
 
-- **Use for:** Long lists: state, occupation.
-- **Not for:** Short lists (use Radios).
+- **Use for:** Long lists: how the person was involved, work, state, occupation.
+- **Not for:** Short lists (use radio chips).
 - Native select: it is the most usable list on Android.
-- First option is 'Choose' or 'Not in this list'.
+- First option is 'Choose' (or 'Not in this list').
 - _Code:_ `web/src/components/form.tsx`
 
 ### Date input (day / month / year)
@@ -87,7 +79,7 @@ Visual tokens (colours, type, radius, spacing) come from the Crashfree India des
 
 ### Money input
 
-- **Use for:** Rupee amounts: salary, tax, ITR income, pension, bills.
+- **Use for:** Rupee amounts: salary, tax, ITR income, pension, bills, an insurer's offer.
 - **Not for:** Counts and percentages.
 - ₹ prefix and the numeric keypad; commas allowed.
 - Reads the amount back as it is typed ('= ₹2.5 lakh a month') so a missing or extra zero is caught.
@@ -106,7 +98,7 @@ Visual tokens (colours, type, radius, spacing) come from the Crashfree India des
 - **Use for:** Small counts: children and parents who claim.
 - **Not for:** Numbers that can be large.
 - Starts unanswered (–); 0 is an answer, not a default.
-- − and + buttons are 48 px; the box can also be typed in.
+- − and + buttons are 44 px; the box can also be typed in.
 - _Code:_ `web/src/components/form.tsx`
 
 ### Checkbox
@@ -118,55 +110,56 @@ Visual tokens (colours, type, radius, spacing) come from the Crashfree India des
 
 ### Reveal
 
-- **Use for:** A follow-up that belongs to an answer on the same page (the amount once a proof is chosen; the claim date once 'Yes').
-- **Not for:** Hiding whole questions (the question graph decides which pages are asked).
-- Indented with a brand-tint bar.
+- **Use for:** A follow-up that belongs to the answer just given (the amount once a proof is chosen; the claim date once 'Yes').
+- **Not for:** Whole questions (the question logic decides which questions are shown).
+- Indented with a hairline rule.
 - _Code:_ `web/src/components/form.tsx`
 
-### Error summary and inline errors
+### Inline errors and 'answers left'
 
-- **Use for:** After Continue, when an answer is missing or wrong.
-- **Not for:** Errors while the person is still typing.
-- The summary takes focus and links to each question.
-- Each field shows its own message: red border and icon, dark text, prefixed 'Error' for screen readers.
-- _Code:_ `web/src/components/form.tsx`
+- **Use for:** A wrong answer (an impossible date, a number out of range) shows under the field once focus leaves it; unanswered questions are listed in the estimate panel, each a link to its field.
+- **Not for:** Errors while the person is still typing; red on fields nobody has reached yet.
+- Red edge and icon, dark text, prefixed 'Error' for screen readers.
+- Choosing an item in the list moves focus to that field and shows what it needs.
+- _Code:_ `web/src/pages/Estimator.tsx`
 
-### Check your answers
-
-- **Use for:** The hub before the result, and where 'Change answers' leads.
-- **Not for:** —
-- Each answer with a Change link to its page.
-- Stacks as question / answer on a phone.
-- _Code:_ `web/src/components/result.tsx (SummaryList)`
-
-### Stop page
+### Stop notice
 
 - **Use for:** An answer that ends or redirects a section 166 claim: owner-driver alone, vehicle never traced, no-fault compensation taken through the insurer.
-- **Not for:** Cautions (those are notices on the result).
-- Says why, what to do next (DLSA, NALSA 15100, the hit-and-run scheme amounts) and offers to change the answer.
-- _Code:_ `web/src/pages/Questions.tsx`
+- **Not for:** Cautions (those are notices below the estimate).
+- Shown right under the answer and in the estimate panel, which then shows no number.
+- Says why and what to do instead (DLSA, NALSA 15100, the hit-and-run scheme amounts).
+- _Code:_ `web/src/pages/ResultSummary.tsx`
+
+### Estimate panel
+
+- **Use for:** The live summary: answers left, or the amount, range, how far real awards land and links to the details.
+- **Not for:** Long explanations (they are in the details below).
+- Sticky beside the form on a wide screen; below the form on a phone.
+- Lakh / crore first in the CFI blue, the exact amount below, one line on what it means.
+- _Code:_ `web/src/pages/ResultSummary.tsx`
+
+### Phone bar
+
+- **Use for:** On a phone: the estimate once there is one, otherwise the answers left and 'Next question'.
+- **Not for:** Wide screens (the panel is visible there).
+- Hidden while a field has focus (the keyboard is open) and while the estimate panel is on screen.
+- _Code:_ `web/src/pages/Estimator.tsx`
 
 ### Notice (info / caution / stop)
 
-- **Use for:** Warnings on the result and stop pages.
+- **Use for:** Warnings below the estimate.
 - **Not for:** Form errors.
-- Colour bar and icon plus a text label; red only for a stop.
+- Tinted box, coloured edge and icon, and a text label; red only for a stop.
 - Stops and cautions shown; notes collapsed.
 - _Code:_ `web/src/components/ui.tsx`
 
-### Answer panel
-
-- **Use for:** The one headline amount.
-- **Not for:** Any other figure.
-- Lakh / crore first, the exact amount below, and one line on what it means.
-- _Code:_ `web/src/components/result.tsx`
-
 ### Range
 
-- **Use for:** Conservative, standard and claimant's best, with a bar when the range is narrow enough to read as one.
-- **Not for:** A bar when the range is too wide (the three amounts and the swing factors say more).
+- **Use for:** Conservative, standard and claimant's best as three rows, with a bar when the range is narrow enough to read as one.
+- **Not for:** A bar when the range is too wide (the three amounts and what could move it say more).
 - Values always given as text; the bar is decorative.
-- _Code:_ `web/src/components/result.tsx (RangeBar)`
+- _Code:_ `web/src/pages/ResultSummary.tsx`
 
 ### Breakdown list
 
@@ -176,19 +169,27 @@ Visual tokens (colours, type, radius, spacing) come from the Crashfree India des
 - Working figures listed separately, never added to the total.
 - _Code:_ `web/src/pages/Result.tsx`
 
-### Disclosure
+### Accordion
 
-- **Use for:** Secondary result sections.
+- **Use for:** Secondary details below the estimate (how it is built, what could move it, what to prove, interest, cases, sources).
 - **Not for:** The amount, the range, stops and cautions.
 - A button with aria-expanded and a panel.
 - Panels always print expanded.
 - _Code:_ `web/src/components/result.tsx`
 
+### Offer check
+
+- **Use for:** 'Got an offer from the insurer?': the offer as a share of the estimate, the award with interest, and the value of waiting today after fees.
+- **Not for:** Advice to accept or refuse.
+- On the same page, below the estimate.
+- Assumptions (years, interest, discount, fee) visible and editable.
+- _Code:_ `web/src/pages/Offer.tsx`
+
 ### Checklist
 
 - **Use for:** What to prove.
 - **Not for:** —
-- Plain list with a tick icon; to be confirmed by the legal reviewers.
+- Plain list with a green tick; to be confirmed by the legal reviewers.
 - _Code:_ `web/src/components/result.tsx`
 
 ### Case card
@@ -201,10 +202,10 @@ Visual tokens (colours, type, radius, spacing) come from the Crashfree India des
 
 ### Buttons
 
-- **Use for:** Primary: the page's one main action. Secondary: alternatives. Links: navigation.
-- **Not for:** Two primary buttons on one page.
-- 48 px tall, rounded; full width on a phone for the main action.
-- Primary has the arrow icon.
+- **Use for:** Primary (blue): the one main action in an area. Outline: alternatives. Links: navigation.
+- **Not for:** Two primary buttons side by side.
+- Rounded 8 px, 44 px tall on a phone.
+- Full width on a phone for the main action.
 - _Code:_ `web/src/components/ui.tsx`
 
 ### Share actions
@@ -219,7 +220,7 @@ Visual tokens (colours, type, radius, spacing) come from the Crashfree India des
 
 - **Use for:** Methodology, rules reference, offer study, rendered from the repository.
 - **Not for:** Editing the text here: it is generated from docs/*.md.
-- Tables scroll inside their own box; the page never scrolls sideways.
+- Tables become labelled cards on a phone; the page never scrolls sideways.
 - _Code:_ `web/src/pages/Doc.tsx`
 
 ### Footer
@@ -229,12 +230,11 @@ Visual tokens (colours, type, radius, spacing) come from the Crashfree India des
 - Rules and engine versions shown so a printout can be traced.
 - _Code:_ `web/src/components/chrome.tsx`
 
-## Deviations from the Crashfree India design system
+## Deviations from the website's design system
 
 | What | Why |
 |---|---|
-| Body grey #6c6a7e instead of #777589 | #777589 is 4.48:1 on white, just under WCAG AA (4.5:1) for body text; #6c6a7e is about 5.2:1. |
-| Orange #F57C00 used for icons and decorative bars only | It is 2.7:1 on white, below the 3:1 needed for a meaningful border and the 4.5:1 for text. |
-| Red #F10015 marks form errors (border and icon) as well as stops | An error is a stop for that question. It is about 4.4:1, so error text stays dark. |
-| Tool pages: a max-w-2xl content column inside the max-w-7xl container, with py-8 / py-12 padding | A readable line length for questions, and the question stays in the first screen of a 360×800 phone (py-24 would use a quarter of it). |
-| Form field borders in grey at 80%, not the hairline border token | A field's edge must be visible (WCAG 1.4.11 asks for 3:1; the hairline token is about 1.2:1). |
+| Field edges in slate #8391A7, not the website's slate-200 #E2E8F0 | A field's edge must be visible (WCAG 1.4.11 asks for 3:1); slate-200 is 1.2:1 on white, #8391A7 is 3.2:1. |
+| Controls 44 px tall on a phone (40 px from the small breakpoint), not the website's 36 px | WCAG 2.2 target size and Android's touch guidance; 36 px is easy to mis-tap on a 360 px phone. |
+| Orange #F57C00 and red #F10015 used for edges and icons only | They are 2.7:1 and about 4.4:1 on white, below the 4.5:1 needed for small text, so the text beside them stays dark. |
+| No blue title bar on the calculator card (the website's calculator has one) | The CFI review found the earlier page 'all blue'; the blue is kept for the main action and the headline figure. |

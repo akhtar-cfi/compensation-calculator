@@ -8,10 +8,8 @@ import {
   activePath,
   errorsFor,
   firstIncomplete,
-  nextAfter,
-  previousOf,
-  resolveQuestion,
-  sectionOf,
+  PAGE_LAYOUT,
+  SECTIONS,
   stopAfter,
 } from "../../web/src/questions.js";
 import { validate } from "../../web/src/validate.js";
@@ -66,35 +64,16 @@ describe("question pages", () => {
     expect(activePath({ ...base, kind: "injury", employment: "permanent" }).length).toBe(15);
   });
 
-  it("moves forward along the path, and back", () => {
-    const v = validate(base, TODAY);
-    expect(nextAfter(base, v, "kind", false)).toBe("accidentDate");
-    expect(nextAfter(base, v, "work", false)).toBe("family");
-    expect(nextAfter(base, v, "medical", false)).toBe("check");
-    expect(previousOf(base, "family")).toBe("work");
-    expect(previousOf(base, "kind")).toBeUndefined();
+  it("places every question exactly once on the calculator page, in its own section", () => {
+    const placed = SECTIONS.flatMap((sec) => PAGE_LAYOUT[sec].map((q) => ({ sec, id: q.id })));
+    expect(placed.map((p) => p.id).sort()).toEqual(QUESTIONS.map((q) => q.id).sort());
+    for (const p of placed) expect(QUESTIONS.find((q) => q.id === p.id)?.section, p.id).toBe(p.sec);
   });
 
-  it("after a change from Check, visits only pages that now need an answer, then returns", () => {
-    const changed: FormState = { ...base, kind: "injury" };
-    const v = validate(changed, TODAY);
-    // The new injury pages are all optional, so nothing blocks: straight back to Check.
-    expect(nextAfter(changed, v, "kind", true)).toBe("check");
-    const work: FormState = { ...base, employment: "permanent" };
-    expect(nextAfter(work, validate(work, TODAY), "work", true)).toBe("income");
-  });
-
-  it("sends a link to a page that is not on the path to the first page still needing an answer", () => {
-    expect(resolveQuestion(base, validate(base, TODAY), "disability")).toBe("check");
+  it("finds the first question still needing an answer", () => {
+    expect(firstIncomplete(base, validate(base, TODAY))).toBeUndefined();
     const half: FormState = { ...base, age: "" };
-    expect(resolveQuestion(half, validate(half, TODAY), "pension")).toBe("age");
-    expect(resolveQuestion(base, validate(base, TODAY), "age")).toBe("age");
-  });
-
-  it("labels pages by section, which stays stable when the path branches", () => {
-    expect(sectionOf("kind")).toEqual({ section: "accident", n: 1, total: 4 });
-    expect(sectionOf("income")).toEqual({ section: "person", n: 2, total: 4 });
-    expect(sectionOf("medical")).toEqual({ section: "details", n: 4, total: 4 });
+    expect(firstIncomplete(half, validate(half, TODAY))).toBe("age");
   });
 
   it("stops after answers that end or redirect a section 166 claim", () => {

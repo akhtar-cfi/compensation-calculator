@@ -1,91 +1,122 @@
-import { examples, expect, fillDate, fillWizard, test } from "./helpers";
+import type { Page } from "@playwright/test";
+import { examples, expect, fillDate, fillForm, test } from "./helpers";
 
-const h1 = (page: import("@playwright/test").Page) => page.getByRole("heading", { level: 1 });
-const cont = (page: import("@playwright/test").Page) =>
-  page.getByRole("button", { name: "Continue" }).click();
+const h1 = (page: Page) => page.getByRole("heading", { level: 1 });
+const question = (page: Page, id: string) => page.locator(`[data-question="${id}"]`);
+/** Moves focus out of a question, as a person does when they go on to the next one. */
+const leave = (page: Page) => page.locator("#page-title").focus();
 
-test("the estimate starts with nothing pre-selected", async ({ page }) => {
+test("the form starts empty: nothing pre-selected, and the panel lists what is needed", async ({ page }) => {
   await page.goto("#/");
-  await page.getByRole("link", { name: "Start the estimate" }).click();
-  await expect(page).toHaveURL(/#\/q\/kind$/);
-  await expect(h1(page)).toHaveText("What happened to the person?");
-  await expect(page.locator('input[name="kind"]:checked')).toHaveCount(0);
-  await expect(page.getByTestId("caption")).toHaveText("The accident · part 1 of 4");
-});
-
-test("an answer that ends the claim goes to a stop page, with a way back", async ({ page }) => {
-  await page.goto("#/");
-  await page.goto("#/q/role");
-  await page.locator('input[name="victimRole"][value="owner_driver_single_vehicle"]').check();
-  await cont(page);
-  await expect(page).toHaveURL(/#\/stop\/owner_driver$/);
-  await expect(page.locator("[data-stop=owner_driver]")).toBeVisible();
+  await expect(h1(page)).toHaveText("Motor accident compensation calculator");
+  await expect(page.locator("input[type=radio]:checked")).toHaveCount(0);
+  await expect(page.locator("#victimRole")).toHaveValue("");
+  await expect(page.locator("#employment")).toHaveValue("");
+  await expect(page.getByTestId("answers-left")).toContainText("answers still needed");
   await expect(page.getByTestId("headline")).toHaveCount(0);
-  await page.getByRole("link", { name: "Change this answer" }).click();
-  await expect(page).toHaveURL(/#\/q\/role$/);
-  await expect(page.locator('input[name="victimRole"][value="owner_driver_single_vehicle"]')).toBeChecked();
+  // No error is shown before anything has been tried.
+  await expect(page.getByText("Please answer this question.")).toHaveCount(0);
 });
 
-test("a missing or impossible answer is reported on its own page and blocks moving on", async ({ page }) => {
+test("an answer that ends the claim shows why under it, and the panel shows no number", async ({ page }) => {
   await page.goto("#/");
-  await page.goto("#/q/kind");
-  await cont(page);
-  await expect(page.locator("#error-summary")).toBeFocused();
-  await expect(page.locator("#error-summary")).toContainText("Please answer this question.");
-  await expect(page).toHaveURL(/#\/q\/kind$/);
-  await page.locator('input[name="kind"][value="death"]').check();
-  await cont(page);
+  await page.selectOption("#victimRole", "owner_driver_single_vehicle");
+  await expect(question(page, "role").locator("[data-stop=owner_driver]")).toBeVisible();
+  await expect(page.locator("#result").getByTestId("no-estimate")).toBeVisible();
+  await expect(page.getByTestId("headline")).toHaveCount(0);
+  // The notice is announced once (under the answer), not again in the panel.
+  await expect(page.locator("[data-stop] [role=alert]")).toHaveCount(1);
+  await page.selectOption("#victimRole", "pedestrian");
+  await expect(page.locator("[data-stop]")).toHaveCount(0);
+  await expect(page.getByTestId("answers-left")).toBeVisible();
+});
+
+test("a wrong answer is reported when leaving it; the list of answers left jumps to each", async ({
+  page,
+}) => {
+  await page.goto("#/");
   await fillDate(page, "accidentDate", "2025-02-30");
-  await cont(page);
+  await expect(page.locator("#accidentDate-error")).toHaveCount(0); // not while typing
+  await leave(page);
   await expect(page.locator("#accidentDate-error")).toContainText("Enter a real date");
   await fillDate(page, "accidentDate", "2099-01-01");
-  await cont(page);
+  await leave(page);
   await expect(page.locator("#accidentDate-error")).toContainText("cannot be in the future");
-});
-
-test("the phone's back button goes to the previous question with answers kept", async ({ page }) => {
-  await page.goto("#/");
-  await page.goto("#/estimate");
-  await page.locator('input[name="kind"][value="injury"]').check();
-  await cont(page);
   await fillDate(page, "accidentDate", "2025-06-01");
-  await cont(page);
-  await expect(page).toHaveURL(/#\/q\/role$/);
-  await page.goBack();
-  await expect(page).toHaveURL(/#\/q\/accidentDate$/);
-  await expect(page.locator("#accidentDate-day")).toHaveValue("1");
-  await page.goBack();
-  await expect(page.locator('input[name="kind"][value="injury"]')).toBeChecked();
-});
+  await leave(page);
+  await expect(page.locator("#accidentDate-error")).toHaveCount(0);
 
-test("answers survive a reload (kept in this tab only)", async ({ page }) => {
-  await page.goto("#/");
-  await page.goto("#/estimate");
+  await page.locator("#result [data-missing=kind]").click();
+  await expect(page.locator('input[name="kind"]').first()).toBeFocused();
+  await expect(page.locator("#kind-error")).toContainText("Please answer this question.");
   await page.locator('input[name="kind"][value="death"]').check();
-  await cont(page);
-  await fillDate(page, "accidentDate", "2025-06-01");
-  await cont(page);
-  await page.reload();
-  await expect(page).toHaveURL(/#\/q\/role$/);
-  await page.goBack();
-  await expect(page.locator("#accidentDate-year")).toHaveValue("2025");
+  await expect(page.locator("#kind-error")).toHaveCount(0);
+  await expect(page.locator("#result [data-missing=kind]")).toHaveCount(0);
+});
+
+test("follow-up questions appear only when they apply", async ({ page }) => {
   await page.goto("#/");
-  await expect(page.getByRole("link", { name: "Continue where you left off" })).toBeVisible();
+  await expect(page.locator("#claimFiledDate-day")).toHaveCount(0);
+  await page.locator('input[name="claimFiled"][value="yes"]').check();
+  await expect(page.locator("#claimFiledDate-day")).toBeVisible();
+  await page.locator('input[name="claimFiled"][value="no"]').check();
+  await expect(page.locator("#claimFiledDate-day")).toHaveCount(0);
+
+  await page.selectOption("#employment", "student");
+  await expect(question(page, "course")).toBeVisible();
+  await expect(question(page, "income")).toHaveCount(0);
+  await page.selectOption("#employment", "permanent");
+  await expect(question(page, "course")).toHaveCount(0);
+  await page.locator('input[name="proof"][value="salary_slip"]').check();
+  await page.fill("#monthlySalary", "25,000");
+  await expect(page.locator("#monthlySalary-echo")).toHaveText("= ₹25,000 a month");
+
+  await expect(page.locator('input[name="spouse"]')).toHaveCount(0);
+  await page.locator('input[name="married"][value="yes"]').check();
+  await expect(page.locator('input[name="spouse"]').first()).toBeVisible();
+
+  // Injury brings its own section; death does not ask it.
+  await expect(page.locator("[data-section=details] [data-question=disability]")).toHaveCount(0);
+  await page.locator('input[name="kind"][value="injury"]').check();
+  await expect(question(page, "disability")).toBeVisible();
+  await page.locator('input[name="kind"][value="death"]').check();
+  await expect(question(page, "disability")).toHaveCount(0);
+});
+
+test("the estimate appears as soon as the answers are in, and follows changes", async ({ page }) => {
+  const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
+  await fillForm(page, input);
+  const amount = page.locator("#result [data-testid=headline] [data-amount]");
+  const before = Number(await amount.getAttribute("data-amount"));
+  await page.fill("#monthlySalary", "50000");
+  await expect.poll(async () => Number(await amount.getAttribute("data-amount"))).toBeGreaterThan(before);
+  await expect(page.locator("#details")).toBeVisible();
+  await expect(page.locator("#offer")).toBeVisible();
+});
+
+test("answers survive a reload (kept in this tab only), and Start again clears them", async ({ page }) => {
+  await page.goto("#/");
+  await page.locator('input[name="kind"][value="death"]').check();
+  await fillDate(page, "accidentDate", "2025-06-01");
+  await page.selectOption("#state", "DL");
+  await page.reload();
+  await expect(page.locator('input[name="kind"][value="death"]')).toBeChecked();
+  await expect(page.locator("#accidentDate-year")).toHaveValue("2025");
+  await expect(page.locator("#state")).toHaveValue("DL");
   await page.getByRole("button", { name: "Start again" }).click();
-  await expect(page.getByRole("link", { name: "Start the estimate" })).toBeVisible();
+  await expect(page.locator("input[type=radio]:checked")).toHaveCount(0);
+  await expect(page.locator("#accidentDate-year")).toHaveValue("");
+  await expect(page.locator("#page-title")).toBeFocused();
 });
 
 test("switching to Hindi keeps every answer", async ({ page }) => {
   await page.goto("#/");
-  await page.goto("#/estimate");
   await page.locator('input[name="kind"][value="injury"]').check();
-  await cont(page);
   await fillDate(page, "accidentDate", "2025-06-01");
   await page.getByRole("button", { name: "हिंदी" }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "hi");
-  await expect(h1(page)).toHaveText("दुर्घटना कब हुई?");
+  await expect(h1(page)).toHaveText("मोटर दुर्घटना मुआवज़ा कैलकुलेटर");
   await expect(page.locator("#accidentDate-month")).toHaveValue("6");
-  await page.getByRole("link", { name: "पीछे" }).click();
   await expect(page.locator('input[name="kind"][value="injury"]')).toBeChecked();
   await page.getByRole("button", { name: "English" }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
@@ -94,44 +125,54 @@ test("switching to Hindi keeps every answer", async ({ page }) => {
 test("?lang=hi opens the page in Hindi", async ({ page }) => {
   await page.goto("?lang=hi#/");
   await expect(page.locator("html")).toHaveAttribute("lang", "hi");
-  await expect(page.getByRole("link", { name: "अनुमान शुरू करें" })).toBeVisible();
+  await expect(h1(page)).toHaveText("मोटर दुर्घटना मुआवज़ा कैलकुलेटर");
 });
 
-test("the result page in Hindi shows the same amounts", async ({ page }) => {
+test("the estimate in Hindi shows the same amounts", async ({ page }) => {
   const { input } = examples().find((e) => e.name === "death-homemaker.yaml")!;
-  await fillWizard(page, input);
+  await fillForm(page, input);
   const amount = await page.locator("[data-testid=headline] [data-amount]").getAttribute("data-amount");
   await page.getByRole("button", { name: "हिंदी" }).click();
   await expect(page.locator("[data-testid=headline] [data-amount]")).toHaveAttribute("data-amount", amount!);
   await expect(page.locator("[data-head=loss_of_dependency]")).toContainText("आश्रितता की हानि");
 });
 
-test('"Change answers" goes to Check; a change that opens a branch asks only the new question', async ({
-  page,
-}) => {
-  const { input } = examples().find((e) => e.name === "death-homemaker.yaml")!;
-  await fillWizard(page, input);
-  await page.getByRole("link", { name: "Change answers" }).click();
-  await expect(page).toHaveURL(/#\/check$/);
-  await expect(page.locator("[data-row=age]")).toContainText("35");
-  await page.locator("[data-row=work] a").click();
-  await expect(page).toHaveURL(/#\/q\/work\?from=check$/);
-  await page.locator('input[name="employment"][value="permanent"]').check();
-  await cont(page);
-  // A salaried person is asked about proof of income, then goes straight back to Check.
-  await expect(page).toHaveURL(/#\/q\/income\?from=check$/);
-  await page.locator('input[name="proof"][value="salary_slip"]').check();
-  await page.fill("#monthlySalary", "25,000");
-  await expect(page.locator("#monthlySalary-echo")).toHaveText("= ₹25,000 a month");
-  await cont(page);
-  await expect(page).toHaveURL(/#\/check$/);
-  await expect(page.locator("[data-row=income]")).toContainText("25,000");
+test("older addresses open the calculator at the matching place", async ({ page }) => {
+  await page.goto("#/q/age");
+  await expect(page).toHaveURL(/#\/$/);
+  await expect(page.locator("#age")).toBeFocused();
+  await page.goto("#/stop/owner_driver");
+  await expect(page).toHaveURL(/#\/$/);
+  await expect(page.locator("#victimRole")).toBeFocused();
+  for (const old of ["#/estimate", "#/check", "#/result", "#/offer"]) {
+    await page.goto(old);
+    await expect(page).toHaveURL(/#\/$/);
+    await expect(h1(page)).toHaveText("Motor accident compensation calculator");
+  }
 });
 
-test("the result page cannot be opened without answers", async ({ page }) => {
+test("on a phone, a bar at the bottom shows progress, then the estimate, and hides while typing", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 800 });
   await page.goto("#/");
-  await page.goto("#/result");
-  await expect(page).toHaveURL(/#\/q\/kind$/);
+  const bar = page.getByTestId("phone-bar");
+  await expect(bar).toContainText("answers still needed");
+  await bar.getByRole("button").click(); // "Next": goes to the first unanswered question
+  await expect(page.locator('input[name="kind"]').first()).toBeFocused();
+  await page.locator("#age").focus();
+  await expect(bar).toHaveCount(0); // the keyboard is open: nothing covers the field
+  await page.locator("#page-title").focus();
+  await expect(bar).toBeVisible();
+
+  const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
+  await fillForm(page, input);
+  await page.locator("#page-title").focus();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(bar).toContainText("₹");
+  await bar.getByRole("button").click();
+  await expect(bar).toHaveCount(0); // the estimate itself is on screen
+  await expect(page.locator("#result [data-testid=headline]")).toBeInViewport();
 });
 
 test("the public documents are on the page, and in-page links do not change the page", async ({ page }) => {
@@ -145,76 +186,54 @@ test("the public documents are on the page, and in-page links do not change the 
   await page.getByRole("link", { name: "Skip to content" }).press("Enter");
   await expect(page).toHaveURL(/#\/offer-study$/);
   await expect(page.locator("#main")).toBeFocused();
+  await page.getByRole("link", { name: "Estimate", exact: true }).click();
+  await expect(page).toHaveURL(/#\/$/);
+  await expect(page.locator("#page-title")).toBeFocused();
 });
 
-test("the questions can be answered with the keyboard alone", async ({ page }) => {
+test("the whole form can be answered with the keyboard alone", async ({ page }) => {
   await page.goto("#/");
   const tabTo = async (selector: string) => {
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 80; i++) {
       if (await page.locator(selector).evaluate((el) => el === document.activeElement)) return;
       await page.keyboard.press("Tab");
     }
     throw new Error(`could not reach ${selector} with Tab`);
   };
-  const submit = async (next: RegExp) => {
-    await tabTo('form button[type="submit"]');
-    await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(next);
-    // The address changes before the next page renders. Wait for the new title to take focus, or the next tabTo
-    // could find the previous page's Continue button still focused and press Enter on a page that is going away.
-    await expect(page.locator("#page-title")).toBeFocused();
-  };
-  await tabTo('a[href="#/estimate"].rounded-full');
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/#\/q\/kind$/);
   await tabTo('input[name="kind"][value="death"]');
   await page.keyboard.press("Space");
-  await submit(/accidentDate$/);
   await tabTo("#accidentDate-day");
   await page.keyboard.type("1");
   await page.keyboard.press("Tab");
   await page.keyboard.type("6");
   await page.keyboard.press("Tab");
   await page.keyboard.type("2025");
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/role$/);
-  await tabTo('input[name="victimRole"][value="pedestrian"]');
-  await page.keyboard.press("Space");
-  await submit(/vehicle$/);
-  await tabTo('input[name="offendingVehicle"][value="identified_insured"]');
-  await page.keyboard.press("Space");
-  await submit(/s164$/);
-  await tabTo('input[name="s164"][value="none"]');
-  await page.keyboard.press("Space");
-  await submit(/claim$/);
-  await tabTo('input[name="claimFiled"][value="yes"]');
-  await page.keyboard.press("ArrowDown"); // radio groups move with the arrow keys
-  await expect(page.locator('input[name="claimFiled"][value="no"]')).toBeChecked();
-  await submit(/state$/);
+  await tabTo("#victimRole");
+  await page.keyboard.press("ArrowDown"); // the first choice: walking
+  await expect(page.locator("#victimRole")).toHaveValue("pedestrian");
   await tabTo("#state");
   await page.keyboard.press("ArrowDown");
   await expect(page.locator("#state")).toHaveValue("DL");
-  await submit(/age$/);
+  await tabTo('input[name="offendingVehicle"][value="identified_insured"]');
+  await page.keyboard.press("Space");
+  await tabTo('input[name="s164"][value="none"]');
+  await page.keyboard.press("Space");
+  await tabTo('input[name="claimFiled"][value="yes"]');
+  await page.keyboard.press("ArrowDown"); // radio groups move with the arrow keys
+  await expect(page.locator('input[name="claimFiled"][value="no"]')).toBeChecked();
   await tabTo("#age");
   await page.keyboard.type("35");
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/work$/);
-  await tabTo('input[name="employment"][value="permanent"]');
-  for (let i = 0; i < 4; i++) await page.keyboard.press("ArrowDown");
-  await expect(page.locator('input[name="employment"][value="homemaker"]')).toBeChecked();
-  await submit(/family$/);
+  await tabTo("#employment");
+  for (let i = 0; i < 5; i++) await page.keyboard.press("ArrowDown");
+  await expect(page.locator("#employment")).toHaveValue("homemaker");
   await tabTo('input[name="married"][value="yes"]');
   await page.keyboard.press("ArrowDown");
+  await expect(page.locator('input[name="married"][value="no"]')).toBeChecked();
   await tabTo("#children");
   await page.keyboard.type("0");
   await tabTo("#parents");
   await page.keyboard.type("2");
-  await submit(/medical$/);
-  await submit(/check$/);
-  await tabTo('a[href="#/result"]');
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/#\/result$/);
-  await expect(page.getByTestId("headline")).toBeVisible();
+  await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
 });
 
 test("a route change right after the first render is not missed", async ({ page }) => {
@@ -223,10 +242,10 @@ test("a route change right after the first render is not missed", async ({ page 
     new MutationObserver((_, obs) => {
       if (document.getElementById("page-title")) {
         obs.disconnect();
-        location.hash = "#/estimate";
+        location.hash = "#/how";
       }
     }).observe(document, { childList: true, subtree: true });
   });
   await page.goto("#/");
-  await expect(h1(page)).toHaveText("What happened to the person?", { timeout: 2000 });
+  await expect(page.locator("article.doc h1").first()).toBeVisible({ timeout: 2000 });
 });

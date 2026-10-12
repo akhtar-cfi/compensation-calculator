@@ -2,72 +2,50 @@ import type { ComponentChildren, JSX } from "preact";
 import { ArrowRight, CircleAlert, Info, OctagonX } from "lucide-preact";
 import { useT } from "../i18n";
 
-/** Standard CFI section wrapper: hairline divider, centred 7xl container, fixed paddings. */
-export function Section(props: {
-  tone?: "background" | "brand-lite";
-  hero?: boolean;
-  narrow?: boolean;
-  id?: string;
-  class?: string;
-  children: ComponentChildren;
-}) {
-  const bg = props.tone === "brand-lite" ? "bg-brand-lite" : "bg-background";
-  const pad = props.hero ? "pt-16 pb-12 md:pt-20 lg:pt-24" : "py-16 lg:py-24";
-  return (
-    <section id={props.id} class={`border-t border-border ${bg} ${props.class ?? ""}`}>
-      <div class={`mx-auto w-full ${props.narrow ? "max-w-4xl" : "max-w-7xl"} px-6 md:px-10 ${pad}`}>
-        {props.children}
-      </div>
-    </section>
-  );
-}
-
-/**
- * A tool page (question, check, stop, result): the standard 7xl container, with content held to a readable
- * column (about 65 characters) and tighter padding than marketing sections, so the question sits in the first
- * screen of a 360x800 phone. A documented exception to the CFI section padding.
+/*
+ * Building blocks in the crashfreeindia.org style (shadcn "new-york" on slate): white cards with a hairline border
+ * and a soft shadow, slate text, and the CFI blue only for the main action, links, focus and the headline figure.
  */
-export function ToolPage(props: { children: ComponentChildren; wide?: boolean }) {
+
+/** The page container: the website's max width, with phone gutters of 16 px. */
+export function Page(props: { children: ComponentChildren; narrow?: boolean; class?: string }) {
   return (
-    <section class="border-t border-border bg-background">
-      <div class="mx-auto w-full max-w-7xl px-6 py-8 md:px-10 md:py-12">
-        <div class={props.wide ? "max-w-4xl" : "max-w-2xl"}>{props.children}</div>
-      </div>
-    </section>
+    <div
+      class={`mx-auto w-full ${props.narrow ? "max-w-3xl" : "max-w-6xl"} px-4 py-6 sm:px-6 md:py-10 ${props.class ?? ""}`}
+    >
+      {props.children}
+    </div>
   );
 }
 
+export function Card(props: { children: ComponentChildren; class?: string; id?: string }) {
+  return (
+    <div id={props.id} class={`rounded-xl border border-border bg-card shadow-sm ${props.class ?? ""}`}>
+      {props.children}
+    </div>
+  );
+}
+
+/** Small blue label above a heading, as on the website ("OUR PROGRAMMES"). */
 export function Eyebrow(props: { children: ComponentChildren }) {
-  return <p class="text-xs font-medium tracking-[0.25em] text-brand">{props.children}</p>;
+  return <p class="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{props.children}</p>;
 }
 
-/** Two-line statement headline: the second line carries the brand colour. */
-export function Headline(props: { a: string; b: string; level?: 1 | 2; id?: string }) {
-  const cls =
-    props.level === 2
-      ? "mt-4 max-w-4xl font-heading text-3xl outline-none font-bold leading-[1.05] tracking-tight sm:text-4xl lg:text-5xl"
-      : "mt-4 max-w-4xl font-heading text-4xl outline-none font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl";
-  const inner = (
-    <>
-      {props.a}
-      <br />
-      <span class="text-brand">{props.b}</span>
-    </>
-  );
-  return props.level === 2 ? (
-    <h2 id={props.id} tabIndex={-1} class={cls}>
-      {inner}
-    </h2>
-  ) : (
-    <h1 id={props.id} tabIndex={-1} class={cls}>
-      {inner}
+export function H1(props: { children: ComponentChildren; id?: string }) {
+  return (
+    <h1
+      id={props.id}
+      tabIndex={-1}
+      class="font-heading text-2xl font-bold tracking-tight text-foreground outline-none sm:text-3xl"
+    >
+      {props.children}
     </h1>
   );
 }
 
 export function H2(props: { children: ComponentChildren; id?: string }) {
   return (
-    <h2 id={props.id} class="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
+    <h2 id={props.id} class="font-heading text-xl font-bold tracking-tight text-foreground">
       {props.children}
     </h2>
   );
@@ -75,33 +53,30 @@ export function H2(props: { children: ComponentChildren; id?: string }) {
 
 export function Lead(props: { children: ComponentChildren; class?: string }) {
   return (
-    <p
-      class={`mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg ${props.class ?? ""}`}
-    >
+    <p class={`mt-2 max-w-3xl leading-relaxed text-muted-foreground ${props.class ?? ""}`}>
       {props.children}
     </p>
   );
 }
 
+/* Buttons: 44 px tall on a phone (WCAG 2.2 target size), 40 px from the small breakpoint up. */
 const btnBase =
-  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
-const btnPrimary = `${btnBase} bg-brand text-brand-foreground shadow-lg shadow-brand/30 hover:bg-brand/90`;
-const btnSecondary = `${btnBase} border border-border bg-background text-foreground hover:border-brand/40`;
-
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 text-sm font-medium transition-colors sm:min-h-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:pointer-events-none disabled:opacity-50";
+export const btnPrimary = `${btnBase} bg-brand text-brand-foreground shadow-sm hover:bg-brand/90`;
+export const btnOutline = `${btnBase} border border-border bg-background text-foreground shadow-sm hover:bg-muted`;
 const fullCls = " w-full sm:w-auto";
 
 export function LinkButton(props: {
   href: string;
   secondary?: boolean;
   arrow?: boolean;
-  /** Full width on a phone (the main action of a tool page). */
   full?: boolean;
   children: ComponentChildren;
 }) {
   return (
-    <a href={props.href} class={(props.secondary ? btnSecondary : btnPrimary) + (props.full ? fullCls : "")}>
+    <a href={props.href} class={(props.secondary ? btnOutline : btnPrimary) + (props.full ? fullCls : "")}>
       {props.children}
-      {props.arrow !== false && !props.secondary && <ArrowRight aria-hidden="true" class="h-4 w-4" />}
+      {props.arrow && <ArrowRight aria-hidden="true" class="h-4 w-4" />}
     </a>
   );
 }
@@ -117,54 +92,63 @@ export function Button(
 ) {
   const { secondary, arrow, full, children, ...rest } = props;
   return (
-    <button type="button" {...rest} class={(secondary ? btnSecondary : btnPrimary) + (full ? fullCls : "")}>
+    <button type="button" {...rest} class={(secondary ? btnOutline : btnPrimary) + (full ? fullCls : "")}>
       {children}
       {arrow && <ArrowRight aria-hidden="true" class="h-4 w-4" />}
     </button>
   );
 }
 
-export function Card(props: { children: ComponentChildren; class?: string }) {
-  return (
-    <div class={`rounded-2xl border border-border bg-card p-6 ${props.class ?? ""}`}>{props.children}</div>
-  );
-}
+/** A text link in the brand colour (the website's link style). */
+export const linkCls =
+  "font-medium text-brand underline underline-offset-4 hover:no-underline focus-visible:outline-2 focus-visible:outline-brand";
 
 const sevStyle = {
-  stop: { bar: "border-l-danger", icon: "text-danger", Icon: OctagonX },
-  caution: { bar: "border-l-warning", icon: "text-warning", Icon: CircleAlert },
-  info: { bar: "border-l-brand", icon: "text-brand", Icon: Info },
+  stop: { box: "border-danger/40 bg-danger/5", icon: "text-danger", Icon: OctagonX },
+  caution: { box: "border-warning/40 bg-warning/5", icon: "text-warning", Icon: CircleAlert },
+  info: { box: "border-border bg-subtle", icon: "text-muted-foreground", Icon: Info },
 } as const;
 
 /**
- * A warning in CFI status colours: red only for a stop. Colour is carried by the bar and icon; the text stays dark,
- * because the red and orange are below WCAG AA contrast for small text.
+ * A warning: colour, icon and a spoken label, never colour alone. Red only for an answer that ends the claim. The
+ * red and orange are below AA contrast for small text, so they mark the edge and icon; the text stays dark.
  */
 export function Notice(props: {
   severity: "stop" | "caution" | "info";
   title: string;
   children?: ComponentChildren;
   code?: string;
+  /** Announce a stop as it appears (off for a second copy of the same notice). */
+  live?: boolean | undefined;
 }) {
   const t = useT();
   const s = sevStyle[props.severity];
   return (
     <div
-      role={props.severity === "stop" ? "alert" : undefined}
+      role={props.severity === "stop" && props.live !== false ? "alert" : undefined}
       data-code={props.code}
       data-severity={props.severity}
-      class={`rounded-2xl border border-border border-l-4 ${s.bar} bg-card p-5`}
+      class={`rounded-lg border p-4 ${s.box}`}
     >
-      <p class="flex items-start gap-2 font-semibold text-foreground">
-        <s.Icon aria-hidden="true" class={`mt-0.5 h-5 w-5 shrink-0 ${s.icon}`} />
+      <p class="flex items-start gap-2 text-sm font-semibold text-foreground">
+        <s.Icon aria-hidden="true" class={`mt-0.5 h-4 w-4 shrink-0 ${s.icon}`} />
         <span>
           <span class="sr-only">{t(`sev.${props.severity}`)}: </span>
           {props.title}
         </span>
       </p>
       {props.children && (
-        <div class="mt-2 pl-7 text-sm leading-relaxed text-muted-foreground">{props.children}</div>
+        <div class="mt-1.5 pl-6 text-sm leading-relaxed text-foreground/80">{props.children}</div>
       )}
     </div>
+  );
+}
+
+/** A small outlined label (shadcn badge, outline variant). */
+export function Tag(props: { children: ComponentChildren }) {
+  return (
+    <span class="ml-2 inline-block rounded-md border border-border bg-background px-1.5 py-0.5 align-middle text-xs font-medium text-muted-foreground">
+      {props.children}
+    </span>
   );
 }

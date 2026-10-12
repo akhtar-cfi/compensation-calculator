@@ -1,12 +1,12 @@
 import { checkOffer } from "../../src/engine/index.js";
-import { examples, expect, expected, fillWizard, guardRequests, rules, test } from "./helpers";
+import { examples, expect, expected, fillForm, guardRequests, rules, test } from "./helpers";
 
-// The page runs the same engine as the CLI and the tests. Each worked example, typed into the wizard, must show
+// The page runs the same engine as the CLI and the tests. Each worked example, typed into the form, must show
 // exactly what estimate() gives for the same input: headline, range and every head.
 for (const { name, input } of examples()) {
-  test(`wizard matches estimate() for ${name}`, async ({ page, baseURL }) => {
+  test(`the page matches estimate() for ${name}`, async ({ page, baseURL }) => {
     const outside = guardRequests(page, baseURL!);
-    await fillWizard(page, input);
+    await fillForm(page, input);
     const est = expected(input);
     expect(est.eligible).toBe(true);
     await expect(page.locator("[data-testid=headline] [data-amount]")).toHaveAttribute(
@@ -30,7 +30,7 @@ for (const { name, input } of examples()) {
 
 test("offer check matches checkOffer()", async ({ page }) => {
   const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
-  await fillWizard(page, input);
+  await fillForm(page, input);
   await page.getByRole("link", { name: "Check an insurance offer against this estimate" }).click();
   await page.fill("#offer-amount", "10,00,000");
   await page.getByRole("button", { name: "Check the offer" }).click();

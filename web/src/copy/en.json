@@ -361,5 +361,22 @@
   "stop.hnr": "Under the hit-and-run scheme (section 161) the amounts are {death} for a death and {hurt} for grievous hurt.",
   "start.resume": "Continue where you left off",
   "start.time": "12 to 15 short questions. Your answers stay on this device.",
-  "footer.analytics": "We count visits to five pages (start, check, result, offer, documents) to see how the tool is used. We never record what you type."
+  "footer.analytics": "We count visits to four pages (the calculator, a shown estimate, an offer check, the documents) to see how the tool is used. We never record what you type.",
+  "calc.title": "Motor accident compensation calculator",
+  "calc.lead": "Answer what you know. The estimate appears as soon as the required answers are in, and changes as you change them.",
+  "calc.meta": "About 5 minutes · Your answers stay on this device",
+  "sum.title": "Your estimate",
+  "sum.empty": "Answer the questions to see the estimate. It updates as you go.",
+  "sum.left": "{n} answers still needed",
+  "sum.left1": "1 answer still needed",
+  "sum.more": "and {n} more",
+  "sum.stop.lead": "On this answer there is no section 166 claim to estimate. What to do instead:",
+  "sum.cautions": "{n} things to read before relying on this",
+  "sum.cautions1": "1 thing to read before relying on this",
+  "sum.details": "How it is built, what to prove, similar cases",
+  "det.title": "About this estimate",
+  "bar.estimate": "Estimate",
+  "bar.see": "See it",
+  "bar.why": "See why",
+  "bar.next": "Next question"
 }

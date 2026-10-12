@@ -1,4 +1,4 @@
-import { ToolPage } from "../components/ui";
+import { Card, Page } from "../components/ui";
 import { loadDocs, useLoaded, type Docs } from "../data";
 import { useLang, useT } from "../i18n";
 import type { DocPage } from "../route";
@@ -19,13 +19,21 @@ export function Doc(props: { page: DocPage }) {
   const p = pages[props.page];
   const docs = useLoaded(loadDocs);
   return (
-    <ToolPage wide>
-      <p class="text-xs font-medium tracking-[0.25em] text-brand outline-none" id="page-title" tabIndex={-1}>
-        {t(p.key).toUpperCase()}
-      </p>
-      {lang === "hi" && <p class="mt-3 text-sm text-muted-foreground">{t("res.enDetail")}</p>}
-      {/* Trusted HTML: rendered from the repository's own markdown by web/scripts/build-data.ts. */}
-      {docs && <article class="doc" lang="en" dangerouslySetInnerHTML={{ __html: p.html(docs) }} />}
-    </ToolPage>
+    <div class="bg-subtle">
+      <Page narrow>
+        <p
+          class="text-xs font-semibold tracking-[0.2em] text-brand uppercase outline-none"
+          id="page-title"
+          tabIndex={-1}
+        >
+          {t(p.key)}
+        </p>
+        {lang === "hi" && <p class="mt-3 text-sm text-muted-foreground">{t("res.enDetail")}</p>}
+        <Card class="mt-4 p-5 sm:p-8">
+          {/* Trusted HTML: rendered from the repository's own markdown by web/scripts/build-data.ts. */}
+          {docs && <article class="doc" lang="en" dangerouslySetInnerHTML={{ __html: p.html(docs) }} />}
+        </Card>
+      </Page>
+    </div>
   );
 }
