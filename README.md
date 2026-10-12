@@ -53,6 +53,8 @@ Input format: see `src/engine/types.ts` (`EstimateInputSchema`) and `examples/`.
 | `src/cases/`             | Case-library schema, loading and similarity matching                       |
 | `src/rules/`             | Loading and validation of the rules files                                  |
 | `src/cli/`               | `mact` command-line tool                                                   |
+| `src/agent/`             | Daily case agent: Indian Kanoon fetch, quote verifier, review Sheet        |
+| `supabase/migrations/`   | Schema of the agent's private database (`docs/case-agent.md`)              |
 | `tests/`                 | Unit, persona, property-based, golden (SC judgment) and case-library tests |
 | `docs/`                  | Methodology and law notes                                                  |
 
