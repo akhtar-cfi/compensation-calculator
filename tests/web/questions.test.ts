@@ -10,7 +10,9 @@ import {
   progress,
   pruneInactive,
   stopsOf,
+  ZONED_STATES,
 } from "../../web/src/questions.js";
+import { loadRules } from "../../src/rules/load.js";
 import { validate } from "../../web/src/validate.js";
 
 const TODAY = "2026-10-11";
@@ -30,7 +32,7 @@ const base: FormState = {
 };
 
 const QUICK = ["kind", "checks", "age", "work", "family"];
-const MORE = ["dates", "earnings", "dependants", "medical"];
+const MORE = ["dates", "medical"];
 
 describe("the quick estimate and its details", () => {
   it("asks every answer in exactly one block", () => {
@@ -46,11 +48,13 @@ describe("the quick estimate and its details", () => {
       "when",
       "state",
       "dates",
-      "earnings",
       "recovery",
       "medical",
     ]);
     expect(activeBlocks({ ...base, vehicleTraced: "yes" })).toContain("insurance");
+    // Income details only where there is one to give (an area only where wages differ by area).
+    expect(activeBlocks({ ...base, employment: "informal" })).toContain("earnings");
+    expect(activeBlocks({ ...base, state: "CENTRAL" })).toContain("earnings");
   });
 
   it("is at most 8 quick steps, each needed for a number", () => {
@@ -82,6 +86,14 @@ describe("the quick estimate and its details", () => {
         s164: "accepted_via_insurer",
       }),
     ).toEqual(["owner_driver", "unidentified", "s164_insurer"]);
+  });
+
+  it("asks the area only for states whose wage differs by area", () => {
+    const rules = loadRules();
+    const zoned = Object.entries(rules.minimumWages)
+      .filter(([, w]) => w.zones.length > 1)
+      .map(([code]) => code);
+    expect([...ZONED_STATES].sort()).toEqual(zoned.sort());
   });
 
   it("forgets answers on a branch the person left", () => {
@@ -125,13 +137,14 @@ const anyForm: fc.Arbitrary<FormState> = fc.record({
   spouse: fc.constantFrom("", "yes", "no"),
   children: str(["0", "2", "-1", "x", "25"]),
   parents: str(["0", "2", "3"]),
-  dependentParents: str(["0", "1", "5"]),
+  dependentParents: str(["0", "1", "2", "5", "unknown"]),
   medicalBills: str(["100000", "x"]),
   cashlessPaid: str(["50000", "200000"]),
   certificatePct: str(["40", "120"]),
   noCertificate: fc.boolean(),
   certificateBasis: fc.constantFrom("", "whole_body", "limb", "unknown"),
   workCapacity: fc.constantFrom("", "unknown", "full", "none"),
+  functionalPct: str(["50", "200"]),
   monthsOffWork: str(["6", "x"]),
   permanentAttendant: fc.boolean(),
 }) as fc.Arbitrary<FormState>;

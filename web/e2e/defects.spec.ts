@@ -39,8 +39,10 @@ test("2. at 1280 x 720 the whole estimate is reachable by scrolling the page", a
   await expect(print).toBeInViewport();
 });
 
-for (const pct of [175, 200])
-  test(`3. a phone with text at ${pct}% does not scroll sideways`, async ({ page }) => {
+for (const pct of [150, 175, 200])
+  test(`3. a phone with text at ${pct}% does not scroll sideways, and choices stay readable`, async ({
+    page,
+  }) => {
     // Before: fixed-width date boxes pushed the page to 450-548 px wide.
     await page.setViewportSize({ width: 360, height: 800 });
     await page.goto("#/");
@@ -53,6 +55,22 @@ for (const pct of [175, 200])
     await radio(page, "proof", "salary_slip");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
+    // Each choice's words stay whole: the label is at least as wide as its longest word.
+    const squeezed = await page.locator('[data-question="work"] label').evaluateAll(
+      (els) =>
+        els.filter((el) => {
+          const text = el.querySelector("span.min-w-0") as HTMLElement | null;
+          return text ? text.scrollWidth > text.clientWidth + 1 : false;
+        }).length,
+    );
+    expect(squeezed).toBe(0);
+    // And with an estimate on the page.
+    await page.evaluate(() => (document.documentElement.style.fontSize = ""));
+    await fillForm(page, salaried());
+    await page.evaluate((p) => (document.documentElement.style.fontSize = `${p}%`), pct);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth),
+    ).toBeLessThanOrEqual(0);
   });
 
 test("4. 'no minimum wage' only points to a proof question that exists", async ({ page }) => {
@@ -79,7 +97,8 @@ test("5. a monthly tax larger than the salary is refused", async ({ page }) => {
   await page.fill("#monthlyTax", "50000");
   await leave(page);
   await expect(page.locator("#monthlyTax-error")).toContainText("less than the salary");
-  await expect(page.locator("#result [data-testid=headline]")).toHaveCount(0);
+  // The last estimate stays, marked out of date, until the tax is corrected.
+  await expect(page.getByTestId("stale")).toBeVisible();
 });
 
 test("6. on a phone, an answer with keyboard focus is never under the bottom bar", async ({ page }) => {
@@ -88,23 +107,30 @@ test("6. on a phone, an answer with keyboard focus is never under the bottom bar
   await fillForm(page, salaried());
   await page.locator("#page-title").focus();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page.getByTestId("bottom-bar")).toBeVisible();
+  const bar = page.getByTestId("bottom-bar");
+  await expect(bar).toBeVisible();
+  // Tabbing to a choice near the bottom of the screen scrolls it clear of the bar (the page keeps room for it).
   await page.locator('input[name="married"][value="yes"]').focus();
-  await expect(page.getByTestId("bottom-bar")).toHaveCount(0);
-  expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollPaddingBottom)).not.toBe(
-    "auto",
-  );
+  if (await bar.count()) {
+    const barTop = (await bar.boundingBox())!.y;
+    const choice = (await page.locator('label[for="married-yes"]').boundingBox())!;
+    expect(choice.y + choice.height).toBeLessThanOrEqual(barTop);
+  }
+  // Typing in a box (the keyboard is open): the bar is gone.
+  await page.locator("#age").focus();
+  await expect(bar).toHaveCount(0);
 });
 
 test("7. the keyboard focus stays on the page when a button disables or goes away", async ({ page }) => {
   // Before: focus dropped to the page body.
   await page.goto("#/");
   await radio(page, "kind", "death");
-  await page.fill("#children", "1");
-  await page.locator("#children-less").focus();
+  await radio(page, "children", "more");
+  await page.fill("#childrenMore", "6");
+  await page.locator("#childrenMore-less").focus();
   await page.keyboard.press("Enter");
-  await expect(page.locator("#children")).toHaveValue("0");
-  await expect(page.locator("#children-more")).toBeFocused();
+  await expect(page.locator("#childrenMore")).toHaveValue("5");
+  await expect(page.locator("#childrenMore-more")).toBeFocused();
   await page.getByRole("button", { name: "Start again" }).click();
   await page.getByRole("button", { name: "Keep my answers" }).click();
   await expect(page.getByTestId("restart")).toBeFocused();
@@ -136,18 +162,23 @@ test("10. a count typed above the limit is refused", async ({ page }) => {
   // Before: 25 children were accepted (+ stops at 20), and − then jumped from 25 to 20.
   await page.goto("#/");
   await radio(page, "kind", "death");
-  await page.fill("#children", "25");
+  await radio(page, "children", "more");
+  await page.fill("#childrenMore", "25");
   await leave(page);
-  await expect(page.locator("#children-error")).toContainText("up to 20");
+  await expect(page.locator("#childrenMore-error")).toContainText("up to 20");
 });
 
-test("11. dependent parents cannot be more than the parents claiming", async ({ page }) => {
-  // Before: 2 dependent parents with 0 parents gave no error.
+test("11. whether the parents depended on the person is asked, not silently assumed", async ({ page }) => {
+  // Before: an optional "dependent parents" box, left empty, assumed both parents depended (about ₹6 lakh), and
+  // 2 dependent parents with 0 parents gave no error.
   await fillForm(page, salaried());
-  await openGroup(page, "dependants");
-  await page.fill("#dependentParents", "2");
-  await leave(page);
-  await expect(page.locator("#dependentParents-error")).toContainText("more than the parents");
+  await expect(page.locator('input[name="dependentParents"]')).toHaveCount(0); // no parents claiming
+  await radio(page, "parents", "2");
+  await expect(page.locator("#result [data-missing=dependentParents]")).toBeVisible();
+  await radio(page, "dependentParents", "unknown");
+  await expect(page.getByTestId("parents-assumed")).toContainText("If they did not, about");
+  await radio(page, "dependentParents", "0");
+  await expect(page.getByTestId("parents-assumed")).toHaveCount(0);
 });
 
 test("12. amounts that can only be a typing slip are refused, and large ones questioned", async ({
@@ -164,4 +195,68 @@ test("12. amounts that can only be a typing slip are refused, and large ones que
   await page.fill("#monthlySalary", "15 lakh");
   await expect(page.locator("#monthlySalary-error")).toHaveCount(0);
   await expect(page.getByTestId("monthlySalary-check")).toContainText("Please check it");
+});
+
+/* From the second round of reviews (phone and desktop), 12 Oct 2026. */
+
+test("a future month cannot be chosen, and a wrong answer keeps the last estimate in view, marked out of date", async ({
+  page,
+}) => {
+  await fillForm(page, salaried());
+  const now = new Date();
+  await page.selectOption("#accidentDate-year", String(now.getFullYear()));
+  const months = await page.locator("#accidentDate-month option").evaluateAll((o) => o.length - 1);
+  expect(months).toBe(now.getMonth() + 1);
+  await page.selectOption("#accidentDate-year", "2025");
+  await page.selectOption("#accidentDate-month", "6");
+  await page.fill("#age", "abc");
+  await leave(page);
+  await expect(page.getByTestId("stale")).toContainText("Out of date");
+  await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
+  await page.fill("#age", "30");
+  await expect(page.getByTestId("stale")).toHaveCount(0);
+});
+
+test("the estimate says how the last change moved it", async ({ page }) => {
+  await fillForm(page, salaried());
+  await page.fill("#monthlySalary", "30000");
+  await expect(page.locator("#result").getByTestId("change")).toContainText("Up ₹");
+});
+
+test("on a laptop, a short summary of the estimate stays in view beside the questions", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await fillForm(page, salaried());
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const rail = page.getByTestId("rail");
+  await expect(rail).toBeInViewport();
+  await expect(rail).toContainText("₹");
+  const box = (await rail.boundingBox())!;
+  expect(box.height).toBeLessThan(700);
+  await expect(page.getByTestId("bottom-bar")).toBeHidden();
+});
+
+test("the offer check gives a plain answer and follows changed assumptions", async ({ page }) => {
+  await fillForm(page, salaried());
+  await page.getByRole("link", { name: "Check an insurance offer against this estimate" }).click();
+  await expect(page.locator("#offer-amount")).toBeFocused();
+  await page.keyboard.type("10,00,000");
+  await page.getByRole("button", { name: "Check the offer" }).click();
+  await expect(page.getByTestId("offer-verdict")).toHaveText("Far below the estimate");
+  const before = await page.getByTestId("offer-award").textContent();
+  await page.getByRole("button", { name: "Change the assumptions" }).click();
+  await page.fill("#offer-years", "3");
+  await expect(page.getByTestId("offer-award")).not.toHaveText(before!);
+});
+
+test("the two salaried kinds of work say how they differ", async ({ page }) => {
+  await page.goto("#/");
+  await expect(page.locator("#employment-permanent-hint")).toContainText("yearly pay rises");
+  await expect(page.locator("#employment-fixed_salary-hint")).toContainText("no regular pay rises");
+});
+
+test("the printout names the facts the estimate rests on", async ({ page }) => {
+  await fillForm(page, salaried());
+  await page.emulateMedia({ media: "print" });
+  await expect(page.getByTestId("print-facts")).toContainText("June 2025");
+  await expect(page.getByTestId("print-facts")).toContainText("2 children");
 });

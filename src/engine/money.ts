@@ -21,6 +21,17 @@ export function formatINR(n: number): string {
   return `${neg ? "-" : ""}₹${grouped}`;
 }
 
+/**
+ * Rupees with paise when the amount is not whole ("₹33,333.33"), for the inputs of a worked line: rounded inputs
+ * would not multiply out to the amount shown.
+ */
+export function formatINRPrecise(n: number): string {
+  const paise = Math.round(Math.abs(n) * 100) % 100;
+  if (paise === 0) return formatINR(n);
+  const whole = formatINR(n < 0 ? Math.ceil(n) : Math.floor(n));
+  return `${whole}.${String(paise).padStart(2, "0")}`;
+}
+
 /** Human figure to two significant digits in lakh/crore: 5281500 -> "₹53 lakh". */
 export function formatApprox(n: number): string {
   const abs = Math.abs(n);

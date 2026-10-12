@@ -1,7 +1,7 @@
 import { useMemo, useState } from "preact/hooks";
 import { checkOffer, type EstimateOutput } from "../../../src/engine/index.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
-import { Button, Card, H2 } from "../components/ui";
+import { Button, Card, H2, Tel } from "../components/ui";
 import { Disclosure } from "../components/result";
 import { MoneyInput, TextInput } from "../components/form";
 import { rules } from "../data";
@@ -38,6 +38,27 @@ const parse = (s: string) => {
   return t === "" ? NaN : Number(t);
 };
 
+/** Reads the figures typed: each must be a number within its limits. */
+function readOffer(f: OfferForm): {
+  errs: Partial<Record<keyof OfferForm, string>>;
+  values: Record<keyof OfferForm, number>;
+} {
+  const errs: Partial<Record<keyof OfferForm, string>> = {};
+  const values = {} as Record<keyof OfferForm, number>;
+  for (const k of Object.keys(LIMITS) as (keyof OfferForm)[]) {
+    const n = k === "amount" ? (parseAmount(f[k]) ?? NaN) : parse(f[k]);
+    const [lo, hi] = LIMITS[k];
+    if (f[k].trim() === "") errs[k] = "err.required";
+    else if (!Number.isFinite(n) || n < lo || n > hi) errs[k] = "err.invalid";
+    values[k] = n;
+  }
+  return { errs, values };
+}
+
+/** The plain answer to "is the offer fair?", from the offer as a share of the estimate. */
+const verdict = (pct: number) =>
+  pct < 25 ? "far" : pct < 50 ? "well" : pct < 80 ? "below" : pct < 95 ? "near" : "close";
+
 /**
  * "Got an offer from the insurer?": the offer as a share of the estimate, what the award would be worth with
  * interest after the usual wait, and what waiting is worth today after fees. Runs `checkOffer`, in the page.
@@ -65,23 +86,21 @@ export function OfferCheck(props: { est: EstimateOutput }) {
   );
 
   const set = (k: keyof OfferForm, v: string) => {
-    setF({ ...f, [k]: v });
-    setChecked(undefined);
+    const next = { ...f, [k]: v };
+    setF(next);
     if (errors[k]) setErrors({ ...errors, [k]: undefined });
+    // Once checked, the result follows every change that makes a complete, valid set of figures (as the estimate
+    // above does); while a figure is half typed, the last result stays.
+    if (checked) {
+      const r = readOffer(next);
+      if (!Object.keys(r.errs).length) setChecked(r.values);
+    }
   };
   const assumptionError = (["years", "interest", "discount", "fee"] as const).some((k) => errors[k]);
 
   const submit = (e: Event) => {
     e.preventDefault();
-    const errs: Partial<Record<keyof OfferForm, string>> = {};
-    const v = {} as Record<keyof OfferForm, number>;
-    for (const k of Object.keys(LIMITS) as (keyof OfferForm)[]) {
-      const n = k === "amount" ? (parseAmount(f[k]) ?? NaN) : parse(f[k]);
-      const [lo, hi] = LIMITS[k];
-      if (f[k].trim() === "") errs[k] = "err.required";
-      else if (!Number.isFinite(n) || n < lo || n > hi) errs[k] = "err.invalid";
-      v[k] = n;
-    }
+    const { errs, values } = readOffer(f);
     setErrors(errs);
     if (Object.keys(errs).length) {
       const first = (Object.keys(LIMITS) as (keyof OfferForm)[]).find((k) => errs[k]);
@@ -91,7 +110,7 @@ export function OfferCheck(props: { est: EstimateOutput }) {
       return;
     }
     countView("offer");
-    setChecked(v);
+    setChecked(values);
   };
 
   const field = (k: keyof OfferForm, label: string, suffix: string) => (
@@ -141,7 +160,13 @@ export function OfferCheck(props: { est: EstimateOutput }) {
 
       {result && (
         <div class="mt-6 border-t border-border pt-5" data-testid="offer-result" aria-live="polite">
-          <p class="font-heading text-lg font-bold text-foreground" data-testid="offer-summary">
+          <p class="font-heading text-lg font-bold text-foreground" data-testid="offer-verdict">
+            {t(`offer.verdict.${verdict(result.offerPctOfStandard)}`)}
+          </p>
+          <p class="mt-1 text-sm text-foreground">
+            <Tel text={t("offer.advice")} />
+          </p>
+          <p class="mt-3 text-sm font-semibold text-foreground" data-testid="offer-summary">
             {t("offer.summary", {
               offer: approx(formatApprox(checked!.amount)),
               p: result.offerPctOfStandard,

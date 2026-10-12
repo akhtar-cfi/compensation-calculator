@@ -165,3 +165,14 @@ export function ShareActions(props: { text: string; title: string }) {
     </div>
   );
 }
+
+/** "Up ₹50,000 from ₹16,58,186": how the amount moved with the last change. */
+export function ChangeLine(props: { change: { from: number; to: number }; class?: string }) {
+  const t = useT();
+  const { from, to } = props.change;
+  return (
+    <p class={`text-xs font-medium text-foreground ${props.class ?? ""}`} data-testid="change">
+      {t(to > from ? "res.up" : "res.down", { d: formatINR(Math.abs(to - from)), from: formatINR(from) })}
+    </p>
+  );
+}

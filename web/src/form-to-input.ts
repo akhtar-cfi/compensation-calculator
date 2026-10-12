@@ -45,6 +45,8 @@ export interface FormState {
   noCertificate: boolean;
   certificateBasis: "" | "whole_body" | "limb" | "unknown";
   workCapacity: "" | "unknown" | "full" | "with_difficulty" | "lighter_only" | "none";
+  /** A functional disability assessed by a doctor or medical board, if there is one. */
+  functionalPct: string;
   monthsOffWork: string;
   permanentAttendant: boolean;
 }
@@ -82,6 +84,7 @@ export const EMPTY_FORM: FormState = {
   noCertificate: false,
   certificateBasis: "",
   workCapacity: "",
+  functionalPct: "",
   monthsOffWork: "",
   permanentAttendant: false,
 };
@@ -139,8 +142,15 @@ export const accidentDay = (f: FormState) => f.accidentDate.split("-")[2] ?? "";
 /** Plain digits, with an optional decimal part: no signs, exponents ("1e9") or hex. */
 const DECIMAL = /^\d+(\.\d+)?$/;
 
+/** Devanagari digits (०–९), as typed on a Hindi keyboard, read as 0–9. */
+const asciiDigits = (s: string) => s.replace(/[०-९]/g, (d) => String(d.charCodeAt(0) - 0x966));
+
+/** A count or a number of years as people type it: "30", "३०", "30 yrs", "30 साल". */
 const num = (s: string): number | undefined => {
-  const t = s.replace(/[,\s₹]/g, "");
+  const t = asciiDigits(s)
+    .toLowerCase()
+    .replace(/[,\s₹]/g, "")
+    .replace(/(years?|yrs?|साल|वर्ष)$/, "");
   if (t === "") return undefined;
   return DECIMAL.test(t) ? Number(t) : NaN;
 };
@@ -156,7 +166,12 @@ const SCALES: readonly [RegExp, number][] = [
  * Undefined when empty, NaN when it cannot be read.
  */
 export function parseAmount(s: string): number | undefined {
-  const t = s.replace(/[,\s₹]/g, "").toLowerCase();
+  // "Rs 25,000/-" and "INR 25000" are how amounts are written on slips and in judgments.
+  const t = asciiDigits(s)
+    .toLowerCase()
+    .replace(/[,\s₹]/g, "")
+    .replace(/^(rs\.?|inr)/, "")
+    .replace(/\/-$/, "");
   if (t === "") return undefined;
   for (const [re, scale] of SCALES) {
     const m = re.exec(t);
@@ -232,7 +247,7 @@ export function formToInput(f: FormState): FormResult {
       spouse: married && death ? yesNo(f.spouse) : undefined,
       children: death ? num(f.children) : undefined,
       parents: death ? num(f.parents) : undefined,
-      dependentParents: death ? num(f.dependentParents) : undefined,
+      dependentParents: death && f.dependentParents !== "unknown" ? num(f.dependentParents) : undefined,
     }),
     medical:
       parseAmount(f.medicalBills) !== undefined
@@ -244,6 +259,7 @@ export function formToInput(f: FormState): FormResult {
             certificatePct: f.noCertificate ? undefined : num(f.certificatePct),
             certificateBasis: f.noCertificate ? undefined : f.certificateBasis || undefined,
             workCapacity: known(f.workCapacity),
+            functionalPct: num(f.functionalPct),
             monthsOffWork: num(f.monthsOffWork),
             permanentAttendant: f.permanentAttendant || undefined,
           })

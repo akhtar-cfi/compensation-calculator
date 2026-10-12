@@ -232,7 +232,13 @@ export function DateInput(props: FieldProps & { value: string; onInput: (v: stri
  * stays "Y-M-D", keeping a day entered elsewhere; without a day the 1st is used.
  */
 export function MonthYear(
-  props: FieldProps & { value: string; onInput: (v: string) => void; fromYear: number; toYear: number },
+  props: FieldProps & {
+    value: string;
+    onInput: (v: string) => void;
+    fromYear: number;
+    /** The latest month that can be chosen ("YYYY-MM"): no month after it is offered. */
+    latest: string;
+  },
 ) {
   const t = useT();
   const [y, m, d] = dateParts(props.value);
@@ -241,8 +247,10 @@ export function MonthYear(
     p[part] = v;
     props.onInput(p.join("-"));
   };
+  const [lastY, lastM] = props.latest.split("-").map(Number) as [number, number];
   const years: string[] = [];
-  for (let n = props.toYear; n >= props.fromYear; n--) years.push(String(n));
+  for (let n = lastY; n >= props.fromYear; n--) years.push(String(n));
+  const months = Array.from({ length: Number(y) === lastY ? lastM : 12 }, (_, i) => i + 1);
   const sel = (
     id: string,
     value: string,
@@ -284,7 +292,7 @@ export function MonthYear(
           m ? String(Number(m)) : "",
           [
             { value: "", label: t("date.month") },
-            ...Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: t(`month.${i + 1}`) })),
+            ...months.map((n) => ({ value: String(n), label: t(`month.${n}`) })),
           ],
           (v) => set(1, v),
         )}
@@ -364,7 +372,9 @@ export function Radios(
     layout === "stack"
       ? "grid gap-2 sm:grid-cols-2"
       : layout === "grid"
-        ? "grid grid-cols-2 gap-2 sm:grid-cols-3"
+        ? // Columns at least 11rem wide: one column on a phone, and still one when the text is made larger (2 or 3
+          // columns would squeeze each label to a few letters).
+          "grid grid-cols-[repeat(auto-fill,minmax(min(100%,11rem),1fr))] gap-2"
         : "flex flex-wrap gap-2";
   return (
     <fieldset id={props.id} aria-describedby={describedBy(props)}>
@@ -389,7 +399,7 @@ export function Radios(
                   : props.error
                     ? "border-danger bg-background"
                     : "border-input bg-background shadow-sm hover:border-foreground/30 hover:bg-subtle"
-              } focus-within:ring-2 focus-within:ring-brand/30 focus-within:ring-offset-1`}
+              } has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand`}
             >
               <input
                 id={id}
@@ -425,7 +435,7 @@ export function Radios(
                 {o.hint && (
                   <span
                     id={`${id}-hint`}
-                    class={`mt-0.5 block text-xs leading-snug ${checked ? "text-foreground/75" : "text-muted-foreground"}`}
+                    class={`mt-0.5 block text-[0.8125rem] leading-snug ${checked ? "text-foreground/75" : "text-muted-foreground"}`}
                   >
                     {o.hint}
                   </span>
@@ -445,19 +455,26 @@ export function Radios(
  * person can tap or type. "0" is an answer, not a default.
  */
 export function Counter(
-  props: FieldProps & { value: string; onInput: (v: string) => void; max?: number; noun: string },
+  props: FieldProps & {
+    value: string;
+    onInput: (v: string) => void;
+    min?: number;
+    max?: number;
+    noun: string;
+  },
 ) {
   const t = useT();
   const n = props.value.trim() === "" ? undefined : Number(props.value);
+  const min = props.min ?? 0;
   const max = props.max ?? 20;
   const step = (d: number) => {
-    const cur = n === undefined || !Number.isFinite(n) ? (d > 0 ? 0 : 1) : n;
-    const next = Math.min(max, Math.max(0, cur + d));
+    const cur = n === undefined || !Number.isFinite(n) ? (d > 0 ? min : min + 1) : n;
+    const next = Math.min(max, Math.max(min, cur + d));
     props.onInput(String(next));
     // A button that becomes disabled under the keyboard focus would drop focus to the page: move it to the other.
-    if (next === 0 || next === max)
+    if (next === min || next === max)
       requestAnimationFrame(() => {
-        const other = document.getElementById(`${props.id}-${next === 0 ? "more" : "less"}`);
+        const other = document.getElementById(`${props.id}-${next === min ? "more" : "less"}`);
         if (
           document.activeElement === document.body ||
           (document.activeElement as HTMLButtonElement)?.disabled
@@ -476,7 +493,7 @@ export function Counter(
           class={btn}
           aria-label={t("counter.less", { noun: props.noun })}
           aria-controls={props.id}
-          disabled={n === 0}
+          disabled={n !== undefined && n <= min}
           onClick={() => step(-1)}
         >
           <Minus aria-hidden="true" class="h-4 w-4" />

@@ -9,7 +9,13 @@ import type { FieldName, Validation } from "./validate.js";
  * Each block lists the answers it shows for this person; nothing here touches the DOM, so it is unit-tested alone.
  */
 export type StepId = "kind" | "checks" | "age" | "work" | "family" | "injury" | "when" | "state";
-export type GroupId = "dates" | "insurance" | "earnings" | "dependants" | "recovery" | "medical";
+export type GroupId = "dates" | "insurance" | "earnings" | "recovery" | "medical";
+
+/**
+ * States whose minimum wage differs by area, so the area is asked. Kept here (the question logic does not load the
+ * rules); a test checks it against the rules.
+ */
+export const ZONED_STATES: ReadonlySet<string> = new Set(["CENTRAL"]);
 export type BlockId = StepId | GroupId;
 
 export interface Block {
@@ -46,7 +52,7 @@ function earningsFields(f: FormState): FieldName[] {
     ...when(inc.includes("claimed") && noProof, "claimedMonthly"),
     ...when(inc.includes("pension"), "familyPensionMonthly"),
     ...when(inc.includes("course"), "studentCourse"),
-    ...when(Boolean(f.state), "zone"),
+    ...when(ZONED_STATES.has(f.state), "zone"),
   ];
 }
 
@@ -71,9 +77,17 @@ export const BLOCKS: readonly Block[] = [
   {
     id: "family",
     part: "quick",
-    all: ["married", "spouse", "children", "parents"],
+    all: ["married", "spouse", "children", "parents", "dependentParents"],
     fields: (f) =>
-      death(f) ? ["married", ...when(f.married === "yes", "spouse"), "children", "parents"] : ["married"],
+      death(f)
+        ? [
+            "married",
+            ...when(f.married === "yes", "spouse"),
+            "children",
+            "parents",
+            ...when(Number(f.parents) > 0, "dependentParents"),
+          ]
+        : ["married"],
   },
   {
     id: "injury",
@@ -102,16 +116,10 @@ export const BLOCKS: readonly Block[] = [
     fields: earningsFields,
   },
   {
-    id: "dependants",
-    part: "more",
-    all: ["dependentParents"],
-    fields: (f) => when(death(f), "dependentParents"),
-  },
-  {
     id: "recovery",
     part: "more",
-    all: ["workCapacity", "permanentAttendant"],
-    fields: (f) => when(injury(f), "workCapacity", "permanentAttendant"),
+    all: ["workCapacity", "functionalPct", "permanentAttendant"],
+    fields: (f) => when(injury(f), "workCapacity", "functionalPct", "permanentAttendant"),
   },
   {
     id: "medical",

@@ -1,4 +1,4 @@
-import { formatFactor, formatINR, rupees } from "./money.js";
+import { formatFactor, formatINR, formatINRPrecise, rupees } from "./money.js";
 import type { Intermediate, PayableHead } from "./types.js";
 
 export interface InjuryParams {
@@ -80,7 +80,7 @@ export function computeInjury(p: InjuryParams): { intermediates: Intermediate[];
     label: "Loss of earnings during treatment",
     amount: during,
     formula: "monthly income x months off work",
-    worked: `${formatINR(p.monthlyIncome)} × ${p.monthsOffWork} = ${formatINR(during)}`,
+    worked: `${formatINRPrecise(p.monthlyIncome)} × ${p.monthsOffWork} = ${formatINR(during)}`,
     sources: [...new Set(["raj_kumar_2011", ...p.incomeSources])],
   });
   push({
@@ -98,7 +98,7 @@ export function computeInjury(p: InjuryParams): { intermediates: Intermediate[];
     amount: capacity,
     formula: "monthly income x 12 x (1 + future prospects) x functional disability x multiplier",
     worked: [
-      formatINR(p.monthlyIncome),
+      formatINRPrecise(p.monthlyIncome),
       "12",
       ...(p.futureProspectsPct ? [formatFactor(1 + p.futureProspectsPct / 100)] : []),
       `${formatFactor(p.functionalPct)}%`,
@@ -113,7 +113,7 @@ export function computeInjury(p: InjuryParams): { intermediates: Intermediate[];
     label: "Future attendant charges",
     amount: futureAttendant,
     formula: "attendant wage x 12 x multiplier x attendants",
-    worked: `${formatINR(p.futureAttendantMonthly)} × 12 × ${p.multiplier}${p.attendants > 1 ? ` × ${p.attendants}` : ""} = ${formatINR(futureAttendant)}`,
+    worked: `${formatINRPrecise(p.futureAttendantMonthly)} × 12 × ${p.multiplier}${p.attendants > 1 ? ` × ${p.attendants}` : ""} = ${formatINR(futureAttendant)}`,
     sources: ["kajal_2020", "hansraj_2026"],
   });
   push({

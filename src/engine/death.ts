@@ -1,5 +1,5 @@
 import type { ConventionalAmounts } from "./formula.js";
-import { formatFactor, formatINR, formatShare, rupees } from "./money.js";
+import { formatFactor, formatINR, formatINRPrecise, formatShare, rupees } from "./money.js";
 import type { Intermediate, PayableHead } from "./types.js";
 
 export interface DeathParams {
@@ -76,7 +76,7 @@ export function computeDeath(p: DeathParams): { intermediates: Intermediate[]; h
       amount: dependency,
       formula: "monthly income x 12 x (1 + future prospects) x (1 - personal deduction) x multiplier",
       worked: [
-        formatINR(p.monthlyIncome),
+        formatINRPrecise(p.monthlyIncome),
         "12",
         ...(p.futureProspectsPct ? [formatFactor(1 + p.futureProspectsPct / 100)] : []),
         ...(p.deduction ? [`(1 − ${formatShare(p.deduction)})`] : []),

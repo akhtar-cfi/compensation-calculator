@@ -18,6 +18,7 @@ const ok: FormState = {
   married: "no",
   children: "0",
   parents: "2",
+  dependentParents: "2",
 };
 
 describe("validation", () => {
@@ -172,11 +173,26 @@ describe("validation", () => {
     expect(validate({ ...salaried, monthlySalary: "15 lakh" }, TODAY).errors).toEqual({});
   });
 
-  it("does not count more dependent parents than parents claiming", () => {
-    expect(validate({ ...ok, parents: "0", dependentParents: "2" }, TODAY).errors.dependentParents).toBe(
+  it("asks whether the parents depended on the person, with 'Not sure', and never counts more than claim", () => {
+    expect(validate({ ...ok, dependentParents: "" }, TODAY).errors).toEqual({
+      dependentParents: "err.required",
+    });
+    expect(
+      validate({ ...ok, dependentParents: "unknown" }, TODAY).input?.family.dependentParents,
+    ).toBeUndefined();
+    expect(validate({ ...ok, dependentParents: "1" }, TODAY).input?.family.dependentParents).toBe(1);
+    expect(validate({ ...ok, parents: "1", dependentParents: "2" }, TODAY).errors.dependentParents).toBe(
       "err.dependentParents",
     );
-    expect(validate({ ...ok, parents: "2", dependentParents: "1" }, TODAY).errors).toEqual({});
+    // No parents claiming: not asked, and a stale answer is ignored.
+    expect(validate({ ...ok, parents: "0", dependentParents: "2" }, TODAY).errors).toEqual({});
+  });
+
+  it("reads numbers as Indian forms and slips write them", () => {
+    expect(validate({ ...ok, age: "३०" }, TODAY).input?.victim.ageYears).toBe(30);
+    expect(validate({ ...ok, age: "30 yrs" }, TODAY).input?.victim.ageYears).toBe(30);
+    for (const typed of ["Rs 25,000/-", "Rs. 25000", "INR 25000", "२५०००", "₹25,000/-"])
+      expect(parseAmount(typed), typed).toBe(25000);
   });
 
   it("does not accept a cashless payment larger than the bills", () => {

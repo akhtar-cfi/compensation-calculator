@@ -97,7 +97,7 @@ function Demo(props: { name: string }) {
           label="When did the accident happen?"
           hint="Month and year are enough."
           fromYear={2020}
-          toYear={2026}
+          latest="2026-10"
           value={month}
           onInput={setMonth}
         />

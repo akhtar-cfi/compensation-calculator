@@ -244,7 +244,7 @@ test("a bar at the bottom shows the estimate while it is out of view, and hides 
   await page.locator("#page-title").focus();
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(bar).toContainText("₹");
-  await page.locator('input[name="kind"][value="death"]').focus(); // answering: nothing covers the answers
+  await page.locator("#age").focus(); // typing: the keyboard is open, nothing covers the box
   await expect(bar).toHaveCount(0);
   await page.locator("#page-title").focus();
   await expect(bar).toBeVisible();
@@ -303,12 +303,13 @@ test("the whole form can be answered with the keyboard alone", async ({ page }) 
   await tabTo('input[name="married"][value="yes"]');
   await page.keyboard.press("ArrowRight");
   await expect(page.locator('input[name="married"][value="no"]')).toBeChecked();
-  await tabTo("#children");
-  await page.keyboard.type("0");
+  await tabTo('input[name="children"][value="0"]');
+  await page.keyboard.press("Space");
   await tabTo('input[name="parents"][value="0"]');
   await page.keyboard.press("ArrowRight");
-  await page.keyboard.press("ArrowRight");
-  await expect(page.locator('input[name="parents"][value="2"]')).toBeChecked();
+  await expect(page.locator('input[name="parents"][value="1"]')).toBeChecked();
+  await tabTo('input[name="dependentParents"][value="1"]');
+  await page.keyboard.press("Space");
   await tabTo("#accidentDate-month");
   await page.keyboard.press("ArrowDown");
   await tabTo("#accidentDate-year");

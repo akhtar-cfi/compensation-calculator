@@ -2,12 +2,12 @@ import { CircleAlert, ListChecks } from "lucide-preact";
 import type { EstimateInput, EstimateOutput, Warning } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { rules } from "../data";
-import { useApprox, useT, useWarnText } from "../i18n";
-import { AnswerPanel, RangeBar, ShareActions } from "../components/result";
+import { hasKey, useApprox, useLang, useT, useWarnText } from "../i18n";
+import { AnswerPanel, ChangeLine, RangeBar, ShareActions } from "../components/result";
 import { Card, Notice, Tel, linkCls } from "../components/ui";
 import type { StopCode } from "../questions";
 import type { FieldName } from "../validate";
-import { shareText } from "../share";
+import { factLines, shareText } from "../share";
 
 const STOP_COPY: Record<StopCode, { title: string; body: string }> = {
   owner_driver: { title: "warn.OWNER_DRIVER_NO_166", body: "elig.owner" },
@@ -66,15 +66,51 @@ export function ResultSummary(props: {
   state: string;
   /** Whether a proof of income can be given for this type of work (the message then says how). */
   canProve: boolean;
+  /** The estimate shown is the last one, kept while an answer above is corrected. */
+  stale?: boolean;
+  /** How the amount moved with the last change. */
+  change?: { from: number; to: number } | undefined;
+  /** The accident date as answered ("June 2025 (day not given)"). */
+  accidentLabel: string;
+  /** How much the estimate rises by assuming the parents depended on the person ("Not sure" was answered). */
+  parentsAssumed?: number | undefined;
   onMissing: (id: FieldName) => void;
 }) {
   const t = useT();
+  const lang = useLang();
   const warnText = useWarnText();
   const approx = useApprox();
   const { est } = props;
 
-  const heading = (
-    <h2 class="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{t("sum.title")}</h2>
+  const heading = <h2 class="font-heading text-lg font-bold text-foreground">{t("sum.title")}</h2>;
+
+  /** The answers still needed (or to correct), the first few as links to them. */
+  const missingList = (
+    <ul class="mt-2 grid gap-1 text-sm">
+      {props.missing.slice(0, SHOWN).map((m) => (
+        <li key={m.id}>
+          <a
+            href={`#${m.id}`}
+            data-missing={m.id}
+            onClick={(e) => {
+              e.preventDefault();
+              props.onMissing(m.id);
+            }}
+            class={`inline-flex min-h-11 items-center sm:min-h-8 ${linkCls}`}
+          >
+            {m.label}
+          </a>
+          {m.invalid && (
+            <span class="ml-1.5 inline-block rounded border border-danger px-1 py-px text-xs whitespace-nowrap text-foreground">
+              {t("sum.check")}
+            </span>
+          )}
+        </li>
+      ))}
+      {props.missing.length > SHOWN && (
+        <li class="text-muted-foreground">{t("sum.andMore", { n: props.missing.length - SHOWN })}</li>
+      )}
+    </ul>
   );
 
   if (props.stop) {
@@ -94,10 +130,13 @@ export function ResultSummary(props: {
 
   if (!est) {
     const n = props.missing.length;
+    const onlyWrong = n > 0 && props.missing.every((m) => m.invalid);
     return (
       <Card class="p-5 sm:p-6" id="result">
         {heading}
-        <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{t("sum.empty")}</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+          {t(onlyWrong ? "sum.check.lead" : "sum.empty")}
+        </p>
         <p
           class="mt-4 flex items-center gap-2 text-sm font-semibold text-foreground"
           data-testid="answers-left"
@@ -105,29 +144,7 @@ export function ResultSummary(props: {
           <ListChecks aria-hidden="true" class="h-4 w-4 text-muted-foreground" />
           {t(n === 1 ? "sum.left1" : "sum.left", { n })}
         </p>
-        <ul class="mt-2 grid gap-1 text-sm">
-          {props.missing.slice(0, SHOWN).map((m) => (
-            <li key={m.id}>
-              <a
-                href={`#${m.id}`}
-                data-missing={m.id}
-                onClick={(e) => {
-                  e.preventDefault();
-                  props.onMissing(m.id);
-                }}
-                class={`inline-flex min-h-11 items-center sm:min-h-8 ${linkCls}`}
-              >
-                {m.label}
-              </a>
-              {m.invalid && (
-                <span class="ml-1.5 rounded border border-danger px-1 py-px text-xs text-foreground">
-                  {t("sum.check")}
-                </span>
-              )}
-            </li>
-          ))}
-          {n > SHOWN && <li class="text-muted-foreground">{t("sum.andMore", { n: n - SHOWN })}</li>}
-        </ul>
+        {missingList}
       </Card>
     );
   }
@@ -173,86 +190,131 @@ export function ResultSummary(props: {
   const cautions = [...est.warnings]
     .filter((w) => w.severity !== "info")
     .sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
+  // A low end far below the headline is the biggest risk to the number: say so in plain words, with its main cause.
+  const top = est.swingFactors[0];
+  const wide = r.conservative < 0.8 * r.standard && top;
   return (
     <Card class="p-5 sm:p-6" id="result">
       {heading}
-      <div class="mt-3">
-        <AnswerPanel
-          approx={approx(est.headline.approx)}
-          exact={est.headline.amount}
-          meaning={t("res.meaning")}
-        />
-      </div>
-
-      <h3 class="mt-5 text-sm font-semibold text-foreground">{t("res.range")}</h3>
-      <dl class="mt-2 grid gap-1.5 text-sm" data-testid="range">
-        {(["conservative", "standard", "claimantMax"] as const).map((s) => (
-          <div
-            key={s}
-            data-scenario={s}
-            data-amount={r[s]}
-            class={`flex items-baseline justify-between gap-3 ${s === "standard" ? "font-semibold text-foreground" : "text-muted-foreground"}`}
-          >
-            <dt>{t(`res.${s}`)}</dt>
-            <dd class="tabular-nums">{formatINR(r[s])}</dd>
-          </div>
-        ))}
-      </dl>
-      {!r.showBar ? (
-        <p class="mt-2 text-xs text-muted-foreground">{t("res.rangeWide")}</p>
-      ) : (r.claimantMax - r.conservative) / r.standard >= 0.05 ? (
-        // A narrow range is clearer as the three figures alone: a bar would make a 1% spread look wide.
-        <RangeBar conservative={r.conservative} standard={r.standard} claimantMax={r.claimantMax} />
-      ) : null}
-
-      {ps && (
-        <p class="mt-4 rounded-lg bg-subtle p-3 text-xs leading-relaxed text-foreground" data-testid="spread">
-          {t("res.spread", {
-            n: ps.n,
-            kind: t(`res.kind.${est.kind}`),
-            label: ps.label,
-            lo: rel(ps.p25),
-            hi: rel(ps.p75),
-            a: approx(formatApprox(r.standard * ps.p25)),
-            b: approx(formatApprox(r.standard * ps.p75)),
-          })}
-        </p>
+      {props.input && (
+        <ul class="mt-2 hidden text-sm text-foreground print:block" data-testid="print-facts">
+          {factLines(props.input, t, props.accidentLabel).map((l) => (
+            <li key={l}>{l}</li>
+          ))}
+        </ul>
       )}
-
-      {cautions.length > 0 && (
-        <div class="mt-4">
-          <p class="text-sm font-semibold text-foreground">{t("sum.read")}</p>
-          <ul class="mt-1 grid gap-0.5 text-sm">
-            {cautions.map((w) => (
-              <li key={w.code}>
-                <a
-                  href={`#warn-${w.code}`}
-                  class={`inline-flex min-h-11 items-start gap-2 py-1 sm:min-h-0 ${linkCls}`}
-                >
-                  <CircleAlert
-                    aria-hidden="true"
-                    class={`mt-0.5 h-4 w-4 shrink-0 ${w.severity === "stop" ? "text-danger" : "text-warning"}`}
-                  />
-                  {t(`warn.${w.code}`)}
-                </a>
-              </li>
-            ))}
-          </ul>
+      {props.stale && (
+        <div class="no-print mt-3" data-testid="stale">
+          <Notice severity="caution" title={t("sum.stale")}>
+            {missingList}
+          </Notice>
         </div>
       )}
+      <div class={props.stale ? "opacity-50" : ""} aria-hidden={props.stale ? "true" : undefined}>
+        <div class="mt-3">
+          <AnswerPanel
+            approx={approx(est.headline.approx)}
+            exact={est.headline.amount}
+            meaning={t("res.meaning")}
+          />
+          {props.change && <ChangeLine change={props.change} class="mt-2" />}
+        </div>
 
-      <div class="no-print mt-5 grid gap-2 border-t border-border pt-4">
+        <h3 class="mt-5 text-sm font-semibold text-foreground">{t("res.range")}</h3>
+        <dl class="mt-2 grid gap-1.5 text-sm" data-testid="range">
+          {(["conservative", "standard", "claimantMax"] as const).map((s) => (
+            <div
+              key={s}
+              data-scenario={s}
+              data-amount={r[s]}
+              class={`flex flex-wrap items-baseline justify-between gap-x-3 ${s === "standard" ? "font-semibold text-foreground" : "text-muted-foreground"}`}
+            >
+              <dt>{t(`res.${s}`)}</dt>
+              <dd class="tabular-nums">{formatINR(r[s])}</dd>
+            </div>
+          ))}
+        </dl>
+        {!r.showBar ? (
+          <p class="mt-2 text-xs text-muted-foreground">{t("res.rangeWide")}</p>
+        ) : (r.claimantMax - r.conservative) / r.standard >= 0.05 ? (
+          // A narrow range is clearer as the three figures alone: a bar would make a 1% spread look wide.
+          <RangeBar conservative={r.conservative} standard={r.standard} claimantMax={r.claimantMax} />
+        ) : null}
+
+        {ps && (
+          <p
+            class="mt-4 rounded-lg bg-subtle p-3 text-xs leading-relaxed text-foreground"
+            data-testid="spread"
+          >
+            {t("res.spread", {
+              n: ps.n,
+              kind: t(`res.kind.${est.kind}`),
+              label: hasKey(lang, `spread.${ps.label}`) ? t(`spread.${ps.label}`) : ps.label,
+              lo: rel(ps.p25),
+              hi: rel(ps.p75),
+              a: approx(formatApprox(r.standard * ps.p25)),
+              b: approx(formatApprox(r.standard * ps.p75)),
+            })}
+          </p>
+        )}
+
+        {props.parentsAssumed !== undefined && (
+          <div class="mt-4" data-testid="parents-assumed">
+            <Notice
+              severity="caution"
+              title={t("res.parentsAssumed", { d: approx(formatApprox(props.parentsAssumed)) })}
+            />
+          </div>
+        )}
+
+        {wide && (
+          <div class="mt-4" data-testid="wide">
+            <Notice severity="caution" title={t("res.wide", { lo: approx(formatApprox(r.conservative)) })}>
+              <span lang={hasKey(lang, `swing.${top.parameter}`) || lang === "en" ? undefined : "en"}>
+                {hasKey(lang, `swing.${top.parameter}`) ? t(`swing.${top.parameter}`) : top.description}
+              </span>
+            </Notice>
+          </div>
+        )}
+
+        {cautions.length > 0 && (
+          <div class="mt-4">
+            <p class="text-sm font-semibold text-foreground">{t("sum.read")}</p>
+            <ul class="mt-1 grid gap-0.5 text-sm">
+              {cautions.map((w) => (
+                <li key={w.code}>
+                  <a
+                    href={`#warn-${w.code}`}
+                    class={`inline-flex min-h-11 items-start gap-2 py-1 sm:min-h-0 ${linkCls}`}
+                  >
+                    <CircleAlert
+                      aria-hidden="true"
+                      class={`mt-0.5 h-4 w-4 shrink-0 ${w.severity === "stop" ? "text-danger" : "text-warning"}`}
+                    />
+                    {t(`warn.${w.code}`)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <div class={`no-print mt-5 grid gap-2 border-t border-border pt-4 ${props.stale ? "hidden" : ""}`}>
         <a href="#more" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
           {t("res.narrow")}
         </a>
-        <a href="#offer" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
+        <a href="#offer-amount" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
           {t("res.offer")}
         </a>
         <a href="#details" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
           {t("sum.details")}
         </a>
         <div class="mt-2">
-          <ShareActions text={shareText(est, props.input, t, siteUrl())} title={t("app.name")} />
+          <ShareActions
+            text={shareText(est, props.input, t, siteUrl(), props.accidentLabel)}
+            title={t("app.name")}
+          />
         </div>
       </div>
       <p class="mt-4 text-xs text-muted-foreground">

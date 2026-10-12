@@ -65,6 +65,13 @@ export async function pickMonth(page: Page, iso: string) {
   await page.selectOption("#accidentDate-year", y!);
 }
 
+/** Answers the number of children: a choice up to 4, then "5 or more" and the count. */
+export async function setChildren(page: Page, n: number) {
+  if (n < 5) return radio(page, "children", String(n));
+  await radio(page, "children", "more");
+  await page.fill("#childrenMore", String(n));
+}
+
 /** Opens a group of optional details, as a person would by tapping its title. */
 export async function openGroup(page: Page, id: string) {
   const g = page.locator(`details[data-question="${id}"]`);
@@ -113,8 +120,14 @@ async function answer(page: Page, block: string, input: EstimateInput) {
       await radio(page, "married", fam.married ? "yes" : "no");
       if (input.kind === "death") {
         if (fam.married) await radio(page, "spouse", fam.spouse ? "yes" : "no");
-        await page.fill("#children", String(fam.children ?? 0));
+        await setChildren(page, fam.children ?? 0);
         await radio(page, "parents", String(fam.parents ?? 0));
+        if (fam.parents)
+          await radio(
+            page,
+            "dependentParents",
+            fam.dependentParents === undefined ? "unknown" : String(fam.dependentParents),
+          );
       }
       return;
     case "injury":

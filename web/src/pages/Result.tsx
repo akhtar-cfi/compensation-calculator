@@ -45,7 +45,7 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
   );
 
   return (
-    <div class="grid gap-6">
+    <div class="grid grid-cols-1 gap-6">
       <Card class="p-5 sm:p-6" id="details">
         <H2>{t("det.title")}</H2>
         {important.length > 0 && (
@@ -119,9 +119,13 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
               <ul class="mt-3 grid gap-2">
                 {est.swingFactors.map((s) => (
                   <li key={s.parameter} class="rounded-lg border border-border p-3">
-                    <p class="text-sm font-medium text-foreground" lang={enOnly}>
-                      {s.description}
-                    </p>
+                    {hasKey(lang, `swing.${s.parameter}`) ? (
+                      <p class="text-sm font-medium text-foreground">{t(`swing.${s.parameter}`)}</p>
+                    ) : (
+                      <p class="text-sm font-medium text-foreground" lang={enOnly}>
+                        {s.description}
+                      </p>
+                    )}
                     <dl class="mt-2 grid gap-1 text-sm sm:grid-cols-2">
                       <div class="flex justify-between gap-4 sm:block">
                         <dt class="text-muted-foreground">{t("res.swing.down")}</dt>

@@ -157,6 +157,14 @@ html:lang(hi) .leading-tight {
   line-height: 1.4;
 }
 
+/* A fieldset is as wide as its content by default (min-width: min-content): with large text, a grid of choices
+   inside one would push the page sideways. */
+@layer base {
+  fieldset {
+    min-width: 0;
+  }
+}
+
 /* Collapsed result sections print in full. In the base layer: Tailwind's base hides [hidden] with !important,
    and an important rule outside the layer would lose to it. */
 @layer base {
@@ -168,14 +176,31 @@ html:lang(hi) .leading-tight {
 }
 
 @media print {
-  .no-print {
+  /* :root raises it above the grid rule below, so a hidden grid stays hidden. */
+  :root .no-print {
     display: none !important;
   }
   body {
     font-size: 11pt;
   }
-  section {
+  /* Grid layouts break badly across printed pages in Chromium (a card drawn over the next): print them as plain
+     stacked blocks, and keep only small units (a head, a case, a notice, a list item) from splitting. */
+  main .grid {
+    display: block !important;
+  }
+  main .grid > * + * {
+    margin-top: 0.75rem;
+  }
+  [data-head],
+  [data-case],
+  [data-severity],
+  li {
     break-inside: avoid;
+  }
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
   }
 }
 

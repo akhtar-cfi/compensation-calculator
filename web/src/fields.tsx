@@ -113,8 +113,8 @@ export function BlockFields(props: {
   set: SetField;
   err: FieldError;
   setForm: (f: FormState) => void;
-  /** This year: the last year offered for the accident. */
-  year: number;
+  /** Today (YYYY-MM-DD): no later month is offered for the accident. */
+  today: string;
 }) {
   const t = useT();
   const lang = useLang();
@@ -207,6 +207,8 @@ export function BlockFields(props: {
             options={EMPLOYMENT.map((e) => ({
               value: e,
               label: t(`chip.emp.${e}`),
+              // The two salaried kinds differ in the future-prospects addition (50% or 40% under 40): say how.
+              hint: e === "permanent" || e === "fixed_salary" ? t(`chip.emp.${e}.hint`) : undefined,
               icon: WORK_ICON[e],
             }))}
           />
@@ -302,24 +304,68 @@ export function BlockFields(props: {
             )}
           </Pair>
           {f.kind === "death" && (
-            <Pair>
-              <Counter
-                id="children"
-                noun={t("noun.children")}
-                label={t("f.children")}
-                value={f.children}
-                error={err("children")}
-                onInput={(v) => set("children", v)}
-              />
-              <Radios
-                id="parents"
-                label={t("f.parents")}
-                value={f.parents}
-                error={err("parents")}
-                onChange={(v) => set("parents", v)}
-                options={["0", "1", "2"].map((n) => ({ value: n, label: n }))}
-              />
-            </Pair>
+            <>
+              <div>
+                <Radios
+                  id="children"
+                  label={t("f.children")}
+                  value={Number(f.children) >= 5 ? "more" : f.children}
+                  error={Number(f.children) >= 5 ? undefined : err("children")}
+                  onChange={(v) => set("children", v === "more" ? "5" : v)}
+                  options={[
+                    ...["0", "1", "2", "3", "4"].map((n) => ({ value: n, label: n })),
+                    { value: "more", label: t("f.children.more") },
+                  ]}
+                />
+                {Number(f.children) >= 5 && (
+                  <div class="mt-3">
+                    <Reveal>
+                      <Counter
+                        id="childrenMore"
+                        min={5}
+                        noun={t("noun.children")}
+                        label={t("f.children.howMany")}
+                        value={f.children}
+                        error={err("children")}
+                        onInput={(v) => set("children", v)}
+                      />
+                    </Reveal>
+                  </div>
+                )}
+              </div>
+              <Pair>
+                <Radios
+                  id="parents"
+                  label={t("f.parents")}
+                  value={f.parents}
+                  error={err("parents")}
+                  onChange={(v) => props.setForm({ ...f, parents: v, dependentParents: "" })}
+                  options={["0", "1", "2"].map((n) => ({ value: n, label: n }))}
+                />
+                {Number(f.parents) > 0 && (
+                  <Radios
+                    id="dependentParents"
+                    label={t(f.parents === "1" ? "f.depends.one" : "f.depends.two")}
+                    value={f.dependentParents}
+                    error={err("dependentParents")}
+                    onChange={(v) => set("dependentParents", v)}
+                    options={[
+                      ...(f.parents === "1"
+                        ? [
+                            { value: "1", label: t("f.yes") },
+                            { value: "0", label: t("f.no") },
+                          ]
+                        : [
+                            { value: "2", label: t("f.depends.both") },
+                            { value: "1", label: t("f.depends.oneOf") },
+                            { value: "0", label: t("f.depends.neither") },
+                          ]),
+                      notSure,
+                    ]}
+                  />
+                )}
+              </Pair>
+            </>
           )}
         </div>
       );
@@ -378,7 +424,7 @@ export function BlockFields(props: {
           label={t("step.when")}
           hint={t("f.when.hint")}
           fromYear={2000}
-          toYear={props.year}
+          latest={props.today.slice(0, 7)}
           value={f.accidentDate}
           error={err("accidentDate")}
           onInput={(v) => set("accidentDate", v)}
@@ -529,20 +575,6 @@ export function BlockFields(props: {
         </div>
       );
     }
-    case "dependants":
-      return (
-        <Counter
-          id="dependentParents"
-          optional
-          max={2}
-          noun={t("noun.dependentParents")}
-          label={t("f.dependentParents")}
-          hint={t("f.dependentParents.hint")}
-          value={f.dependentParents}
-          error={err("dependentParents")}
-          onInput={(v) => set("dependentParents", v)}
-        />
-      );
     case "recovery":
       return (
         <div class="grid grid-cols-1 gap-5">
@@ -551,10 +583,23 @@ export function BlockFields(props: {
             layout="stack"
             optional
             label={t("q.workNow.title")}
+            hint={t("f.workCapacity.hint")}
             value={f.workCapacity}
             error={err("workCapacity")}
             onChange={(v) => set("workCapacity", v as FormState["workCapacity"])}
             options={[...opt("f.work.", ["full", "with_difficulty", "lighter_only", "none"]), notSure]}
+          />
+          <TextInput
+            id="functionalPct"
+            numeric
+            optional
+            width="xs"
+            suffix="%"
+            label={t("f.functionalPct")}
+            hint={t("f.functionalPct.hint")}
+            value={f.functionalPct}
+            error={err("functionalPct")}
+            onInput={(v) => set("functionalPct", v)}
           />
           <Checkbox
             id="permanentAttendant"

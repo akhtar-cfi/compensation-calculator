@@ -26,6 +26,7 @@ const AMOUNT = "err.amount";
 const INVALID: Partial<Record<FieldName, string>> = {
   age: "err.age",
   certificatePct: "err.pct",
+  functionalPct: "err.pct",
   monthsOffWork: "err.number",
   children: "err.count",
   parents: "err.parents",
@@ -104,13 +105,16 @@ export function validate(form: FormState, today: string): Validation {
   if (f.kind === "death") {
     if (f.children.trim() === "") set("children", "err.count");
     if (f.parents.trim() === "") set("parents", "err.count");
+    // Whether the parents depended on the person changes the deduction for personal expenses: asked, with "Not sure".
+    if (Number(f.parents) > 0 && f.dependentParents === "") set("dependentParents", "err.required");
   }
   for (const [k, max] of Object.entries(MAX_COUNT) as [FieldName, number][]) {
     const n = Number(f[k]);
     if (String(f[k]).trim() !== "" && Number.isInteger(n) && n > max)
       set(k, k === "children" ? "err.children" : "err.parents");
   }
-  if (Number(f.dependentParents) > Number(f.parents || 0)) set("dependentParents", "err.dependentParents");
+  if (f.dependentParents !== "unknown" && Number(f.dependentParents) > Number(f.parents || 0))
+    set("dependentParents", "err.dependentParents");
   for (const k of MONTHLY) if ((parseAmount(String(f[k])) ?? 0) > MAX_MONTHLY) set(k, "err.tooLarge");
   const salary = parseAmount(f.monthlySalary);
   const tax = parseAmount(f.monthlyTax);

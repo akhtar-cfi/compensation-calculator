@@ -1,8 +1,11 @@
 import type { ComponentChildren } from "preact";
-import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { estimate } from "../../../src/engine/index.js";
 import { ArrowDown, ArrowUp, Check, ChevronDown, RotateCcw, SlidersHorizontal } from "lucide-preact";
 import type { EstimateInput, EstimateOutput } from "../../../src/engine/types.js";
+import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { focusField } from "../components/form";
+import { rules } from "../data";
 import { Card, H1, Lead } from "../components/ui";
 import { BlockFields, fieldLabels, type FieldError, type SetField } from "../fields";
 import { EMPTY_FORM, incomeFields, type FormState } from "../form-to-input";
@@ -22,6 +25,7 @@ import {
 import type { FieldName, Validation } from "../validate";
 import { ResultDetails } from "./Result";
 import { ResultSummary, StopNotice } from "./ResultSummary";
+import { ChangeLine } from "../components/result";
 
 /** Errors that only say "not answered yet" are shown in the list of answers left, not under each field. */
 const EMPTY = new Set(["err.required", "err.count"]);
@@ -59,9 +63,12 @@ export function Estimator(props: {
   const [revealed, setRevealed] = useState<ReadonlySet<FieldName>>(new Set());
   const labels = fieldLabels(t);
   const approx = useApprox();
-  const year = Number(props.today.slice(0, 4));
 
-  const set: SetField = (k, val) => props.setForm({ ...f, [k]: val });
+  const set: SetField = (k, val) => {
+    props.setForm({ ...f, [k]: val });
+    // The month and year are picked, not typed: a problem with them (a future month) shows at once.
+    if (k === "accidentDate" && !touched.has(k)) setTouched(new Set([...touched, k]));
+  };
   const err: FieldError = (k) => {
     const e = v.errors[k];
     if (!e) return undefined;
@@ -100,6 +107,9 @@ export function Estimator(props: {
     setTouched(new Set());
     setRevealed(new Set());
     setConfirming(false);
+    lastGood.current = undefined;
+    previous.current = undefined;
+    setChange(undefined);
     props.onRestart();
   };
   const keep = () => {
@@ -109,6 +119,46 @@ export function Estimator(props: {
   };
   const answered = JSON.stringify(f) !== JSON.stringify(EMPTY_FORM);
   const complete = Boolean(props.computed?.est.eligible && props.computed.est.headline) && !stop;
+
+  // The last estimate shown, kept on screen (marked out of date) while an answer is being corrected, so a slip in
+  // one box does not make the number vanish.
+  const lastGood = useRef<{ input: EstimateInput; est: EstimateOutput } | undefined>(undefined);
+  if (complete && props.computed) lastGood.current = props.computed;
+  const onlyWrong = missing.length > 0 && missing.every((m) => m.invalid);
+  const stale = !complete && !stop && onlyWrong ? lastGood.current : undefined;
+
+  // How the amount moved with the last change ("up ₹50,000 from ₹16,58,186").
+  const headline = complete ? props.computed?.est.headline?.amount : undefined;
+  const previous = useRef<number | undefined>(undefined);
+  const [change, setChange] = useState<{ from: number; to: number } | undefined>(undefined);
+  useEffect(() => {
+    if (headline === undefined) return;
+    if (previous.current !== undefined && previous.current !== headline)
+      setChange({ from: previous.current, to: headline });
+    previous.current = headline;
+  }, [headline]);
+
+  // "Not sure" whether the parents depended on the person: the estimate assumes they did (the engine's default);
+  // say how much that assumption is worth.
+  const computed = complete ? props.computed : undefined;
+  const parentsAssumed = useMemo(() => {
+    const fam = computed?.input.family;
+    if (!computed || computed.input.kind !== "death" || !fam?.parents || fam.dependentParents !== undefined)
+      return undefined;
+    const alt = estimate(
+      rules,
+      { ...computed.input, family: { ...fam, dependentParents: 0 } },
+      { asOf: props.today },
+    );
+    const d = (computed.est.headline?.amount ?? 0) - (alt.headline?.amount ?? 0);
+    return d > 0 ? d : undefined;
+  }, [computed, props.today]);
+
+  // The facts the estimate rests on, printed with it and named in the shared summary.
+  const [ay = "", am = "", ad = ""] = f.accidentDate.split("-");
+  const accidentLabel = am
+    ? `${ad ? `${Number(ad)} ` : ""}${t(`month.${Number(am)}`)} ${ay}${ad ? "" : ` ${t("date.noDay")}`}`
+    : "";
   const amount =
     complete && props.computed?.est.headline ? approx(props.computed.est.headline.approx) : undefined;
   const announce = useSettled(amount ? t("res.ready", { x: amount }) : "", 1200);
@@ -116,7 +166,7 @@ export function Estimator(props: {
 
   return (
     <div class="bg-subtle">
-      <div class="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 md:py-10">
+      <div class="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 md:py-10 lg:max-w-6xl">
         <H1 id="page-title">{t("calc.title")}</H1>
         <Lead class="print:hidden">{t("calc.lead")}</Lead>
         {complete && (
@@ -162,118 +212,152 @@ export function Estimator(props: {
             ))}
         </div>
 
-        <div class="mt-4 grid gap-6">
-          {/* 1. The quick estimate */}
-          <Card class="no-print overflow-hidden">
-            <div class="bg-brand px-4 py-3.5 text-brand-foreground sm:px-6">
-              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h2 class="font-heading text-lg font-bold">{t("quick.title")}</h2>
-                <p class="text-sm text-brand-foreground/85" data-testid="progress">
-                  {stop ? t("quick.stopped") : t("quick.progress", { done, total })}
-                </p>
-              </div>
-              <div aria-hidden="true" class="mt-2.5 h-1 overflow-hidden rounded-full bg-brand-foreground/25">
+        {/* One column; from a laptop width up, a slim summary stays in view beside it. */}
+        <div class="mt-4 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start lg:gap-8">
+          <div class="grid min-w-0 grid-cols-1 gap-6">
+            {/* 1. The quick estimate */}
+            <Card class="no-print overflow-hidden">
+              <div class="bg-brand px-4 py-3.5 text-brand-foreground sm:px-6">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <h2 class="font-heading text-lg font-bold">{t("quick.title")}</h2>
+                  <p class="text-sm text-brand-foreground/85" data-testid="progress">
+                    {stop ? t("quick.stopped") : t("quick.progress", { done, total })}
+                  </p>
+                </div>
                 <div
-                  class="h-full rounded-full bg-brand-foreground transition-[width] duration-300 motion-reduce:transition-none"
-                  style={{ width: `${stop ? 100 : Math.round((done / Math.max(1, total)) * 100)}%` }}
-                />
-              </div>
-            </div>
-            <form noValidate onSubmit={(e) => e.preventDefault()} aria-labelledby="page-title">
-              <ol class="divide-y divide-border">
-                {steps.map((s, i) => {
-                  if (stop && i > 1) return null;
-                  const ok = Object.keys(errorsFor(v, s.id, f)).length === 0;
-                  return (
-                    <Step
-                      key={s.id}
-                      id={s.id}
-                      n={i + 1}
-                      done={ok && !stop}
-                      title={t(STEP_TITLE[s.id])}
-                      onLeave={leave(s.id)}
-                    >
-                      <BlockFields id={s.id} f={f} set={set} err={err} setForm={props.setForm} year={year} />
-                      {s.id === "checks" &&
-                        stops.map((c) => (
-                          <div key={c} class="mt-4" data-stop-for={STOP_FIELD[c]}>
-                            <StopNotice code={c} />
-                          </div>
-                        ))}
-                    </Step>
-                  );
-                })}
-              </ol>
-              {stop && (
-                <p
-                  class="border-t border-border px-4 py-4 text-sm text-muted-foreground sm:px-6"
-                  data-testid="skipped"
+                  aria-hidden="true"
+                  class="mt-2.5 h-1 overflow-hidden rounded-full bg-brand-foreground/25"
                 >
-                  {t("stop.skip")}
-                </p>
-              )}
-            </form>
-          </Card>
-
-          {/* 2. The estimate */}
-          <section aria-label={t("sum.title")} id="summary">
-            <ResultSummary
-              est={stop ? undefined : props.computed?.est}
-              input={props.computed?.input}
-              stop={stop}
-              missing={missing}
-              progress={{ done, total }}
-              state={f.state}
-              canProve={canProve}
-              onMissing={goTo}
-            />
-            <p class="sr-only" aria-live="polite">
-              {announce}
-            </p>
-          </section>
-
-          {/* 3. Make it more accurate */}
-          {!stop && groups.length > 0 && (
-            <Card class="no-print overflow-hidden" id="more">
-              <div class="flex items-start gap-3 px-4 pt-5 sm:px-6">
-                <SlidersHorizontal aria-hidden="true" class="mt-1 h-5 w-5 shrink-0 text-brand" />
-                <div>
-                  <h2 class="font-heading text-lg font-bold text-foreground">{t("more.title")}</h2>
-                  <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t("more.lead")}</p>
+                  <div
+                    class="h-full rounded-full bg-brand-foreground transition-[width] duration-300 motion-reduce:transition-none"
+                    style={{ width: `${stop ? 100 : Math.round((done / Math.max(1, total)) * 100)}%` }}
+                  />
                 </div>
               </div>
-              <form noValidate onSubmit={(e) => e.preventDefault()} class="mt-4 border-t border-border">
-                {groups.map((g) => {
-                  const fields = g.fields(f);
-                  // The exact day is part of the accident date, asked here as its own box.
-                  const day = g.id === "dates" ? 1 : 0;
-                  const filled =
-                    fields.filter((k) => filledIn(f, k)).length +
-                    (day && f.accidentDate.split("-")[2] ? 1 : 0);
-                  return (
-                    <Group
-                      key={g.id}
-                      id={g.id}
-                      title={t(`group.${g.id}`)}
-                      count={t("group.count", { n: filled, total: fields.length + day })}
-                      problem={fields.some((k) => err(k))}
-                      onLeave={leave(g.id)}
-                    >
-                      <BlockFields id={g.id} f={f} set={set} err={err} setForm={props.setForm} year={year} />
-                    </Group>
-                  );
-                })}
+              <form noValidate onSubmit={(e) => e.preventDefault()} aria-labelledby="page-title">
+                <ol class="divide-y divide-border">
+                  {steps.map((s, i) => {
+                    if (stop && i > 1) return null;
+                    const ok = Object.keys(errorsFor(v, s.id, f)).length === 0;
+                    return (
+                      <Step
+                        key={s.id}
+                        id={s.id}
+                        n={i + 1}
+                        done={ok && !stop}
+                        title={t(STEP_TITLE[s.id])}
+                        onLeave={leave(s.id)}
+                      >
+                        <BlockFields
+                          id={s.id}
+                          f={f}
+                          set={set}
+                          err={err}
+                          setForm={props.setForm}
+                          today={props.today}
+                        />
+                        {s.id === "checks" &&
+                          stops.map((c) => (
+                            <div key={c} class="mt-4" data-stop-for={STOP_FIELD[c]}>
+                              <StopNotice code={c} />
+                            </div>
+                          ))}
+                      </Step>
+                    );
+                  })}
+                </ol>
+                {stop && (
+                  <p
+                    class="border-t border-border px-4 py-4 text-sm text-muted-foreground sm:px-6"
+                    data-testid="skipped"
+                  >
+                    {t("stop.skip")}
+                  </p>
+                )}
               </form>
             </Card>
-          )}
 
-          {/* 4. The details */}
-          {complete && props.computed && (
-            <ResultDetails input={props.computed.input} est={props.computed.est} />
-          )}
+            {/* 2. The estimate */}
+            <section aria-label={t("sum.title")} id="summary">
+              <ResultSummary
+                est={stop ? undefined : (stale?.est ?? props.computed?.est)}
+                input={stale?.input ?? props.computed?.input}
+                stale={Boolean(stale)}
+                stop={stop}
+                missing={missing}
+                progress={{ done, total }}
+                state={f.state}
+                canProve={canProve}
+                change={complete ? change : undefined}
+                accidentLabel={accidentLabel}
+                parentsAssumed={stale ? undefined : parentsAssumed}
+                onMissing={goTo}
+              />
+              <p class="sr-only" aria-live="polite">
+                {announce}
+              </p>
+            </section>
+
+            {/* 3. Make it more accurate */}
+            {!stop && groups.length > 0 && (
+              <Card class="no-print overflow-hidden" id="more">
+                <div class="flex items-start gap-3 px-4 pt-5 sm:px-6">
+                  <SlidersHorizontal aria-hidden="true" class="mt-1 h-5 w-5 shrink-0 text-brand" />
+                  <div>
+                    <h2 class="font-heading text-lg font-bold text-foreground">{t("more.title")}</h2>
+                    <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t("more.lead")}</p>
+                  </div>
+                </div>
+                <form noValidate onSubmit={(e) => e.preventDefault()} class="mt-4 border-t border-border">
+                  {groups.map((g) => {
+                    const fields = g.fields(f);
+                    // The exact day is part of the accident date, asked here as its own box.
+                    const day = g.id === "dates" ? 1 : 0;
+                    const filled =
+                      fields.filter((k) => filledIn(f, k)).length +
+                      (day && f.accidentDate.split("-")[2] ? 1 : 0);
+                    return (
+                      <Group
+                        key={g.id}
+                        id={g.id}
+                        title={t(`group.${g.id}`)}
+                        count={t("group.count", { n: filled, total: fields.length + day })}
+                        problem={fields.some((k) => err(k))}
+                        onLeave={leave(g.id)}
+                      >
+                        <BlockFields
+                          id={g.id}
+                          f={f}
+                          set={set}
+                          err={err}
+                          setForm={props.setForm}
+                          today={props.today}
+                        />
+                      </Group>
+                    );
+                  })}
+                </form>
+              </Card>
+            )}
+
+            {/* 4. The details */}
+            {complete && props.computed && (
+              <ResultDetails input={props.computed.input} est={props.computed.est} />
+            )}
+          </div>
+          <aside aria-label={t("sum.rail")} class="no-print hidden lg:sticky lg:top-4 lg:block">
+            <SummaryRail
+              est={complete ? props.computed?.est : undefined}
+              stop={stop}
+              progress={{ done, total }}
+              missing={missing}
+              change={complete ? change : undefined}
+              onMissing={goTo}
+            />
+          </aside>
         </div>
       </div>
-      <BottomBar amount={amount} stopped={Boolean(stop)} />
+      <BottomBar amount={amount} exact={headline} change={change} stopped={Boolean(stop)} />
     </div>
   );
 }
@@ -357,44 +441,137 @@ function useSettled(value: string, ms: number): string {
 }
 
 /**
- * Once there is an estimate (or a stop), a slim bar at the bottom of the screen shows it while the estimate itself
- * is scrolled out of view. It hides while any answer has focus, so it never covers what is being answered, and
- * the page keeps room under a focused answer for it.
+ * From a laptop width up: a slim summary beside the questions, so the number stays in view while answers change.
+ * Short by design (never taller than a 720 px screen): the full estimate is in the column.
  */
-function BottomBar(props: { amount?: string | undefined; stopped: boolean }) {
+function SummaryRail(props: {
+  est?: EstimateOutput | undefined;
+  stop?: string | undefined;
+  progress: { done: number; total: number };
+  missing: { id: FieldName; label: string; invalid: boolean }[];
+  change?: { from: number; to: number } | undefined;
+  onMissing: (id: FieldName) => void;
+}) {
   const t = useT();
-  const [focused, setFocused] = useState(false);
+  const approx = useApprox();
+  const { est } = props;
+  const link = "text-sm font-medium text-brand underline underline-offset-4 hover:no-underline";
+  return (
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm" data-testid="rail">
+      <p class="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{t("sum.title")}</p>
+      {props.stop ? (
+        <>
+          <p class="mt-2 font-heading text-lg font-bold text-foreground">{t("res.none")}</p>
+          <a href="#result" class={`mt-3 inline-block ${link}`}>
+            {t("bar.why")}
+          </a>
+        </>
+      ) : est?.headline && est.range ? (
+        <>
+          <p class="mt-2 font-heading text-3xl font-bold tracking-tight text-brand">
+            {approx(est.headline.approx)}
+          </p>
+          <p class="text-sm font-semibold text-foreground">{formatINR(est.headline.amount)}</p>
+          {props.change && <ChangeLine change={props.change} class="mt-1" />}
+          <p class="mt-3 text-xs text-muted-foreground">
+            {t("rail.range", {
+              lo: approx(formatApprox(est.range.conservative)),
+              hi: approx(formatApprox(est.range.claimantMax)),
+            })}
+          </p>
+          <div class="mt-4 grid gap-2 border-t border-border pt-4">
+            <a href="#result" class={link}>
+              {t("rail.read")}
+            </a>
+            <a href="#details" class={link}>
+              {t("rail.how")}
+            </a>
+            <a href="#offer-amount" class={link}>
+              {t("rail.offer")}
+            </a>
+          </div>
+        </>
+      ) : (
+        <>
+          <p class="mt-2 text-sm font-semibold text-foreground">
+            {t("quick.progress", { done: props.progress.done, total: props.progress.total })}
+          </p>
+          <div aria-hidden="true" class="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+            <div
+              class="h-full rounded-full bg-brand transition-[width] duration-300 motion-reduce:transition-none"
+              style={{
+                width: `${Math.round((props.progress.done / Math.max(1, props.progress.total)) * 100)}%`,
+              }}
+            />
+          </div>
+          {props.missing.length > 0 && (
+            <ul class="mt-3 grid gap-1">
+              {props.missing.slice(0, 3).map((m) => (
+                <li key={m.id}>
+                  <a
+                    href={`#${m.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      props.onMissing(m.id);
+                    }}
+                    class={link}
+                  >
+                    {m.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+/**
+ * On a phone or tablet, once there is an estimate (or a stop), a slim bar at the bottom shows it while the estimate
+ * itself is out of view. It hides while a box or list has focus (the keyboard or picker is open), not for choices:
+ * the page keeps room under a focused answer for it, so it never covers one.
+ */
+function BottomBar(props: {
+  amount?: string | undefined;
+  exact?: number | undefined;
+  change?: { from: number; to: number } | undefined;
+  stopped: boolean;
+}) {
+  const t = useT();
+  const [typing, setTyping] = useState(false);
   const [resultVisible, setResultVisible] = useState(true);
   const [resultAbove, setResultAbove] = useState(false);
   const show = Boolean(props.amount || props.stopped);
 
   useEffect(() => {
-    const isAnswer = (el: EventTarget | null) =>
-      el instanceof HTMLElement && el.matches("input, select, textarea, summary");
-    const onIn = (e: FocusEvent) => setFocused(isAnswer(e.target));
-    const onOut = () => setFocused(false);
+    const isBox = (el: EventTarget | null) =>
+      el instanceof HTMLElement &&
+      el.matches("input:not([type=radio]):not([type=checkbox]), select, textarea");
+    const onIn = (e: FocusEvent) => setTyping(isBox(e.target));
+    const onOut = () => setTyping(false);
+    // Which way the estimate is, worked out as the page moves (not only when the estimate crosses the screen).
+    const where = () => {
+      const r = document.getElementById("result")?.getBoundingClientRect();
+      if (!r) return;
+      setResultAbove(r.bottom < 0);
+      setResultVisible(r.top < window.innerHeight * 0.85 && r.bottom > window.innerHeight * 0.15);
+    };
     document.addEventListener("focusin", onIn);
     document.addEventListener("focusout", onOut);
-    const el = document.getElementById("result");
-    const io =
-      el && "IntersectionObserver" in window
-        ? new IntersectionObserver(
-            ([e]) => {
-              setResultVisible(Boolean(e?.isIntersecting));
-              setResultAbove(Boolean(e && e.boundingClientRect.top < 0));
-            },
-            { threshold: 0.15 },
-          )
-        : undefined;
-    if (el) io?.observe(el);
+    addEventListener("scroll", where, { passive: true });
+    addEventListener("resize", where);
+    where();
     return () => {
       document.removeEventListener("focusin", onIn);
       document.removeEventListener("focusout", onOut);
-      io?.disconnect();
+      removeEventListener("scroll", where);
+      removeEventListener("resize", where);
     };
   }, [show]);
 
-  const hidden = !show || focused || resultVisible;
+  const hidden = !show || typing || resultVisible;
   // Keep a focused answer clear of the bar when the page scrolls to it.
   useLayoutEffect(() => {
     document.documentElement.style.scrollPaddingBottom = show ? "5rem" : "";
@@ -416,24 +593,27 @@ function BottomBar(props: { amount?: string | undefined; stopped: boolean }) {
     document.getElementById("result")?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
     <div
-      class={`no-print fixed inset-x-0 bottom-0 z-10 ${settled ? "" : "pointer-events-none"} border-t border-border bg-background/95 px-4 py-2 shadow-[0_-4px_12px_rgba(2,6,23,0.06)] backdrop-blur`}
+      class={`no-print fixed inset-x-0 bottom-0 z-10 ${settled ? "" : "pointer-events-none"} border-t border-border bg-background/95 px-4 py-2 shadow-[0_-4px_12px_rgba(2,6,23,0.06)] backdrop-blur lg:hidden`}
       data-testid="bottom-bar"
     >
       <div class="mx-auto flex max-w-3xl items-center justify-between gap-3">
-        <p class="text-sm text-muted-foreground">
+        <div class="min-w-0">
           {props.amount ? (
             <>
-              {t("bar.estimate")}{" "}
-              <span class="font-heading text-lg font-bold text-brand">{props.amount}</span>
+              <p class="text-sm text-muted-foreground">
+                {t("bar.estimate")}{" "}
+                <span class="font-heading text-lg font-bold text-brand">{props.amount}</span>
+              </p>
+              {props.change && props.change.to === props.exact && <ChangeLine change={props.change} />}
             </>
           ) : (
-            <span class="font-medium text-foreground">{t("res.none")}</span>
+            <p class="text-sm font-medium text-foreground">{t("res.none")}</p>
           )}
-        </p>
+        </div>
         <button
           type="button"
           onClick={toResult}
-          class="inline-flex min-h-11 items-center gap-1.5 rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground shadow-sm"
+          class="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground shadow-sm"
         >
           {props.amount ? t("bar.see") : t("bar.why")}
           {resultAbove ? (

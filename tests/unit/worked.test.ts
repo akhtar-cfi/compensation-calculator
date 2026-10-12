@@ -20,7 +20,21 @@ function evaluate(expr: string): number {
 const rupeesOf = (s: string) => Number(s.replace(/[₹,\s]/g, ""));
 
 describe("worked calculations shown with each head", () => {
+  // Income that is not a whole number of rupees a month (an ITR of ₹4,00,000 a year): the worked line shows paise.
+  const itr: EstimateInput = {
+    kind: "injury",
+    accidentDate: "2025-06-01",
+    state: "DL",
+    victim: {
+      ageYears: 45,
+      employment: "self_employed",
+      income: { proof: "itr", itrAnnualIncomes: [{ fy: "2024-25", income: 400000 }] },
+    },
+    family: { married: true },
+    injury: { certificatePct: 30, certificateBasis: "whole_body", monthsOffWork: 3 },
+  };
   const inputs: EstimateInput[] = [
+    itr,
     ...examples,
     ...examples.map((e) => ({ ...e, victim: { ...e.victim, ageYears: 45 } })),
     ...examples.map((e) => ({ ...e, accidentDate: "2019-06-01" })),
