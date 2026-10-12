@@ -38,6 +38,7 @@ export interface DocResult {
   doc: string; // HTML
   publishdate?: string;
   docsource?: string;
+  numcitedby?: number;
 }
 
 export type FetchLike = (
@@ -45,15 +46,39 @@ export type FetchLike = (
   init: { method: string; headers: Record<string, string> },
 ) => Promise<{ ok: boolean; status: number; text(): Promise<string> }>;
 
+/** One uncached, paid API call: what was called and what it cost. */
+export interface PaidCall {
+  endpoint: Endpoint;
+  path: string;
+  cost: number;
+}
+
 export interface ClientOptions {
   token: string;
   budgetRupees: number;
   cacheDir: string;
   fetch?: FetchLike;
   baseUrl?: string;
+  /** Rupees already spent elsewhere (e.g. earlier today); counts against budgetRupees. */
+  spentBefore?: number;
+  /** Runs before each uncached paid call; throw (e.g. BudgetExceededError) to refuse the call. */
+  beforePaidCall?: (e: PaidCall) => Promise<void> | void;
+  /** Runs after each uncached paid call succeeds, e.g. to record it in a database. */
+  onPaidCall?: (e: PaidCall) => Promise<void> | void;
 }
 
 export class BudgetExceededError extends Error {}
+
+/** A failed API call. `status` is the HTTP status when the call failed at HTTP level. */
+export class IndianKanoonError extends Error {
+  constructor(
+    message: string,
+    readonly status?: number,
+    readonly errmsg?: string,
+  ) {
+    super(message);
+  }
+}
 
 export class IndianKanoonClient {
   private spent = 0;
@@ -95,25 +120,48 @@ export class IndianKanoonClient {
     if (existsSync(file)) return JSON.parse(readFileSync(file, "utf8")) as T;
 
     const cost = PRICE_RUPEES[endpoint];
-    if (this.spent + cost > this.opts.budgetRupees + 1e-9)
+    const before = this.opts.spentBefore ?? 0;
+    if (before + this.spent + cost > this.opts.budgetRupees + 1e-9)
       throw new BudgetExceededError(
-        `Budget of Rs ${this.opts.budgetRupees} reached (spent Rs ${this.spentRupees}); not calling ${path}`,
+        `Budget of Rs ${this.opts.budgetRupees} reached (spent Rs ${round2(before + this.spent)}); not calling ${path}`,
       );
+    await this.opts.beforePaidCall?.({ endpoint, path, cost });
     const res = await this.fetchFn(this.baseUrl + path, {
       method: "POST",
       headers: { Authorization: `Token ${this.opts.token}`, Accept: "application/json" },
     });
     const body = await res.text();
-    if (!res.ok) throw new Error(`Indian Kanoon ${endpoint} failed: HTTP ${res.status}`);
+    if (!res.ok) {
+      const errmsg = errmsgOf(body);
+      throw new IndianKanoonError(
+        `Indian Kanoon ${endpoint} failed: HTTP ${res.status}${errmsg ? ` (${errmsg})` : ""}`,
+        res.status,
+        errmsg,
+      );
+    }
     const json = JSON.parse(body) as T & { errmsg?: string };
-    if (json.errmsg) throw new Error(`Indian Kanoon ${endpoint} error: ${json.errmsg}`);
+    if (json.errmsg)
+      throw new IndianKanoonError(`Indian Kanoon ${endpoint} error: ${json.errmsg}`, undefined, json.errmsg);
     this.spent += cost;
     writeFileSync(file, body);
     appendFileSync(
       join(this.opts.cacheDir, "ledger.jsonl"),
       JSON.stringify({ endpoint, path, rupees: cost }) + "\n",
     );
+    await this.opts.onPaidCall?.({ endpoint, path, cost });
     return json;
+  }
+}
+
+const round2 = (n: number): number => Math.round(n * 100) / 100;
+
+/** The API's error message in a failed response body, if the body is JSON with one. */
+function errmsgOf(body: string): string | undefined {
+  try {
+    const v = (JSON.parse(body) as { errmsg?: unknown }).errmsg;
+    return typeof v === "string" && v ? v.slice(0, 200) : undefined;
+  } catch {
+    return undefined;
   }
 }
 

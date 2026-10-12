@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   BudgetExceededError,
   IndianKanoonClient,
+  IndianKanoonError,
   buildQuery,
   htmlToText,
   ikDate,
@@ -70,6 +71,65 @@ describe("Indian Kanoon client", () => {
     await expect(err.docmeta(9)).rejects.toThrow("bad query");
     expect(err.spentRupees).toBe(0);
     expect(existsSync(join(dir, "ledger.jsonl"))).toBe(false);
+  });
+
+  it("counts spend made elsewhere against the budget", async () => {
+    const m = mockFetch({ tid: 5, title: "x", doc: "<p/>" });
+    const c = new IndianKanoonClient({
+      token: "t",
+      budgetRupees: 1,
+      spentBefore: 0.7,
+      cacheDir: tmp(),
+      fetch: m.fetch,
+    });
+    await c.doc(1);
+    await expect(c.doc(2)).rejects.toThrow("Budget of Rs 1 reached (spent Rs 0.9)");
+    expect(m.calls).toHaveLength(1);
+    expect(c.spentRupees).toBe(0.2);
+  });
+
+  it("calls the paid-call hooks around uncached calls only", async () => {
+    const m = mockFetch({ tid: 5, title: "x", doc: "<p/>" });
+    const before: string[] = [];
+    const after: unknown[] = [];
+    const dir = tmp();
+    const c = new IndianKanoonClient({
+      token: "t",
+      budgetRupees: 5,
+      cacheDir: dir,
+      fetch: m.fetch,
+      beforePaidCall: (e) => void before.push(e.path),
+      onPaidCall: (e) => void after.push(e),
+    });
+    await c.doc(1);
+    await c.doc(1); // cached: no hooks
+    expect(before).toEqual(["/doc/1/"]);
+    expect(after).toEqual([{ endpoint: "doc", path: "/doc/1/", cost: 0.2 }]);
+
+    const refusing = new IndianKanoonClient({
+      token: "t",
+      budgetRupees: 5,
+      cacheDir: dir,
+      fetch: m.fetch,
+      beforePaidCall: () => {
+        throw new BudgetExceededError("no");
+      },
+    });
+    await expect(refusing.doc(2)).rejects.toBeInstanceOf(BudgetExceededError);
+    expect(m.calls).toHaveLength(1);
+
+    const failing = new IndianKanoonClient({
+      token: "t",
+      budgetRupees: 5,
+      cacheDir: dir,
+      fetch: mockFetch({ errmsg: "Insufficient credit" }, 402).fetch,
+      onPaidCall: (e) => void after.push(e),
+    });
+    const err = await failing.doc(3).catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(IndianKanoonError);
+    expect(err).toMatchObject({ status: 402, errmsg: "Insufficient credit" });
+    expect((err as Error).message).toBe("Indian Kanoon doc failed: HTTP 402 (Insufficient credit)");
+    expect(after).toHaveLength(1);
   });
 
   it("requires a token", () => {
