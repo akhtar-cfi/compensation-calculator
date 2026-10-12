@@ -81,7 +81,9 @@ export function App() {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  useEffect(() => {
+  // Saved with the render, not after the next paint: an answer changed just before a reload (or before the phone
+  // discards the tab) must not be lost.
+  useLayoutEffect(() => {
     try {
       sessionStorage.setItem(STORE, JSON.stringify({ form, lang } satisfies Saved));
     } catch {

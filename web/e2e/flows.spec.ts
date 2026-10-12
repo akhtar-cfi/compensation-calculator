@@ -95,11 +95,16 @@ test("the estimate appears as soon as the answers are in, and follows changes", 
 });
 
 test("answers survive a reload (kept in this tab only), and Start again clears them", async ({ page }) => {
+  // On a slow phone, an answer changed just before a reload must still be kept (it was lost when saving waited for
+  // the next paint).
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send("Emulation.setCPUThrottlingRate", { rate: 6 });
   await page.goto("#/");
   await page.locator('input[name="kind"][value="death"]').check();
   await fillDate(page, "accidentDate", "2025-06-01");
   await page.selectOption("#state", "DL");
   await page.reload();
+  await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
   await expect(page.locator('input[name="kind"][value="death"]')).toBeChecked();
   await expect(page.locator("#accidentDate-year")).toHaveValue("2025");
   await expect(page.locator("#state")).toHaveValue("DL");
