@@ -1,11 +1,13 @@
 import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
+import { HardHat, House, Landmark } from "lucide-preact";
 import { Button, LinkButton, Notice, Page } from "../components/ui";
 import {
   Checkbox,
   Counter,
   DateInput,
   MoneyInput,
+  MonthYear,
   Radios,
   Reveal,
   Select,
@@ -15,7 +17,8 @@ import { AnswerPanel, Checklist, Disclosure, RangeBar } from "../components/resu
 import { COMPONENTS, DEVIATIONS, EVIDENCE, PRINCIPLES } from "../design/catalog";
 
 const DEMOS = new Set([
-  "Radio chips (row / stack)",
+  "Radio chips (row / stack / grid)",
+  "Month and year",
   "Select",
   "Date input (day / month / year)",
   "Money input",
@@ -25,7 +28,7 @@ const DEMOS = new Set([
   "Reveal",
   "Inline errors and 'answers left'",
   "Notice (info / caution / stop)",
-  "Estimate panel",
+  "Estimate card",
   "Range",
   "Accordion",
   "Checklist",
@@ -36,6 +39,8 @@ const DEMOS = new Set([
 function Demo(props: { name: string }) {
   const [radio, setRadio] = useState("");
   const [yn, setYn] = useState("");
+  const [work, setWork] = useState("");
+  const [month, setMonth] = useState("2025-6-");
   const [sel, setSel] = useState("");
   const [date, setDate] = useState("2025-6-15");
   const [money, setMoney] = useState("250000");
@@ -43,9 +48,21 @@ function Demo(props: { name: string }) {
   const [count, setCount] = useState("");
   const [box, setBox] = useState(false);
   switch (props.name) {
-    case "Radio chips (row / stack)":
+    case "Radio chips (row / stack / grid)":
       return (
         <div class="grid gap-6">
+          <Radios
+            id="demo-work"
+            layout="grid"
+            label="What work did they do?"
+            value={work}
+            onChange={setWork}
+            options={[
+              { value: "permanent", label: "Permanent job", icon: Landmark },
+              { value: "informal", label: "Daily wage or informal work", icon: HardHat },
+              { value: "homemaker", label: "Homemaker", icon: House },
+            ]}
+          />
           <Radios
             id="demo-radio"
             layout="stack"
@@ -73,17 +90,29 @@ function Demo(props: { name: string }) {
           />
         </div>
       );
+    case "Month and year":
+      return (
+        <MonthYear
+          id="demo-month"
+          label="When did the accident happen?"
+          hint="Month and year are enough."
+          fromYear={2020}
+          toYear={2026}
+          value={month}
+          onInput={setMonth}
+        />
+      );
     case "Select":
       return (
         <Select
           id="demo-select"
-          label="State where the claim is filed"
+          label="Occupation"
           value={sel}
           onChange={setSel}
           options={[
-            { value: "", label: "Choose" },
-            { value: "DL", label: "Delhi" },
-            { value: "HR", label: "Haryana" },
+            { value: "", label: "Not in this list, or not sure" },
+            { value: "driver", label: "Driver" },
+            { value: "mason", label: "Mason" },
           ]}
         />
       );
@@ -91,7 +120,7 @@ function Demo(props: { name: string }) {
       return (
         <DateInput
           id="demo-date"
-          label="When did the accident happen?"
+          label="Date the claim was filed"
           hint="For example, 15 6 2025"
           value={date}
           onInput={setDate}
@@ -168,7 +197,7 @@ function Demo(props: { name: string }) {
           </Notice>
         </div>
       );
-    case "Estimate panel":
+    case "Estimate card":
       return (
         <AnswerPanel
           approx="₹56 lakh"

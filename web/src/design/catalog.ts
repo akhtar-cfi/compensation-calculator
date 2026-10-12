@@ -43,24 +43,36 @@ export const EVIDENCE: { finding: string; source: string; consequence: string }[
   },
   {
     finding:
+      "The one-page form was then judged scattered and unpolished: about 20 questions of equal weight in a two-column grid whose rows did not line up, a side panel that cut off its own content on a laptop, and a hint under most fields.",
+    source: "CFI review and a live bug hunt, 12 Oct 2026",
+    consequence:
+      "Quick estimate first: up to eight numbered steps in one column, the estimate right under them, and everything optional in closed groups below.",
+  },
+  {
+    finding:
       "Use three boxes for dates; avoid sliders; mark optional questions '(optional)'; show errors after the person leaves a field, not while typing.",
     source: "GOV.UK Design System (date input, error messages); Baymard Institute form usability research",
-    consequence: "Dates are day / month / year boxes; errors appear when focus leaves an answer.",
+    consequence:
+      "The accident is asked as a month and a year (what families know); a full date, where one is needed, is day / month / year boxes. Errors appear when focus leaves an answer.",
   },
 ];
 
 export const PRINCIPLES: Principle[] = [
   {
-    title: "Everything on one page",
-    body: "All questions sit in one card, in four sections (the accident, the person, family, injury and medical). An answer shows or hides only what depends on it, in place; nothing moves to another page.",
+    title: "Quick estimate first",
+    body: "Only the answers a number needs come first, as up to eight numbered steps in one column: what happened, three checks on whether a claim can be made, age, work, family, the injury, the month and year, and the state. Every other fact is an optional detail in a closed group below the estimate.",
+  },
+  {
+    title: "One column, one path",
+    body: "Steps, then the estimate, then the details, top to bottom on every screen size. An answer shows or hides only what depends on it, in place. Nothing sits beside the form, and nothing scrolls inside its own box.",
   },
   {
     title: "The estimate updates as you go",
-    body: "As soon as the required answers are in, the amount, its range and how far real awards land appear beside the form (below it on a phone) and change with every answer. Until then the panel lists what is still needed, each a link to the question.",
+    body: "As soon as the quick steps are answered, the amount, its range and how far real awards land appear under them and change with every answer. Until then the estimate card says how many answers are left and links to the first three.",
   },
   {
     title: "The right control for each answer",
-    body: "Two to four options are chips in a row; long lists are the phone's own picker; dates are three boxes; rupees have a ₹ prefix and read the amount back in lakh; small counts are − n + counters that start empty.",
+    body: "Up to about nine short options are chips (a grid with icons for the type of work); long lists are the phone's own picker; the accident is a month and a year; rupees have a ₹ prefix and read the amount back in lakh; small counts are − n + counters that start empty.",
   },
   {
     title: "Nothing pre-selected",
@@ -68,7 +80,7 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "Phone first, thumb reach",
-    body: "Designed at 360 px. Controls are at least 44 px tall on a phone. A slim bar at the bottom shows the estimate or the answers left; it hides while a field has focus, so it never covers the keyboard's field.",
+    body: "Designed at 360 px, and at 200% text size without sideways scrolling. Controls are at least 44 px tall on a phone. Once there is an estimate, a slim bar at the bottom shows it while it is out of view; it hides while any answer has focus, so it never covers what is being answered.",
   },
   {
     title: "Private by design",
@@ -98,8 +110,8 @@ export const DEVIATIONS: { what: string; why: string }[] = [
     why: "They are 2.7:1 and about 4.4:1 on white, below the 4.5:1 needed for small text, so the text beside them stays dark.",
   },
   {
-    what: "No blue title bar on the calculator card (the website's calculator has one)",
-    why: "The CFI review found the earlier page 'all blue'; the blue is kept for the main action and the headline figure.",
+    what: "Hint text inside a chosen chip is 75% of the text colour, not the muted grey",
+    why: "The muted grey falls below 4.5:1 on the light-blue tint of a chosen chip.",
   },
 ];
 
@@ -122,30 +134,50 @@ export const COMPONENTS: ComponentSpec[] = [
     rules: ["44 px targets.", "The language switch keeps every answer.", "Skip link to the main content."],
   },
   {
-    name: "Calculator card and sections",
+    name: "Quick estimate card and steps",
     file: "pages/Estimator.tsx",
-    use: "All questions, in four numbered sections with small grey uppercase titles (the website's calculator style).",
-    avoid: "Splitting questions over several pages.",
+    use: "The answers a number needs, as numbered steps in one white card with the website calculator's blue title bar, which also shows how many steps are answered.",
+    avoid: "Optional facts (they are details) and more than eight steps.",
     rules: [
-      "Two columns from the small breakpoint up; a question with several options or answers spans both.",
-      "Only questions that apply to this person are shown; answers to hidden questions are ignored, not lost.",
+      "Each step's title is its question; a step's badge turns into a tick once it is fully answered.",
+      "Only steps that apply to this person are shown; answers to hidden questions are ignored, not lost.",
+      "After an answer that ends the claim, the later steps are replaced by one line saying they are not needed.",
     ],
   },
   {
-    name: "Radio chips (row / stack)",
+    name: "Details group",
+    file: "pages/Estimator.tsx",
+    use: "Optional facts that narrow the estimate or add a caution: exact date and claim, vehicle insurance, income details, dependent parents, work after the injury, medical bills.",
+    avoid: "Anything the number cannot be given without.",
+    rules: [
+      "Closed until opened; the title shows how many of its answers are given ('1 of 3').",
+      "Opens by itself when one of its answers needs correcting, and never closes by itself.",
+    ],
+  },
+  {
+    name: "Radio chips (row / stack / grid)",
     file: "components/form.tsx",
-    use: "Two to about five exclusive choices: chips in a row for short answers (Yes / No, death / injury), one per line for longer ones with hints.",
+    use: "Exclusive choices: a row for short answers (Yes / No, 0 / 1 / 2), one per line for longer ones with hints, a grid with icons for many short ones (type of work, state).",
     avoid: "Long lists (use Select) or choices that are not exclusive (use Checkbox).",
     rules: [
-      "Whole chip tappable, 44 px tall on a phone.",
-      "'Not sure' last, where it is a valid answer.",
-      "Nothing pre-selected.",
+      "The whole chip is the radio button (a transparent native input over it), so arrow keys and screen readers work as usual; 44 px tall on a phone.",
+      "A check mark and a blue edge show the choice, never colour alone.",
+      "'Not sure' last, where it is a valid answer. Nothing pre-selected.",
+    ],
+  },
+  {
+    name: "Month and year",
+    file: "components/form.tsx",
+    use: "The accident date in the quick estimate: two of the phone's own pickers.",
+    avoid: "Dates where the day matters for the answer itself (the claim date).",
+    rules: [
+      "Without a day the 1st is used; the exact day is an optional detail (for the time limit, and a wage order that changed mid-month).",
     ],
   },
   {
     name: "Select",
     file: "components/form.tsx",
-    use: "Long lists: how the person was involved, work, state, occupation.",
+    use: "Long lists: occupation, area of the Central-sphere wage, the month and year.",
     avoid: "Short lists (use radio chips).",
     rules: [
       "Native select: it is the most usable list on Android.",
@@ -155,10 +187,10 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Date input (day / month / year)",
     file: "components/form.tsx",
-    use: "Dates people know: the accident, the claim.",
+    use: "A full date where the day matters: the date the claim was filed.",
     avoid: "The phone's date picker (month-first on many devices, slow for dates years back).",
     rules: [
-      "Three numeric boxes with labels.",
+      "Three numeric boxes with labels; their widths are shares of the row, so very large text narrows them instead of widening the page.",
       "Hint 'For example, 15 6 2025'.",
       "Rejects dates that do not exist (31 2 2025) and future dates.",
     ],
@@ -171,6 +203,7 @@ export const COMPONENTS: ComponentSpec[] = [
     rules: [
       "₹ prefix and the numeric keypad; commas allowed.",
       "Reads the amount back as it is typed ('= ₹2.5 lakh a month') so a missing or extra zero is caught.",
+      "Accepts '25k', '2.5 lakh', '1.2 crore'; refuses exponents ('1e9') and more than ₹1 crore a month, and asks to check an amount above ₹10 lakh a month.",
     ],
   },
   {
@@ -183,17 +216,18 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Counter",
     file: "components/form.tsx",
-    use: "Small counts: children and parents who claim.",
+    use: "Small counts that can go past three: children who claim, dependent parents.",
     avoid: "Numbers that can be large.",
     rules: [
       "Starts unanswered (–); 0 is an answer, not a default.",
-      "− and + buttons are 44 px; the box can also be typed in.",
+      "− and + buttons are 44 px; the box can also be typed in, and a typed count above the limit is an error.",
+      "When a button disables under the keyboard focus, the focus moves to the other button.",
     ],
   },
   {
     name: "Checkbox",
     file: "components/form.tsx",
-    use: "An independent extra fact (needs an attendant permanently).",
+    use: "An independent extra fact (needs an attendant permanently; no disability certificate yet).",
     avoid: "Either/or choices.",
     rules: ["Whole row tappable."],
   },
@@ -207,7 +241,7 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Inline errors and 'answers left'",
     file: "pages/Estimator.tsx",
-    use: "A wrong answer (an impossible date, a number out of range) shows under the field once focus leaves it; unanswered questions are listed in the estimate panel, each a link to its field.",
+    use: "A wrong answer (an impossible date, a number out of range) shows under the field once focus leaves it; unanswered questions are counted in the estimate card, and the first three are links to their field (opening a closed group if needed).",
     avoid: "Errors while the person is still typing; red on fields nobody has reached yet.",
     rules: [
       "Red edge and icon, dark text, prefixed 'Error' for screen readers.",
@@ -220,27 +254,28 @@ export const COMPONENTS: ComponentSpec[] = [
     use: "An answer that ends or redirects a section 166 claim: owner-driver alone, vehicle never traced, no-fault compensation taken through the insurer.",
     avoid: "Cautions (those are notices below the estimate).",
     rules: [
-      "Shown right under the answer and in the estimate panel, which then shows no number.",
+      "Shown right under the check that gave it (each one, if there are two) and in the estimate card, which then shows no number.",
       "Says why and what to do instead (DLSA, NALSA 15100, the hit-and-run scheme amounts).",
     ],
   },
   {
-    name: "Estimate panel",
+    name: "Estimate card",
     file: "pages/ResultSummary.tsx",
-    use: "The live summary: answers left, or the amount, range, how far real awards land and links to the details.",
+    use: "The live summary, right under the quick steps: answers left, or the amount, range, how far real awards land and links to the details and the offer check.",
     avoid: "Long explanations (they are in the details below).",
     rules: [
-      "Sticky beside the form on a wide screen; below the form on a phone.",
+      "In the page's single column on every screen size; never a panel with its own scroll.",
       "Lakh / crore first in the CFI blue, the exact amount below, one line on what it means.",
+      "Announced once to screen readers when ready ('Estimate ready: ₹53 lakh'), without moving the focus.",
     ],
   },
   {
-    name: "Phone bar",
+    name: "Bottom bar",
     file: "pages/Estimator.tsx",
-    use: "On a phone: the estimate once there is one, otherwise the answers left and 'Next question'.",
-    avoid: "Wide screens (the panel is visible there).",
+    use: "Once there is an estimate (or a stop), a slim bar showing it while the estimate card is out of view, with a button to it.",
+    avoid: "Before there is anything to show.",
     rules: [
-      "Hidden while a field has focus (the keyboard is open) and while the estimate panel is on screen.",
+      "Hidden while any answer has focus and while the estimate card is on screen; the page keeps room under a focused answer for it.",
     ],
   },
   {
