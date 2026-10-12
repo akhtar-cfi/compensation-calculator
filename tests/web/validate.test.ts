@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { EMPTY_FORM, type FormState } from "../../web/src/form-to-input.js";
+import { EMPTY_FORM, parseAmount, type FormState } from "../../web/src/form-to-input.js";
 import { proofItems } from "../../web/src/prove.js";
 import { errorsFor } from "../../web/src/questions.js";
 import { fieldOfPath, validate } from "../../web/src/validate.js";
@@ -89,12 +89,36 @@ describe("validation", () => {
     expect(validate({ ...filed, claimFiledDate: "2025-7-1" }, TODAY).errors).toEqual({});
   });
 
-  it("flags text and out-of-range numbers as invalid, not missing", () => {
-    expect(validate({ ...ok, age: "thirty" }, TODAY).errors.age).toBe("err.invalid");
-    expect(validate({ ...ok, age: "140" }, TODAY).errors.age).toBe("err.invalid");
-    expect(validate({ ...ok, parents: "3" }, TODAY).errors.parents).toBe("err.invalid");
+  it("flags text and out-of-range numbers as wrong, not missing, saying what is expected", () => {
+    expect(validate({ ...ok, age: "thirty" }, TODAY).errors.age).toBe("err.age");
+    expect(validate({ ...ok, age: "140" }, TODAY).errors.age).toBe("err.age");
+    expect(validate({ ...ok, parents: "3" }, TODAY).errors.parents).toBe("err.parents");
     expect(validate({ ...ok, kind: "injury", certificatePct: "120" }, TODAY).errors.certificatePct).toBe(
-      "err.invalid",
+      "err.pct",
+    );
+    const salaried = { ...ok, employment: "permanent" as const, proof: "salary_slip" as const };
+    expect(validate({ ...salaried, monthlySalary: "twenty" }, TODAY).errors.monthlySalary).toBe("err.amount");
+  });
+
+  it("reads rupee amounts the way people type them", () => {
+    expect(parseAmount("")).toBeUndefined();
+    for (const [typed, rupees] of [
+      ["25000", 25000],
+      ["25,000", 25000],
+      ["₹ 25,000", 25000],
+      ["25k", 25000],
+      ["2.5 lakh", 250000],
+      ["2.5L", 250000],
+      ["15 lakhs", 1500000],
+      ["1.2 crore", 12000000],
+      ["2.5 लाख", 250000],
+    ] as const)
+      expect(parseAmount(typed), typed).toBe(rupees);
+    expect(parseAmount("lakh")).toBeNaN();
+    expect(parseAmount("abc")).toBeNaN();
+    const salaried = { ...ok, employment: "permanent" as const, proof: "salary_slip" as const };
+    expect(validate({ ...salaried, monthlySalary: "25k" }, TODAY).input?.victim.income?.monthlySalary).toBe(
+      25000,
     );
   });
 

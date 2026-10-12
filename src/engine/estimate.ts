@@ -67,6 +67,7 @@ function resolveMultiplier(rules: RulesBundle, age: number, ch: ParamChooser, wa
       "AGE_OUTSIDE_TABLE",
       "caution",
       `Age ${age} is outside the Sarla Verma table; multiplier ${m.multiplier} used.`,
+      { age, multiplier: m.multiplier },
     );
   return m.multiplier;
 }
@@ -300,6 +301,7 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
       "UNIDENTIFIED_USE_HIT_AND_RUN",
       "stop",
       `The offending vehicle is untraced: apply under the hit-and-run scheme (s.161): ${formatINR(h.death)} for death, ${formatINR(h.grievous_hurt)} for grievous hurt.`,
+      { death: formatINR(h.death), hurt: formatINR(h.grievous_hurt) },
     );
     ok = false;
   }
@@ -318,6 +320,7 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
         "LIMITATION",
         "caution",
         `More than ${lim.months} months since the accident. s.166(3) sets a 6-month limit, but the Supreme Court has directed (interim order, 4 Nov 2025) that claims not be dismissed as time-barred while it decides the challenge. File as soon as possible.`,
+        { months: lim.months },
       );
     }
   }

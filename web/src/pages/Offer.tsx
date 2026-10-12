@@ -5,8 +5,9 @@ import { Button, Card, H2 } from "../components/ui";
 import { Disclosure } from "../components/result";
 import { MoneyInput, TextInput } from "../components/form";
 import { rules } from "../data";
-import { useLang, useT } from "../i18n";
+import { useApprox, useLang, useT } from "../i18n";
 import { countView } from "../analytics";
+import { parseAmount } from "../form-to-input";
 
 interface OfferForm {
   amount: string;
@@ -44,6 +45,7 @@ const parse = (s: string) => {
 export function OfferCheck(props: { est: EstimateOutput }) {
   const t = useT();
   const lang = useLang();
+  const approx = useApprox();
   const [f, setF] = useState<OfferForm>(defaults);
   const [errors, setErrors] = useState<Partial<Record<keyof OfferForm, string>>>({});
   // The figures last checked, not the result: the result is worked out from them and the current estimate, so it
@@ -74,7 +76,7 @@ export function OfferCheck(props: { est: EstimateOutput }) {
     const errs: Partial<Record<keyof OfferForm, string>> = {};
     const v = {} as Record<keyof OfferForm, number>;
     for (const k of Object.keys(LIMITS) as (keyof OfferForm)[]) {
-      const n = parse(f[k]);
+      const n = k === "amount" ? (parseAmount(f[k]) ?? NaN) : parse(f[k]);
       const [lo, hi] = LIMITS[k];
       if (f[k].trim() === "") errs[k] = "err.required";
       else if (!Number.isFinite(n) || n < lo || n > hi) errs[k] = "err.invalid";
@@ -145,9 +147,9 @@ export function OfferCheck(props: { est: EstimateOutput }) {
         <div class="mt-6 border-t border-border pt-5" data-testid="offer-result" aria-live="polite">
           <p class="font-heading text-lg font-bold text-foreground" data-testid="offer-summary">
             {t("offer.summary", {
-              offer: formatApprox(checked!.amount),
+              offer: approx(formatApprox(checked!.amount)),
               p: result.offerPctOfStandard,
-              est: formatApprox(est.range!.standard),
+              est: approx(formatApprox(est.range!.standard)),
             })}
           </p>
           <div class="mt-4 grid gap-3 sm:grid-cols-3">

@@ -20,8 +20,10 @@ for (const { name, input } of examples()) {
       );
     const heads = page.locator("[data-head]");
     await expect(heads).toHaveCount(est.scenarios!.standard.heads.length);
-    for (const h of est.scenarios!.standard.heads)
+    for (const h of est.scenarios!.standard.heads) {
       await expect(page.locator(`[data-head=${h.id}]`)).toHaveAttribute("data-amount", String(h.amount));
+      if (h.worked) await expect(page.locator(`[data-head=${h.id}] [data-worked]`)).toHaveText(h.worked);
+    }
     for (const w of est.warnings) await expect(page.locator(`[data-code=${w.code}]`)).toHaveCount(1);
     if (est.practiceSpread) await expect(page.getByTestId("spread")).toContainText(`${est.practiceSpread.n}`);
     expect(outside, "requests outside the page's own origin").toEqual([]);

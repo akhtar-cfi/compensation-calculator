@@ -1,7 +1,8 @@
 import type { ComponentChildren } from "preact";
 import { ChevronDown, CircleAlert, Minus, Plus } from "lucide-preact";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
-import { useT } from "../i18n";
+import { parseAmount } from "../form-to-input";
+import { useApprox, useT } from "../i18n";
 
 /*
  * Form controls in the crashfreeindia.org style (shadcn "new-york"): small medium-weight labels, white fields with
@@ -107,10 +108,8 @@ export function TextInput(
 
 /** What a typed amount means, in the words people use: "= ₹2.5 lakh". */
 export function amountEcho(value: string): string | undefined {
-  const t = value.replace(/[,\s₹]/g, "");
-  if (!/^\d+(\.\d+)?$/.test(t)) return undefined;
-  const n = Number(t);
-  if (!(n > 0)) return undefined;
+  const n = parseAmount(value);
+  if (n === undefined || !(n > 0)) return undefined;
   return n >= 1e5 ? formatApprox(n) : formatINR(n);
 }
 
@@ -122,6 +121,7 @@ export function MoneyInput(
   props: FieldProps & { value: string; onInput: (v: string) => void; per?: string },
 ) {
   const t = useT();
+  const approx = useApprox();
   const echo = amountEcho(props.value);
   return (
     <Field {...props}>
@@ -149,7 +149,7 @@ export function MoneyInput(
         />
       </div>
       <p id={`${props.id}-echo`} aria-live="polite" class="mt-1 min-h-4 text-xs text-muted-foreground">
-        {echo ? t("money.echo", { x: echo, per: props.per ?? "" }).trim() : ""}
+        {echo ? t("money.echo", { x: approx(echo), per: props.per ?? "" }).trim() : ""}
       </p>
     </Field>
   );

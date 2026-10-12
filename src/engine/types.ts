@@ -134,6 +134,8 @@ export interface PayableHead {
   readonly label: string;
   readonly amount: number;
   readonly formula: string;
+  /** The formula with this case's numbers in it, ending in the amount ("₹25,000 × 12 × 1.5 × … = ₹51,00,000"). */
+  readonly worked?: string;
   readonly sources: readonly string[];
   readonly experimental?: boolean;
 }
@@ -184,6 +186,8 @@ export interface Warning {
   readonly code: WarningCode;
   readonly severity: "info" | "caution" | "stop";
   readonly message: string;
+  /** The values in the message (a state code, a date, an amount), so that it can be worded in another language. */
+  readonly vars?: Readonly<Record<string, string | number>>;
 }
 
 export interface SwingFactor {

@@ -6,7 +6,7 @@ import { Card, H2, Notice, Tag, Tel, linkCls } from "../components/ui";
 import { CaseTimeline, Checklist, Disclosure } from "../components/result";
 import { SourceLinks } from "../components/sources";
 import { loadCases, useLoaded } from "../data";
-import { hasKey, useLang, useT } from "../i18n";
+import { hasKey, useLang, useT, useWarnText } from "../i18n";
 import { proofItems } from "../prove";
 import { OfferCheck } from "./Offer";
 
@@ -23,6 +23,7 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
   const lang = useLang();
   const { est, input } = props;
   const enOnly = lang === "hi" ? "en" : undefined;
+  const warnText = useWarnText();
   const warnings = [...est.warnings].sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
   const cases = useLoaded(loadCases);
   if (!est.eligible || !est.scenarios) return null;
@@ -36,7 +37,7 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
       {list.map((w) => (
         <div key={w.code} id={`warn-${w.code}`} tabIndex={-1} class="scroll-mt-4 outline-none">
           <Notice code={w.code} severity={w.severity} title={t(`warn.${w.code}`)}>
-            <span lang={enOnly}>{w.message}</span>
+            <span lang={warnText(w).en ? "en" : undefined}>{warnText(w).text}</span>
           </Notice>
         </div>
       ))}
@@ -67,6 +68,11 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
                     </p>
                     <p class="font-semibold tabular-nums text-foreground">{formatINR(h.amount)}</p>
                   </div>
+                  {h.worked && (
+                    <p class="text-sm tabular-nums text-foreground" data-worked>
+                      {h.worked}
+                    </p>
+                  )}
                   <p class="text-xs text-muted-foreground" lang={enOnly}>
                     {h.formula}
                   </p>

@@ -1,4 +1,4 @@
-import { rupees } from "./money.js";
+import { formatFactor, formatINR, rupees } from "./money.js";
 import type { Intermediate, PayableHead } from "./types.js";
 
 export interface InjuryParams {
@@ -72,11 +72,15 @@ export function computeInjury(p: InjuryParams): { intermediates: Intermediate[];
     formula: "as estimated by treating doctors",
     sources: ["raj_kumar_2011"],
   });
+  const during = rupees(p.monthlyIncome * p.monthsOffWork);
+  const capacity = rupees(annualWithFp * (p.functionalPct / 100) * p.multiplier);
+  const futureAttendant = rupees(p.futureAttendantMonthly * 12 * p.multiplier * p.attendants);
   push({
     id: "loss_of_income_during_treatment",
     label: "Loss of earnings during treatment",
-    amount: rupees(p.monthlyIncome * p.monthsOffWork),
+    amount: during,
     formula: "monthly income x months off work",
+    worked: `${formatINR(p.monthlyIncome)} × ${p.monthsOffWork} = ${formatINR(during)}`,
     sources: [...new Set(["raj_kumar_2011", ...p.incomeSources])],
   });
   push({
@@ -91,15 +95,25 @@ export function computeInjury(p: InjuryParams): { intermediates: Intermediate[];
   push({
     id: "loss_of_earning_capacity",
     label: "Loss of future earning capacity",
-    amount: rupees(annualWithFp * (p.functionalPct / 100) * p.multiplier),
+    amount: capacity,
     formula: "monthly income x 12 x (1 + future prospects) x functional disability x multiplier",
+    worked: [
+      formatINR(p.monthlyIncome),
+      "12",
+      ...(p.futureProspectsPct ? [formatFactor(1 + p.futureProspectsPct / 100)] : []),
+      `${formatFactor(p.functionalPct)}%`,
+      String(p.multiplier),
+    ]
+      .join(" × ")
+      .concat(` = ${formatINR(capacity)}`),
     sources: [...new Set(["raj_kumar_2011", "sidram_2022", "pranay_sethi_2017", ...p.incomeSources])],
   });
   push({
     id: "future_attendant",
     label: "Future attendant charges",
-    amount: rupees(p.futureAttendantMonthly * 12 * p.multiplier * p.attendants),
+    amount: futureAttendant,
     formula: "attendant wage x 12 x multiplier x attendants",
+    worked: `${formatINR(p.futureAttendantMonthly)} × 12 × ${p.multiplier}${p.attendants > 1 ? ` × ${p.attendants}` : ""} = ${formatINR(futureAttendant)}`,
     sources: ["kajal_2020", "hansraj_2026"],
   });
   push({

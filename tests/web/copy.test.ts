@@ -2,9 +2,10 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { Forum } from "../../src/cases/schema.js";
-import { Employment } from "../../src/engine/types.js";
+import { estimate } from "../../src/engine/index.js";
+import { Employment, type EstimateInput } from "../../src/engine/types.js";
 import { QUESTIONS } from "../../web/src/questions.js";
-import { REPO_ROOT } from "../../src/rules/load.js";
+import { REPO_ROOT, loadRules } from "../../src/rules/load.js";
 import { translate, type Dict } from "../../web/src/translate.js";
 
 const copy = (lang: string): Dict =>
@@ -57,6 +58,67 @@ describe("web copy (EN/HI)", () => {
       expect(en[k], k).toBeTruthy();
       expect(hi[k], k).toBeTruthy();
     }
+  });
+
+  it("words every engine warning in Hindi, and its English wording matches the engine's", () => {
+    const rules = loadRules();
+    const base: EstimateInput = {
+      kind: "death",
+      accidentDate: "2025-06-01",
+      state: "DL",
+      victimRole: "pedestrian",
+      victim: {
+        ageYears: 30,
+        employment: "permanent",
+        income: { proof: "salary_slip", monthlySalary: 25000 },
+      },
+      family: { married: true, spouse: true, children: 2, parents: 0 },
+    };
+    // Inputs chosen to raise as many different warnings as possible.
+    const inputs: EstimateInput[] = [
+      base,
+      { ...base, offendingVehicle: "unidentified" },
+      { ...base, offendingVehicle: "identified_uninsured", accidentDate: "2024-01-01" },
+      { ...base, victimRole: "owner_driver_single_vehicle" },
+      { ...base, s164: "accepted_via_insurer" },
+      { ...base, state: "UP", victim: { ageYears: 30, employment: "informal" } },
+      { ...base, state: "CENTRAL", victim: { ageYears: 30, employment: "informal" } },
+      { ...base, victim: { ageYears: 8, employment: "minor" } },
+      {
+        ...base,
+        victim: {
+          ageYears: 75,
+          employment: "self_employed",
+          income: { proof: "itr", itrAnnualIncomes: [{ fy: "2024-25", income: 600000 }] },
+        },
+      },
+      {
+        ...base,
+        kind: "injury",
+        victimRole: "driver_of_involved_vehicle",
+        victim: { ageYears: 25, employment: "informal" },
+        injury: { workCapacity: "with_difficulty" },
+      },
+      {
+        ...base,
+        kind: "injury",
+        victim: { ageYears: 25, employment: "informal" },
+        injury: { certificatePct: 40, certificateBasis: "limb" },
+      },
+    ];
+    const seen = new Set<string>();
+    for (const input of inputs)
+      for (const w of estimate(rules, input, { asOf: "2026-10-12" }).warnings) {
+        seen.add(w.code);
+        if (w.code === "MW_CONTESTED") continue; // its text comes from the wage data, in English
+        const key = [`warnmsg.${w.code}.${w.vars?.variant}`, `warnmsg.${w.code}`].find((k) => en[k])!;
+        expect(key, w.code).toBeDefined();
+        // ZONE_ASSUMED names the state in full in the engine's text; the page gives the name itself.
+        if (w.code !== "ZONE_ASSUMED")
+          expect(translate({ en, hi }, "en", key, w.vars), w.code).toBe(w.message);
+        expect(translate({ en, hi }, "hi", key, w.vars), w.code).not.toMatch(/\{\w+\}/);
+      }
+    expect(seen.size).toBeGreaterThan(12);
   });
 
   it("keeps the CFI tone: no emoji, brand name never in capitals", () => {

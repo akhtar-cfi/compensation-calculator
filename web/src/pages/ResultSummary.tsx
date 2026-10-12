@@ -1,9 +1,9 @@
 import { useState } from "preact/hooks";
 import { CircleAlert, ListChecks } from "lucide-preact";
-import type { EstimateOutput, Warning } from "../../../src/engine/types.js";
+import type { EstimateInput, EstimateOutput, Warning } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { rules } from "../data";
-import { useLang, useT } from "../i18n";
+import { useApprox, useT, useWarnText } from "../i18n";
 import { AnswerPanel, RangeBar, ShareActions } from "../components/result";
 import { Card, Notice, Tel, linkCls } from "../components/ui";
 import type { StopCode } from "../questions";
@@ -56,6 +56,8 @@ const LIMITS: Partial<Record<string, string>> = { MW_MISSING: "lim.MW_MISSING" }
  */
 export function ResultSummary(props: {
   est?: EstimateOutput | undefined;
+  /** The facts the estimate was made on (named in the shared summary). */
+  input?: EstimateInput | undefined;
   stop?: StopCode | undefined;
   missing: { id: FieldName; label: string; invalid: boolean }[];
   /** The state answered, to name it in a message. */
@@ -63,8 +65,9 @@ export function ResultSummary(props: {
   onMissing: (id: FieldName) => void;
 }) {
   const t = useT();
-  const lang = useLang();
   const [all, setAll] = useState(false);
+  const warnText = useWarnText();
+  const approx = useApprox();
   const { est } = props;
 
   const heading = (
@@ -155,12 +158,12 @@ export function ResultSummary(props: {
                 // A limit of the calculator, not of the claim: amber, with what to do instead.
                 <Notice key={w.code} code={w.code} severity="caution" title={t(`warn.${w.code}`)}>
                   <p>
-                    <Tel text={t(LIMITS[w.code]!, { state: t(`state.${props.state}`) })} />
+                    <Tel text={t(LIMITS[w.code]!, { state: t(`stname.${props.state}`) })} />
                   </p>
                 </Notice>
               ) : (
                 <Notice key={w.code} code={w.code} severity={w.severity} title={t(`warn.${w.code}`)}>
-                  <span lang={lang === "hi" ? "en" : undefined}>{w.message}</span>
+                  <span lang={warnText(w).en ? "en" : undefined}>{warnText(w).text}</span>
                 </Notice>
               ),
             )}
@@ -179,7 +182,11 @@ export function ResultSummary(props: {
     <Card class="p-5" id="result">
       {heading}
       <div class="mt-3">
-        <AnswerPanel approx={est.headline.approx} exact={est.headline.amount} meaning={t("res.meaning")} />
+        <AnswerPanel
+          approx={approx(est.headline.approx)}
+          exact={est.headline.amount}
+          meaning={t("res.meaning")}
+        />
       </div>
 
       <h3 class="mt-5 text-sm font-semibold text-foreground">{t("res.range")}</h3>
@@ -211,8 +218,8 @@ export function ResultSummary(props: {
             label: ps.label,
             lo: rel(ps.p25),
             hi: rel(ps.p75),
-            a: formatApprox(r.standard * ps.p25),
-            b: formatApprox(r.standard * ps.p75),
+            a: approx(formatApprox(r.standard * ps.p25)),
+            b: approx(formatApprox(r.standard * ps.p75)),
           })}
         </p>
       )}
@@ -247,7 +254,7 @@ export function ResultSummary(props: {
           {t("sum.details")}
         </a>
         <div class="mt-2">
-          <ShareActions text={shareText(est, t, siteUrl())} title={t("app.name")} />
+          <ShareActions text={shareText(est, props.input, t, siteUrl())} title={t("app.name")} />
         </div>
       </div>
       <p class="mt-4 text-xs text-muted-foreground">

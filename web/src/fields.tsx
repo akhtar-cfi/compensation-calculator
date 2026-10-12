@@ -216,11 +216,15 @@ export function QuestionFields(props: {
                 id="zone"
                 optional
                 label={t("f.zone")}
+                hint={f.state === "CENTRAL" ? t("f.zone.central") : undefined}
                 value={f.zone}
                 onChange={(v) => set("zone", v)}
                 options={[
                   { value: "", label: t("opt.notSure") },
-                  ...zones.map((z) => ({ value: z, label: z })),
+                  ...zones.map((z) => ({
+                    value: z,
+                    label: f.state === "CENTRAL" ? t(`zone.central.${z}`) : z,
+                  })),
                 ]}
               />
             </Reveal>

@@ -29,3 +29,14 @@ export function formatApprox(n: number): string {
   if (abs >= 1e5) return `₹${round2(n / 1e5)} lakh`;
   return formatINR(round2(n));
 }
+
+/** A factor in a worked calculation: 1.5, 1.15 (no trailing zeros). */
+export function formatFactor(x: number): string {
+  return String(Number(x.toFixed(4)));
+}
+
+/** A share as people write it in a calculation: 1/3, 1/2, or a decimal when it is not one over a whole number. */
+export function formatShare(x: number): string {
+  const inv = 1 / x;
+  return x > 0 && Math.abs(inv - Math.round(inv)) < 1e-9 ? `1/${Math.round(inv)}` : formatFactor(x);
+}

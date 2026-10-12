@@ -21,6 +21,26 @@ export type Validation = { input?: EstimateInput; errors: Partial<Record<FieldNa
 
 const DATE_FIELDS: readonly FieldName[] = ["accidentDate", "claimFiledDate"];
 
+const AMOUNT = "err.amount";
+/** What to say when an answer cannot be used, by the kind of answer (copy keys). */
+const INVALID: Partial<Record<FieldName, string>> = {
+  age: "err.age",
+  certificatePct: "err.pct",
+  monthsOffWork: "err.number",
+  hospitalDays: "err.number",
+  children: "err.count",
+  parents: "err.parents",
+  dependentParents: "err.parents",
+  monthlySalary: AMOUNT,
+  monthlyTax: AMOUNT,
+  itrAnnualIncome: AMOUNT,
+  claimedMonthly: AMOUNT,
+  pensionMonthly: AMOUNT,
+  familyPensionMonthly: AMOUNT,
+  medicalBills: AMOUNT,
+  cashlessPaid: AMOUNT,
+};
+
 /**
  * Validates every answer on the person's path. Error values are copy keys (err.*). The engine's own schema is the
  * authority; the checks here are the ones it cannot know: a question that must be answered even though the engine
@@ -40,7 +60,7 @@ export function validate(form: FormState, today: string): Validation {
       if (DATE_FIELDS.includes(field)) {
         const d = parseDate(String(f[field]));
         set(field, d.status === "empty" ? "err.required" : "err.date");
-      } else set(field, String(f[field]).trim() === "" ? "err.required" : "err.invalid");
+      } else set(field, String(f[field]).trim() === "" ? "err.required" : (INVALID[field] ?? "err.invalid"));
     }
   }
   // Must be answered (each offers "Not sure" or "Something else" where that is a valid answer).

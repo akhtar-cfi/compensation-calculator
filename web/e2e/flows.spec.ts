@@ -49,6 +49,9 @@ test("a wrong answer is reported when leaving it; the list of answers left jumps
   await fillDate(page, "accidentDate", "2025-06-01");
   await leave(page);
   await expect(page.locator("#accidentDate-error")).toHaveCount(0);
+  await page.fill("#age", "130");
+  await leave(page);
+  await expect(page.locator("#age-error")).toContainText("from 0 to 110"); // says what is expected
 
   await page.locator("#result [data-missing=kind]").click();
   await expect(page.locator('input[name="kind"]').first()).toBeFocused();
@@ -76,6 +79,10 @@ test("follow-up questions appear only when they apply", async ({ page }) => {
   await page.locator('input[name="proof"][value="salary_slip"]').check();
   await page.fill("#monthlySalary", "25,000");
   await expect(page.locator("#monthlySalary-echo")).toHaveText("= ₹25,000 a month");
+  await page.fill("#monthlySalary", "25k"); // amounts as people type them
+  await expect(page.locator("#monthlySalary-echo")).toHaveText("= ₹25,000 a month");
+  await page.fill("#monthlySalary", "2.5 lakh");
+  await expect(page.locator("#monthlySalary-echo")).toHaveText("= ₹2.5 lakh a month");
 
   await expect(page.locator('input[name="spouse"]')).toHaveCount(0);
   await page.locator('input[name="married"][value="yes"]').check();
@@ -177,6 +184,16 @@ test("the estimate in Hindi shows the same amounts", async ({ page }) => {
   await page.getByRole("button", { name: "हिंदी" }).click();
   await expect(page.locator("[data-testid=headline] [data-amount]")).toHaveAttribute("data-amount", amount!);
   await expect(page.locator("[data-head=loss_of_dependency]")).toContainText("आश्रितता की हानि");
+  await expect(page.locator("#result [data-testid=headline]")).toContainText("लाख");
+});
+
+test("in Hindi, the cautions are in Hindi too", async ({ page }) => {
+  const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+  await fillForm(page, input);
+  await page.getByRole("button", { name: "हिंदी" }).click();
+  const note = page.locator("#warn-INJURY_EXPERIMENTAL");
+  await expect(note).toContainText("प्रायोगिक");
+  await expect(note.locator('[lang="en"]')).toHaveCount(0);
 });
 
 test("older addresses open the calculator at the matching place", async ({ page }) => {

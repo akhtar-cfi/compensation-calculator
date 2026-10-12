@@ -14,6 +14,7 @@ async function noSeriousViolations(page: Page, where: string) {
 
 for (const lang of ["en", "hi"] as const) {
   test(`no serious accessibility violations (${lang})`, async ({ page }) => {
+    test.setTimeout(60_000); // about ten full-page scans
     await page.goto(lang === "hi" ? "?lang=hi#/" : "#/");
     await noSeriousViolations(page, "empty form");
     for (const route of ["how", "rules", "offer-study", "design"]) {

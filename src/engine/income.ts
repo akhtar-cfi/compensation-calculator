@@ -50,6 +50,7 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
       "ZONE_ASSUMED",
       "caution",
       `No zone given for ${st.name}; used ${st.zones[0]}. Choose the zone of the person's place of work.`,
+      { state: input.state, zone: st.zones[0]! },
     );
   }
   const hit = minimumWage(rules, { state: input.state, zone: input.zone, category, on: input.accidentDate });
@@ -58,6 +59,7 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
       "MW_MISSING",
       "stop",
       `No verified minimum wage for ${input.state} on ${input.accidentDate}. The estimate cannot be computed without it.`,
+      { state: input.state, date: input.accidentDate },
     );
     return undefined;
   }
@@ -66,6 +68,7 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
       "MW_CATEGORY_FALLBACK",
       "caution",
       `${hit.state} has no '${category}' rate; used '${hit.category}'.`,
+      { state: hit.state, category, used: hit.category },
     );
   }
   const r = hit.revision;
@@ -79,6 +82,7 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
       "MW_MAY_BE_OUTDATED",
       "caution",
       `The latest ${hit.state} minimum wage on file took effect on ${r.effective_from}, more than ${MW_FRESH_MONTHS} months before the accident, and the official source has not been checked since the accident date. A later revision may apply.`,
+      { state: hit.state, from: r.effective_from, months: MW_FRESH_MONTHS },
     );
   }
   return {
@@ -152,9 +156,12 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
         "TAX_ESTIMATED",
         "info",
         `Income tax estimated from FY ${fy} slabs; enter actual TDS if known.`,
+        { fy },
       );
       if (!t.found)
-        ctx.warn.add("TAX_YEAR_MISSING", "caution", `No tax table for FY ${fy}; used the latest table.`);
+        ctx.warn.add("TAX_YEAR_MISSING", "caution", `No tax table for FY ${fy}; used the latest table.`, {
+          fy,
+        });
       assumptions.push(`Income tax estimated at ${formatINR(annualTax)}/year (FY ${fy}).`);
     }
     const monthly = Math.max(0, inc.monthlySalary - annualTax / 12);
@@ -192,6 +199,7 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
       "TAX_ESTIMATED",
       "info",
       `Income tax estimated from FY ${fy} slabs on the average return income.`,
+      { fy, variant: "itr" },
     );
     const monthly = Math.max(0, (avg - t.annualTax) / 12);
     return {

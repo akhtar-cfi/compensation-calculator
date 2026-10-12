@@ -1,5 +1,5 @@
 import type { ConventionalAmounts } from "./formula.js";
-import { formatINR, rupees } from "./money.js";
+import { formatFactor, formatINR, formatShare, rupees } from "./money.js";
 import type { Intermediate, PayableHead } from "./types.js";
 
 export interface DeathParams {
@@ -63,13 +63,27 @@ export function computeDeath(p: DeathParams): { intermediates: Intermediate[]; h
       unit: "count",
     },
   ];
+  const dependency = rupees(contribution * p.multiplier);
+  const steps = (base: number, amount: number) =>
+    p.conventional.steps > 0
+      ? `${formatINR(base)}${" × 1.1".repeat(p.conventional.steps)} = ${formatINR(amount)}`
+      : formatINR(amount);
   const heads: PayableHead[] = [
     {
       kind: "payable",
       id: "loss_of_dependency",
       label: "Loss of dependency",
-      amount: rupees(contribution * p.multiplier),
+      amount: dependency,
       formula: "monthly income x 12 x (1 + future prospects) x (1 - personal deduction) x multiplier",
+      worked: [
+        formatINR(p.monthlyIncome),
+        "12",
+        ...(p.futureProspectsPct ? [formatFactor(1 + p.futureProspectsPct / 100)] : []),
+        ...(p.deduction ? [`(1 − ${formatShare(p.deduction)})`] : []),
+        String(p.multiplier),
+      ]
+        .join(" × ")
+        .concat(` = ${formatINR(dependency)}`),
       sources: [...new Set(["sarla_verma_2009", "pranay_sethi_2017", ...p.incomeSources])],
     },
     {
@@ -77,7 +91,8 @@ export function computeDeath(p: DeathParams): { intermediates: Intermediate[]; h
       id: "loss_of_estate",
       label: "Loss of estate",
       amount: p.conventional.lossOfEstate,
-      formula: `Rs 15,000 + ${p.conventional.steps} x 10%`,
+      formula: `₹15,000 + ${p.conventional.steps} x 10%`,
+      worked: steps(15000, p.conventional.lossOfEstate),
       sources: ["pranay_sethi_2017"],
     },
     {
@@ -85,7 +100,8 @@ export function computeDeath(p: DeathParams): { intermediates: Intermediate[]; h
       id: "funeral",
       label: "Funeral expenses",
       amount: p.conventional.funeral,
-      formula: `Rs 15,000 + ${p.conventional.steps} x 10%`,
+      formula: `₹15,000 + ${p.conventional.steps} x 10%`,
+      worked: steps(15000, p.conventional.funeral),
       sources: ["pranay_sethi_2017"],
     },
     {
@@ -94,6 +110,7 @@ export function computeDeath(p: DeathParams): { intermediates: Intermediate[]; h
       label: "Loss of consortium",
       amount: p.conventional.consortiumPerClaimant * p.consortiumClaimants,
       formula: `${p.consortiumClaimants} claimant(s) x ${formatINR(p.conventional.consortiumPerClaimant)}`,
+      worked: `${p.consortiumClaimants} × ${formatINR(p.conventional.consortiumPerClaimant)} = ${formatINR(p.conventional.consortiumPerClaimant * p.consortiumClaimants)}`,
       sources: ["magma_2018", "satinder_kaur_2020", "pranay_sethi_2017"],
     },
   ];

@@ -138,6 +138,30 @@ const num = (s: string): number | undefined => {
   return Number.isFinite(n) ? n : NaN;
 };
 
+const SCALES: readonly [RegExp, number][] = [
+  [/^(.*?)(k|thousand|हज़ार|हजार)$/, 1e3],
+  [/^(.*?)(l|lac|lacs|lakh|lakhs|लाख)$/, 1e5],
+  [/^(.*?)(cr|crore|crores|करोड़|करोड)$/, 1e7],
+];
+
+/**
+ * A rupee amount as people type it: "25000", "25,000", "₹25,000", "25k", "2.5 lakh", "1.2 crore" (also in Hindi).
+ * Undefined when empty, NaN when it cannot be read.
+ */
+export function parseAmount(s: string): number | undefined {
+  const t = s.replace(/[,\s₹]/g, "").toLowerCase();
+  if (t === "") return undefined;
+  for (const [re, scale] of SCALES) {
+    const m = re.exec(t);
+    if (m) {
+      const n = m[1] === "" ? NaN : Number(m[1]);
+      return Number.isFinite(n) ? Math.round(n * scale) : NaN;
+    }
+  }
+  const n = Number(t);
+  return Number.isFinite(n) ? n : NaN;
+}
+
 const known = <T extends string>(v: T): Exclude<T, "" | "unknown"> | undefined =>
   v === "" || v === "unknown" ? undefined : (v as Exclude<T, "" | "unknown">);
 
@@ -158,17 +182,17 @@ export function formToInput(f: FormState): FormResult {
   const fields = incomeFields(f.employment);
   const salaryProof = fields.includes("salary") && f.proof === "salary_slip";
   const itrProof = fields.includes("itr") && f.proof === "itr";
-  const itr = num(f.itrAnnualIncome);
+  const itr = parseAmount(f.itrAnnualIncome);
   const income = compact({
     proof: salaryProof ? ("salary_slip" as const) : itrProof ? ("itr" as const) : ("none" as const),
-    monthlySalary: salaryProof ? num(f.monthlySalary) : undefined,
-    monthlyTax: salaryProof ? num(f.monthlyTax) : undefined,
+    monthlySalary: salaryProof ? parseAmount(f.monthlySalary) : undefined,
+    monthlyTax: salaryProof ? parseAmount(f.monthlyTax) : undefined,
     itrAnnualIncomes:
       itrProof && itr !== undefined ? [{ fy: "latest before the accident", income: itr }] : undefined,
     claimedMonthly:
-      fields.includes("claimed") && !salaryProof && !itrProof ? num(f.claimedMonthly) : undefined,
-    pensionMonthly: fields.includes("pension") ? num(f.pensionMonthly) : undefined,
-    familyPensionMonthly: fields.includes("pension") ? num(f.familyPensionMonthly) : undefined,
+      fields.includes("claimed") && !salaryProof && !itrProof ? parseAmount(f.claimedMonthly) : undefined,
+    pensionMonthly: fields.includes("pension") ? parseAmount(f.pensionMonthly) : undefined,
+    familyPensionMonthly: fields.includes("pension") ? parseAmount(f.familyPensionMonthly) : undefined,
   });
   const married = yesNo(f.married);
   const death = f.kind === "death";
@@ -197,8 +221,8 @@ export function formToInput(f: FormState): FormResult {
       dependentParents: death ? num(f.dependentParents) : undefined,
     }),
     medical:
-      num(f.medicalBills) !== undefined
-        ? compact({ bills: num(f.medicalBills), paidByCashlessScheme: num(f.cashlessPaid) })
+      parseAmount(f.medicalBills) !== undefined
+        ? compact({ bills: parseAmount(f.medicalBills), paidByCashlessScheme: parseAmount(f.cashlessPaid) })
         : undefined,
     injury:
       f.kind === "injury"

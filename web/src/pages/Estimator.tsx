@@ -5,7 +5,7 @@ import { focusField } from "../components/form";
 import { Card, H1, Lead } from "../components/ui";
 import { fieldLabels, QuestionFields, type FieldError, type SetField } from "../fields";
 import { EMPTY_FORM, type FormState } from "../form-to-input";
-import { useT } from "../i18n";
+import { useApprox, useT } from "../i18n";
 import {
   activePath,
   PAGE_LAYOUT,
@@ -52,6 +52,7 @@ export function Estimator(props: {
   const active = useMemo(() => new Set(activePath(f)), [f]);
   const sections: Section[] = ["accident", "person", "family", "details"];
   const labels = fieldLabels(t);
+  const approx = useApprox();
 
   const set: SetField = (k, val) => props.setForm({ ...f, [k]: val });
   const err: FieldError = (k) => {
@@ -208,6 +209,7 @@ export function Estimator(props: {
           >
             <ResultSummary
               est={stop ? undefined : props.computed?.est}
+              input={props.computed?.input}
               stop={stop}
               missing={missing}
               state={f.state}
@@ -223,7 +225,9 @@ export function Estimator(props: {
         </div>
       </div>
       <PhoneBar
-        amount={complete ? props.computed?.est.headline?.approx : undefined}
+        amount={
+          complete && props.computed?.est.headline ? approx(props.computed.est.headline.approx) : undefined
+        }
         stopped={Boolean(stop) || (props.computed !== undefined && !complete)}
         left={missing.length}
         onNext={() => missing[0] && goTo(missing[0].id)}
