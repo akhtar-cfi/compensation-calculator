@@ -23,7 +23,11 @@ describe("the shared summary", () => {
     const text = shareText(est, input, t, "https://example.org/");
     expect(text).toContain("DRAFT");
     expect(text).toContain("Facts: death of a 30-year-old");
-    expect(text).toContain("Delhi · accident on 2025-06-01");
+    expect(text).toContain("Delhi · accident: 2025-06-01");
+    expect(text).toContain("Family claiming: husband or wife, 2 children, 0 parents");
+    expect(shareText(est, input, t, "https://example.org/", "June 2025 (day not given)")).toContain(
+      "accident: June 2025 (day not given)",
+    );
     expect(text).toContain("Monthly income used: ₹25,000");
     expect(text).toContain("₹52,81,500");
     expect(text).toContain("Not legal advice");

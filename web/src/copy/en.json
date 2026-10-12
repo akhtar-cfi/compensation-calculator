@@ -384,7 +384,7 @@
   "res.meaning": "What the Supreme Court's method gives on these facts. Not a promise of what a tribunal will award.",
   "share.draft": "DRAFT estimate from Crashfree India's compensation calculator (not yet legally reviewed)",
   "share.asof": "As of {d}",
-  "share.facts": "Facts: {kind} of a {age}-year-old · {work} · {state} · accident on {date}",
+  "share.facts": "Facts: {kind} of a {age}-year-old · {work} · {state} · accident: {date}",
   "share.income": "Monthly income used: {x}",
   "share.amount": "Legal entitlement on these facts: {x} (about {approx})",
   "share.range": "Range: {lo} to {hi}",
