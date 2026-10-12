@@ -1,14 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from "preact/hooks";
-import { ArrowDown, RotateCcw } from "lucide-preact";
+import { ArrowDown, ArrowUp, RotateCcw } from "lucide-preact";
 import type { EstimateInput, EstimateOutput } from "../../../src/engine/types.js";
 import { focusField } from "../components/form";
 import { Card, H1, Lead } from "../components/ui";
 import { fieldLabels, QuestionFields, type FieldError, type SetField } from "../fields";
-import type { FormState } from "../form-to-input";
+import { EMPTY_FORM, type FormState } from "../form-to-input";
 import { useT } from "../i18n";
 import {
   activePath,
-  ALL_FIELDS,
   PAGE_LAYOUT,
   question,
   stopAfter,
@@ -48,16 +47,18 @@ export function Estimator(props: {
   const t = useT();
   const { form: f, v } = props;
   const [touched, setTouched] = useState<ReadonlySet<FieldName>>(new Set());
-  const [showEmpty, setShowEmpty] = useState(false);
+  // Answers someone was sent to from the list of answers left: these say "please answer" even before they are left.
+  const [revealed, setRevealed] = useState<ReadonlySet<FieldName>>(new Set());
   const active = useMemo(() => new Set(activePath(f)), [f]);
+  const sections: Section[] = ["accident", "person", "family", "details"];
   const labels = fieldLabels(t);
 
   const set: SetField = (k, val) => props.setForm({ ...f, [k]: val });
   const err: FieldError = (k) => {
     const e = v.errors[k];
     if (!e) return undefined;
-    if (EMPTY.has(e)) return showEmpty ? t(e) : undefined;
-    return touched.has(k) || showEmpty ? t(e) : undefined;
+    if (EMPTY.has(e)) return revealed.has(k) ? t(e) : undefined;
+    return touched.has(k) || revealed.has(k) ? t(e) : undefined;
   };
 
   /** A question's answers count as touched once focus leaves it (errors appear then, not while typing). */
@@ -72,36 +73,83 @@ export function Estimator(props: {
     .map((id) => [id, stopAfter(id, f)] as const)
     .filter((x): x is readonly [QuestionId, StopCode] => Boolean(x[1]));
   const stop = stops[0]?.[1];
+  // After an answer that ends the claim, the questions below it are not needed: shown dimmed and out of reach.
+  const order = sections.flatMap((s) => PAGE_LAYOUT[s].map((q) => q.id)).filter((id) => active.has(id));
+  const stopAt = stops[0] ? order.indexOf(stops[0][0]) : -1;
+  const after = (id: QuestionId) => stopAt >= 0 && order.indexOf(id) > stopAt;
 
-  const missing = ALL_FIELDS.filter((k) => v.errors[k]).map((k) => ({ id: k, label: labels[k] ?? k }));
-  const goTo = (id: string) => {
-    setShowEmpty(true);
+  // One entry per question still to answer (or to correct), in the order they appear on the page.
+  const missing = sections
+    .flatMap((s) => PAGE_LAYOUT[s].filter((q) => active.has(q.id)))
+    .flatMap(({ id }) => {
+      const k = question(id).fields.find((x) => v.errors[x]);
+      return k ? [{ id: k, label: labels[k] ?? k, invalid: !EMPTY.has(v.errors[k]!) }] : [];
+    });
+  const goTo = (id: FieldName) => {
+    if (!revealed.has(id)) setRevealed(new Set([...revealed, id]));
     focusField(id);
   };
+  const [confirming, setConfirming] = useState(false);
+  const restart = () => {
+    setTouched(new Set());
+    setRevealed(new Set());
+    setConfirming(false);
+    props.onRestart();
+  };
+  const answered = JSON.stringify(f) !== JSON.stringify(EMPTY_FORM);
 
-  const sections: Section[] = ["accident", "person", "family", "details"];
-  const complete = props.computed?.est.eligible && !stop;
+  const complete = Boolean(props.computed?.est.eligible && props.computed.est.headline) && !stop;
 
   return (
-    <div class="bg-subtle pb-24 lg:pb-0">
+    <div class="bg-subtle">
       <div class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 md:py-10">
         <H1 id="page-title">{t("calc.title")}</H1>
-        <Lead>{t("calc.lead")}</Lead>
-        <div class="mt-1 flex flex-wrap items-center justify-between gap-x-4">
+        <Lead class="print:hidden">{t("calc.lead")}</Lead>
+        {complete && (
+          <p class="mt-2 hidden text-sm text-muted-foreground print:block">{t("calc.printNote")}</p>
+        )}
+        <div class="mt-1 flex flex-wrap items-center justify-between gap-x-4 print:hidden">
           <p class="text-xs text-muted-foreground">{t("calc.meta")}</p>
-          <button
-            type="button"
-            data-testid="restart"
-            onClick={props.onRestart}
-            class="no-print -mr-2 inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-muted-foreground hover:text-foreground sm:min-h-9"
-          >
-            <RotateCcw aria-hidden="true" class="h-4 w-4" />
-            {t("app.restart")}
-          </button>
+          {answered &&
+            (confirming ? (
+              <div
+                role="group"
+                aria-label={t("app.clearQ")}
+                class="no-print flex flex-wrap items-center gap-2 text-sm"
+              >
+                <span class="font-medium text-foreground">{t("app.clearQ")}</span>
+                <button
+                  type="button"
+                  data-testid="restart-confirm"
+                  onClick={restart}
+                  class="inline-flex min-h-11 items-center rounded-md border border-danger px-3 font-medium text-foreground hover:bg-danger/5 sm:min-h-9"
+                >
+                  {t("app.clear")}
+                </button>
+                <button
+                  type="button"
+                  autoFocus
+                  onClick={() => setConfirming(false)}
+                  class="inline-flex min-h-11 items-center rounded-md border border-input px-3 font-medium text-foreground hover:bg-subtle sm:min-h-9"
+                >
+                  {t("app.keep")}
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                data-testid="restart"
+                onClick={() => setConfirming(true)}
+                class="no-print -mr-2 inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-muted-foreground hover:text-foreground sm:min-h-9"
+              >
+                <RotateCcw aria-hidden="true" class="h-4 w-4" />
+                {t("app.restart")}
+              </button>
+            ))}
         </div>
 
         <div class="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-          <Card class="lg:col-start-1 lg:row-start-1">
+          <Card class="no-print lg:col-start-1 lg:row-start-1">
             <form noValidate onSubmit={(e) => e.preventDefault()} aria-labelledby="page-title">
               {sections.map((s, si) => {
                 const items = PAGE_LAYOUT[s].filter((q) => active.has(q.id));
@@ -133,12 +181,14 @@ export function Estimator(props: {
                             key={q.id}
                             data-question={q.id}
                             onFocusOut={leave(q.id)}
-                            class={q.wide ? "sm:col-span-2" : ""}
+                            inert={after(q.id)}
+                            class={`${q.wide ? "sm:col-span-2" : ""} ${after(q.id) ? "opacity-50" : ""}`}
                           >
                             <QuestionFields id={q.id} f={f} set={set} err={err} setForm={props.setForm} />
                             {code && (
                               <div class="mt-3">
                                 <StopNotice code={code} />
+                                <p class="mt-2 text-sm text-muted-foreground">{t("stop.below")}</p>
                               </div>
                             )}
                           </div>
@@ -154,12 +204,13 @@ export function Estimator(props: {
           <aside
             id="summary"
             aria-label={t("sum.title")}
-            class="lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1"
+            class="lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto"
           >
             <ResultSummary
               est={stop ? undefined : props.computed?.est}
               stop={stop}
               missing={missing}
+              state={f.state}
               onMissing={goTo}
             />
           </aside>
@@ -173,7 +224,7 @@ export function Estimator(props: {
       </div>
       <PhoneBar
         amount={complete ? props.computed?.est.headline?.approx : undefined}
-        stopped={Boolean(stop) || (props.computed !== undefined && !props.computed.est.eligible)}
+        stopped={Boolean(stop) || (props.computed !== undefined && !complete)}
         left={missing.length}
         onNext={() => missing[0] && goTo(missing[0].id)}
       />
@@ -195,6 +246,7 @@ function PhoneBar(props: {
   const t = useT();
   const [typing, setTyping] = useState(false);
   const [resultVisible, setResultVisible] = useState(false);
+  const [resultAbove, setResultAbove] = useState(false);
 
   useEffect(() => {
     const isField = (el: EventTarget | null) =>
@@ -207,7 +259,13 @@ function PhoneBar(props: {
     const el = document.getElementById("summary");
     const io =
       el && "IntersectionObserver" in window
-        ? new IntersectionObserver(([e]) => setResultVisible(Boolean(e?.isIntersecting)), { threshold: 0.2 })
+        ? new IntersectionObserver(
+            ([e]) => {
+              setResultVisible(Boolean(e?.isIntersecting));
+              setResultAbove(Boolean(e && e.boundingClientRect.top < 0));
+            },
+            { threshold: 0.2 },
+          )
         : undefined;
     if (el) io?.observe(el);
     return () => {
@@ -247,7 +305,11 @@ function PhoneBar(props: {
             </p>
             <button type="button" class={btn} onClick={toResult}>
               {t("bar.see")}
-              <ArrowDown aria-hidden="true" class="h-4 w-4" />
+              {resultAbove ? (
+                <ArrowUp aria-hidden="true" class="h-4 w-4" />
+              ) : (
+                <ArrowDown aria-hidden="true" class="h-4 w-4" />
+              )}
             </button>
           </>
         ) : props.stopped ? (

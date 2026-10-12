@@ -60,7 +60,7 @@ export function renderEstimate(o: EstimateOutput): string {
         ? i.value.toFixed(4)
         : i.unit.startsWith("rupees")
           ? formatINR(i.value)
-          : String(i.value);
+          : String(Math.round(i.value * 10) / 10);
     L.push(`- ${i.label}: ${v}${i.unit === "percent" ? "%" : ""}`);
   }
   if (o.swingFactors.length) {

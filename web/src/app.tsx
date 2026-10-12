@@ -160,7 +160,7 @@ export function App() {
       <main id="main" tabIndex={-1} class="outline-none">
         {page}
       </main>
-      <Footer />
+      <Footer spaceForBar={route.name === "calc"} />
     </LangProvider>
   );
 }

@@ -1,6 +1,6 @@
 import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
-import { Check, ChevronDown, Copy, Printer, Share2 } from "lucide-preact";
+import { ChevronDown, Copy, Printer, Share2, Square } from "lucide-preact";
 import type { JourneySummary } from "../../../src/cases/match.js";
 import type { Case } from "../../../src/cases/schema.js";
 import { formatINR } from "../../../src/engine/money.js";
@@ -35,7 +35,7 @@ export function RangeBar(props: { conservative: number; standard: number; claima
       <div class="relative h-1.5 rounded-full bg-muted">
         <div class="absolute inset-y-0 left-0 right-0 rounded-full bg-brand/25" />
         <div
-          class="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background bg-brand shadow"
+          class="absolute top-1/2 h-3.5 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand"
           style={{ left: `${pos}%` }}
         />
       </div>
@@ -83,7 +83,7 @@ export function Checklist(props: { items: string[]; testId?: string }) {
     <ul class="grid gap-2" data-testid={props.testId}>
       {props.items.map((s) => (
         <li key={s} class="flex gap-2.5 text-sm">
-          <Check aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-success" />
+          <Square aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
           <span class="text-foreground">{s}</span>
         </li>
       ))}

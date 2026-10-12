@@ -74,12 +74,15 @@ test("the estimate prints without the navigation or buttons", async ({ page }) =
   await expect(page.locator("[data-head]").first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Print or save as PDF" })).toBeHidden();
   await expect(page.getByTestId("phone-bar")).toBeHidden();
+  await expect(page.locator('form[aria-labelledby="page-title"]')).toBeHidden(); // the estimate, not the form
+  await expect(page.locator("#offer")).toBeHidden();
   await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
   await expect(page.getByText("DRAFT", { exact: true })).toBeVisible();
   const pdf = await page.pdf({ format: "A4", printBackground: true });
   expect(pdf.byteLength).toBeGreaterThan(10_000);
   if (SHOTS) {
-    const { writeFileSync } = await import("node:fs");
+    const { mkdirSync, writeFileSync } = await import("node:fs");
+    mkdirSync("web/test-results/screens", { recursive: true });
     writeFileSync("web/test-results/screens/estimate-print.pdf", pdf);
   }
 });

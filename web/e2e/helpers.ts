@@ -148,8 +148,12 @@ async function answer(page: Page, q: string, input: EstimateInput) {
  */
 export async function fillForm(page: Page, input: EstimateInput): Promise<"result" | "stop"> {
   await page.goto("#/");
-  await page.getByTestId("restart").click(); // from a clean form, whatever an earlier step left
   await expect(page.locator("[data-question]").first()).toBeVisible();
+  // From a clean form, whatever an earlier step left ("Start again" shows only when there are answers).
+  if (await page.getByTestId("restart").count()) {
+    await page.getByTestId("restart").click();
+    await page.getByTestId("restart-confirm").click();
+  }
   const done = new Set<string>();
   for (let i = 0; i < 40; i++) {
     const ids = await page

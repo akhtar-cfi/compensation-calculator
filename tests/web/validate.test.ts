@@ -44,7 +44,30 @@ describe("validation", () => {
   it("asks a death claim for the number of children and parents (0 if none)", () => {
     const v = validate({ ...ok, children: "", parents: "" }, TODAY);
     expect(errorsFor(v, "family")).toEqual({ children: "err.count", parents: "err.count" });
-    expect(validate({ ...ok, kind: "injury", children: "", parents: "" }, TODAY).errors).toEqual({});
+    const injury = {
+      ...ok,
+      kind: "injury" as const,
+      workCapacity: "unknown" as const,
+      monthsOffWork: "0",
+      hospitalDays: "0",
+    };
+    expect(validate({ ...injury, children: "", parents: "" }, TODAY).errors).toEqual({});
+  });
+
+  it("asks an injury claim whether the person can work, and the months off and days in hospital (0 is an answer)", () => {
+    expect(validate({ ...ok, kind: "injury" }, TODAY).errors).toEqual({
+      workCapacity: "err.required",
+      monthsOffWork: "err.required",
+      hospitalDays: "err.required",
+    });
+    const answered = {
+      ...ok,
+      kind: "injury" as const,
+      workCapacity: "unknown" as const,
+      monthsOffWork: "0",
+      hospitalDays: "0",
+    };
+    expect(validate(answered, TODAY).input?.injury).toEqual({ monthsOffWork: 0, hospitalDays: 0 });
   });
 
   it("needs the spouse answer only for a married person", () => {
@@ -128,14 +151,16 @@ describe("what to prove", () => {
         kind: "injury",
         employment: "informal",
         certificatePct: "40",
+        workCapacity: "with_difficulty",
         monthsOffWork: "6",
+        hospitalDays: "10",
         claimedMonthly: "15000",
       },
       TODAY,
     );
     expect(proofItems(v.input!)).toEqual([
       "prove.fir",
-      "prove.age",
+      "prove.age.injury",
       "prove.claimed",
       "prove.medical",
       "prove.disability",

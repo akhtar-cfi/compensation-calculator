@@ -51,6 +51,12 @@ export function validate(form: FormState, today: string): Validation {
   if (f.married === "yes" && !f.spouse) set("spouse", "err.required");
   const fields = incomeFields(f.employment);
   if ((fields.includes("salary") || fields.includes("itr")) && !f.proof) set("proof", "err.required");
+  // An injury's amount turns on these, so the estimate waits for them (0, or "Not sure", is an answer).
+  if (f.kind === "injury") {
+    if (!f.workCapacity) set("workCapacity", "err.required");
+    if (f.monthsOffWork.trim() === "") set("monthsOffWork", "err.required");
+    if (f.hospitalDays.trim() === "") set("hospitalDays", "err.required");
+  }
   if (f.kind === "death") {
     if (f.children.trim() === "") set("children", "err.count");
     if (f.parents.trim() === "") set("parents", "err.count");

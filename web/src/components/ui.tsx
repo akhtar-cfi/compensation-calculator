@@ -152,3 +152,21 @@ export function Tag(props: { children: ComponentChildren }) {
     </span>
   );
 }
+
+/** Text with the NALSA legal-aid helpline as a link that dials it on a phone. */
+export function Tel(props: { text: string }) {
+  const parts = props.text.split(/(15100)/);
+  return (
+    <>
+      {parts.map((x, i) =>
+        x === "15100" ? (
+          <a key={i} href="tel:15100" class={linkCls}>
+            15100
+          </a>
+        ) : (
+          x
+        ),
+      )}
+    </>
+  );
+}

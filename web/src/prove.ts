@@ -7,7 +7,7 @@ import type { EstimateInput } from "../../src/engine/types.js";
 export function proofItems(input: EstimateInput): string[] {
   const k = ["prove.fir"];
   if (input.kind === "death") k.push("prove.pm", "prove.heirs");
-  k.push("prove.age");
+  k.push(input.kind === "death" ? "prove.age" : "prove.age.injury");
   const inc = input.victim.income;
   if (inc?.proof === "salary_slip") k.push("prove.salary");
   else if (inc?.proof === "itr") k.push("prove.itr");

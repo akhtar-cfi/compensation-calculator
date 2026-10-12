@@ -40,22 +40,22 @@ const EMPLOYMENT = [
 export type SetField = <K extends FieldName>(k: K, v: FormState[K]) => void;
 export type FieldError = (k: FieldName) => string | undefined;
 
-/** Short names for each answer, used in the "answers left" list ("Date of the accident: Enter a real date"). */
+/** Each answer's label as shown on the page, used in the list of answers left. */
 export function fieldLabels(t: (k: string) => string): Partial<Record<FieldName, string>> {
   return {
     kind: t("q.kind.title"),
-    accidentDate: t("f.accidentDate"),
+    accidentDate: t("q.accidentDate.title"),
     victimRole: t("q.role.title"),
-    offendingVehicle: t("f.vehicle"),
-    s164: t("f.s164"),
+    offendingVehicle: t("q.vehicle.title"),
+    s164: t("q.s164.title"),
     claimFiled: t("q.claim.title"),
     claimFiledDate: t("f.claimFiledDate"),
-    state: t("f.state"),
+    state: t("q.state.title"),
     zone: t("f.zone"),
-    age: t("f.age"),
-    employment: t("f.employment"),
-    occupationCode: t("f.occupation"),
-    studentCourse: t("f.course"),
+    age: t("q.age.title"),
+    employment: t("q.work.title"),
+    occupationCode: t("q.occupation.title"),
+    studentCourse: t("q.course.title"),
     proof: t("f.proof"),
     monthlySalary: t("f.monthlySalary"),
     monthlyTax: t("f.monthlyTax"),
@@ -72,7 +72,7 @@ export function fieldLabels(t: (k: string) => string): Partial<Record<FieldName,
     cashlessPaid: t("f.cashless"),
     certificatePct: t("f.certificatePct"),
     certificateBasis: t("f.certificateBasis"),
-    workCapacity: t("f.workCapacity"),
+    workCapacity: t("q.workNow.title"),
     monthsOffWork: t("f.monthsOffWork"),
     hospitalDays: t("f.hospitalDays"),
   };
@@ -303,6 +303,7 @@ export function QuestionFields(props: {
                 <MoneyInput
                   id="monthlySalary"
                   label={t("f.monthlySalary")}
+                  hint={t("f.monthlySalary.help")}
                   per={t("unit.month")}
                   value={f.monthlySalary}
                   error={err("monthlySalary")}
@@ -439,12 +440,12 @@ export function QuestionFields(props: {
     case "disability":
       return (
         <div class="grid gap-4">
-          <p class="text-sm text-muted-foreground">{t("q.disability.hint")}</p>
           <Pair>
             <TextInput
               id="certificatePct"
               numeric
               optional
+              hint={t("q.disability.hint")}
               width="xs"
               suffix="%"
               label={t("f.certificatePct")}
@@ -471,9 +472,9 @@ export function QuestionFields(props: {
         <Radios
           id="workCapacity"
           layout="stack"
-          optional
           label={t("q.workNow.title")}
           value={f.workCapacity}
+          error={err("workCapacity")}
           onChange={(v) => set("workCapacity", v as FormState["workCapacity"])}
           options={[...opt("f.work.", ["full", "with_difficulty", "lighter_only", "none"]), notSure]}
         />
@@ -485,7 +486,7 @@ export function QuestionFields(props: {
             <TextInput
               id="monthsOffWork"
               numeric
-              optional
+              hint={t("f.zeroIfNone")}
               width="xs"
               suffix={t("unit.months")}
               label={t("f.monthsOffWork")}
@@ -496,7 +497,7 @@ export function QuestionFields(props: {
             <TextInput
               id="hospitalDays"
               numeric
-              optional
+              hint={t("f.zeroIfNone")}
               width="xs"
               suffix={t("unit.days")}
               label={t("f.hospitalDays")}

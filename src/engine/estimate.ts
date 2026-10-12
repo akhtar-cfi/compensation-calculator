@@ -197,11 +197,18 @@ function runScenario(
     if (inj.functionalPct !== undefined) {
       functionalPct = inj.functionalPct;
     } else {
-      warn.add(
-        "FUNCTIONAL_ESTIMATED",
-        "caution",
-        "No functional-disability assessment given; estimated from the disability certificate. Ask the doctor/board for a functional assessment.",
-      );
+      if (inj.certificatePct === undefined)
+        warn.add(
+          "NO_CERTIFICATE",
+          "caution",
+          "No disability certificate given: loss of future earning capacity is taken as nil (except in the claimant's best case, when the person cannot work at all). Add the certificate's percentage when there is one.",
+        );
+      else
+        warn.add(
+          "FUNCTIONAL_ESTIMATED",
+          "caution",
+          "No functional-disability assessment given; estimated from the disability certificate. Ask the doctor/board for a functional assessment.",
+        );
       const s = ch.choose(
         "functional_pct",
         "Functional disability (loss of earning capacity) estimated from the certificate",

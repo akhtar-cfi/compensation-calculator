@@ -2,7 +2,7 @@ import { ExternalLink } from "lucide-preact";
 import { matchCases, summariseJourney, type CaseMatch } from "../../../src/cases/match.js";
 import type { EstimateInput, EstimateOutput, Intermediate, Warning } from "../../../src/engine/types.js";
 import { formatINR } from "../../../src/engine/money.js";
-import { Card, H2, Notice, Tag, linkCls } from "../components/ui";
+import { Card, H2, Notice, Tag, Tel, linkCls } from "../components/ui";
 import { CaseTimeline, Checklist, Disclosure } from "../components/result";
 import { SourceLinks } from "../components/sources";
 import { loadCases, useLoaded } from "../data";
@@ -34,9 +34,11 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
   const warningList = (list: Warning[]) => (
     <div class="grid gap-2">
       {list.map((w) => (
-        <Notice key={w.code} code={w.code} severity={w.severity} title={t(`warn.${w.code}`)}>
-          <span lang={enOnly}>{w.message}</span>
-        </Notice>
+        <div key={w.code} id={`warn-${w.code}`} tabIndex={-1} class="scroll-mt-4 outline-none">
+          <Notice code={w.code} severity={w.severity} title={t(`warn.${w.code}`)}>
+            <span lang={enOnly}>{w.message}</span>
+          </Notice>
+        </div>
       ))}
     </div>
   );
@@ -117,13 +119,13 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
                     <dl class="mt-2 grid gap-1 text-sm sm:grid-cols-2">
                       <div class="flex justify-between gap-4 sm:block">
                         <dt class="text-muted-foreground">{t("res.swing.down")}</dt>
-                        <dd class="font-semibold tabular-nums">
+                        <dd class="shrink-0 font-semibold whitespace-nowrap tabular-nums">
                           {s.toConservative === 0 ? t("res.swing.none") : signed(s.toConservative)}
                         </dd>
                       </div>
                       <div class="flex justify-between gap-4 sm:block">
                         <dt class="text-muted-foreground">{t("res.swing.up")}</dt>
-                        <dd class="font-semibold tabular-nums">
+                        <dd class="shrink-0 font-semibold whitespace-nowrap tabular-nums">
                           {s.toClaimantMax === 0 ? t("res.swing.none") : signed(s.toClaimantMax)}
                         </dd>
                       </div>
@@ -143,7 +145,7 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
                         <span class="text-muted-foreground" lang={enOnly}>
                           {s.label}
                         </span>
-                        <span class="font-semibold tabular-nums">{signed(s.delta)}</span>
+                        <span class="font-semibold whitespace-nowrap tabular-nums">{signed(s.delta)}</span>
                       </li>
                     ))}
                   </ul>
@@ -179,12 +181,12 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
           </Disclosure>
 
           {notes.length > 0 && (
-            <Disclosure id="notes" title={t("sev.info")}>
+            <Disclosure id="notes" title={t("det.notes")}>
               {warningList(notes)}
             </Disclosure>
           )}
 
-          <Disclosure id="sources" title={t("res.authorities")}>
+          <Disclosure id="sources" title={t("det.sources")}>
             <h4 class="text-sm font-semibold">{t("res.assumptions")}</h4>
             <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground" lang={enOnly}>
               {est.assumptions.map((a) => (
@@ -224,7 +226,7 @@ function formatIntermediate(i: Intermediate, t: (k: string) => string): string {
     case "rupees_per_year":
       return `${formatINR(i.value)} ${t("unit.year")}`;
     case "percent":
-      return `${i.value}%`;
+      return `${Math.round(i.value * 10) / 10}%`;
     case "fraction":
       return `${Math.round(i.value * 1000) / 10}%`;
     default:
@@ -246,7 +248,9 @@ function NextSteps() {
             >
               {n}
             </span>
-            <span class="leading-relaxed text-foreground">{t(`res.next.${n}`)}</span>
+            <span class="leading-relaxed text-foreground">
+              <Tel text={t(`res.next.${n}`)} />
+            </span>
           </li>
         ))}
       </ol>

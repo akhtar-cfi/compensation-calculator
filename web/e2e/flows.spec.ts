@@ -26,8 +26,12 @@ test("an answer that ends the claim shows why under it, and the panel shows no n
   await expect(page.getByTestId("headline")).toHaveCount(0);
   // The notice is announced once (under the answer), not again in the panel.
   await expect(page.locator("[data-stop] [role=alert]")).toHaveCount(1);
+  // The questions below are not needed: dimmed and out of reach until the answer is changed.
+  await expect(question(page, "vehicle")).toHaveAttribute("inert", "");
+  await expect(question(page, "kind")).not.toHaveAttribute("inert", "");
   await page.selectOption("#victimRole", "pedestrian");
   await expect(page.locator("[data-stop]")).toHaveCount(0);
+  await expect(question(page, "vehicle")).not.toHaveAttribute("inert", "");
   await expect(page.getByTestId("answers-left")).toBeVisible();
 });
 
@@ -49,6 +53,8 @@ test("a wrong answer is reported when leaving it; the list of answers left jumps
   await page.locator("#result [data-missing=kind]").click();
   await expect(page.locator('input[name="kind"]').first()).toBeFocused();
   await expect(page.locator("#kind-error")).toContainText("Please answer this question.");
+  // Only the question someone was sent to: the rest are not marked wrong before they are reached.
+  await expect(page.locator("#victimRole-error")).toHaveCount(0);
   await page.locator('input[name="kind"][value="death"]').check();
   await expect(page.locator("#kind-error")).toHaveCount(0);
   await expect(page.locator("#result [data-missing=kind]")).toHaveCount(0);
@@ -94,6 +100,31 @@ test("the estimate appears as soon as the answers are in, and follows changes", 
   await expect(page.locator("#offer")).toBeVisible();
 });
 
+test("an injury estimate waits for the answers that decide it", async ({ page }) => {
+  const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+  await fillForm(page, input);
+  await page.fill("#monthsOffWork", "");
+  await expect(page.locator("#result [data-testid=headline]")).toHaveCount(0);
+  await expect(page.locator("#result [data-missing=monthsOffWork]")).toBeVisible();
+  await page.fill("#monthsOffWork", "0"); // none is an answer
+  await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
+  // Without a disability certificate the estimate says what it leaves out.
+  await page.fill("#certificatePct", "");
+  await expect(page.locator("#result").getByText("No disability certificate entered")).toBeVisible();
+});
+
+test("the offer check follows a changed estimate", async ({ page }) => {
+  const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
+  await fillForm(page, input);
+  await page.fill("#offer-amount", "10,00,000");
+  await page.getByRole("button", { name: "Check the offer" }).click();
+  const pct = page.getByTestId("offer-pct-std");
+  const before = parseFloat((await pct.textContent())!);
+  await page.fill("#monthlySalary", "50000");
+  await expect.poll(async () => parseFloat((await pct.textContent())!)).toBeLessThan(before);
+  await expect(page.getByTestId("offer-summary")).toContainText("₹10 lakh");
+});
+
 test("answers survive a reload (kept in this tab only), and Start again clears them", async ({ page }) => {
   // On a slow phone, an answer changed just before a reload must still be kept (it was lost when saving waited for
   // the next paint).
@@ -108,8 +139,14 @@ test("answers survive a reload (kept in this tab only), and Start again clears t
   await expect(page.locator('input[name="kind"][value="death"]')).toBeChecked();
   await expect(page.locator("#accidentDate-year")).toHaveValue("2025");
   await expect(page.locator("#state")).toHaveValue("DL");
+  // Clearing asks first, and can be called off.
   await page.getByRole("button", { name: "Start again" }).click();
+  await page.getByRole("button", { name: "Keep my answers" }).click();
+  await expect(page.locator('input[name="kind"][value="death"]')).toBeChecked();
+  await page.getByRole("button", { name: "Start again" }).click();
+  await page.getByRole("button", { name: "Clear", exact: true }).click();
   await expect(page.locator("input[type=radio]:checked")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Start again" })).toHaveCount(0);
   await expect(page.locator("#accidentDate-year")).toHaveValue("");
   await expect(page.locator("#page-title")).toBeFocused();
 });

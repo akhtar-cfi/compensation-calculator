@@ -1,11 +1,13 @@
+import { useState } from "preact/hooks";
 import { CircleAlert, ListChecks } from "lucide-preact";
 import type { EstimateOutput, Warning } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { rules } from "../data";
 import { useLang, useT } from "../i18n";
 import { AnswerPanel, RangeBar, ShareActions } from "../components/result";
-import { Card, Notice, linkCls } from "../components/ui";
+import { Card, Notice, Tel, linkCls } from "../components/ui";
 import type { StopCode } from "../questions";
+import type { FieldName } from "../validate";
 import { shareText } from "../share";
 
 const STOP_COPY: Record<StopCode, { title: string; body: string }> = {
@@ -31,15 +33,22 @@ export function StopNotice(props: { code: StopCode; live?: boolean | undefined }
               })}
             </li>
           )}
-          <li>{t("res.next.1")}</li>
+          <li>
+            <Tel text={t("res.next.1")} />
+          </li>
         </ul>
       </Notice>
     </div>
   );
 }
 
+/** How many answers left are listed before "Show N more". */
+const SHOWN = 5;
+
 const siteUrl = () => `${location.origin}${location.pathname}`;
 const SEV_ORDER: Record<Warning["severity"], number> = { stop: 0, caution: 1, info: 2 };
+/** Warnings that are a limit of this calculator rather than of the claim, with what to do instead. */
+const LIMITS: Partial<Record<string, string>> = { MW_MISSING: "lim.MW_MISSING" };
 
 /**
  * The live summary: what is still needed, why there is no number, or the number itself with its range and how far
@@ -48,11 +57,14 @@ const SEV_ORDER: Record<Warning["severity"], number> = { stop: 0, caution: 1, in
 export function ResultSummary(props: {
   est?: EstimateOutput | undefined;
   stop?: StopCode | undefined;
-  missing: { id: string; label: string }[];
-  onMissing: (id: string) => void;
+  missing: { id: FieldName; label: string; invalid: boolean }[];
+  /** The state answered, to name it in a message. */
+  state: string;
+  onMissing: (id: FieldName) => void;
 }) {
   const t = useT();
   const lang = useLang();
+  const [all, setAll] = useState(false);
   const { est } = props;
 
   const heading = (
@@ -90,7 +102,7 @@ export function ResultSummary(props: {
           {t(n === 1 ? "sum.left1" : "sum.left", { n })}
         </p>
         <ul class="mt-2 grid gap-1 text-sm">
-          {props.missing.slice(0, 6).map((m) => (
+          {(all ? props.missing : props.missing.slice(0, SHOWN)).map((m) => (
             <li key={m.id}>
               <a
                 href={`#${m.id}`}
@@ -103,9 +115,24 @@ export function ResultSummary(props: {
               >
                 {m.label}
               </a>
+              {m.invalid && (
+                <span class="ml-1.5 rounded border border-danger px-1 py-px text-xs text-foreground">
+                  {t("sum.check")}
+                </span>
+              )}
             </li>
           ))}
-          {n > 6 && <li class="text-muted-foreground">{t("sum.more", { n: n - 6 })}</li>}
+          {n > SHOWN && !all && (
+            <li>
+              <button
+                type="button"
+                onClick={() => setAll(true)}
+                class={`inline-flex min-h-11 items-center text-muted-foreground sm:min-h-8 ${linkCls}`}
+              >
+                {t("sum.more", { n: n - SHOWN })}
+              </button>
+            </li>
+          )}
         </ul>
       </Card>
     );
@@ -123,11 +150,20 @@ export function ResultSummary(props: {
         <div class="mt-4 grid gap-2">
           {warnings
             .filter((w) => w.severity !== "info")
-            .map((w) => (
-              <Notice key={w.code} code={w.code} severity={w.severity} title={t(`warn.${w.code}`)}>
-                <span lang={lang === "hi" ? "en" : undefined}>{w.message}</span>
-              </Notice>
-            ))}
+            .map((w) =>
+              LIMITS[w.code] ? (
+                // A limit of the calculator, not of the claim: amber, with what to do instead.
+                <Notice key={w.code} code={w.code} severity="caution" title={t(`warn.${w.code}`)}>
+                  <p>
+                    <Tel text={t(LIMITS[w.code]!, { state: t(`state.${props.state}`) })} />
+                  </p>
+                </Notice>
+              ) : (
+                <Notice key={w.code} code={w.code} severity={w.severity} title={t(`warn.${w.code}`)}>
+                  <span lang={lang === "hi" ? "en" : undefined}>{w.message}</span>
+                </Notice>
+              ),
+            )}
         </div>
       </Card>
     );
@@ -136,7 +172,9 @@ export function ResultSummary(props: {
   const r = est.range;
   const ps = est.practiceSpread;
   const rel = (x: number) => t(x < 1 ? "res.below" : "res.above", { p: Math.round(Math.abs(x - 1) * 100) });
-  const cautions = est.warnings.filter((w) => w.severity !== "info").length;
+  const cautions = [...est.warnings]
+    .filter((w) => w.severity !== "info")
+    .sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
   return (
     <Card class="p-5" id="result">
       {heading}
@@ -158,11 +196,12 @@ export function ResultSummary(props: {
           </div>
         ))}
       </dl>
-      {r.showBar ? (
-        <RangeBar conservative={r.conservative} standard={r.standard} claimantMax={r.claimantMax} />
-      ) : (
+      {!r.showBar ? (
         <p class="mt-2 text-xs text-muted-foreground">{t("res.rangeWide")}</p>
-      )}
+      ) : (r.claimantMax - r.conservative) / r.standard >= 0.05 ? (
+        // A narrow range is clearer as the three figures alone: a bar would make a 1% spread look wide.
+        <RangeBar conservative={r.conservative} standard={r.standard} claimantMax={r.claimantMax} />
+      ) : null}
 
       {ps && (
         <p class="mt-4 rounded-lg bg-subtle p-3 text-xs leading-relaxed text-foreground" data-testid="spread">
@@ -178,18 +217,33 @@ export function ResultSummary(props: {
         </p>
       )}
 
-      {cautions > 0 && (
-        <a href="#warnings" class={`mt-4 flex items-center gap-2 text-sm ${linkCls}`}>
-          <CircleAlert aria-hidden="true" class="h-4 w-4 shrink-0 text-warning" />
-          {t(cautions === 1 ? "sum.cautions1" : "sum.cautions", { n: cautions })}
-        </a>
+      {cautions.length > 0 && (
+        <div class="mt-4">
+          <p class="text-sm font-semibold text-foreground">{t("sum.read")}</p>
+          <ul class="mt-1 grid gap-0.5 text-sm">
+            {cautions.map((w) => (
+              <li key={w.code}>
+                <a
+                  href={`#warn-${w.code}`}
+                  class={`inline-flex min-h-11 items-start gap-2 py-1 sm:min-h-0 ${linkCls}`}
+                >
+                  <CircleAlert
+                    aria-hidden="true"
+                    class={`mt-0.5 h-4 w-4 shrink-0 ${w.severity === "stop" ? "text-danger" : "text-warning"}`}
+                  />
+                  {t(`warn.${w.code}`)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       <div class="no-print mt-5 grid gap-2 border-t border-border pt-4">
-        <a href="#offer" class={`text-sm ${linkCls}`}>
+        <a href="#offer" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
           {t("res.offer")}
         </a>
-        <a href="#details" class={`text-sm ${linkCls}`}>
+        <a href="#details" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
           {t("sum.details")}
         </a>
         <div class="mt-2">

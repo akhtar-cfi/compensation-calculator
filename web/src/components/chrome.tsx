@@ -4,6 +4,7 @@ import { ENGINE_VERSION } from "../../../src/engine/index.js";
 import { rules } from "../data";
 import { useLang, useT, LangContext } from "../i18n";
 import type { Route } from "../route";
+import { Tel } from "./ui";
 import { analyticsOn } from "../analytics";
 
 const NAV: { href: string; key: string; active: (r: Route) => boolean }[] = [
@@ -85,16 +86,18 @@ export function DraftBanner() {
 }
 
 /** The website's footer, short: who runs this, privacy, legal aid, sources and the versions behind the numbers. */
-export function Footer() {
+export function Footer(props: { spaceForBar?: boolean }) {
   const t = useT();
   const link = "underline underline-offset-4 hover:text-brand";
   return (
-    <footer class="border-t border-border bg-background">
+    <footer class={`border-t border-border bg-background ${props.spaceForBar ? "pb-20 lg:pb-0" : ""}`}>
       <div class="mx-auto grid w-full max-w-6xl gap-6 px-4 py-10 text-sm text-muted-foreground sm:grid-cols-[1.2fr_1fr] sm:px-6">
         <div class="grid gap-3 leading-relaxed">
           <img src="logo.svg" alt="Crashfree India" width="148" height="16" class="h-4 w-auto self-start" />
           <p>{t("footer.notAdvice")}</p>
-          <p>{t("footer.aid")}</p>
+          <p>
+            <Tel text={t("footer.aid")} />
+          </p>
         </div>
         <div class="grid gap-3 leading-relaxed">
           <p>{t("footer.private")}</p>

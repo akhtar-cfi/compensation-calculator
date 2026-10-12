@@ -1,11 +1,8 @@
-import { useState } from "preact/hooks";
-import {
-  checkOffer,
-  type EstimateOutput,
-  type OfferCheck as OfferResult,
-} from "../../../src/engine/index.js";
-import { formatINR } from "../../../src/engine/money.js";
-import { Button, Card, H2, Notice } from "../components/ui";
+import { useMemo, useState } from "preact/hooks";
+import { checkOffer, type EstimateOutput } from "../../../src/engine/index.js";
+import { formatApprox, formatINR } from "../../../src/engine/money.js";
+import { Button, Card, H2 } from "../components/ui";
+import { Disclosure } from "../components/result";
 import { MoneyInput, TextInput } from "../components/form";
 import { rules } from "../data";
 import { useLang, useT } from "../i18n";
@@ -49,13 +46,28 @@ export function OfferCheck(props: { est: EstimateOutput }) {
   const lang = useLang();
   const [f, setF] = useState<OfferForm>(defaults);
   const [errors, setErrors] = useState<Partial<Record<keyof OfferForm, string>>>({});
-  const [result, setResult] = useState<OfferResult | undefined>();
+  // The figures last checked, not the result: the result is worked out from them and the current estimate, so it
+  // follows when an answer above changes the estimate.
+  const [checked, setChecked] = useState<Record<keyof OfferForm, number> | undefined>();
   const est = props.est;
+  const result = useMemo(
+    () =>
+      checked &&
+      checkOffer(est, checked.amount, {
+        yearsToAward: checked.years,
+        awardInterestPct: checked.interest,
+        discountPct: checked.discount,
+        lawyerFeePct: checked.fee,
+      }),
+    [est, checked],
+  );
 
   const set = (k: keyof OfferForm, v: string) => {
     setF({ ...f, [k]: v });
-    setResult(undefined);
+    setChecked(undefined);
+    if (errors[k]) setErrors({ ...errors, [k]: undefined });
   };
+  const assumptionError = (["years", "interest", "discount", "fee"] as const).some((k) => errors[k]);
 
   const submit = (e: Event) => {
     e.preventDefault();
@@ -72,18 +84,11 @@ export function OfferCheck(props: { est: EstimateOutput }) {
     if (Object.keys(errs).length) {
       const first = (Object.keys(LIMITS) as (keyof OfferForm)[]).find((k) => errs[k]);
       document.getElementById(`offer-${first}`)?.focus();
-      setResult(undefined);
+      setChecked(undefined);
       return;
     }
     countView("offer");
-    setResult(
-      checkOffer(est, v.amount, {
-        yearsToAward: v.years,
-        awardInterestPct: v.interest,
-        discountPct: v.discount,
-        lawyerFeePct: v.fee,
-      }),
-    );
+    setChecked(v);
   };
 
   const field = (k: keyof OfferForm, label: string, suffix: string) => (
@@ -100,7 +105,7 @@ export function OfferCheck(props: { est: EstimateOutput }) {
   );
 
   return (
-    <Card class="p-5 sm:p-6" id="offer">
+    <Card class="no-print p-5 sm:p-6" id="offer">
       <H2>{t("offer.h")}</H2>
       <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t("offer.lead")}</p>
       <form class="mt-5 grid gap-5" noValidate onSubmit={submit}>
@@ -113,11 +118,21 @@ export function OfferCheck(props: { est: EstimateOutput }) {
             onInput={(v) => set("amount", v)}
           />
         </div>
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {field("years", t("offer.years"), t("unit.years"))}
-          {field("interest", t("offer.interest"), "%")}
-          {field("discount", t("offer.discount"), "%")}
-          {field("fee", t("offer.fee"), "%")}
+        <div class="border-y border-border">
+          {/* Sensible defaults; most people never need to change them. Opens by itself if one is wrong. */}
+          <Disclosure
+            key={assumptionError ? "open" : "closed"}
+            id="offer-assumptions"
+            title={t("offer.assumptions")}
+            open={assumptionError}
+          >
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {field("years", t("offer.years"), t("unit.years"))}
+              {field("interest", t("offer.interest"), "%")}
+              {field("discount", t("offer.discount"), "%")}
+              {field("fee", t("offer.fee"), "%")}
+            </div>
+          </Disclosure>
         </div>
         <div>
           <Button type="submit" full>
@@ -128,9 +143,16 @@ export function OfferCheck(props: { est: EstimateOutput }) {
 
       {result && (
         <div class="mt-6 border-t border-border pt-5" data-testid="offer-result" aria-live="polite">
-          <div class="grid gap-3 sm:grid-cols-3">
+          <p class="font-heading text-lg font-bold text-foreground" data-testid="offer-summary">
+            {t("offer.summary", {
+              offer: formatApprox(checked!.amount),
+              p: result.offerPctOfStandard,
+              est: formatApprox(est.range!.standard),
+            })}
+          </p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-3">
             <div class="rounded-lg border border-border p-4">
-              <p class="font-heading text-3xl font-bold text-brand" data-testid="offer-pct-std">
+              <p class="font-heading text-xl font-bold text-brand" data-testid="offer-pct-std">
                 {result.offerPctOfStandard}%
               </p>
               <p class="mt-1 text-xs text-muted-foreground">
@@ -142,7 +164,9 @@ export function OfferCheck(props: { est: EstimateOutput }) {
               <p class="font-heading text-xl font-bold text-foreground" data-testid="offer-award">
                 {formatINR(result.awardWithInterest)}
               </p>
-              <p class="mt-1 text-xs text-muted-foreground">{t("offer.award", { y: f.years })}</p>
+              <p class="mt-1 text-xs text-muted-foreground">
+                {t("offer.award", { y: checked?.years ?? "" })}
+              </p>
             </div>
             <div class="rounded-lg border border-border p-4">
               <p class="font-heading text-xl font-bold text-foreground" data-testid="offer-pv">
@@ -154,17 +178,14 @@ export function OfferCheck(props: { est: EstimateOutput }) {
           <p class="mt-4 text-sm font-semibold text-foreground" data-testid="offer-vs-pv">
             {t("offer.vsPv", { p: result.offerVsPresentValuePct })}
           </p>
-          <ul
-            class="mt-3 list-disc space-y-1 pl-5 text-xs text-muted-foreground"
-            lang={lang === "hi" ? "en" : undefined}
-          >
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
             {result.notes.map((n) => (
-              <li key={n}>{n}</li>
+              <li key={n} lang={lang === "hi" ? "en" : undefined}>
+                {n}
+              </li>
             ))}
+            <li>{t("offer.caveat")}</li>
           </ul>
-          <div class="mt-4">
-            <Notice severity="info" title={t("offer.caveat")} />
-          </div>
         </div>
       )}
     </Card>
