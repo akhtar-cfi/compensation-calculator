@@ -15,7 +15,7 @@ import { validate } from "./validate";
 
 /** Answers are kept in this tab only (sessionStorage): they survive a reload or the phone discarding the tab in
  * the background, vanish when the tab is closed, and are never sent anywhere. */
-const STORE = "mact-calculator.v1";
+const STORE = "mact-calculator.v2";
 
 interface Saved {
   form: FormState;
@@ -38,20 +38,48 @@ function load(): Partial<Saved> {
   }
 }
 
+/** A language the person chose on this tab wins over a shared "?lang=hi" link. */
 const initialLang = (saved?: Lang): Lang =>
-  new URLSearchParams(location.search).get("lang") === "hi" ? "hi" : (saved ?? "en");
+  saved ?? (new URLSearchParams(location.search).get("lang") === "hi" ? "hi" : "en");
+
+/** The language the page will open in (read before the first render, to fetch the Hindi text first). */
+export const startLang = (): Lang => initialLang(load().lang);
 
 const currentRoute = (fallback: Route): Route => parseRoute(location.hash) ?? fallback;
 
 export function App() {
   const saved = useMemo(load, []);
   const [route, setRoute] = useState<Route>(() => currentRoute({ name: "calc" }));
-  const [lang, setLang] = useState<Lang>(() => initialLang(saved.lang));
+  const [lang, setLangState] = useState<Lang>(() => initialLang(saved.lang));
+  // Choosing a language drops "?lang=" from the address, so a reload keeps the choice.
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    const q = new URLSearchParams(location.search);
+    if (q.has("lang")) {
+      q.delete("lang");
+      const rest = q.toString();
+      history.replaceState(
+        history.state,
+        "",
+        `${location.pathname}${rest ? `?${rest}` : ""}${location.hash}`,
+      );
+    }
+  };
   const [form, setForm] = useState<FormState>(saved.form ?? EMPTY_FORM);
   const today = todayISO();
 
   // Listen for route changes from the first render on (a layout effect runs with the render; a plain effect waits
   // for the next paint, and a click in that gap was lost), then catch up on any change made before this ran.
+  // Where the calculator was last scrolled to, to come back to the same place from a document. Kept while the
+  // address is the calculator's (the browser itself scrolls to the top as a link to a document is followed).
+  const calcScroll = useRef(0);
+  useEffect(() => {
+    const onScroll = () => {
+      if (parseRoute(location.hash)?.name === "calc") calcScroll.current = window.scrollY;
+    };
+    addEventListener("scroll", onScroll, { passive: true });
+    return () => removeEventListener("scroll", onScroll);
+  }, []);
   useLayoutEffect(() => {
     const on = () => setRoute((r) => currentRoute(r));
     addEventListener("hashchange", on);
@@ -94,9 +122,10 @@ export function App() {
   const key = routeKey(route);
   const firstRender = useRef(true);
   useLayoutEffect(() => {
-    // Each page change starts at the top, with focus on the page's title for keyboard and screen-reader users
-    // (not on first load, where focus belongs to the browser). Done with the render, not after the next paint.
-    window.scrollTo(0, 0);
+    // Each page change starts at the top (the calculator where it was left), with focus on the page's title for
+    // keyboard and screen-reader users (not on first load, where focus belongs to the browser). Done with the
+    // render, not after the next paint.
+    window.scrollTo(0, route.name === "calc" ? calcScroll.current : 0);
     if (firstRender.current) {
       firstRender.current = false;
       return;
@@ -150,7 +179,16 @@ export function App() {
       page = <Lazy load={() => import("./pages/Design").then((m) => m.Design)} />;
       break;
     default:
-      page = <Estimator form={form} setForm={setForm} v={v} computed={computed} onRestart={restart} />;
+      page = (
+        <Estimator
+          form={form}
+          setForm={setForm}
+          v={v}
+          computed={computed}
+          today={today}
+          onRestart={restart}
+        />
+      );
   }
 
   return (

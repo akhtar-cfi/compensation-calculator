@@ -1,4 +1,3 @@
-import { useState } from "preact/hooks";
 import { CircleAlert, ListChecks } from "lucide-preact";
 import type { EstimateInput, EstimateOutput, Warning } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
@@ -42,13 +41,15 @@ export function StopNotice(props: { code: StopCode; live?: boolean | undefined }
   );
 }
 
-/** How many answers left are listed before "Show N more". */
-const SHOWN = 5;
+/** How many answers left are listed by name (the rest are counted). */
+const SHOWN = 3;
 
 const siteUrl = () => `${location.origin}${location.pathname}`;
 const SEV_ORDER: Record<Warning["severity"], number> = { stop: 0, caution: 1, info: 2 };
 /** Warnings that are a limit of this calculator rather than of the claim, with what to do instead. */
 const LIMITS: Partial<Record<string, string>> = { MW_MISSING: "lim.MW_MISSING" };
+/** Cautions about the range: left out when there is no number to have a range. */
+const ABOUT_THE_RANGE = new Set(["MINOR_DEATH_CONTESTED"]);
 
 /**
  * The live summary: what is still needed, why there is no number, or the number itself with its range and how far
@@ -60,25 +61,25 @@ export function ResultSummary(props: {
   input?: EstimateInput | undefined;
   stop?: StopCode | undefined;
   missing: { id: FieldName; label: string; invalid: boolean }[];
+  progress: { done: number; total: number };
   /** The state answered, to name it in a message. */
   state: string;
+  /** Whether a proof of income can be given for this type of work (the message then says how). */
+  canProve: boolean;
   onMissing: (id: FieldName) => void;
 }) {
   const t = useT();
-  const [all, setAll] = useState(false);
   const warnText = useWarnText();
   const approx = useApprox();
   const { est } = props;
 
   const heading = (
-    <p class="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-brand uppercase">
-      {t("sum.title")}
-    </p>
+    <h2 class="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{t("sum.title")}</h2>
   );
 
   if (props.stop) {
     return (
-      <Card class="p-5" id="result">
+      <Card class="p-5 sm:p-6" id="result">
         {heading}
         <p class="mt-2 font-heading text-lg font-bold text-foreground" data-testid="no-estimate">
           {t("res.none")}
@@ -94,7 +95,7 @@ export function ResultSummary(props: {
   if (!est) {
     const n = props.missing.length;
     return (
-      <Card class="p-5" id="result">
+      <Card class="p-5 sm:p-6" id="result">
         {heading}
         <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{t("sum.empty")}</p>
         <p
@@ -105,7 +106,7 @@ export function ResultSummary(props: {
           {t(n === 1 ? "sum.left1" : "sum.left", { n })}
         </p>
         <ul class="mt-2 grid gap-1 text-sm">
-          {(all ? props.missing : props.missing.slice(0, SHOWN)).map((m) => (
+          {props.missing.slice(0, SHOWN).map((m) => (
             <li key={m.id}>
               <a
                 href={`#${m.id}`}
@@ -125,17 +126,7 @@ export function ResultSummary(props: {
               )}
             </li>
           ))}
-          {n > SHOWN && !all && (
-            <li>
-              <button
-                type="button"
-                onClick={() => setAll(true)}
-                class={`inline-flex min-h-11 items-center text-muted-foreground sm:min-h-8 ${linkCls}`}
-              >
-                {t("sum.more", { n: n - SHOWN })}
-              </button>
-            </li>
-          )}
+          {n > SHOWN && <li class="text-muted-foreground">{t("sum.andMore", { n: n - SHOWN })}</li>}
         </ul>
       </Card>
     );
@@ -144,7 +135,7 @@ export function ResultSummary(props: {
   if (!est.eligible || !est.range || !est.headline) {
     const warnings = [...est.warnings].sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
     return (
-      <Card class="p-5" id="result">
+      <Card class="p-5 sm:p-6" id="result">
         {heading}
         <p class="mt-2 font-heading text-lg font-bold text-foreground" data-testid="no-estimate">
           {t("res.none")}
@@ -152,13 +143,17 @@ export function ResultSummary(props: {
         <p class="mt-1 text-sm text-muted-foreground">{t("res.none.lead")}</p>
         <div class="mt-4 grid gap-2">
           {warnings
-            .filter((w) => w.severity !== "info")
+            .filter((w) => w.severity !== "info" && !ABOUT_THE_RANGE.has(w.code))
             .map((w) =>
               LIMITS[w.code] ? (
                 // A limit of the calculator, not of the claim: amber, with what to do instead.
                 <Notice key={w.code} code={w.code} severity="caution" title={t(`warn.${w.code}`)}>
                   <p>
-                    <Tel text={t(LIMITS[w.code]!, { state: t(`stname.${props.state}`) })} />
+                    <Tel
+                      text={t(`${LIMITS[w.code]!}${props.canProve ? ".proof" : ""}`, {
+                        state: t(`stname.${props.state}`),
+                      })}
+                    />
                   </p>
                 </Notice>
               ) : (
@@ -179,7 +174,7 @@ export function ResultSummary(props: {
     .filter((w) => w.severity !== "info")
     .sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
   return (
-    <Card class="p-5" id="result">
+    <Card class="p-5 sm:p-6" id="result">
       {heading}
       <div class="mt-3">
         <AnswerPanel
@@ -247,6 +242,9 @@ export function ResultSummary(props: {
       )}
 
       <div class="no-print mt-5 grid gap-2 border-t border-border pt-4">
+        <a href="#more" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
+          {t("res.narrow")}
+        </a>
         <a href="#offer" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
           {t("res.offer")}
         </a>

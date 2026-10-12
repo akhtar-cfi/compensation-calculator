@@ -85,7 +85,8 @@ export function OfferCheck(props: { est: EstimateOutput }) {
     setErrors(errs);
     if (Object.keys(errs).length) {
       const first = (Object.keys(LIMITS) as (keyof OfferForm)[]).find((k) => errs[k]);
-      document.getElementById(`offer-${first}`)?.focus();
+      // After the render that opens the assumptions (if the problem is there), so the field can take focus.
+      requestAnimationFrame(() => document.getElementById(`offer-${first}`)?.focus());
       setChecked(undefined);
       return;
     }
@@ -122,12 +123,7 @@ export function OfferCheck(props: { est: EstimateOutput }) {
         </div>
         <div class="border-y border-border">
           {/* Sensible defaults; most people never need to change them. Opens by itself if one is wrong. */}
-          <Disclosure
-            key={assumptionError ? "open" : "closed"}
-            id="offer-assumptions"
-            title={t("offer.assumptions")}
-            open={assumptionError}
-          >
+          <Disclosure id="offer-assumptions" title={t("offer.assumptions")} open={assumptionError}>
             <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {field("years", t("offer.years"), t("unit.years"))}
               {field("interest", t("offer.interest"), "%")}

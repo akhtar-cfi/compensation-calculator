@@ -47,7 +47,7 @@ export function examples(): { name: string; input: EstimateInput }[] {
 
 export const expected = (input: EstimateInput) => estimate(rules, input, { asOf: today() });
 
-const radio = (page: Page, name: string, value: string) =>
+export const radio = (page: Page, name: string, value: string) =>
   page.locator(`input[name="${name}"][value="${value}"]`).check();
 
 /** Types a date (YYYY-MM-DD) into the three day / month / year boxes. */
@@ -58,93 +58,133 @@ export async function fillDate(page: Page, id: string, iso: string) {
   await page.fill(`#${id}-year`, y!);
 }
 
-const select = (page: Page, id: string, value: string) => page.selectOption(`#${id}`, value);
+/** Picks the accident month and year (the quick question). */
+export async function pickMonth(page: Page, iso: string) {
+  const [y, m] = iso.split("-");
+  await page.selectOption("#accidentDate-month", String(Number(m)));
+  await page.selectOption("#accidentDate-year", y!);
+}
 
-/** Answers one question on the page from an engine input, as a person would. */
-async function answer(page: Page, q: string, input: EstimateInput) {
+/** Opens a group of optional details, as a person would by tapping its title. */
+export async function openGroup(page: Page, id: string) {
+  const g = page.locator(`details[data-question="${id}"]`);
+  if (!(await g.evaluate((d: HTMLDetailsElement) => d.open))) await g.locator("summary").click();
+}
+
+/** The page's three-way role question, from the engine's role. */
+const role = (r: EstimateInput["victimRole"]) =>
+  r === "owner_driver_single_vehicle" || r === "driver_of_involved_vehicle" ? r : "not_driving";
+
+/** Answers one block on the page from an engine input, as a person would. */
+async function answer(page: Page, block: string, input: EstimateInput) {
   const v = input.victim;
   const inc = v.income;
   const fam = input.family;
   const inj = input.injury;
-  switch (q) {
+  const traced =
+    input.offendingVehicle === "unidentified" ? "no" : input.offendingVehicle ? "yes" : "unknown";
+  switch (block) {
     case "kind":
       return radio(page, "kind", input.kind);
-    case "accidentDate":
-      return fillDate(page, "accidentDate", input.accidentDate);
-    case "role":
-      return select(page, "victimRole", input.victimRole ?? "other");
-    case "vehicle":
-      return radio(page, "offendingVehicle", input.offendingVehicle ?? "unknown");
-    case "s164":
-      return radio(page, "s164", input.s164 ?? "unknown");
-    case "claim":
-      await radio(page, "claimFiled", input.claimFiledDate ? "yes" : "no");
-      if (input.claimFiledDate) await fillDate(page, "claimFiledDate", input.claimFiledDate);
-      return;
-    case "state":
-      await select(page, "state", input.state);
-      if (input.zone) await select(page, "zone", input.zone);
-      return;
+    case "checks":
+      await radio(page, "victimRole", role(input.victimRole));
+      await radio(page, "vehicleTraced", traced);
+      return radio(
+        page,
+        "s164",
+        input.s164 === "none" || input.s164 === "accepted_via_insurer" ? input.s164 : "unknown",
+      );
     case "age":
       return page.fill("#age", String(v.ageYears));
     case "work":
-      return select(page, "employment", v.employment);
-    case "occupation":
-      return select(page, "occupationCode", v.occupationCode ?? "");
-    case "course":
-      return radio(page, "studentCourse", v.studentCourse ?? "unknown");
-    case "income":
+      await radio(page, "employment", v.employment);
       if (await page.locator('input[name="proof"]').count()) {
         const proof = inc?.proof === "salary_slip" || inc?.proof === "itr" ? inc.proof : "none";
         await radio(page, "proof", proof);
       }
       if (inc?.monthlySalary !== undefined) await page.fill("#monthlySalary", String(inc.monthlySalary));
-      if (inc?.monthlyTax !== undefined) await page.fill("#monthlyTax", String(inc.monthlyTax));
       if (inc?.itrAnnualIncomes?.[0])
         await page.fill("#itrAnnualIncome", String(inc.itrAnnualIncomes[0].income));
-      if (inc?.claimedMonthly !== undefined) await page.fill("#claimedMonthly", String(inc.claimedMonthly));
-      return;
-    case "pension":
+      if (v.occupationCode && (await page.locator("#occupationCode").count()))
+        await page.selectOption("#occupationCode", v.occupationCode);
       if (inc?.pensionMonthly !== undefined) await page.fill("#pensionMonthly", String(inc.pensionMonthly));
-      if (inc?.familyPensionMonthly !== undefined)
-        await page.fill("#familyPensionMonthly", String(inc.familyPensionMonthly));
       return;
     case "family":
       await radio(page, "married", fam.married ? "yes" : "no");
-      if (fam.married) await radio(page, "spouse", fam.spouse ? "yes" : "no");
       if (input.kind === "death") {
+        if (fam.married) await radio(page, "spouse", fam.spouse ? "yes" : "no");
         await page.fill("#children", String(fam.children ?? 0));
-        await page.fill("#parents", String(fam.parents ?? 0));
-        if (fam.dependentParents !== undefined)
-          await page.fill("#dependentParents", String(fam.dependentParents));
+        await radio(page, "parents", String(fam.parents ?? 0));
       }
       return;
-    case "disability":
-      if (inj?.certificatePct !== undefined) await page.fill("#certificatePct", String(inj.certificatePct));
-      if (inj?.certificateBasis) await radio(page, "certificateBasis", inj.certificateBasis);
+    case "injury":
+      if (inj?.certificatePct !== undefined) {
+        await page.fill("#certificatePct", String(inj.certificatePct));
+        await radio(page, "certificateBasis", inj.certificateBasis ?? "unknown");
+      } else await page.check("#noCertificate");
+      return page.fill("#monthsOffWork", String(inj?.monthsOffWork ?? 0));
+    case "when":
+      return pickMonth(page, input.accidentDate);
+    case "state":
+      return radio(page, "state", input.state);
+    case "dates": {
+      const day = Number(input.accidentDate.split("-")[2]);
+      if (day === 1 && !input.claimFiledDate) return;
+      await openGroup(page, "dates");
+      if (day !== 1) await page.fill("#accidentDay", String(day));
+      if (input.claimFiledDate) {
+        await radio(page, "claimFiled", "yes");
+        await fillDate(page, "claimFiledDate", input.claimFiledDate);
+      }
       return;
-    case "workNow":
-      if (inj?.workCapacity) await radio(page, "workCapacity", inj.workCapacity);
+    }
+    case "insurance":
+      if (!input.offendingVehicle) return;
+      await openGroup(page, "insurance");
+      return radio(page, "vehicleInsured", input.offendingVehicle === "identified_insured" ? "yes" : "no");
+    case "earnings": {
+      const todo = [
+        inc?.monthlyTax,
+        inc?.claimedMonthly,
+        inc?.familyPensionMonthly,
+        v.studentCourse,
+        input.zone,
+      ];
+      if (todo.every((x) => x === undefined)) return;
+      await openGroup(page, "earnings");
+      if (inc?.monthlyTax !== undefined) await page.fill("#monthlyTax", String(inc.monthlyTax));
+      if (inc?.claimedMonthly !== undefined) await page.fill("#claimedMonthly", String(inc.claimedMonthly));
+      if (inc?.familyPensionMonthly !== undefined)
+        await page.fill("#familyPensionMonthly", String(inc.familyPensionMonthly));
+      if (v.studentCourse) await radio(page, "studentCourse", v.studentCourse);
+      if (input.zone) await page.selectOption("#zone", input.zone);
       return;
-    case "treatment":
-      if (inj?.monthsOffWork !== undefined) await page.fill("#monthsOffWork", String(inj.monthsOffWork));
-      if (inj?.hospitalDays !== undefined) await page.fill("#hospitalDays", String(inj.hospitalDays));
-      if (inj?.permanentAttendant) await page.check("#permanentAttendant");
+    }
+    case "dependants":
+      if (fam.dependentParents === undefined) return;
+      await openGroup(page, "dependants");
+      return page.fill("#dependentParents", String(fam.dependentParents));
+    case "recovery":
+      if (!inj?.workCapacity && !inj?.permanentAttendant) return;
+      await openGroup(page, "recovery");
+      if (inj.workCapacity) await radio(page, "workCapacity", inj.workCapacity);
+      if (inj.permanentAttendant) await page.check("#permanentAttendant");
       return;
     case "medical":
-      if (input.medical?.bills !== undefined) await page.fill("#medicalBills", String(input.medical.bills));
-      if (input.medical?.paidByCashlessScheme !== undefined)
+      if (input.medical?.bills === undefined) return;
+      await openGroup(page, "medical");
+      await page.fill("#medicalBills", String(input.medical.bills));
+      if (input.medical.paidByCashlessScheme !== undefined)
         await page.fill("#cashlessPaid", String(input.medical.paidByCashlessScheme));
       return;
     default:
-      throw new Error(`no answer for question ${q}`);
+      throw new Error(`no answer for block ${block}`);
   }
 }
 
 /**
- * Fills the one-page form from an engine input, the way a person would: top to bottom, answering each question as
- * it appears (an answer can bring up a follow-up below it). Returns what the estimate panel then shows: an
- * estimate, or a stop (an answer that ends the claim).
+ * Fills the page from an engine input, the way a person would: the quick steps top to bottom (an answer can bring
+ * up a follow-up), then any details the input has. Returns what the estimate then shows: an estimate, or a stop.
  */
 export async function fillForm(page: Page, input: EstimateInput): Promise<"result" | "stop"> {
   await page.goto("#/");

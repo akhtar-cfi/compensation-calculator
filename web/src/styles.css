@@ -59,6 +59,9 @@
 
 body {
   @apply bg-background text-foreground font-sans antialiased;
+  /* With very large text on a phone, a long word ("compensation") is wider than the screen: break it rather than
+     scroll the page sideways. */
+  overflow-wrap: break-word;
 }
 
 /* Rendered public documents (methodology, rules reference, offer study). */

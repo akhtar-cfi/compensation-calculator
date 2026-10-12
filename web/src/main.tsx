@@ -1,5 +1,6 @@
 import { render } from "preact";
-import { App } from "./app";
+import { App, startLang } from "./app";
+import { loadHindi } from "./i18n";
 import "./styles.css";
 
 // After a new version is deployed, a page opened earlier may ask for a file that no longer exists: reload once
@@ -15,4 +16,7 @@ addEventListener("vite:preloadError", (e) => {
   location.reload();
 });
 
-render(<App />, document.getElementById("app")!);
+const start = () => render(<App />, document.getElementById("app")!);
+// In Hindi, wait for the Hindi text (a small file) rather than flash English first.
+if (startLang() === "hi") loadHindi().then(start, start);
+else start();

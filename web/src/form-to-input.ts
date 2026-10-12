@@ -11,22 +11,17 @@ export type YesNo = "" | "yes" | "no";
  */
 export interface FormState {
   kind: "" | "death" | "injury";
+  /** "Y-M-D" as answered: year and month from the quick question, the day (optional) from the details. */
   accidentDate: string;
   claimFiled: YesNo;
   claimFiledDate: string;
   state: string;
   zone: string;
-  victimRole:
-    | ""
-    | "pedestrian"
-    | "passenger"
-    | "pillion_rider"
-    | "cyclist"
-    | "driver_of_involved_vehicle"
-    | "owner_driver_single_vehicle"
-    | "other";
-  offendingVehicle: "" | "unknown" | "identified_insured" | "identified_uninsured" | "unidentified";
-  s164: "" | "unknown" | "none" | "accepted_via_insurer" | "awarded_by_tribunal";
+  /** Only two roles change the amount: driving an involved vehicle (fault) and owner-driver alone (no claim). */
+  victimRole: "" | "not_driving" | "driver_of_involved_vehicle" | "owner_driver_single_vehicle";
+  vehicleTraced: "" | "unknown" | "yes" | "no";
+  vehicleInsured: "" | "unknown" | "yes" | "no";
+  s164: "" | "unknown" | "none" | "accepted_via_insurer";
   age: string;
   employment: "" | Employment;
   occupationCode: string;
@@ -46,10 +41,11 @@ export interface FormState {
   medicalBills: string;
   cashlessPaid: string;
   certificatePct: string;
+  /** "No certificate yet": an answer, so the estimate does not wait for a percentage that does not exist. */
+  noCertificate: boolean;
   certificateBasis: "" | "whole_body" | "limb" | "unknown";
   workCapacity: "" | "unknown" | "full" | "with_difficulty" | "lighter_only" | "none";
   monthsOffWork: string;
-  hospitalDays: string;
   permanentAttendant: boolean;
 }
 
@@ -61,7 +57,8 @@ export const EMPTY_FORM: FormState = {
   state: "",
   zone: "",
   victimRole: "",
-  offendingVehicle: "",
+  vehicleTraced: "",
+  vehicleInsured: "",
   s164: "",
   age: "",
   employment: "",
@@ -82,10 +79,10 @@ export const EMPTY_FORM: FormState = {
   medicalBills: "",
   cashlessPaid: "",
   certificatePct: "",
+  noCertificate: false,
   certificateBasis: "",
   workCapacity: "",
   monthsOffWork: "",
-  hospitalDays: "",
   permanentAttendant: false,
 };
 
@@ -113,10 +110,15 @@ export function incomeFields(
 
 export type ParsedDate = { status: "empty" } | { status: "invalid" } | { status: "ok"; iso: string };
 
-/** Reads a "Y-M-D" date as typed (parts unpadded or missing) and checks it is a real calendar date. */
-export function parseDate(raw: string): ParsedDate {
+/**
+ * Reads a "Y-M-D" date as typed (parts unpadded or missing) and checks it is a real calendar date. With
+ * `dayOptional`, a missing day is read as the 1st (the accident is asked as a month and year).
+ */
+export function parseDate(raw: string, opts: { dayOptional?: boolean } = {}): ParsedDate {
   const parts = raw.split("-").map((p) => p.trim());
   if (parts.every((p) => p === "")) return { status: "empty" };
+  if (opts.dayOptional && parts.length === 3 && parts[2] === "" && parts[0] !== "" && parts[1] !== "")
+    parts[2] = "1";
   if (parts.length !== 3 || !parts.every((p) => /^\d+$/.test(p))) return { status: "invalid" };
   const [y, m, d] = parts.map(Number) as [number, number, number];
   if (parts[0]!.length !== 4 || y < 1900 || m < 1 || m > 12 || d < 1) return { status: "invalid" };
@@ -126,16 +128,21 @@ export function parseDate(raw: string): ParsedDate {
   return { status: "ok", iso: `${y}-${p(m)}-${p(d)}` };
 }
 
-const isoOrRaw = (raw: string) => {
-  const d = parseDate(raw);
+const isoOrRaw = (raw: string, dayOptional = false) => {
+  const d = parseDate(raw, { dayOptional });
   return d.status === "ok" ? d.iso : raw;
 };
+
+/** The day of the accident as entered in the details ("" when only the month and year are known). */
+export const accidentDay = (f: FormState) => f.accidentDate.split("-")[2] ?? "";
+
+/** Plain digits, with an optional decimal part: no signs, exponents ("1e9") or hex. */
+const DECIMAL = /^\d+(\.\d+)?$/;
 
 const num = (s: string): number | undefined => {
   const t = s.replace(/[,\s₹]/g, "");
   if (t === "") return undefined;
-  const n = Number(t);
-  return Number.isFinite(n) ? n : NaN;
+  return DECIMAL.test(t) ? Number(t) : NaN;
 };
 
 const SCALES: readonly [RegExp, number][] = [
@@ -153,13 +160,9 @@ export function parseAmount(s: string): number | undefined {
   if (t === "") return undefined;
   for (const [re, scale] of SCALES) {
     const m = re.exec(t);
-    if (m) {
-      const n = m[1] === "" ? NaN : Number(m[1]);
-      return Number.isFinite(n) ? Math.round(n * scale) : NaN;
-    }
+    if (m) return DECIMAL.test(m[1]!) ? Math.round(Number(m[1]) * scale) : NaN;
   }
-  const n = Number(t);
-  return Number.isFinite(n) ? n : NaN;
+  return DECIMAL.test(t) ? Number(t) : NaN;
 }
 
 const known = <T extends string>(v: T): Exclude<T, "" | "unknown"> | undefined =>
@@ -170,6 +173,17 @@ const yesNo = (v: YesNo): boolean | undefined => (v === "" ? undefined : v === "
 /** Drops keys whose value is undefined (the schema uses exact optional properties). */
 function compact<T extends object>(o: T): T {
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as T;
+}
+
+/** Traced or not (asked first), then insured or not (a detail): the engine's single vehicle answer. */
+function vehicle(f: FormState): EstimateInput["offendingVehicle"] {
+  if (f.vehicleTraced === "no") return "unidentified";
+  if (f.vehicleTraced !== "yes") return undefined;
+  return f.vehicleInsured === "yes"
+    ? "identified_insured"
+    : f.vehicleInsured === "no"
+      ? "identified_uninsured"
+      : undefined;
 }
 
 export type FormResult = { ok: true; input: EstimateInput } | { ok: false; errors: Record<string, string> };
@@ -198,12 +212,12 @@ export function formToInput(f: FormState): FormResult {
   const death = f.kind === "death";
   const raw = compact({
     kind: f.kind || undefined,
-    accidentDate: isoOrRaw(f.accidentDate),
+    accidentDate: isoOrRaw(f.accidentDate, true),
     claimFiledDate: f.claimFiled === "yes" ? isoOrRaw(f.claimFiledDate) : undefined,
     state: f.state,
     zone: f.zone || undefined,
-    victimRole: f.victimRole || undefined,
-    offendingVehicle: known(f.offendingVehicle),
+    victimRole: f.victimRole === "not_driving" ? ("other" as const) : f.victimRole || undefined,
+    offendingVehicle: vehicle(f),
     s164: known(f.s164),
     victim: compact({
       ageYears: num(f.age),
@@ -215,7 +229,7 @@ export function formToInput(f: FormState): FormResult {
     }),
     family: compact({
       married,
-      spouse: married ? yesNo(f.spouse) : undefined,
+      spouse: married && death ? yesNo(f.spouse) : undefined,
       children: death ? num(f.children) : undefined,
       parents: death ? num(f.parents) : undefined,
       dependentParents: death ? num(f.dependentParents) : undefined,
@@ -227,11 +241,10 @@ export function formToInput(f: FormState): FormResult {
     injury:
       f.kind === "injury"
         ? compact({
-            certificatePct: num(f.certificatePct),
-            certificateBasis: f.certificateBasis || undefined,
+            certificatePct: f.noCertificate ? undefined : num(f.certificatePct),
+            certificateBasis: f.noCertificate ? undefined : f.certificateBasis || undefined,
             workCapacity: known(f.workCapacity),
             monthsOffWork: num(f.monthsOffWork),
-            hospitalDays: num(f.hospitalDays),
             permanentAttendant: f.permanentAttendant || undefined,
           })
         : undefined,

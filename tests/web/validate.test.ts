@@ -8,11 +8,10 @@ const TODAY = "2026-10-11";
 const ok: FormState = {
   ...EMPTY_FORM,
   kind: "death",
-  accidentDate: "2025-6-1",
-  victimRole: "pedestrian",
-  offendingVehicle: "identified_insured",
+  accidentDate: "2025-6-",
+  victimRole: "not_driving",
+  vehicleTraced: "yes",
   s164: "none",
-  claimFiled: "no",
   state: "DL",
   age: "30",
   employment: "homemaker",
@@ -28,56 +27,71 @@ describe("validation", () => {
     expect(v.input?.victim.ageYears).toBe(30);
   });
 
-  it("puts each missing answer on the page that asks it", () => {
+  it("puts each missing answer in the step that asks it", () => {
     const v = validate(EMPTY_FORM, TODAY);
     expect(v.input).toBeUndefined();
-    expect(errorsFor(v, "kind")).toEqual({ kind: "err.required" });
-    expect(errorsFor(v, "accidentDate")).toEqual({ accidentDate: "err.required" });
-    expect(errorsFor(v, "role")).toEqual({ victimRole: "err.required" });
-    expect(errorsFor(v, "vehicle")).toEqual({ offendingVehicle: "err.required" });
-    expect(errorsFor(v, "claim")).toEqual({ claimFiled: "err.required" });
-    expect(errorsFor(v, "age")).toEqual({ age: "err.required" });
-    expect(errorsFor(v, "work")).toEqual({ employment: "err.required" });
-    expect(errorsFor(v, "family")).toEqual({ married: "err.required" });
+    expect(errorsFor(v, "kind", EMPTY_FORM)).toEqual({ kind: "err.required" });
+    expect(errorsFor(v, "when", EMPTY_FORM)).toEqual({ accidentDate: "err.required" });
+    expect(errorsFor(v, "checks", EMPTY_FORM)).toEqual({
+      victimRole: "err.required",
+      vehicleTraced: "err.required",
+      s164: "err.required",
+    });
+    expect(errorsFor(v, "age", EMPTY_FORM)).toEqual({ age: "err.required" });
+    expect(errorsFor(v, "work", EMPTY_FORM)).toEqual({ employment: "err.required" });
+    expect(errorsFor(v, "state", EMPTY_FORM)).toEqual({ state: "err.required" });
+    // Details are optional: nothing in them is required.
+    for (const g of ["dates", "earnings", "medical"] as const)
+      expect(errorsFor(v, g, EMPTY_FORM)).toEqual({});
   });
 
   it("asks a death claim for the number of children and parents (0 if none)", () => {
     const v = validate({ ...ok, children: "", parents: "" }, TODAY);
-    expect(errorsFor(v, "family")).toEqual({ children: "err.count", parents: "err.count" });
-    const injury = {
-      ...ok,
-      kind: "injury" as const,
-      workCapacity: "unknown" as const,
-      monthsOffWork: "0",
-      hospitalDays: "0",
-    };
+    expect(v.errors).toEqual({ children: "err.count", parents: "err.count" });
+    const injury = { ...ok, kind: "injury" as const, noCertificate: true, monthsOffWork: "0" };
     expect(validate({ ...injury, children: "", parents: "" }, TODAY).errors).toEqual({});
   });
 
-  it("asks an injury claim whether the person can work, and the months off and days in hospital (0 is an answer)", () => {
-    expect(validate({ ...ok, kind: "injury" }, TODAY).errors).toEqual({
-      workCapacity: "err.required",
+  it("asks an injury claim for the certificate (or that there is none) and the months off work (0 is an answer)", () => {
+    const injury = { ...ok, kind: "injury" as const };
+    expect(validate(injury, TODAY).errors).toEqual({
+      certificatePct: "err.required",
       monthsOffWork: "err.required",
-      hospitalDays: "err.required",
     });
-    const answered = {
-      ...ok,
-      kind: "injury" as const,
-      workCapacity: "unknown" as const,
-      monthsOffWork: "0",
-      hospitalDays: "0",
-    };
-    expect(validate(answered, TODAY).input?.injury).toEqual({ monthsOffWork: 0, hospitalDays: 0 });
+    expect(validate({ ...injury, certificatePct: "40", monthsOffWork: "0" }, TODAY).errors).toEqual({
+      certificateBasis: "err.required",
+    });
+    const answered = { ...injury, noCertificate: true, monthsOffWork: "0" };
+    expect(validate(answered, TODAY).input?.injury).toEqual({ monthsOffWork: 0 });
+    // How the person can work now is a detail: it narrows the best case, so it never holds up the estimate.
+    expect(validate({ ...answered, workCapacity: "" }, TODAY).errors).toEqual({});
+  });
+
+  it("takes the accident month and year as enough", () => {
+    expect(validate({ ...ok, accidentDate: "2025-6-" }, TODAY).input?.accidentDate).toBe("2025-06-01");
+    expect(validate({ ...ok, accidentDate: "2025-6-17" }, TODAY).input?.accidentDate).toBe("2025-06-17");
+    expect(validate({ ...ok, accidentDate: "2025--" }, TODAY).errors.accidentDate).toBe("err.required");
+    expect(validate({ ...ok, accidentDate: "-6-" }, TODAY).errors.accidentDate).toBe("err.required");
   });
 
   it("needs the spouse answer only for a married person", () => {
     expect(validate({ ...ok, married: "yes" }, TODAY).errors).toEqual({ spouse: "err.required" });
     expect(validate({ ...ok, married: "yes", spouse: "no" }, TODAY).errors).toEqual({});
+    // For an injury, the spouse's claim changes nothing: not asked.
+    const injury = {
+      ...ok,
+      kind: "injury" as const,
+      noCertificate: true,
+      monthsOffWork: "0",
+      married: "yes" as const,
+    };
+    expect(validate(injury, TODAY).errors).toEqual({});
   });
 
   it("rejects impossible, future and out-of-order dates", () => {
     expect(validate({ ...ok, accidentDate: "2025-2-30" }, TODAY).errors.accidentDate).toBe("err.date");
     expect(validate({ ...ok, accidentDate: "2026-10-12" }, TODAY).errors.accidentDate).toBe("err.future");
+    expect(validate({ ...ok, accidentDate: "2026-11-" }, TODAY).errors.accidentDate).toBe("err.future");
     const filed = { ...ok, claimFiled: "yes" as const };
     expect(validate(filed, TODAY).errors.claimFiledDate).toBe("err.required");
     expect(validate({ ...filed, claimFiledDate: "2025-5-1" }, TODAY).errors.claimFiledDate).toBe(
@@ -93,6 +107,8 @@ describe("validation", () => {
     expect(validate({ ...ok, age: "thirty" }, TODAY).errors.age).toBe("err.age");
     expect(validate({ ...ok, age: "140" }, TODAY).errors.age).toBe("err.age");
     expect(validate({ ...ok, parents: "3" }, TODAY).errors.parents).toBe("err.parents");
+    expect(validate({ ...ok, children: "25" }, TODAY).errors.children).toBe("err.children");
+    expect(validate({ ...ok, children: "20" }, TODAY).errors).toEqual({});
     expect(validate({ ...ok, kind: "injury", certificatePct: "120" }, TODAY).errors.certificatePct).toBe(
       "err.pct",
     );
@@ -116,6 +132,7 @@ describe("validation", () => {
       expect(parseAmount(typed), typed).toBe(rupees);
     expect(parseAmount("lakh")).toBeNaN();
     expect(parseAmount("abc")).toBeNaN();
+    for (const odd of ["1e9", "0x10", "-500", "2.5e3 lakh"]) expect(parseAmount(odd), odd).toBeNaN();
     const salaried = { ...ok, employment: "permanent" as const, proof: "salary_slip" as const };
     expect(validate({ ...salaried, monthlySalary: "25k" }, TODAY).input?.victim.income?.monthlySalary).toBe(
       25000,
@@ -136,6 +153,30 @@ describe("validation", () => {
     // Answered as an injury with an invalid certificate, then switched to death: nothing blocks.
     const v = validate({ ...ok, certificatePct: "999", monthsOffWork: "x", studentCourse: "school" }, TODAY);
     expect(v.errors).toEqual({});
+  });
+
+  it("refuses a tax as large as the salary, and amounts that can only be a typing slip", () => {
+    const salaried: FormState = {
+      ...ok,
+      employment: "permanent",
+      proof: "salary_slip",
+      monthlySalary: "10000",
+    };
+    expect(validate({ ...salaried, monthlyTax: "50000" }, TODAY).errors.monthlyTax).toBe("err.tax");
+    expect(validate({ ...salaried, monthlyTax: "500" }, TODAY).errors).toEqual({});
+    expect(validate({ ...salaried, monthlySalary: "99 crore" }, TODAY).errors.monthlySalary).toBe(
+      "err.tooLarge",
+    );
+    expect(validate({ ...salaried, monthlySalary: "1e9" }, TODAY).errors.monthlySalary).toBe("err.amount");
+    // Large but possible: accepted (the page asks to check it).
+    expect(validate({ ...salaried, monthlySalary: "15 lakh" }, TODAY).errors).toEqual({});
+  });
+
+  it("does not count more dependent parents than parents claiming", () => {
+    expect(validate({ ...ok, parents: "0", dependentParents: "2" }, TODAY).errors.dependentParents).toBe(
+      "err.dependentParents",
+    );
+    expect(validate({ ...ok, parents: "2", dependentParents: "1" }, TODAY).errors).toEqual({});
   });
 
   it("does not accept a cashless payment larger than the bills", () => {
@@ -175,9 +216,9 @@ describe("what to prove", () => {
         kind: "injury",
         employment: "informal",
         certificatePct: "40",
+        certificateBasis: "limb",
         workCapacity: "with_difficulty",
         monthsOffWork: "6",
-        hospitalDays: "10",
         claimedMonthly: "15000",
       },
       TODAY,

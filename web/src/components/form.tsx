@@ -1,7 +1,8 @@
 import type { ComponentChildren } from "preact";
-import { ChevronDown, CircleAlert, Minus, Plus } from "lucide-preact";
+import { Check, ChevronDown, CircleAlert, Minus, Plus, type LucideIcon } from "lucide-preact";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { parseAmount } from "../form-to-input";
+import { amountCheck } from "../validate";
 import { useApprox, useT } from "../i18n";
 
 /*
@@ -19,6 +20,8 @@ export interface FieldProps {
   hint?: string | undefined;
   error?: string | undefined;
   optional?: boolean | undefined;
+  /** Keep the label for screen readers only: the step's title already asks the question. */
+  hideLabel?: boolean | undefined;
 }
 
 const describedBy = (p: FieldProps, extra?: string) =>
@@ -61,7 +64,7 @@ export function FieldError(props: { id: string; message?: string | undefined }) 
 function Field(props: FieldProps & { children: ComponentChildren; class?: string }) {
   return (
     <div class={props.class}>
-      <label for={props.id} class={labelCls}>
+      <label for={props.id} class={props.hideLabel ? "sr-only" : labelCls}>
         {props.label}
         <Optional on={props.optional} />
       </label>
@@ -81,6 +84,7 @@ export function TextInput(
     width?: "xs" | "sm" | "full";
     suffix?: string;
     autoComplete?: string;
+    disabled?: boolean;
   },
 ) {
   const w = props.width === "xs" ? "max-w-28" : props.width === "sm" ? "max-w-44" : "";
@@ -94,11 +98,12 @@ export function TextInput(
           inputMode={props.numeric ? "numeric" : undefined}
           autoComplete={props.autoComplete ?? "off"}
           spellcheck={false}
+          disabled={props.disabled}
           value={props.value}
           aria-invalid={props.error ? "true" : undefined}
           aria-describedby={describedBy(props)}
           onInput={(e) => props.onInput((e.currentTarget as HTMLInputElement).value)}
-          class={`${inputCls} ${edge(props.error)} ${w}`}
+          class={`${inputCls} ${edge(props.error)} ${w} disabled:cursor-not-allowed disabled:bg-subtle disabled:opacity-60`}
         />
         {props.suffix && <span class="shrink-0 text-sm text-muted-foreground">{props.suffix}</span>}
       </div>
@@ -118,11 +123,12 @@ export function amountEcho(value: string): string | undefined {
  * missing or extra zero is caught (2,50,000 vs 25,000).
  */
 export function MoneyInput(
-  props: FieldProps & { value: string; onInput: (v: string) => void; per?: string },
+  props: FieldProps & { value: string; onInput: (v: string) => void; per?: string; monthly?: boolean },
 ) {
   const t = useT();
   const approx = useApprox();
   const echo = amountEcho(props.value);
+  const large = props.monthly && !props.error && amountCheck(props.value);
   return (
     <Field {...props}>
       <div
@@ -150,6 +156,15 @@ export function MoneyInput(
       </div>
       <p id={`${props.id}-echo`} aria-live="polite" class="mt-1 min-h-4 text-xs text-muted-foreground">
         {echo ? t("money.echo", { x: approx(echo), per: props.per ?? "" }).trim() : ""}
+        {large && (
+          <span
+            class="mt-1 flex items-start gap-1.5 font-medium text-foreground"
+            data-testid={`${props.id}-check`}
+          >
+            <CircleAlert aria-hidden="true" class="mt-px h-3.5 w-3.5 shrink-0 text-warning" />
+            {t("money.check")}
+          </span>
+        )}
       </p>
     </Field>
   );
@@ -173,8 +188,10 @@ export function DateInput(props: FieldProps & { value: string; onInput: (v: stri
     p[part] = v.replace(/\D/g, "");
     props.onInput(p.join("-"));
   };
+  // Widths are a share of the row, not fixed: with very large text the boxes narrow instead of pushing the page
+  // sideways.
   const box = (part: 0 | 1 | 2, key: string, value: string, width: string, autoFocus = false) => (
-    <div>
+    <div class={`min-w-0 ${width}`}>
       <label for={`${props.id}-${key}`} class="block text-xs text-muted-foreground">
         {t(`date.${key}`)}
       </label>
@@ -189,7 +206,7 @@ export function DateInput(props: FieldProps & { value: string; onInput: (v: stri
         aria-invalid={props.error ? "true" : undefined}
         data-autofocus={autoFocus ? "" : undefined}
         onInput={(e) => set(part, (e.currentTarget as HTMLInputElement).value)}
-        class={`${inputCls} ${edge(props.error)} ${width} mt-1 text-center`}
+        class={`${inputCls} ${edge(props.error)} mt-1 min-w-0 px-1 text-center`}
       />
     </div>
   );
@@ -200,10 +217,86 @@ export function DateInput(props: FieldProps & { value: string; onInput: (v: stri
         <Optional on={props.optional} />
       </legend>
       {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
-      <div class="mt-1.5 flex gap-2">
-        {box(2, "day", d, "w-14!", true)}
-        {box(1, "month", m, "w-14!")}
-        {box(0, "year", y, "w-20!")}
+      <div class="mt-1.5 flex max-w-60 gap-2">
+        {box(2, "day", d, "flex-[2]", true)}
+        {box(1, "month", m, "flex-[2]")}
+        {box(0, "year", y, "flex-[3]")}
+      </div>
+      <FieldError id={props.id} message={props.error} />
+    </fieldset>
+  );
+}
+
+/**
+ * Month and year as two of the phone's own pickers: what most families know without looking anything up. The value
+ * stays "Y-M-D", keeping a day entered elsewhere; without a day the 1st is used.
+ */
+export function MonthYear(
+  props: FieldProps & { value: string; onInput: (v: string) => void; fromYear: number; toYear: number },
+) {
+  const t = useT();
+  const [y, m, d] = dateParts(props.value);
+  const set = (part: 0 | 1, v: string) => {
+    const p = [y, m, d];
+    p[part] = v;
+    props.onInput(p.join("-"));
+  };
+  const years: string[] = [];
+  for (let n = props.toYear; n >= props.fromYear; n--) years.push(String(n));
+  const sel = (
+    id: string,
+    value: string,
+    opts: { value: string; label: string }[],
+    onChange: (v: string) => void,
+  ) => (
+    <div class="relative min-w-0 flex-1 basis-36">
+      <select
+        id={id}
+        name={id}
+        value={value}
+        aria-invalid={props.error ? "true" : undefined}
+        aria-describedby={describedBy(props)}
+        onChange={(e) => onChange((e.currentTarget as HTMLSelectElement).value)}
+        class={`${inputCls} ${edge(props.error)} appearance-none pr-9 ${value ? "" : "text-muted-foreground"}`}
+      >
+        {opts.map((o) => (
+          <option key={o.value} value={o.value} class="text-foreground">
+            {o.label}
+          </option>
+        ))}
+      </select>
+      <ChevronDown
+        aria-hidden="true"
+        class="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+      />
+    </div>
+  );
+  return (
+    <fieldset id={props.id} role="group" aria-describedby={describedBy(props)}>
+      <legend class="sr-only">{props.label}</legend>
+      {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
+      <div class="mt-2 flex flex-wrap gap-2" data-autofocus-group>
+        <label for={`${props.id}-month`} class="sr-only">
+          {t("date.month")}
+        </label>
+        {sel(
+          `${props.id}-month`,
+          m ? String(Number(m)) : "",
+          [
+            { value: "", label: t("date.month") },
+            ...Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: t(`month.${i + 1}`) })),
+          ],
+          (v) => set(1, v),
+        )}
+        <label for={`${props.id}-year`} class="sr-only">
+          {t("date.year")}
+        </label>
+        {sel(
+          `${props.id}-year`,
+          y,
+          [{ value: "", label: t("date.year") }, ...years.map((x) => ({ value: x, label: x }))],
+          (v) => set(0, v),
+        )}
       </div>
       <FieldError id={props.id} message={props.error} />
     </fieldset>
@@ -249,43 +342,54 @@ export interface RadioOption {
   value: string;
   label: string;
   hint?: string | undefined;
+  icon?: LucideIcon | undefined;
 }
 
 /**
- * Either/or choices as tappable chips with a visible radio. `row`: short answers side by side (Yes / No, death /
- * injury); `stack`: one per line, for longer labels or hints. Nothing is pre-selected.
+ * Choices as tappable chips: the whole chip is the radio button (a transparent native input over it, so the
+ * keyboard, screen readers and arrow keys work as usual), a check mark shows the choice. `row`: short answers side
+ * by side (Yes / No); `stack`: one per line, for longer labels or hints; `grid`: many short choices with icons
+ * (type of work). Nothing is pre-selected.
  */
 export function Radios(
   props: FieldProps & {
     value: string;
     onChange: (v: string) => void;
     options: RadioOption[];
-    layout?: "row" | "stack";
+    layout?: "row" | "stack" | "grid";
   },
 ) {
-  const stack = props.layout === "stack";
+  const layout = props.layout ?? "row";
+  const wrap =
+    layout === "stack"
+      ? "grid gap-2 sm:grid-cols-2"
+      : layout === "grid"
+        ? "grid grid-cols-2 gap-2 sm:grid-cols-3"
+        : "flex flex-wrap gap-2";
   return (
     <fieldset id={props.id} aria-describedby={describedBy(props)}>
-      <legend class={labelCls}>
+      <legend class={props.hideLabel ? "sr-only" : labelCls}>
         {props.label}
         <Optional on={props.optional} />
       </legend>
       {props.hint && <Hint id={props.id}>{props.hint}</Hint>}
-      <div class={`mt-1.5 ${stack ? "grid gap-2 sm:grid-cols-2" : "flex flex-wrap gap-2"}`}>
+      <div class={`${props.hideLabel && !props.hint ? "" : "mt-2"} ${wrap}`}>
         {props.options.map((o, i) => {
           const checked = props.value === o.value;
           const id = `${props.id}-${o.value || "none"}`;
+          const Icon = o.icon;
           return (
             <label
               key={o.value}
               for={id}
-              class={`flex min-h-11 cursor-pointer items-start gap-2.5 rounded-md border px-3 py-2.5 text-sm shadow-sm transition-colors sm:min-h-10 sm:py-2 ${
+              data-checked={checked ? "" : undefined}
+              class={`relative flex min-h-11 cursor-pointer items-start gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
                 checked
-                  ? "border-brand bg-brand-lite"
+                  ? "border-brand bg-brand-lite shadow-[inset_0_0_0_1px_var(--color-brand)]"
                   : props.error
                     ? "border-danger bg-background"
-                    : "border-input bg-background hover:bg-subtle"
-              } focus-within:ring-2 focus-within:ring-brand/25`}
+                    : "border-input bg-background shadow-sm hover:border-foreground/30 hover:bg-subtle"
+              } focus-within:ring-2 focus-within:ring-brand/30 focus-within:ring-offset-1`}
             >
               <input
                 id={id}
@@ -296,12 +400,33 @@ export function Radios(
                 data-autofocus={i === 0 ? "" : undefined}
                 aria-describedby={o.hint ? `${id}-hint` : undefined}
                 onChange={() => props.onChange(o.value)}
-                class="mt-0.5 h-4 w-4 shrink-0 accent-brand"
+                class="absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-lg opacity-0"
               />
-              <span>
-                <span class={`block text-foreground ${checked ? "font-medium" : ""}`}>{o.label}</span>
+              <span
+                aria-hidden="true"
+                class={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${
+                  checked ? "border-brand bg-brand text-brand-foreground" : "border-input bg-background"
+                }`}
+              >
+                {checked && <Check class="h-3 w-3" strokeWidth={3} />}
+              </span>
+              {Icon && (
+                <Icon
+                  aria-hidden="true"
+                  class={`mt-px h-4 w-4 shrink-0 ${checked ? "text-brand" : "text-muted-foreground"}`}
+                />
+              )}
+              <span class="min-w-0">
+                <span
+                  class={`block leading-snug text-foreground ${checked ? "font-semibold" : "font-medium"}`}
+                >
+                  {o.label}
+                </span>
                 {o.hint && (
-                  <span id={`${id}-hint`} class="mt-0.5 block text-xs text-muted-foreground">
+                  <span
+                    id={`${id}-hint`}
+                    class={`mt-0.5 block text-xs leading-snug ${checked ? "text-foreground/75" : "text-muted-foreground"}`}
+                  >
                     {o.hint}
                   </span>
                 )}
@@ -327,7 +452,18 @@ export function Counter(
   const max = props.max ?? 20;
   const step = (d: number) => {
     const cur = n === undefined || !Number.isFinite(n) ? (d > 0 ? 0 : 1) : n;
-    props.onInput(String(Math.min(max, Math.max(0, cur + d))));
+    const next = Math.min(max, Math.max(0, cur + d));
+    props.onInput(String(next));
+    // A button that becomes disabled under the keyboard focus would drop focus to the page: move it to the other.
+    if (next === 0 || next === max)
+      requestAnimationFrame(() => {
+        const other = document.getElementById(`${props.id}-${next === 0 ? "more" : "less"}`);
+        if (
+          document.activeElement === document.body ||
+          (document.activeElement as HTMLButtonElement)?.disabled
+        )
+          other?.focus();
+      });
   };
   const btn =
     "flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-input bg-background text-foreground shadow-sm hover:bg-subtle focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-40 sm:h-10 sm:w-10";
@@ -336,6 +472,7 @@ export function Counter(
       <div class="flex items-center gap-2">
         <button
           type="button"
+          id={`${props.id}-less`}
           class={btn}
           aria-label={t("counter.less", { noun: props.noun })}
           aria-controls={props.id}
@@ -355,10 +492,11 @@ export function Counter(
           aria-invalid={props.error ? "true" : undefined}
           aria-describedby={describedBy(props)}
           onInput={(e) => props.onInput((e.currentTarget as HTMLInputElement).value.replace(/\D/g, ""))}
-          class={`${inputCls} ${edge(props.error)} w-16! text-center font-semibold`}
+          class={`${inputCls} ${edge(props.error)} w-16! min-w-0 shrink px-1 text-center font-semibold`}
         />
         <button
           type="button"
+          id={`${props.id}-more`}
           class={btn}
           aria-label={t("counter.more", { noun: props.noun })}
           aria-controls={props.id}
@@ -416,6 +554,9 @@ export function Reveal(props: { children: ComponentChildren }) {
 export function focusField(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
+  // An answer inside a closed group of details: open the group first.
+  const group = el.closest("details");
+  if (group && !group.open) group.open = true;
   const target =
     el instanceof HTMLInputElement || el instanceof HTMLSelectElement
       ? el

@@ -1,5 +1,5 @@
 import type { ComponentChildren } from "preact";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { ChevronDown, Copy, Printer, Share2, Square } from "lucide-preact";
 import type { JourneySummary } from "../../../src/cases/match.js";
 import type { Case } from "../../../src/cases/schema.js";
@@ -54,6 +54,11 @@ export function Disclosure(props: {
   children: ComponentChildren;
 }) {
   const [open, setOpen] = useState(props.open ?? false);
+  // Opens when asked to (a problem inside it), but never closes by itself: closing while someone is typing in it
+  // would lose their place.
+  useEffect(() => {
+    if (props.open) setOpen(true);
+  }, [props.open]);
   return (
     <section class="border-b border-border last:border-b-0" data-disclosure={props.id}>
       <h3>

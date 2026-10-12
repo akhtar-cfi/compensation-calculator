@@ -18,7 +18,9 @@ describe("addresses", () => {
   it("opens older addresses (one page per question) at the matching place on the calculator", () => {
     expect(parseRoute("#/q/age")).toEqual({ name: "calc", target: "age" });
     expect(parseRoute("#/q/role?from=check")).toEqual({ name: "calc", target: "victimRole" });
-    expect(parseRoute("#/stop/unidentified")).toEqual({ name: "calc", target: "offendingVehicle" });
+    expect(parseRoute("#/stop/unidentified")).toEqual({ name: "calc", target: "vehicleTraced" });
+    expect(parseRoute("#/q/vehicle")).toEqual({ name: "calc", target: "vehicleTraced" });
+    expect(parseRoute("#/q/nonsense")).toEqual({ name: "calc" });
     expect(parseRoute("#/result")).toEqual({ name: "calc", target: "result" });
     expect(parseRoute("#/offer")).toEqual({ name: "calc", target: "offer" });
     expect(parseRoute("#/check")).toEqual({ name: "calc" });

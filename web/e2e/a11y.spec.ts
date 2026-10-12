@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
-import { examples, expect, fillForm, test } from "./helpers";
+import { examples, expect, fillForm, openGroup, radio, test } from "./helpers";
 
 async function noSeriousViolations(page: Page, where: string) {
   const r = await new AxeBuilder({ page })
@@ -26,13 +26,14 @@ for (const lang of ["en", "hi"] as const) {
     await page.locator("#result [data-missing]").first().click(); // every unanswered question now says so
     await expect(page.locator("[id$=-error]").first()).toBeVisible();
     await noSeriousViolations(page, "form with errors");
-    await page.selectOption("#victimRole", "owner_driver_single_vehicle");
+    await radio(page, "victimRole", "owner_driver_single_vehicle");
     await expect(page.locator("[data-stop]").first()).toBeVisible();
     await noSeriousViolations(page, "stopped");
     if (lang === "en") {
       const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
       await fillForm(page, input);
-      await noSeriousViolations(page, "estimate");
+      for (const g of ["dates", "earnings", "recovery", "medical"]) await openGroup(page, g);
+      await noSeriousViolations(page, "estimate, details open");
       const closed = page.locator("[data-disclosure] button[aria-expanded=false]");
       while (await closed.count()) await closed.first().click();
       await noSeriousViolations(page, "estimate, all sections open");

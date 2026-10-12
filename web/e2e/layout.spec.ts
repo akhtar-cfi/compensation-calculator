@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
-import { examples, expect, fillForm, test } from "./helpers";
+import { examples, expect, fillForm, openGroup, radio, test } from "./helpers";
 
-const WIDTHS = [320, 360, 768, 1200];
+const WIDTHS = [320, 360, 390, 768, 1280];
 const SHOTS = process.env.SCREENSHOTS === "1";
 
 /**
@@ -42,13 +42,14 @@ for (const width of WIDTHS) {
     await shot(page, "01-empty", width);
     await page.locator("#result [data-missing]").first().click();
     await shot(page, "02-errors", width);
-    await page.selectOption("#victimRole", "owner_driver_single_vehicle");
+    await radio(page, "victimRole", "owner_driver_single_vehicle");
     await shot(page, "03-stop", width);
     const { input: death } = examples().find((e) => e.name === "death-homemaker.yaml")!;
     await fillForm(page, death);
     await shot(page, "04-estimate-death", width);
     const { input: injury } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
     await fillForm(page, injury);
+    for (const g of ["dates", "earnings", "recovery", "medical"]) await openGroup(page, g);
     const closed = page.locator("[data-disclosure] button[aria-expanded=false]");
     while (await closed.count()) await closed.first().click();
     await page.fill("#offer-amount", "300000");
@@ -73,7 +74,7 @@ test("the estimate prints without the navigation or buttons", async ({ page }) =
   // Collapsed sections print in full.
   await expect(page.locator("[data-head]").first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Print or save as PDF" })).toBeHidden();
-  await expect(page.getByTestId("phone-bar")).toBeHidden();
+  await expect(page.getByTestId("bottom-bar")).toBeHidden();
   await expect(page.locator('form[aria-labelledby="page-title"]')).toBeHidden(); // the estimate, not the form
   await expect(page.locator("#offer")).toBeHidden();
   await expect(page.locator("#result [data-testid=headline]")).toBeVisible();

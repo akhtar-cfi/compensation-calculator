@@ -4,13 +4,12 @@ import { Employment } from "../../src/engine/types.js";
 import { EMPTY_FORM, type FormState } from "../../web/src/form-to-input.js";
 import {
   ALL_FIELDS,
-  QUESTIONS,
-  activePath,
-  errorsFor,
-  firstIncomplete,
-  PAGE_LAYOUT,
-  SECTIONS,
-  stopAfter,
+  activeBlocks,
+  blockOf,
+  BLOCKS,
+  progress,
+  pruneInactive,
+  stopsOf,
 } from "../../web/src/questions.js";
 import { validate } from "../../web/src/validate.js";
 
@@ -18,11 +17,10 @@ const TODAY = "2026-10-11";
 const base: FormState = {
   ...EMPTY_FORM,
   kind: "death",
-  accidentDate: "2025-6-1",
-  victimRole: "pedestrian",
-  offendingVehicle: "unknown",
+  accidentDate: "2025-6-",
+  victimRole: "not_driving",
+  vehicleTraced: "unknown",
   s164: "none",
-  claimFiled: "no",
   state: "DL",
   age: "30",
   employment: "homemaker",
@@ -31,56 +29,71 @@ const base: FormState = {
   parents: "0",
 };
 
-const ACCIDENT = ["kind", "accidentDate", "role", "vehicle", "s164", "claim", "state"];
+const QUICK = ["kind", "checks", "age", "work", "family"];
+const MORE = ["dates", "earnings", "dependants", "medical"];
 
-describe("question pages", () => {
-  it("every answer is asked on exactly one page", () => {
+describe("the quick estimate and its details", () => {
+  it("asks every answer in exactly one block", () => {
     expect(new Set(ALL_FIELDS).size).toBe(ALL_FIELDS.length);
     expect([...ALL_FIELDS].sort()).toEqual(Object.keys(EMPTY_FORM).sort());
   });
 
-  it("gives each claim type only the pages that apply", () => {
-    expect(activePath(base)).toEqual([...ACCIDENT, "age", "work", "family", "medical"]);
-    expect(activePath({ ...base, kind: "injury", employment: "informal" })).toEqual([
-      ...ACCIDENT,
-      "age",
-      "work",
-      "occupation",
-      "income",
-      "family",
-      "disability",
-      "workNow",
-      "treatment",
+  it("gives each claim type only the blocks that apply", () => {
+    expect(activeBlocks(base)).toEqual([...QUICK, "when", "state", ...MORE]);
+    expect(activeBlocks({ ...base, kind: "injury" })).toEqual([
+      ...QUICK,
+      "injury",
+      "when",
+      "state",
+      "dates",
+      "earnings",
+      "recovery",
       "medical",
     ]);
-    expect(activePath({ ...base, employment: "student" })).toContain("course");
-    expect(activePath({ ...base, employment: "pensioner" })).toContain("pension");
-    expect(activePath({ ...base, employment: "permanent" })).toContain("income");
-    expect(activePath({ ...base, employment: "permanent" })).not.toContain("occupation");
+    expect(activeBlocks({ ...base, vehicleTraced: "yes" })).toContain("insurance");
   });
 
-  it("is about 12 pages for a death claim and 15 for an injury", () => {
-    expect(activePath({ ...base, employment: "informal" }).length).toBe(13);
-    expect(activePath({ ...base, kind: "injury", employment: "permanent" }).length).toBe(15);
-  });
-
-  it("places every question exactly once on the calculator page, in its own section", () => {
-    const placed = SECTIONS.flatMap((sec) => PAGE_LAYOUT[sec].map((q) => ({ sec, id: q.id })));
-    expect(placed.map((p) => p.id).sort()).toEqual(QUESTIONS.map((q) => q.id).sort());
-    for (const p of placed) expect(QUESTIONS.find((q) => q.id === p.id)?.section, p.id).toBe(p.sec);
-  });
-
-  it("finds the first question still needing an answer", () => {
-    expect(firstIncomplete(base, validate(base, TODAY))).toBeUndefined();
+  it("is at most 8 quick steps, each needed for a number", () => {
+    expect(progress(base, validate(base, TODAY))).toEqual({ done: 7, total: 7 });
+    const injury: FormState = { ...base, kind: "injury", noCertificate: true, monthsOffWork: "0" };
+    expect(progress(injury, validate(injury, TODAY))).toEqual({ done: 8, total: 8 });
     const half: FormState = { ...base, age: "" };
-    expect(firstIncomplete(half, validate(half, TODAY))).toBe("age");
+    expect(progress(half, validate(half, TODAY))).toEqual({ done: 6, total: 7 });
   });
 
-  it("stops after answers that end or redirect a section 166 claim", () => {
-    expect(stopAfter("role", { ...base, victimRole: "owner_driver_single_vehicle" })).toBe("owner_driver");
-    expect(stopAfter("vehicle", { ...base, offendingVehicle: "unidentified" })).toBe("unidentified");
-    expect(stopAfter("s164", { ...base, s164: "accepted_via_insurer" })).toBe("s164_insurer");
-    expect(stopAfter("s164", { ...base, s164: "awarded_by_tribunal" })).toBeUndefined();
+  it("asks proof and amount with the type of work, and the rest as details", () => {
+    const salaried: FormState = { ...base, employment: "permanent", proof: "salary_slip" };
+    expect(blockOf("proof", salaried)).toBe("work");
+    expect(blockOf("monthlySalary", salaried)).toBe("work");
+    expect(blockOf("monthlyTax", salaried)).toBe("earnings");
+    const informal: FormState = { ...base, employment: "informal" };
+    expect(blockOf("occupationCode", informal)).toBe("work");
+    expect(blockOf("claimedMonthly", informal)).toBe("earnings");
+    expect(blockOf("monthlySalary", informal)).toBeUndefined();
+  });
+
+  it("names every answer that ends or redirects a section 166 claim, all at once", () => {
+    expect(stopsOf(base)).toEqual([]);
+    expect(
+      stopsOf({
+        ...base,
+        victimRole: "owner_driver_single_vehicle",
+        vehicleTraced: "no",
+        s164: "accepted_via_insurer",
+      }),
+    ).toEqual(["owner_driver", "unidentified", "s164_insurer"]);
+  });
+
+  it("forgets answers on a branch the person left", () => {
+    const f = pruneInactive({
+      ...base,
+      employment: "informal",
+      occupationCode: "driver",
+      monthlySalary: "9",
+    });
+    expect(f.occupationCode).toBe("driver");
+    expect(f.monthlySalary).toBe("");
+    expect(pruneInactive({ ...base, kind: "injury", children: "2" }).children).toBe("");
   });
 });
 
@@ -88,59 +101,56 @@ describe("question pages", () => {
 const str = (vals: string[]) => fc.constantFrom("", ...vals);
 const anyForm: fc.Arbitrary<FormState> = fc.record({
   kind: fc.constantFrom("", "death", "injury"),
-  accidentDate: str(["2025-6-1", "2025-2-30", "2027-1-1", "x"]),
+  accidentDate: str(["2025-6-", "2025-6-1", "2025-2-30", "2027-1-", "2025--", "x"]),
   claimFiled: fc.constantFrom("", "yes", "no"),
   claimFiledDate: str(["2025-7-1", "2024-1-1", "abc"]),
   state: str(["DL", "CENTRAL", "OTHER"]),
   zone: str(["A", "B"]),
-  victimRole: fc.constantFrom(
-    "",
-    "pedestrian",
-    "driver_of_involved_vehicle",
-    "owner_driver_single_vehicle",
-    "other",
-  ),
-  offendingVehicle: fc.constantFrom("", "unknown", "identified_insured", "unidentified"),
+  victimRole: fc.constantFrom("", "not_driving", "driver_of_involved_vehicle", "owner_driver_single_vehicle"),
+  vehicleTraced: fc.constantFrom("", "unknown", "yes", "no"),
+  vehicleInsured: fc.constantFrom("", "unknown", "yes", "no"),
   s164: fc.constantFrom("", "unknown", "none", "accepted_via_insurer"),
   age: str(["0", "30", "65", "140", "abc"]),
   employment: fc.constantFrom("", ...Employment.options),
   occupationCode: str(["driver", "mason"]),
   studentCourse: fc.constantFrom("", "unknown", "school", "professional"),
   proof: fc.constantFrom("", "none", "salary_slip", "itr"),
-  monthlySalary: str(["25000", "-1", "x"]),
-  monthlyTax: str(["100", "x"]),
+  monthlySalary: str(["25000", "-1", "x", "99 crore"]),
+  monthlyTax: str(["100", "x", "50000"]),
   itrAnnualIncome: str(["300000", "x"]),
   claimedMonthly: str(["15000", "x"]),
   pensionMonthly: str(["20000", "x"]),
   familyPensionMonthly: str(["5000"]),
   married: fc.constantFrom("", "yes", "no"),
   spouse: fc.constantFrom("", "yes", "no"),
-  children: str(["0", "2", "-1", "x"]),
+  children: str(["0", "2", "-1", "x", "25"]),
   parents: str(["0", "2", "3"]),
   dependentParents: str(["0", "1", "5"]),
   medicalBills: str(["100000", "x"]),
   cashlessPaid: str(["50000", "200000"]),
   certificatePct: str(["40", "120"]),
+  noCertificate: fc.boolean(),
   certificateBasis: fc.constantFrom("", "whole_body", "limb", "unknown"),
   workCapacity: fc.constantFrom("", "unknown", "full", "none"),
   monthsOffWork: str(["6", "x"]),
-  hospitalDays: str(["10"]),
   permanentAttendant: fc.boolean(),
 }) as fc.Arbitrary<FormState>;
 
 describe("no one gets stuck", () => {
-  it("every problem is shown on a page the person will actually see", () => {
+  it("every problem is shown in a block the person can see", () => {
     fc.assert(
       fc.property(anyForm, (f) => {
         const v = validate(f, TODAY);
-        const path = new Set(activePath(f));
-        const owners = new Set(
-          Object.keys(v.errors).map((k) => QUESTIONS.find((q) => q.fields.includes(k as never))!.id),
-        );
-        for (const id of owners) expect(path.has(id)).toBe(true);
-        // Either the answers are complete (an input for the engine), or some page says what is missing.
-        if (!v.input) expect(firstIncomplete(f, v)).toBeDefined();
-        else expect(Object.keys(errorsFor(v, firstIncomplete(f, v) ?? "kind"))).toEqual([]);
+        for (const k of Object.keys(v.errors)) expect(blockOf(k as never, f), k).toBeDefined();
+        // Either the answers are complete (an input for the engine), or some block says what is missing.
+        if (!v.input) expect(Object.keys(v.errors).length).toBeGreaterThan(0);
+        else expect(v.errors).toEqual({});
+        // Details never hold up the estimate unless an answer in them is wrong, or incomplete (a claim said to be
+        // filed, without its date).
+        for (const [k, e] of Object.entries(v.errors)) {
+          const b = BLOCKS.find((x) => x.id === blockOf(k as never, f))!;
+          if (b.part === "more" && k !== "claimFiledDate") expect(e, k).not.toBe("err.required");
+        }
       }),
       { numRuns: 2000 },
     );

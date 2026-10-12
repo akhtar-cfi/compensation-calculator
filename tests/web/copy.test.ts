@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { Forum } from "../../src/cases/schema.js";
 import { estimate } from "../../src/engine/index.js";
 import { Employment, type EstimateInput } from "../../src/engine/types.js";
-import { QUESTIONS } from "../../web/src/questions.js";
+import { BLOCKS } from "../../web/src/questions.js";
 import { REPO_ROOT, loadRules } from "../../src/rules/load.js";
 import { translate, type Dict } from "../../web/src/translate.js";
 
@@ -51,7 +51,7 @@ describe("web copy (EN/HI)", () => {
       ...unionMembers("HeadId").map((h) => `head.${h}`),
       ...Employment.options.map((e) => `f.emp.${e}`),
       ...Forum.options.map((f) => `forum.${f}`),
-      ...QUESTIONS.map((q) => `q.${q.id}.title`),
+      ...BLOCKS.map((b) => (b.part === "quick" ? `step.${b.id}` : `group.${b.id}`)),
     ];
     expect(families.length).toBeGreaterThan(40);
     for (const k of families) {

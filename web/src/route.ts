@@ -1,4 +1,26 @@
-import { isQuestionId, isStopCode, question, STOP_QUESTION } from "./questions.js";
+import { isStopCode, STOP_FIELD } from "./questions.js";
+
+/** The question pages of the earlier version, and the answer each now opens at. */
+const OLD_QUESTION: Readonly<Record<string, string>> = {
+  kind: "kind",
+  accidentDate: "accidentDate",
+  role: "victimRole",
+  vehicle: "vehicleTraced",
+  s164: "s164",
+  claim: "claimFiled",
+  state: "state",
+  age: "age",
+  work: "employment",
+  occupation: "occupationCode",
+  course: "studentCourse",
+  income: "proof",
+  pension: "pensionMonthly",
+  family: "married",
+  disability: "certificatePct",
+  workNow: "workCapacity",
+  treatment: "monthsOffWork",
+  medical: "medicalBills",
+};
 
 export type DocPage = "how" | "rules" | "offer-study";
 
@@ -17,9 +39,8 @@ export function parseRoute(hash: string): Route | undefined {
   const [a, b] = path.split("/").filter(Boolean);
   if (a === "how" || a === "rules" || a === "offer-study") return { name: "doc", page: a };
   if (a === "design") return { name: "design" };
-  if (a === "q" && b && isQuestionId(b)) return { name: "calc", target: question(b).fields[0] };
-  if (a === "stop" && b && isStopCode(b))
-    return { name: "calc", target: question(STOP_QUESTION[b]).fields[0] };
+  if (a === "q" && b && OLD_QUESTION[b]) return { name: "calc", target: OLD_QUESTION[b] };
+  if (a === "stop" && b && isStopCode(b)) return { name: "calc", target: STOP_FIELD[b] };
   if (a === "result") return { name: "calc", target: "result" };
   if (a === "offer") return { name: "calc", target: "offer" };
   return { name: "calc" };

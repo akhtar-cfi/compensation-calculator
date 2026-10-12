@@ -1,11 +1,17 @@
 import { createContext, type ComponentChildren } from "preact";
-import { useContext } from "preact/hooks";
+import { useContext, useEffect, useState } from "preact/hooks";
 import en from "./copy/en.json";
-import hi from "./copy/hi.json";
 import type { Warning } from "../../src/engine/types.js";
-import { translate, type Lang, type Vars } from "./translate";
+import { translate, type Dict, type Lang, type Vars } from "./translate";
 
-const dicts = { en, hi } as const;
+// The Hindi text is a separate file, fetched only when Hindi is chosen: most visits never need it, and it would
+// otherwise be about an eighth of the first download.
+let hi: Dict | undefined;
+let hiP: Promise<Dict> | undefined;
+export const loadHindi = (): Promise<Dict> =>
+  (hiP ??= import("./copy/hi.json").then((m) => (hi = m.default as Dict)));
+/** English until the Hindi file has arrived (it is fetched before the first render when Hindi was chosen). */
+const dicts = (): Readonly<Record<Lang, Dict>> => ({ en, hi: hi ?? en });
 
 export const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({
   lang: "en",
@@ -13,6 +19,11 @@ export const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => voi
 });
 
 export function LangProvider(props: { lang: Lang; setLang: (l: Lang) => void; children: ComponentChildren }) {
+  // Re-render once the Hindi text arrives.
+  const [, setLoaded] = useState(Boolean(hi));
+  useEffect(() => {
+    if (props.lang === "hi" && !hi) void loadHindi().then(() => setLoaded(true));
+  }, [props.lang]);
   return (
     <LangContext.Provider value={{ lang: props.lang, setLang: props.setLang }}>
       {props.children}
@@ -27,12 +38,13 @@ export function useLang(): Lang {
 /** The translator for the current language. */
 export function useT(): (key: string, vars?: Vars) => string {
   const { lang } = useContext(LangContext);
-  return (key, vars) => translate(dicts, lang, key, vars);
+  const d = dicts();
+  return (key, vars) => translate(d, lang, key, vars);
 }
 
 /** True when the key has its own string in this language (used to fall back to the engine's English label). */
 export function hasKey(lang: Lang, key: string): boolean {
-  return Boolean((dicts[lang] as Record<string, string>)[key]);
+  return Boolean(dicts()[lang][key]);
 }
 
 /**
@@ -50,8 +62,8 @@ export function useWarnText(): (w: Warning) => { text: string; en: boolean } {
     if (!key) return { text: w.message, en: true };
     const state =
       typeof v.state === "string" && hasKey(lang, `stname.${v.state}`) ? `stname.${v.state}` : undefined;
-    const vars = state ? { ...v, state: translate(dicts, lang, state) } : v;
-    return { text: translate(dicts, lang, key, vars), en: false };
+    const vars = state ? { ...v, state: translate(dicts(), lang, state) } : v;
+    return { text: translate(dicts(), lang, key, vars), en: false };
   };
 }
 
