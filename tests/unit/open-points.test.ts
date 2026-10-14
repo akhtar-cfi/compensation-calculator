@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { estimate } from "../../src/engine/index.js";
 import { minimumWage } from "../../src/engine/minimumWage.js";
+import { formatApprox } from "../../src/engine/money.js";
 import type { EstimateInput } from "../../src/engine/types.js";
 import { loadRules } from "../../src/rules/load.js";
 
@@ -173,5 +174,46 @@ describe("limitation wording and settings (OP-24)", () => {
     };
     const drv = estimate(cards, { ...death, victimRole: "driver_of_involved_vehicle" }, { asOf });
     expect(drv.sensitivity.map((c) => c.id)).toEqual(["contributory_negligence_10"]);
+  });
+});
+
+describe("income-tax returns and rounding (OP-25, OP-35)", () => {
+  const itr = (rows: { fy: string; income: number; filedAfterAccident?: boolean }[]): EstimateInput => ({
+    kind: "death",
+    accidentDate: "2025-06-01",
+    state: "DL",
+    victimRole: "pedestrian",
+    victim: { ageYears: 40, employment: "self_employed", income: { proof: "itr", itrAnnualIncomes: rows } },
+    family: { married: true, spouse: true, children: 1 },
+  });
+  const net = (input: EstimateInput) => estimate(rules, input, { asOf }).headline!.amount;
+  it("takes the last three returns by financial year, whatever the order entered", () => {
+    const inOrder = [
+      { fy: "2020-21", income: 100000 },
+      { fy: "2021-22", income: 400000 },
+      { fy: "2022-23", income: 500000 },
+      { fy: "2023-24", income: 600000 },
+    ];
+    const shuffled = [inOrder[3]!, inOrder[0]!, inOrder[2]!, inOrder[1]!];
+    expect(net(itr(shuffled))).toBe(net(itr(inOrder)));
+  });
+  it("keeps the order entered when the years are free text", () => {
+    const rows = [
+      { fy: "latest", income: 600000 },
+      { fy: "older", income: 100000 },
+    ];
+    expect(() => net(itr(rows))).not.toThrow();
+  });
+  it("rounds the headline in words on whole rupees", () => {
+    expect(formatApprox(115000)).toBe("₹1.2 lakh");
+    expect(formatApprox(114999)).toBe("₹1.1 lakh");
+    expect(formatApprox(145000)).toBe("₹1.5 lakh");
+    expect(formatApprox(995000)).toBe("₹10 lakh");
+    expect(formatApprox(9950000)).toBe("₹1 crore");
+    expect(formatApprox(11500000)).toBe("₹1.2 crore");
+    expect(formatApprox(5281500)).toBe("₹53 lakh");
+    expect(formatApprox(12500000)).toBe("₹1.3 crore");
+    expect(formatApprox(12345)).toBe("₹12,000");
+    expect(formatApprox(0)).toBe("₹0");
   });
 });

@@ -208,8 +208,12 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
     );
     const average = (rows: readonly { income: number }[]) =>
       rows.reduce((a, r) => a + r.income, 0) / rows.length;
-    const preAccident = inc.itrAnnualIncomes.filter((r) => r.filedAfterAccident !== true).slice(-3);
-    const all = inc.itrAnnualIncomes.slice(-3);
+    // "Last three" by financial year when every return is labelled YYYY-YY; otherwise in the order entered.
+    const rows = inc.itrAnnualIncomes.every((r) => /^\d{4}-\d{2}$/.test(r.fy))
+      ? [...inc.itrAnnualIncomes].sort((a, b) => a.fy.localeCompare(b.fy))
+      : inc.itrAnnualIncomes;
+    const preAccident = rows.filter((r) => r.filedAfterAccident !== true).slice(-3);
+    const all = rows.slice(-3);
     // Claimant-max counts post-accident returns only if that helps the claimant; C <= L <= M must hold.
     const last3 =
       preAccident.length === 0
