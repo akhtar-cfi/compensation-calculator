@@ -172,7 +172,9 @@ A fresh session runs this once a day; nothing carries over except the Sheet and 
    `sheet-in.json` (`{"Cases": [...], "Precedents": [...], "Seen": [...], "By state": [...], "Runs": [...]}`).
 2. `mact agent bulk-next --existing sheet-in.json` gives the slot; `bulk-list --slot "<slot>"`, then
    `bulk-fetch --max 60 --seen sheet-in.json`.
-3. `bulk-pending --min-words 600 --limit 15` lists the day's judgments, highest score first.
+3. `bulk-pending --min-words 600 --limit 15` lists the day's judgments, highest score first. With fewer than 15,
+   take the next slot (`bulk-next --existing sheet-in.json --after "<last slot>"`) and repeat steps 2 and 3, up to
+   six slots a day; the Runs row lists every slot covered, and the next day continues after the last.
 4. For each judgment, with subagents (several at a time):
    - **Extract** into `.cache/agent/bulk/extractions/<doc_id>.json` following "Extraction format and rules" above,
      then `bulk-verify --only <doc_id>`, repairing quotes until it passes (at most four rounds).
