@@ -1,0 +1,202 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { courtByCode, isMotorClaimText, mactSignal, type BulkCourt, type MactSignal } from "./courts.js";
+import {
+  HC_COLUMNS,
+  hcRecord,
+  INSURER,
+  MOTOR_CLAIM,
+  readParquet,
+  SC_COLUMNS,
+  scRecord,
+  type HcRecord,
+  type ScRecord,
+} from "./metadata.js";
+import { rank, topicsIn } from "./rank.js";
+import { getObject, type HttpFetch } from "./s3.js";
+import { MIN_WORDS, pdfToText, wordCount } from "./text.js";
+
+/**
+ * The bulk route's work files, all under one work directory (default .cache/agent/bulk, not committed):
+ *   candidates.jsonl   one Candidate per line, from `listHc` / `listSc`
+ *   text/<doc_id>.txt  judgment text (pdftotext), the text extractions quote
+ *   docs.jsonl         one Doc per fetched judgment: metadata + topics + score + status
+ * The Sheet holds what is reviewed; these files can always be rebuilt from the public buckets.
+ */
+export type Candidate =
+  | ({ source: "hc"; signal: MactSignal; state_code: string } & HcRecord)
+  | ({ source: "sc"; signal: "party+words" | "party" | "words"; state_code: "IN" } & ScRecord);
+
+export interface Doc {
+  doc_id: string;
+  source: "hc" | "sc";
+  court: string;
+  state_code: string;
+  case_label: string;
+  cnr: string;
+  judges: number;
+  registered?: string;
+  decided?: string;
+  citation?: string;
+  pdf_key: string;
+  words: number;
+  status: "ok" | "scanned" | "missing" | "not_motor_claim";
+  topics: string[];
+  score: number;
+  why: string[];
+}
+
+export async function listHc(
+  court: BulkCourt,
+  years: readonly number[],
+  fetchFn?: HttpFetch,
+  log: (l: string) => void = () => {},
+): Promise<Candidate[]> {
+  const out: Candidate[] = [];
+  for (const bench of court.benches)
+    for (const year of years) {
+      const buf = await getObject(
+        "hc",
+        `metadata/parquet/year=${year}/court=${court.code}/bench=${bench}/metadata.parquet`,
+        fetchFn,
+      );
+      if (!buf) {
+        log(`${court.state_code} ${bench} ${year}: no metadata file`);
+        continue;
+      }
+      const rows = await readParquet(buf, HC_COLUMNS);
+      let n = 0;
+      for (const raw of rows) {
+        const r = hcRecord(raw, court.code, bench, year);
+        if (!r || r.form === "order") continue;
+        const signal = mactSignal(r, court);
+        if (!signal) continue;
+        out.push({ source: "hc", signal, state_code: court.state_code, ...r });
+        n++;
+      }
+      log(`${court.state_code} ${bench} ${year}: ${rows.length} rows, ${n} candidate(s)`);
+    }
+  return out;
+}
+
+export async function listSc(
+  years: readonly number[],
+  fetchFn?: HttpFetch,
+  log: (l: string) => void = () => {},
+): Promise<Candidate[]> {
+  const out: Candidate[] = [];
+  for (const year of years) {
+    const buf = await getObject("sc", `metadata/parquet/year=${year}/metadata.parquet`, fetchFn);
+    if (!buf) {
+      log(`SC ${year}: no metadata file`);
+      continue;
+    }
+    const rows = await readParquet(buf, SC_COLUMNS);
+    let n = 0;
+    for (const raw of rows) {
+      const r = scRecord(raw, year);
+      if (!r) continue;
+      const party = INSURER.test(r.title);
+      const words = MOTOR_CLAIM.test(r.header) || MOTOR_CLAIM.test(r.title);
+      if (!party && !words) continue;
+      out.push({
+        source: "sc",
+        signal: party && words ? "party+words" : party ? "party" : "words",
+        state_code: "IN",
+        ...r,
+      });
+      n++;
+    }
+    log(`SC ${year}: ${rows.length} rows, ${n} candidate(s)`);
+  }
+  return out;
+}
+
+export const readJsonl = <T>(file: string): T[] =>
+  existsSync(file)
+    ? readFileSync(file, "utf8")
+        .split("\n")
+        .filter((l) => l.trim())
+        .map((l) => JSON.parse(l) as T)
+    : [];
+
+export function writeJsonl(file: string, rows: readonly unknown[]): void {
+  writeFileSync(file, rows.map((r) => JSON.stringify(r)).join("\n") + (rows.length ? "\n" : ""));
+}
+
+const caseLabel = (c: Candidate) =>
+  c.source === "sc"
+    ? c.neutral_citation || c.report_citation || c.doc_id
+    : `${c.case_type} ${c.case_no}/${c.case_year}`.trim();
+
+/** Fetches and converts up to `max` candidates not yet in docs.jsonl or `seen`; returns the new docs. */
+export async function fetchTexts(
+  workDir: string,
+  candidates: readonly Candidate[],
+  opts: {
+    max: number;
+    seen?: ReadonlySet<string>;
+    fetch?: HttpFetch;
+    pdftotext?: string;
+    log?: (l: string) => void;
+  },
+): Promise<Doc[]> {
+  const log = opts.log ?? (() => {});
+  const textDir = join(workDir, "text");
+  mkdirSync(textDir, { recursive: true });
+  const docsFile = join(workDir, "docs.jsonl");
+  const done = new Set(readJsonl<Doc>(docsFile).map((d) => d.doc_id));
+  const fresh: Doc[] = [];
+  for (const c of candidates) {
+    if (fresh.length >= opts.max) break;
+    if (done.has(c.doc_id) || opts.seen?.has(c.doc_id)) continue;
+    done.add(c.doc_id);
+    const pdf = await getObject(c.source, c.pdf_key, opts.fetch);
+    const text = pdf ? await pdfToText(pdf, opts.pdftotext) : "";
+    const words = wordCount(text);
+    const status: Doc["status"] = !pdf
+      ? "missing"
+      : words < MIN_WORDS
+        ? "scanned"
+        : c.source === "hc" && c.signal === "type-only" && !isMotorClaimText(text)
+          ? "not_motor_claim"
+          : "ok";
+    if (status === "ok") writeFileSync(join(textDir, `${c.doc_id}.txt`), text);
+    const topics = status === "ok" ? topicsIn(text) : [];
+    const judges = c.judges.length || 1;
+    const r = rank({ level: c.source, judges, ...(c.decided && { decided: c.decided }), topics });
+    const doc: Doc = {
+      doc_id: c.doc_id,
+      source: c.source,
+      court: c.source === "sc" ? "Supreme Court of India" : (courtByCode(c.court_code)?.name ?? c.court_code),
+      state_code: c.state_code,
+      case_label: caseLabel(c),
+      cnr: c.cnr,
+      judges,
+      ...(c.source === "hc" && c.registered && { registered: c.registered }),
+      ...(c.decided && { decided: c.decided }),
+      ...(c.source === "sc" && {
+        citation: [c.neutral_citation, c.report_citation].filter(Boolean).join("; "),
+      }),
+      pdf_key: c.pdf_key,
+      words,
+      status,
+      topics,
+      score: r.score,
+      why: r.why,
+    };
+    writeFileSync(docsFile, JSON.stringify(doc) + "\n", { flag: "a" });
+    fresh.push(doc);
+    log(`${doc.doc_id}\t${status}\t${words} words\tscore ${doc.score}\t${topics.join(",")}`);
+  }
+  return fresh;
+}
+
+/** Candidates in the order to fetch: Supreme Court first, then strongest signal, then newest. */
+export function fetchOrder(cs: readonly Candidate[]): Candidate[] {
+  const sig = (c: Candidate) =>
+    c.source === "sc"
+      ? 0
+      : ({ type: 1, "type+party": 1, "party+words": 2, words: 3, "type-only": 4 } as const)[c.signal];
+  return [...cs].sort((a, b) => sig(a) - sig(b) || (b.decided ?? "").localeCompare(a.decided ?? ""));
+}
