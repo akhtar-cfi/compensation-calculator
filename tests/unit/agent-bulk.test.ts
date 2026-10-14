@@ -151,6 +151,18 @@ describe("which rows are motor accident appeals", () => {
     expect(mactSignal({ case_type: "CW", title: "A Vs ORIENTAL INSURANCE", header: "" }, rj)).toBeUndefined();
   });
 
+  it("reads the motor appeal types of the larger courts", () => {
+    const ins = "THE ORIENTAL INSURANCE CO LTD Vs A";
+    expect(mactSignal({ case_type: "MFA", title: ins, header: "" }, courtByState("KA")!)).toBe("type+party");
+    expect(mactSignal({ case_type: "CMA(MD)", title: ins, header: "" }, courtByState("TN")!)).toBe(
+      "type+party",
+    );
+    expect(mactSignal({ case_type: "FMAT (MV)", title: "A Vs B", header: "" }, courtByState("WB")!)).toBe(
+      "type-only",
+    );
+    expect(mactSignal({ case_type: "WP", title: ins, header: "" }, courtByState("KA")!)).toBeUndefined();
+  });
+
   it("covers 25 High Courts, each code once", () => {
     expect(BULK_COURTS).toHaveLength(25);
     expect(new Set(BULK_COURTS.map((c) => c.code)).size).toBe(25);
@@ -227,6 +239,21 @@ describe("listing and fetching from the buckets", () => {
     );
     const again = await fetchTexts(work, cs, { max: 10, fetch: f, pdftotext: FAKE_PDFTOTEXT });
     expect(again).toEqual([]);
+  });
+
+  it("drops a shared-type appeal whose text is not about a motor accident claim", async () => {
+    const work = tmp();
+    const ec = "Appeal under the Employees Compensation Act against the Commissioner's order. ".repeat(20);
+    const f = fakeFetch({ "KAHC_EC.pdf": ec });
+    const [dl] = await listHc(courtByState("DL")!, [2025], f);
+    const c = {
+      ...(dl as Extract<Candidate, { source: "hc" }>),
+      doc_id: "KAHC_EC",
+      signal: "type+party" as const,
+      pdf_key: "data/pdf/year=2025/court=29_3/bench=karnataka_bng_old/KAHC_EC.pdf",
+    };
+    const docs = await fetchTexts(work, [c], { max: 5, fetch: f, pdftotext: FAKE_PDFTOTEXT });
+    expect(docs.map((d) => d.status)).toEqual(["not_motor_claim"]);
   });
 });
 

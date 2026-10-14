@@ -168,7 +168,7 @@ export async function fetchTexts(
       ? "missing"
       : words < MIN_WORDS
         ? "scanned"
-        : (c.source === "sc" || c.signal === "type-only") && !isMotorClaimText(text)
+        : c.signal !== "type" && !isMotorClaimText(text)
           ? "not_motor_claim"
           : "ok";
     if (status === "ok") writeFileSync(join(textDir, `${c.doc_id}.txt`), text);

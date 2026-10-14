@@ -66,7 +66,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     name: "Bombay High Court",
     state_code: "MH",
     benches: ["hcaurdb", "hcbgoa", "kolhcdb", "newas", "newos"],
-    mactTypes: [],
+    mactTypes: ["FA"],
     exclusive: false,
   },
   {
@@ -74,7 +74,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     name: "High Court of Karnataka",
     state_code: "KA",
     benches: ["karhcdharwad", "karhckalaburagi", "karnataka_bng_old"],
-    mactTypes: [],
+    mactTypes: ["MFA"],
     exclusive: false,
   },
   {
@@ -82,7 +82,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     name: "Madras High Court",
     state_code: "TN",
     benches: ["hc_cis_mas", "mdubench"],
-    mactTypes: [],
+    mactTypes: ["CMA", "CMA(MD)"],
     exclusive: false,
   },
   {
@@ -114,7 +114,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     name: "High Court of Gujarat",
     state_code: "GJ",
     benches: ["gujarathc"],
-    mactTypes: [],
+    mactTypes: ["FA"],
     exclusive: false,
   },
   {
@@ -127,7 +127,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
       "calcutta_circuit_bench_at_jalpaiguri",
       "calcutta_circuit_bench_at_port_blair",
     ],
-    mactTypes: [],
+    mactTypes: ["FMA", "FMAT", "FMAT (MV)"],
     exclusive: false,
   },
   {
@@ -135,7 +135,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     name: "Patna High Court",
     state_code: "BR",
     benches: ["patnahcucisdb94"],
-    mactTypes: [],
+    mactTypes: ["MA"],
     exclusive: false,
   },
   {
@@ -175,7 +175,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     name: "High Court of Himachal Pradesh",
     state_code: "HP",
     benches: ["cmis"],
-    mactTypes: [],
+    mactTypes: ["FAO"],
     exclusive: false,
   },
   {
@@ -254,6 +254,6 @@ export function mactSignal(
   return undefined;
 }
 
-/** True when the judgment text is about a motor accident claim (used for "type-only" rows). */
+/** True when the judgment text is about a motor accident claim (checked for every row but an exclusive type's). */
 export const isMotorClaimText = (text: string): boolean =>
   /Motor Vehicles? Act|Claims? Tribunal|M\.?\s?A\.?\s?C\.?\s?T/i.test(text.slice(0, 20000));

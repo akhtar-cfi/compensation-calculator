@@ -115,10 +115,12 @@ only ever appended below the last one, so nothing a reviewer typed is overwritte
 ### Which rows are motor accident appeals
 
 By each court's own case type, read from its metadata (2017–2026): Delhi `MAC.APP.` (used for nothing else),
-Allahabad `FAFO`, Rajasthan `CMA`, Madhya Pradesh `MA`, Punjab & Haryana `FAO`. Where the type is shared with other
-appeals, a row also needs an insurer among the parties or motor-claim words in its header; otherwise the judgment
-text must mention the Motor Vehicles Act or a Claims Tribunal. Supreme Court rows need an insurer or those words, and
-the text check always.
+Allahabad `FAFO`, Rajasthan `CMA`, Madhya Pradesh `MA`, Punjab & Haryana `FAO`, Karnataka `MFA`, Madras `CMA` and
+`CMA(MD)`, Calcutta `FMA`, `FMAT` and `FMAT (MV)`, Bombay and Gujarat `FA`, Patna `MA`, Himachal `FAO`. Courts with no
+type recorded are searched by an insurer among the parties together with motor-claim words. Every row except Delhi's
+`MAC.APP.` must then pass the text check: the judgment mentions the Motor Vehicles Act or a Claims Tribunal (this drops,
+for example, employees' compensation appeals filed under the same type). Supreme Court rows need an insurer or those
+words, and the text check always.
 
 ### Known limits
 
