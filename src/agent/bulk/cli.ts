@@ -41,8 +41,8 @@ import type { Cell } from "../sheet.js";
 export const BULK_USAGE = `  mact agent bulk-next [--existing sheet.json]
   mact agent bulk-list <SC|state code...|launch|all> [--from 2017] [--to 2026] [--slot "DL 2025"] [--work-dir DIR]
   mact agent bulk-fetch [--max 40] [--court SC|DL|...] [--seen sheet.json] [--work-dir DIR]
-  mact agent bulk-pending [--limit 20] [--min-words 600] [--work-dir DIR]
-  mact agent bulk-verify [--work-dir DIR]
+  mact agent bulk-pending [--limit 20] [--min-words 600] [--court SC|DL|...] [--work-dir DIR]
+  mact agent bulk-verify [--only DOC_ID] [--work-dir DIR]
   mact agent bulk-sheet <outdir> [--existing sheet.json] [--work-dir DIR]
       (sheet.json: per tab, the start row and the rows to write there; --existing is the Sheet as read,
        column A of Cases, Precedents, Seen and By state, and all of Runs)
@@ -208,8 +208,12 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
         : [],
     );
     const minWords = intFlag(args, "min-words", 0);
+    const only = flag(args, "court")?.toUpperCase();
     const pending = readJsonl<Doc>(join(work, "docs.jsonl"))
       .filter((d) => d.status === "ok" && !done.has(d.doc_id) && d.words >= minWords)
+      .filter(
+        (d) => !only || (only === "SC" ? d.source === "sc" : d.source === "hc" && d.state_code === only),
+      )
       .sort((a, b) => b.score - a.score || (b.decided ?? "").localeCompare(a.decided ?? ""))
       .slice(0, intFlag(args, "limit", 20));
     for (const d of pending)
@@ -221,7 +225,11 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
   }
 
   if (sub === "bulk-verify") {
-    const { cases, problems } = loadCases(work, log);
+    const only = flag(args, "only");
+    const loaded = loadCases(work, log);
+    const cases = only ? loaded.cases.filter((c) => c.x.doc_id === only) : loaded.cases;
+    const problems = only ? loaded.problems.filter((p) => p.startsWith(`${only}.json`)) : loaded.problems;
+    if (only && !cases.length && !problems.length) problems.push(`${only}.json: no extraction found`);
     for (const c of cases)
       log(
         `${c.doc.doc_id}\t${c.report.status}\tquotes ${c.report.quotes.found}/${c.report.quotes.total}` +

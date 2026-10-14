@@ -350,11 +350,12 @@ describe("Sheet store", () => {
     const at = (h: string) => row[CASES_HEADER.indexOf(h)];
     expect(at("tribunal award (Rs)")).toBe(16203342);
     expect(at("final ÷ tribunal")).toBe(
-      '=IF(OR(J{r}="",AND(K{r}="",L{r}="")),"",ROUND(IF(L{r}<>"",L{r},K{r})/J{r},2))',
+      '=IF(OR(K{r}="",AND(L{r}="",M{r}="")),"",ROUND(IF(M{r}<>"",M{r},L{r})/K{r},2))',
     );
     expect(at("years, accident to this judgment")).toBe(
-      '=IF(OR(H{r}="",F{r}=""),"",ROUND((F{r}-H{r})/365.25,1))',
+      '=IF(OR(I{r}="",G{r}=""),"",ROUND((G{r}-I{r})/365.25,1))',
     );
+    expect(at("CNR (eCourts)")).toBe("");
     expect(String(at("data, do not edit")).startsWith("'{")).toBe(true);
     const by = byStateBlock(["UP", "DL", "DL"]);
     expect(by.values.slice(1, 3).map((r) => r[0])).toEqual(["DL", "UP"]);
