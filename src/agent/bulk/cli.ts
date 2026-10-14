@@ -6,6 +6,8 @@ import { failureLines } from "../verify.js";
 import { BULK_COURTS, courtByState } from "./courts.js";
 import { BulkExtractionFileSchema, verifyBulk, type BulkExtractionFile } from "./extraction.js";
 import { toLibraryCase } from "./publish.js";
+import { publicRecord } from "./store.js";
+import { objectUrl } from "./s3.js";
 import {
   bulkSlots,
   docSha,
@@ -48,6 +50,7 @@ export const BULK_USAGE = `  mact agent bulk-next [--existing sheet.json]
   mact agent bulk-sheet <outdir> [--existing sheet.json] [--data none|lean|full] [--work-dir DIR]
       (sheet.json: per tab, the start row and the rows to write there; --existing is the Sheet as read,
        column A of Cases, Precedents, Seen and By state, and all of Runs)
+  mact agent bulk-store [--out data/bulk-extractions] [--work-dir DIR]
   mact agent bulk-publish <sheet.json> [--dry-run] [--work-dir DIR]
       (public High Court / Supreme Court buckets: no account or key needed; work files go to
        .cache/agent/bulk; extractions are written to <work-dir>/extractions/<doc_id>.json)`;
@@ -327,6 +330,35 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
     writeFileSync(join(pos[0], "sheet.json"), JSON.stringify(blocks) + "\n");
     for (const p of problems) log(`✗ ${p}`);
     log(`wrote ${join(pos[0], "sheet.json")}`);
+    return 0;
+  }
+
+  if (sub === "bulk-store") {
+    const outDir = flag(args, "out") ?? join(REPO_ROOT, "data", "bulk-extractions");
+    mkdirSync(outDir, { recursive: true });
+    const { cases, problems } = loadCases(work, log);
+    const titles = new Map(
+      readJsonl<Candidate>(join(work, "candidates.jsonl")).map((c) => [c.doc_id, c.title]),
+    );
+    let n = 0;
+    for (const c of cases) {
+      if (c.report.status === "failed") {
+        problems.push(`${c.doc.doc_id}: quote check failed; not stored`);
+        continue;
+      }
+      const { record, masked } = publicRecord(
+        c.x,
+        c.doc,
+        objectUrl(c.doc.source, c.doc.pdf_key),
+        `${c.report.status}, ${c.report.quotes.found}/${c.report.quotes.total} quotes`,
+        titles.get(c.doc.doc_id) ?? "",
+      );
+      writeFileSync(join(outDir, `${c.doc.doc_id}.json`), JSON.stringify(record, null, 2) + "\n");
+      if (masked.length) log(`${c.doc.doc_id}\tmasked ${masked.length} name(s)`);
+      n++;
+    }
+    for (const p of problems) log(`✗ ${p}`);
+    log(`${n} record(s) in ${outDir}`);
     return 0;
   }
 

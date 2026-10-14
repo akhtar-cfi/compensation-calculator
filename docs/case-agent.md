@@ -163,3 +163,30 @@ before anything is shown to families.
 `mact agent bulk-publish <cases.json>` writes `data/cases/<id>.yaml` only for Cases rows a reviewer marked
 **approved** with **Show families: yes**. Only the anonymised title and summary, the case number (no party names), the
 journey and the link to the public judgment leave the Sheet.
+
+### Daily run (scheduled session)
+
+A fresh session runs this once a day; nothing carries over except the Sheet and the repository.
+
+1. `npm ci`. Read the Sheet "MACT cases": column A of Cases, Precedents, Seen and By state, and all of Runs, into
+   `sheet-in.json` (`{"Cases": [...], "Precedents": [...], "Seen": [...], "By state": [...], "Runs": [...]}`).
+2. `mact agent bulk-next --existing sheet-in.json` gives the slot; `bulk-list --slot "<slot>"`, then
+   `bulk-fetch --max 60 --seen sheet-in.json`.
+3. `bulk-pending --min-words 600 --limit 15` lists the day's judgments, highest score first.
+4. For each judgment, with subagents (several at a time):
+   - **Extract** into `.cache/agent/bulk/extractions/<doc_id>.json` following "Extraction format and rules" above,
+     then `bulk-verify --only <doc_id>`, repairing quotes until it passes (at most four rounds).
+   - **Review.** Supreme Court judgments, and any extraction with a `precedent`, get two independent reviewers:
+     one for the numbers and the journey, one for privacy, the legal reading and tags. Every other judgment gets
+     one reviewer covering all of it. Reviewers do not edit; they report each issue with the field, the problem,
+     the exact fix, a verbatim supporting quote and a severity.
+   - **Fix.** When a reviewer reports issues, a fixer applies those the judgment supports (privacy fixes always),
+     records each change or refusal in `review_notes`, and re-runs `bulk-verify --only`.
+5. `bulk-verify` (all must be verified or partial; failed ones are left out), then `bulk-store` writes the public
+   records to `data/bulk-extractions/`; commit and push them.
+6. `bulk-sheet out --existing sheet-in.json`, then write each tab's rows at its start row with the Sheets connector
+   (By state: clear the tab first). Read back a few cells to check no formula shows an error.
+7. Add a line to the Runs tab's notes for anything unusual (scanned files, failed checks, a name masked).
+
+The run never edits rules or engine code and never publishes to `data/cases/`; that needs a reviewer's approval in
+the Sheet and a separate pull request.

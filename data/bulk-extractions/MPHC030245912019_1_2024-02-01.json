@@ -1,0 +1,93 @@
+{
+  "record_version": 1,
+  "doc_id": "MPHC030245912019_1_2024-02-01",
+  "source": "hc",
+  "court": "High Court of Madhya Pradesh",
+  "case": "MA 5625/2019",
+  "cnr": "MPHC030245912019",
+  "decided": "2024-02-01",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/court%3D23_23/bench%3Dmphc_db_gwl/MPHC030245912019_1_2024-02-01.pdf",
+  "quote_check": "verified, 25/25 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "MPHC030245912019_1_2024-02-01",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_dismissed",
+      "court": "High Court of Madhya Pradesh at Gwalior",
+      "court_level": "hc",
+      "state_code": "MP",
+      "accident_date": "2016-04-13",
+      "filing_date": null,
+      "award_date": "2019-07-16",
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": "none",
+      "claimed_monthly_income": 7500,
+      "income_monthly_accepted": 4500,
+      "income_basis": "notional",
+      "future_prospects_pct": 40,
+      "deduction": "1/4",
+      "multiplier": 17,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "other:conventional_heads": 70000
+      },
+      "awarded_formula_head": null,
+      "total_award": 1033900,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 2,
+      "parents": 2,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2019-07-16",
+        "amount": 1033900,
+        "by": null,
+        "note": "Claims tribunal awarded Rs 10,33,900: income taken as Rs 4,500 a month plus 40% future prospects, one-quarter deducted for personal expenses, multiplier 17, plus Rs 70,000 conventional heads; driver, owner and insurer jointly liable."
+      },
+      {
+        "forum": "high_court",
+        "date": "2024-02-01",
+        "amount": 1033900,
+        "by": "both",
+        "note": "The claimants' appeal for more (income of Rs 7,500 not proved) and the insurer's appeal (late police report, different driver's name) were both dismissed; award of Rs 10,33,900 upheld."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, father of two young children, crane accident, Madhya Pradesh (death)",
+    "family_summary": "A man in Madhya Pradesh died after an accident involving a crane in April 2016, leaving his wife, two small children and his parents. In July 2019 the claims tribunal awarded Rs 10,33,900, taking his income as Rs 4,500 a month. The family appealed for more, saying he earned Rs 7,500, and the insurer appealed against paying. In February 2024 the Madhya Pradesh High Court dismissed both appeals and left the award unchanged, because the family had no proof of the higher income and the insurer brought no evidence for its objections. The case took nearly eight years from the accident.",
+    "what_mattered": [
+      "The family said he earned Rs 7,500 a month but had no proof, so the High Court kept the tribunal's Rs 4,500 a month. The tribunal added 40% for likely pay rises, took off a quarter for his own spending, and multiplied the yearly loss by 17.",
+      "The insurer argued that the police report came more than two months late and first named a different driver, but it brought no evidence or eyewitness against the family's evidence, so the driver, owner and insurer stayed jointly liable."
+    ],
+    "archetypes": [
+      "death_informal_no_proof"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: family_summary no longer says the tribunal took Rs 4,500 because the Rs 7,500 was unproved; the judgment gives no tribunal reason, and it is the High Court that relies on the missing proof (para 6).",
+      "fixed: what_mattered[0] rewritten in plain words (40% for likely pay rises, a quarter off for his own spending, yearly loss multiplied by 17); figures unchanged and match para 5."
+    ]
+  }
+}

@@ -131,6 +131,7 @@ const CASE_COLUMNS: readonly { h: string; v: (c: BulkCase) => Cell }[] = [
   { h: "verify", v: (c) => c.report.status },
   { h: "verify problems", v: (c) => failureLines(c.report).join(" | ") },
   { h: "reviewer notes", v: (c) => c.x.review_notes.join(" | ") },
+  { h: "extractor doubts", v: (c) => c.x.payload.uncertain.join(" | ") },
   { h: "Status", v: () => STATUS_LABEL.pending },
   { h: "Show families", v: () => "" },
   { h: "Tags", v: () => "" },

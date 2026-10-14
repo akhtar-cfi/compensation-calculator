@@ -1,0 +1,125 @@
+{
+  "record_version": 1,
+  "doc_id": "2026_7_379_400",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2026 INSC 656",
+  "cnr": "ESCR010002062026",
+  "decided": "2026-06-24",
+  "citation": "2026 INSC 656; [2026] 7 S.C.R. 379",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/english/2026_7_379_400_EN.pdf",
+  "quote_check": "verified, 29/29 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2026_7_379_400",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "UK",
+      "accident_date": "2004-11-09",
+      "filing_date": null,
+      "award_date": null,
+      "age": 38,
+      "employment": "self_employed",
+      "occupation": "skilled carpenter (ran a carpentry shop, took furniture and door/window contracts)",
+      "proof": "none",
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": 9000,
+      "income_basis": "notional",
+      "future_prospects_pct": 40,
+      "deduction": null,
+      "multiplier": 15,
+      "disability_pct": 100,
+      "certificate_pct": 70,
+      "certificate_basis": "unclear",
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_earning_capacity": 2268000,
+        "pain_suffering": 100000,
+        "future_medical": 1000000,
+        "loss_of_income_treatment": 13500,
+        "attendant": 50000,
+        "special_diet": 40000,
+        "medical": 44423,
+        "conveyance": 30000,
+        "loss_of_amenities": 50000
+      },
+      "awarded_formula_head": 2268000,
+      "total_award": 3595923,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 2,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": 1.5,
+      "hospital_days": 43,
+      "medical_bills_awarded": 44423,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2012-03-02",
+        "amount": 477823,
+        "by": null,
+        "note": "Tribunal took income at Rs 3,000 a month, 70% disability and multiplier 17; 4% interest."
+      },
+      {
+        "forum": "high_court",
+        "date": "2019-12-19",
+        "amount": 1151423,
+        "by": "claimant",
+        "note": "Claimant's appeal allowed: income raised to Rs 5,000 with 40% future prospects, multiplier cut to 15, disability kept at 70%, future medical and nourishment added; 6% interest."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2026-06-24",
+        "amount": 3595923,
+        "by": "claimant",
+        "note": "Claimant's appeal allowed: income Rs 9,000 as a skilled worker, 40% future prospects, functional disability 100%, Rs 10 lakh for artificial legs; 6% interest."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "functional_disability",
+        "notional_income"
+      ],
+      "holding": "Functional disability is judged by what the injury does to the victim's own work, not just by the doctor's percentage: a carpenter whose leg was amputated and who cannot sit to work or stand without support was taken at 100% though the certificate said 70%. A carpenter is a skilled worker, so his notional income must reflect that skill.",
+      "para": "5.2.4, 5.6.4, 5.7.6",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 38, carpenter, Uttarakhand (leg amputated)",
+    "family_summary": "A 38-year-old carpenter riding his motorcycle in Uttarakhand in 2004 was hit by a jeep coming on the wrong side of the road, and his right leg had to be amputated. The tribunal awarded Rs 4,77,823 in 2012, and the High Court raised it to Rs 11,51,423 in 2019. In 2026 the Supreme Court raised it to Rs 35,95,923 with 6% interest, including Rs 10 lakh for artificial legs over his lifetime. The case took more than 21 years from the accident.",
+    "what_mattered": [
+      "The Supreme Court took his disability as 100%, not the 70% on the medical certificate, because a carpenter who cannot sit cross-legged or stand without support cannot do his work.",
+      "Carpentry was treated as skilled work, and his unchallenged evidence that he earned Rs 8,000 to 10,000 a month counted, so his income was taken at Rs 9,000 a month instead of Rs 5,000; 40% was added for future prospects, as the High Court had done.",
+      "Rs 10 lakh was added for buying, replacing and maintaining artificial legs for the rest of his life."
+    ],
+    "archetypes": [
+      "injury_amputation",
+      "injury_severe_100"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: archetypes now injury_amputation + injury_severe_100; dropped injury_partial_disability_self_employed_or_manual because the SC award rests on 100% functional disability (para 5.7.6), not the 70% certificate.",
+      "fixed: precedent.holding softened to 'not just by the doctor's percentage' (R. Halle: careful scrutiny of medical evidence) and adds the para 5.2.4 holding that a carpenter is a skilled worker for notional income.",
+      "fixed: precedent.topics adds notional_income (para 5.2.4, 5.3.2: income raised from Rs 5,000 to Rs 9,000 as a skilled worker).",
+      "fixed: what_mattered[1] now cites his unrefuted evidence of Rs 8,000-10,000 a month (para 5.3.2) and says the 40% future prospects matches the High Court's (para 3.2.1 table).",
+      "fixed: precedent.para now '5.2.4, 5.6.4, 5.7.6' (5.6.4 states the general rule); precedent.quote kept as the verbatim 5.7.6 passage since 5.6.4 is not contiguous with it."
+    ]
+  }
+}

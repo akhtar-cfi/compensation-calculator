@@ -13,3 +13,4 @@ data/cases
 rules/occupations.yaml
 sources/minimum-wages
 sources/watch-seen.json
+data/bulk-extractions/*.json

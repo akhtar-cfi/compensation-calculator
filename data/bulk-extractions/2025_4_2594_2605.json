@@ -1,0 +1,127 @@
+{
+  "record_version": 1,
+  "doc_id": "2025_4_2594_2605",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2025 INSC 724",
+  "cnr": "ESCR010007262025",
+  "decided": "2025-04-28",
+  "citation": "2025 INSC 724; [2025] 4 S.C.R. 2594",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2025/english/2025_4_2594_2605_EN.pdf",
+  "quote_check": "verified, 32/32 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2025_4_2594_2605",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "HR",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": null,
+      "age": 43,
+      "employment": "permanent",
+      "occupation": "Haryana government employee",
+      "proof": "other",
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": 30107,
+      "income_basis": "proved_salary",
+      "future_prospects_pct": 30,
+      "deduction": "1/4",
+      "multiplier": 14,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_dependency": 4931527,
+        "consortium": 160000,
+        "funeral": 15000,
+        "loss_of_estate": 15000
+      },
+      "awarded_formula_head": 4931527,
+      "total_award": 786119,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 3,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": 3785800,
+        "by": null,
+        "note": "Tribunal awarded Rs 35,65,800 for loss of dependency and Rs 2,20,000 under conventional heads. Award date not stated."
+      },
+      {
+        "forum": "high_court",
+        "date": "2019-01-24",
+        "amount": 4514986,
+        "by": "both",
+        "note": "Insurer and claimants both appealed. Loss of dependency raised, conventional heads cut to Rs 70,000; total Rs 45,14,986, but half the salary payable under the Haryana 2006 Rules (Rs 21,67,704) ordered deducted. Net payable after the deduction: about Rs 23,47,282."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2025-04-28",
+        "amount": 786119,
+        "by": "both",
+        "note": "Full Rs 43,35,408 under the 2006 Rules deducted from loss of dependency (Rs 49,31,527); consortium Rs 1,60,000 and estate/funeral Rs 30,000 added. Amounts already paid not refunded."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "collateral_benefits",
+        "income_tax",
+        "consortium",
+        "future_prospects"
+      ],
+      "holding": "Where a deceased Haryana government employee's family gets his last pay under the 2006 assistance Rules, it is deducted in full, not half, from loss of income, following a 2016 three-judge ruling; a contrary two-judge ruling is not followed. Loss of income uses last pay plus future prospects, with no income-tax cut; any balance is paid. Consortium is not reduced.",
+      "para": "12, 14-17",
+      "quote": "",
+      "departs_from_rules": true,
+      "rule_id": "income_tax"
+    },
+    "title_anon": "Man, 43, government employee, Haryana (death)",
+    "family_summary": "A 43-year-old Haryana government employee died in a motor accident, leaving his wife and three children. A Haryana scheme pays the family his last salary for 12 years (Rs 43,35,408 in all). The tribunal awarded Rs 37,85,800. In January 2019 the High Court raised this to Rs 45,14,986 but took off half the scheme money (Rs 21,67,704). In April 2025 the Supreme Court worked out loss of income at Rs 49,31,527, took off all the scheme money, and added Rs 1,60,000 for the wife and children and Rs 30,000 for funeral and estate: Rs 7,86,119, paid on top of the scheme salary. Money already paid need not be returned. The first High Court appeal dates from 2016, so this took about nine years.",
+    "what_mattered": [
+      "The family already gets the deceased's last salary for 12 years under Haryana's 2006 assistance Rules; the Supreme Court deducted all of it from loss of income, not half as the High Court had.",
+      "The Rs 7,86,119 is paid on top of the Rs 43,35,408 the family gets under the scheme, not instead of it.",
+      "Loss of income was worked out on his last salary with 30% added for future pay rises, a multiplier of 14 and no income-tax cut; the Rs 40,000 each for the widow and three children for loss of his love and care (consortium) was not reduced.",
+      "Money already paid under the earlier awards does not have to be refunded."
+    ],
+    "archetypes": [
+      "death_salaried"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: journey[1] note now says the High Court's Rs 45,14,986 is gross and net payable was about Rs 23,47,282 (45,14,986 - 21,67,704); amount kept at the quoted 4514986 because the net is not printed.",
+      "not changed: journey[1].amount stays 4514986 because the net 2347282 is not printed and would fail bulk-verify. The High Court amount is gross and the Supreme Court amount (786119) net, so the two cannot be compared directly.",
+      "not changed: consortium_claimants stays null because the quote says 'the spouse and the three children', not 4, so bulk-verify reports not_in_quote; uncertain item reworded to say it is four.",
+      "fixed: uncertain item on consortium_claimants reworded: four claimants (spouse and three children) at Rs 40,000 = Rs 1,60,000, left null only for the verifier.",
+      "fixed: family_summary rewritten: scheme pays Rs 43,35,408 over 12 years; SC loss of income Rs 49,31,527, plus consortium and funeral/estate; Rs 7,86,119 paid on top of the scheme salary.",
+      "fixed: precedent.holding now says a 2016 three-judge ruling is followed and a contrary two-judge ruling (SLP(C) 5044 of 2019, decided 2024) is not; para set to '12, 14-17'.",
+      "fixed: precedent.topics now collateral_benefits, income_tax, consortium, future_prospects (para 9 deduction of Rules benefits; para 16 no income-tax cut).",
+      "not changed: audience stays 'both' because the family_summary fix (applied) now says the Rs 7,86,119 is paid on top of the scheme salary, the finding's own condition for keeping it.",
+      "fixed: what_mattered item on loss of income reworded in plain words (future pay rises, love and care); added item that Rs 7,86,119 is paid on top of the scheme's Rs 43,35,408.",
+      "fixed: uncertain item added: conventional heads at Pranay Sethi base amounts (40,000 / 15,000 / 15,000) with no 10% three-yearly increase, unlike the conventional_heads rule."
+    ]
+  }
+}
