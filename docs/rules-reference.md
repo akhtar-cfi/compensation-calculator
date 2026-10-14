@@ -215,7 +215,8 @@ Monthly rates unless stated. A gap is listed, never guessed.
 Basic rates fixed by notifications of 19 Jan 2017; VDA revised every 1 April and 1 October from CPI-IW. From 1 Oct 2026 the VDA orders are issued by the Labour Bureau, Chandigarh, under the Code on Wages, 2019 (s.69(2)).
 
 - Official source: https://clc.gov.in/clc/min-wages — Chief Labour Commissioner (C) - VDA orders by scheduled employment (archived copy of 19 Apr 2026 used)
-- Last checked: 2026-04-19
+- Official source: https://www.labourbureau.gov.in/ — Labour Bureau, Chandigarh - VDA orders from 1 Oct 2026 (Code on Wages, 2019)
+- Last checked: 2026-10-10
 
 | From | Zone | Unskilled | Semi-skilled | Skilled | Highly skilled | Order | Source quality |
 |---|---|---:|---:|---:|---:|---|---|
@@ -250,7 +251,6 @@ Basic rates fixed by notifications of 19 Jan 2017; VDA revised every 1 April and
 Gaps:
 
 - Before 1 Oct 2022: not loaded. Older orders are on paged listings (clc.gov.in/clc/min-wages/minimum-wages-1..3) in Wayback captures from 2016 onwards.
-- 1 Oct 2026: read from a published copy only; replace with the official Labour Bureau file when found.
 - Only the construction schedule is loaded; other schedules (sweeping and cleaning, watch and ward, loading and unloading, agriculture, mines) have different rates.
 
 ### Delhi (NCT)

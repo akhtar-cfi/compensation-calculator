@@ -99,6 +99,7 @@
   citation: 2026 INSC 498
   court: SC
   url: https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf
+  background: true
 - id: sarla_devi_2026
   title: Sarla Devi v Reliance General Insurance (three-judge bench, ex-gratia deduction)
   court: SC
@@ -125,6 +126,7 @@
   title: Helen C. Rebello v Maharashtra SRTC
   court: SC
   url: https://indiankanoon.org/doc/1340758/
+  background: true
 - id: khenyei_2015
   title: Khenyei v New India Assurance Co. Ltd.
   citation: (2015) 9 SCC 273
@@ -135,6 +137,7 @@
   court: MACT Delhi
   date: 2026-08-17
   url: https://indiankanoon.org/doc/105820332/
+  background: true
 - id: delhi_awards_backtest_2026
   title: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
   kind: dataset

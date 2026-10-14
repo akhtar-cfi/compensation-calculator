@@ -11,6 +11,8 @@ export const SourceSchema = z.object({
   court: z.string().optional(),
   date: isoDate.optional(),
   url: z.string().url().optional(),
+  /** Cited only in the notes or the case library, not by a rule or by the engine. */
+  background: z.boolean().optional(),
 });
 
 export const MultiplierRuleSchema = z.object({
