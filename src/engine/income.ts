@@ -42,7 +42,15 @@ export function occupationCategory(rules: RulesBundle, code: string | undefined)
   return rules.occupations.occupations.find((o) => o.code === code)?.category;
 }
 
-function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; note: string } | undefined {
+/**
+ * Minimum wage for the state, area and accident date, with the matching cautions. For income (the default) a
+ * missing wage is a stop. For the attendant heads it is a caution and the head is nil (`purpose: "attendant"`).
+ */
+export function mw(
+  ctx: IncomeContext,
+  category: SkillCategory,
+  purpose: "income" | "attendant" = "income",
+): { monthly: number; daily: number; note: string } | undefined {
   const { rules, input } = ctx;
   const st = rules.minimumWages[input.state];
   if (st && st.zones.length > 1 && !input.zone) {
@@ -55,13 +63,29 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
   }
   const hit = minimumWage(rules, { state: input.state, zone: input.zone, category, on: input.accidentDate });
   if (!hit) {
-    ctx.warn.add(
-      "MW_MISSING",
-      "stop",
-      `No verified minimum wage for ${input.state} on ${input.accidentDate}. The estimate cannot be computed without it.`,
-      { state: input.state, date: input.accidentDate },
-    );
+    if (purpose === "attendant")
+      ctx.warn.add(
+        "ATTENDANT_WAGE_MISSING",
+        "caution",
+        `No minimum wage on file for ${input.state} on ${input.accidentDate}, so the attendant charges are taken as nil.`,
+        { state: input.state, date: input.accidentDate },
+      );
+    else
+      ctx.warn.add(
+        "MW_MISSING",
+        "stop",
+        `No verified minimum wage for ${input.state} on ${input.accidentDate}. The estimate cannot be computed without it.`,
+        { state: input.state, date: input.accidentDate },
+      );
     return undefined;
+  }
+  if (st && st.zones.length > 1 && input.zone && hit.zone !== input.zone) {
+    ctx.warn.add(
+      "ZONE_ASSUMED",
+      "caution",
+      `'${input.zone}' is not a zone of ${st.name}; used ${hit.zone}. Choose the zone of the person's place of work.`,
+      { state: input.state, zone: hit.zone, given: input.zone, variant: "unknown" },
+    );
   }
   if (hit.category !== category) {
     ctx.warn.add(
@@ -87,6 +111,7 @@ function mw(ctx: IncomeContext, category: SkillCategory): { monthly: number; not
   }
   return {
     monthly: hit.monthly,
+    daily: hit.monthly / (st?.days_per_month ?? 26),
     note: `Minimum wage ${hit.state}/${hit.zone}/${hit.category} in force on ${input.accidentDate}: ${formatINR(hit.monthly)}/month (effective ${r.effective_from}, ${r.confidence} source).`,
   };
 }
@@ -201,6 +226,10 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
       `Income tax estimated from FY ${fy} slabs on the average return income.`,
       { fy, variant: "itr" },
     );
+    if (!t.found)
+      ctx.warn.add("TAX_YEAR_MISSING", "caution", `No tax table for FY ${fy}; used the latest table.`, {
+        fy,
+      });
     const monthly = Math.max(0, (avg - t.annualTax) / 12);
     return {
       monthly,
@@ -212,6 +241,17 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
       ],
     };
   }
+
+  const mwPath = !["minor", "student", "homemaker", "pensioner"].includes(v.employment);
+  if ((proof === "salary_slip" || proof === "itr") && mwPath)
+    ctx.warn.add(
+      "INCOME_MISSING",
+      "caution",
+      proof === "salary_slip"
+        ? "Salary slips were chosen but no salary was entered, so the minimum wage is used instead."
+        : "Income-tax returns were chosen but no return income was entered, so the minimum wage is used instead.",
+      proof === "itr" ? { variant: "itr" } : undefined,
+    );
 
   switch (v.employment) {
     case "minor":

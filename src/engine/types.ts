@@ -180,7 +180,9 @@ export type WarningCode =
   | "INJURY_EXPERIMENTAL"
   | "RANGE_TOO_WIDE"
   | "NOT_A_PREDICTION"
-  | "INCOME_MISSING";
+  | "INCOME_MISSING"
+  | "ATTENDANT_WAGE_MISSING"
+  | "S164_AMOUNT_NOT_GIVEN";
 
 export interface Warning {
   readonly code: WarningCode;

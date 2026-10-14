@@ -105,6 +105,25 @@ describe("web copy (EN/HI)", () => {
         victim: { ageYears: 25, employment: "informal" },
         injury: { certificatePct: 40, certificateBasis: "limb" },
       },
+      {
+        ...base,
+        kind: "injury",
+        state: "UP",
+        injury: { certificatePct: 60, permanentAttendant: true },
+      },
+      { ...base, s164: "awarded_by_tribunal" },
+      { ...base, victim: { ageYears: 30, employment: "permanent", income: { proof: "salary_slip" } } },
+      { ...base, victim: { ageYears: 30, employment: "self_employed", income: { proof: "itr" } } },
+      { ...base, state: "CENTRAL", zone: "Z", victim: { ageYears: 30, employment: "informal" } },
+      {
+        ...base,
+        accidentDate: "2017-06-01",
+        victim: {
+          ageYears: 40,
+          employment: "self_employed",
+          income: { proof: "itr", itrAnnualIncomes: [{ fy: "2016-17", income: 600000 }] },
+        },
+      },
     ];
     const seen = new Set<string>();
     for (const input of inputs)

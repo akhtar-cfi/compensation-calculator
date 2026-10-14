@@ -8,9 +8,8 @@ import {
   marriedDeduction,
   tableMultiplier,
 } from "./formula.js";
-import { resolveIncome, type IncomeResult } from "./income.js";
+import { mw, resolveIncome, type IncomeResult } from "./income.js";
 import { computeInjury } from "./injury.js";
-import { minimumWage } from "./minimumWage.js";
 import { formatApprox, formatINR, parseFraction } from "./money.js";
 import { allOf, ParamChooser, pickTriple, rangeValue, standardExcept } from "./params.js";
 import { applyAdjustments, sumPayable } from "./sum.js";
@@ -231,20 +230,15 @@ function runScenario(
       !input.family.married && age <= mp.max_age && functionalPct >= mp.min_functional_pct
         ? pickTriple(mp, np)
         : 0;
-    const dailyUnskilled =
-      (minimumWage(rules, {
-        state: input.state,
-        zone: input.zone,
-        category: "unskilled",
-        on: input.accidentDate,
-      })?.monthly ?? 0) / 26;
+    const ctx = { rules, input, asOf, ch, warn };
+    const daysGiven = inj.attendantDaysDuringTreatment !== undefined;
+    // Attendant days are paid at the unskilled day rate; the wage is looked up only when days are given.
+    const dailyUnskilled = daysGiven ? (mw(ctx, "unskilled", "attendant")?.daily ?? 0) : 0;
     let futureAttendantMonthly = 0;
     if (inj.permanentAttendant) {
       const s = ch.choose("attendant_rate", "Attendant wage: unskilled vs semi-skilled minimum wage");
       const cat = s === "claimantMax" ? "semi_skilled" : "unskilled";
-      futureAttendantMonthly =
-        minimumWage(rules, { state: input.state, zone: input.zone, category: cat, on: input.accidentDate })
-          ?.monthly ?? 0;
+      futureAttendantMonthly = mw(ctx, cat, "attendant")?.monthly ?? 0;
     }
     ({ intermediates, heads } = computeInjury({
       monthlyIncome: monthly,
@@ -254,7 +248,7 @@ function runScenario(
       monthsOffWork: inj.monthsOffWork ?? 0,
       medical: medicalBills,
       futureMedical: inj.futureMedical ?? 0,
-      ...(inj.attendantDaysDuringTreatment === undefined && b.attendant_during_treatment
+      ...(!daysGiven && b.attendant_during_treatment
         ? { attendantDuringTreatment: pickTriple(b.attendant_during_treatment, np), attendantFromBand: true }
         : { attendantDuringTreatment: (inj.attendantDaysDuringTreatment ?? 0) * dailyUnskilled }),
       futureAttendantMonthly,
@@ -304,6 +298,13 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
       { death: formatINR(h.death), hurt: formatINR(h.grievous_hurt) },
     );
     ok = false;
+  }
+  if (input.s164 === "awarded_by_tribunal" && input.received?.s164 === undefined) {
+    warn.add(
+      "S164_AMOUNT_NOT_GIVEN",
+      "caution",
+      "No-fault compensation (s.164) was awarded by the tribunal, but no amount was entered, so nothing is deducted for it. Enter the amount received.",
+    );
   }
   if (input.offendingVehicle === "identified_uninsured") {
     warn.add(
@@ -462,6 +463,11 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
     rules.deduction,
     rules.conventional,
     rules.notional,
+    rules.statutory,
+    rules.tax,
+    rules.occupations,
+    rules.injuryBands,
+    ...(rules.practiceSpread ? [rules.practiceSpread] : []),
   ].some((r) => !r.verified);
   if (unverified)
     warn.add("RULE_UNVERIFIED", "info", "Draft rules: not yet signed off by the legal reviewers.");
