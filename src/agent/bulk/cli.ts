@@ -8,6 +8,7 @@ import { BulkExtractionFileSchema, verifyBulk, type BulkExtractionFile } from ".
 import { toLibraryCase } from "./publish.js";
 import {
   bulkSlots,
+  docSha,
   fetchOrder,
   fetchTexts,
   listHc,
@@ -209,8 +210,17 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
     );
     const minWords = intFlag(args, "min-words", 0);
     const only = flag(args, "court")?.toUpperCase();
-    const pending = readJsonl<Doc>(join(work, "docs.jsonl"))
+    const docs = readJsonl<Doc>(join(work, "docs.jsonl"));
+    // One judgment uploaded under two case numbers (cross-appeals) is extracted once.
+    const shaDone = new Set(docs.filter((d) => done.has(d.doc_id)).map((d) => docSha(work, d)));
+    const pending = docs
       .filter((d) => d.status === "ok" && !done.has(d.doc_id) && d.words >= minWords)
+      .filter((d) => {
+        const h = docSha(work, d);
+        if (h && shaDone.has(h)) return false;
+        if (h) shaDone.add(h);
+        return true;
+      })
       .filter(
         (d) => !only || (only === "SC" ? d.source === "sc" : d.source === "hc" && d.state_code === only),
       )
@@ -251,6 +261,16 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
     const usable = cases.filter((c) => c.report.status !== "failed");
     const today = deps.today ?? new Date().toISOString().slice(0, 10);
     const docs = readJsonl<Doc>(join(work, "docs.jsonl"));
+    const bySha = new Map<string, Doc[]>();
+    for (const d of docs) {
+      const h = d.status === "ok" ? docSha(work, d) : undefined;
+      if (h) bySha.set(h, [...(bySha.get(h) ?? []), d]);
+    }
+    for (const c of usable) {
+      const h = docSha(work, c.doc);
+      const others = h ? (bySha.get(h) ?? []).filter((d) => d.doc_id !== c.doc.doc_id) : [];
+      if (others.length) c.alsoDecides = others.map((d) => d.case_label);
+    }
     const caseRows = usable.filter((c) => c.x.payload.usable).map(caseRow);
     const precRows = usable.map(precedentRow).filter((r): r is Cell[] => !!r);
     const n = (s: string) => cases.filter((c) => c.report.status === s).length;

@@ -1,5 +1,5 @@
 import { STATUS_LABEL, parseStatus, type Cell } from "../sheet.js";
-import type { VerifyReport } from "../verify.js";
+import { failureLines, type VerifyReport } from "../verify.js";
 import type { BulkExtractionFile, JourneyStep } from "./extraction.js";
 import type { Doc } from "./run.js";
 import { objectUrl } from "./s3.js";
@@ -19,55 +19,146 @@ export const BULK_TABS = {
   seen: "Seen",
 } as const;
 
-export const HUMAN_COLUMNS = ["Status", "Show families", "Tags", "Notes"] as const;
+export const HUMAN_COLUMNS = ["Status", "Show families", "Tags", "Notes", "Reviewed by"] as const;
 export const SHOW_FAMILIES = ["yes", "no"] as const;
 
-export const CASES_HEADER = [
-  "doc_id",
-  "link",
-  "court",
-  "state",
-  "case",
-  "CNR (eCourts)",
-  "decided",
-  "kind",
-  "accident date",
-  "tribunal date",
-  "tribunal award (Rs)",
-  "High Court award (Rs)",
-  "Supreme Court award (Rs)",
-  "interest %",
-  "final ÷ tribunal",
-  "years, accident to this judgment",
-  "title (anonymised)",
-  "summary for families",
-  "verify",
-  "score",
-  ...HUMAN_COLUMNS,
-  "data, do not edit",
-];
-/** Column letter of a Cases header (A..Z). */
+/** Column letter(s) for a 0-based index: 0 → A, 25 → Z, 26 → AA. */
+export function letters(i: number): string {
+  let s = "";
+  for (let n = i + 1; n > 0; n = Math.floor((n - 1) / 26)) s = String.fromCharCode(65 + ((n - 1) % 26)) + s;
+  return s;
+}
+/** Column letter(s) of a header. */
 export const col = (header: readonly string[], name: string): string => {
   const i = header.indexOf(name);
-  if (i < 0 || i > 25) throw new Error(`no column "${name}"`);
-  return String.fromCharCode(65 + i);
+  if (i < 0) throw new Error(`no column "${name}"`);
+  return letters(i);
 };
+
+const step = (j: readonly JourneyStep[], forums: readonly JourneyStep["forum"][]) =>
+  [...j].reverse().find((s) => forums.includes(s.forum));
+const text = (v: unknown): Cell => (v === null || v === undefined ? "" : (v as Cell));
+const asText = (v: string | null | undefined): Cell => (v ? `'${v}` : "");
+
+/** What one Cases row is built from: the fetched judgment, its extraction and the quote check. */
+export interface BulkCase {
+  doc: Doc;
+  x: BulkExtractionFile;
+  report: VerifyReport;
+  /** Other case numbers decided by the same judgment (cross-appeals uploaded once per case). */
+  alsoDecides?: string[];
+}
+
+/**
+ * The Cases tab, one column per entry, in order: identity, facts, timeline, method, tags, words for
+ * families, checks, then the reviewers' columns and the stored extraction. A value of "=..." is a
+ * formula; "{r}" stands for the row's own number and "{col:Name}" for another column's letter.
+ */
+const CASE_COLUMNS: readonly { h: string; v: (c: BulkCase) => Cell }[] = [
+  { h: "doc_id", v: (c) => c.doc.doc_id },
+  { h: "judgment", v: (c) => objectUrl(c.doc.source, c.doc.pdf_key) },
+  { h: "court", v: (c) => c.doc.court },
+  { h: "state", v: (c) => c.x.payload.state_code ?? c.doc.state_code },
+  { h: "case", v: (c) => asText([c.doc.case_label, ...(c.alsoDecides ?? [])].join("; ")) },
+  { h: "CNR (eCourts)", v: (c) => asText(c.doc.cnr) },
+  { h: "decided", v: (c) => text(c.doc.decided) },
+  { h: "judges", v: (c) => c.doc.judges },
+  { h: "citation", v: (c) => asText(c.doc.citation) },
+  { h: "kind", v: (c) => text(c.x.payload.kind) },
+  { h: "age", v: (c) => text(c.x.payload.age) },
+  { h: "occupation", v: (c) => text(c.x.payload.occupation) },
+  { h: "employment", v: (c) => text(c.x.payload.employment) },
+  { h: "income accepted (Rs a month)", v: (c) => text(c.x.payload.income_monthly_accepted) },
+  { h: "income basis", v: (c) => text(c.x.payload.income_basis) },
+  { h: "disability %", v: (c) => text(c.x.payload.disability_pct) },
+  {
+    h: "family",
+    v: (c) => {
+      const p = c.x.payload;
+      return [
+        p.spouse ? "spouse" : "",
+        p.children ? `${p.children} child${p.children > 1 ? "ren" : ""}` : "",
+        p.parents ? `${p.parents} parent${p.parents > 1 ? "s" : ""}` : "",
+      ]
+        .filter(Boolean)
+        .join(", ");
+    },
+  },
+  { h: "contributory negligence %", v: (c) => c.x.payload.contributory_negligence_pct || "" },
+  { h: "accident date", v: (c) => text(c.x.payload.accident_date) },
+  { h: "claim filed", v: (c) => text(c.x.payload.filing_date) },
+  { h: "tribunal date", v: (c) => text(step(c.x.journey, ["mact", "lok_adalat"])?.date) },
+  { h: "tribunal award (Rs)", v: (c) => text(step(c.x.journey, ["mact", "lok_adalat"])?.amount) },
+  { h: "High Court award (Rs)", v: (c) => text(step(c.x.journey, ["high_court"])?.amount) },
+  { h: "Supreme Court award (Rs)", v: (c) => text(step(c.x.journey, ["supreme_court"])?.amount) },
+  {
+    h: "appealed by",
+    v: (c) =>
+      c.x.journey
+        .filter((s) => s.forum === "high_court" || s.forum === "supreme_court")
+        .map((s) => s.by)
+        .filter(Boolean)
+        .join(", "),
+  },
+  { h: "outcome", v: (c) => text(c.x.payload.outcome) },
+  {
+    h: "final ÷ tribunal",
+    v: () =>
+      '=IF(OR({col:tribunal award (Rs)}{r}="",AND({col:High Court award (Rs)}{r}="",{col:Supreme Court award (Rs)}{r}="")),"",ROUND(IF({col:Supreme Court award (Rs)}{r}<>"",{col:Supreme Court award (Rs)}{r},{col:High Court award (Rs)}{r})/{col:tribunal award (Rs)}{r},2))',
+  },
+  {
+    h: "years, accident to this judgment",
+    v: () =>
+      '=IF(OR({col:accident date}{r}="",{col:decided}{r}=""),"",ROUND(({col:decided}{r}-{col:accident date}{r})/365.25,1))',
+  },
+  { h: "multiplier", v: (c) => text(c.x.payload.multiplier) },
+  { h: "future prospects %", v: (c) => text(c.x.payload.future_prospects_pct) },
+  { h: "deduction", v: (c) => asText(c.x.payload.deduction) },
+  { h: "interest %", v: (c) => text(c.x.payload.interest_rate_pct) },
+  { h: "insurer offer (Rs)", v: (c) => text(c.x.payload.insurer_offer) },
+  { h: "archetypes", v: (c) => c.x.archetypes.join(", ") },
+  { h: "topics", v: (c) => [...new Set([...c.doc.topics, ...(c.x.precedent?.topics ?? [])])].join(", ") },
+  { h: "audience", v: (c) => c.x.audience },
+  { h: "lays down law", v: (c) => (c.x.precedent ? "yes" : "no") },
+  { h: "score", v: (c) => c.doc.score },
+  { h: "why (score)", v: (c) => c.doc.why.join("; ") },
+  { h: "title (anonymised)", v: (c) => text(c.x.title_anon) },
+  { h: "summary for families", v: (c) => text(c.x.family_summary) },
+  { h: "what mattered", v: (c) => c.x.what_mattered.join(" | ") },
+  { h: "verify", v: (c) => c.report.status },
+  { h: "verify problems", v: (c) => failureLines(c.report).join(" | ") },
+  { h: "reviewer notes", v: (c) => c.x.review_notes.join(" | ") },
+  { h: "Status", v: () => STATUS_LABEL.pending },
+  { h: "Show families", v: () => "" },
+  { h: "Tags", v: () => "" },
+  { h: "Notes", v: () => "" },
+  { h: "Reviewed by", v: () => "" },
+  { h: "data, do not edit", v: (c) => `'${dataCell(c.x)}` },
+];
+export const CASES_HEADER: readonly string[] = CASE_COLUMNS.map((c) => c.h);
 const C = (name: string) => col(CASES_HEADER, name);
 
 export const PRECEDENTS_HEADER = [
   "doc_id",
-  "link",
+  "judgment",
   "court",
   "case / citation",
   "decided",
   "judges",
-  "score",
-  "why",
   "scope",
+  "state",
   "topics",
   "holding",
+  "paragraph",
+  "differs from calculator rules",
+  "rule",
+  "score",
+  "why (score)",
   "verify",
-  ...HUMAN_COLUMNS,
+  "Status",
+  "Tags",
+  "Notes",
+  "Reviewed by",
 ];
 export const BY_STATE_HEADER = [
   "state",
@@ -93,56 +184,12 @@ export const RUNS_HEADER = [
 ];
 export const SEEN_HEADER = ["doc_id", "status", "court", "decided", "seen on"];
 
-export interface BulkCase {
-  doc: Doc;
-  x: BulkExtractionFile;
-  report: VerifyReport;
-}
-
-const link = (d: Doc) => objectUrl(d.source, d.pdf_key);
-const step = (j: readonly JourneyStep[], forums: readonly JourneyStep["forum"][]) =>
-  [...j].reverse().find((s) => forums.includes(s.forum));
-
 /** One Cases row; "{r}" in a formula stands for the row's own number until `placeRows` sets it. */
 export function caseRow(c: BulkCase): Cell[] {
-  const j = c.x.journey;
-  const tribunal = step(j, ["mact", "lok_adalat"]);
-  const hc = step(j, ["high_court"]);
-  const sc = step(j, ["supreme_court"]);
-  const [acc, dec, trib, hcA, scA] = [
-    C("accident date"),
-    C("decided"),
-    C("tribunal award (Rs)"),
-    C("High Court award (Rs)"),
-    C("Supreme Court award (Rs)"),
-  ];
-  return [
-    c.doc.doc_id,
-    link(c.doc),
-    c.doc.court,
-    c.x.payload.state_code ?? c.doc.state_code,
-    `'${c.doc.case_label}`,
-    c.doc.cnr ? `'${c.doc.cnr}` : "",
-    c.doc.decided ?? "",
-    c.x.payload.kind ?? "",
-    c.x.payload.accident_date ?? "",
-    tribunal?.date ?? "",
-    tribunal?.amount ?? "",
-    hc?.amount ?? "",
-    sc?.amount ?? "",
-    c.x.payload.interest_rate_pct ?? "",
-    `=IF(OR(${trib}{r}="",AND(${hcA}{r}="",${scA}{r}="")),"",ROUND(IF(${scA}{r}<>"",${scA}{r},${hcA}{r})/${trib}{r},2))`,
-    `=IF(OR(${acc}{r}="",${dec}{r}=""),"",ROUND((${dec}{r}-${acc}{r})/365.25,1))`,
-    c.x.title_anon ?? "",
-    c.x.family_summary ?? "",
-    c.report.status,
-    c.doc.score,
-    STATUS_LABEL.pending,
-    "",
-    [...c.x.archetypes, c.x.audience === "lawyers" ? "lawyers-only" : ""].filter(Boolean).join(", "),
-    "",
-    `'${dataCell(c.x)}`,
-  ];
+  return CASE_COLUMNS.map(({ v }) => {
+    const cell = v(c);
+    return typeof cell === "string" ? cell.replace(/\{col:([^}]+)\}/g, (_, name: string) => C(name)) : cell;
+  });
 }
 
 /** A Sheets cell holds at most 50,000 characters: an extraction too long for one drops its evidence quotes. */
@@ -157,20 +204,24 @@ export function precedentRow(c: BulkCase): Cell[] | undefined {
   if (!p) return undefined;
   return [
     c.doc.doc_id,
-    link(c.doc),
+    objectUrl(c.doc.source, c.doc.pdf_key),
     c.doc.court,
-    c.doc.citation || c.doc.case_label,
-    c.doc.decided ?? "",
+    asText(c.doc.citation || [c.doc.case_label, ...(c.alsoDecides ?? [])].join("; ")),
+    text(c.doc.decided),
     c.doc.judges,
-    c.doc.score,
-    c.doc.why.join("; "),
-    p.binding_scope,
+    p.binding_scope === "all_india" ? "all India" : p.binding_scope,
+    text(p.state_code ?? c.x.payload.state_code),
     p.topics.join(", "),
     p.holding,
+    asText(p.para),
+    p.departs_from_rules ? "yes" : "no",
+    text(p.rule_id),
+    c.doc.score,
+    c.doc.why.join("; "),
     c.report.status,
     STATUS_LABEL.pending,
     "",
-    p.topics.join(", "),
+    "",
     "",
   ];
 }
@@ -277,7 +328,7 @@ export function reviewedCases(values: readonly (readonly unknown[])[]): {
     cases.push({
       x,
       doc_id: id,
-      link: String(r[ix("link")] ?? ""),
+      link: String(r[ix("judgment")] ?? ""),
       court: String(r[ix("court")] ?? ""),
       case_label: String(r[ix("case")] ?? "").replace(/^'/, ""),
       decided: String(r[ix("decided")] ?? ""),

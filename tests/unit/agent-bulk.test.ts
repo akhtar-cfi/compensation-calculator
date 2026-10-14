@@ -27,6 +27,8 @@ import {
   appendBlock,
   byStateBlock,
   caseRow,
+  col,
+  letters,
   reviewedCases,
   seenIds,
   CASES_HEADER,
@@ -349,17 +351,34 @@ describe("Sheet store", () => {
     });
     const at = (h: string) => row[CASES_HEADER.indexOf(h)];
     expect(at("tribunal award (Rs)")).toBe(16203342);
+    const L = (h: string) => col(CASES_HEADER, h);
+    const [t, h, s, a, d] = [
+      L("tribunal award (Rs)"),
+      L("High Court award (Rs)"),
+      L("Supreme Court award (Rs)"),
+      L("accident date"),
+      L("decided"),
+    ];
     expect(at("final ÷ tribunal")).toBe(
-      '=IF(OR(K{r}="",AND(L{r}="",M{r}="")),"",ROUND(IF(M{r}<>"",M{r},L{r})/K{r},2))',
+      `=IF(OR(${t}{r}="",AND(${h}{r}="",${s}{r}="")),"",ROUND(IF(${s}{r}<>"",${s}{r},${h}{r})/${t}{r},2))`,
     );
     expect(at("years, accident to this judgment")).toBe(
-      '=IF(OR(I{r}="",G{r}=""),"",ROUND((G{r}-I{r})/365.25,1))',
+      `=IF(OR(${a}{r}="",${d}{r}=""),"",ROUND((${d}{r}-${a}{r})/365.25,1))`,
     );
+    expect(row).toHaveLength(CASES_HEADER.length);
+    expect(at("judgment")).toMatch(/^https:\/\/indian-high-court-judgments/);
+    expect(at("lays down law")).toBe("no");
+    expect(at("archetypes")).toBe("death_salaried");
     expect(at("CNR (eCourts)")).toBe("");
     expect(String(at("data, do not edit")).startsWith("'{")).toBe(true);
     const by = byStateBlock(["UP", "DL", "DL"]);
     expect(by.values.slice(1, 3).map((r) => r[0])).toEqual(["DL", "UP"]);
     expect(by.values[1]![1]).toBe("=COUNTIF(Cases!D2:D,A2)");
+  });
+
+  it("names columns past Z the way Sheets does", () => {
+    expect([0, 25, 26, 51, 52].map(letters)).toEqual(["A", "Z", "AA", "AZ", "BA"]);
+    expect(CASES_HEADER.length).toBeGreaterThan(26);
   });
 
   it("collects doc_ids already handled from Cases, Precedents and Seen", () => {
@@ -487,5 +506,42 @@ describe("mact agent bulk-* commands", () => {
     expect(await bulkCommand("bulk-publish", [join(work, "cases.json"), "--dry-run"], deps)).toBe(0);
     expect(lines[lines.length - 1]).toBe("0 case(s) ready");
     expect(existsSync(join(work, "slot.txt"))).toBe(true);
+  });
+
+  it("extracts a judgment filed under two case numbers once and shows both numbers on its row", async () => {
+    const work = tmp();
+    const out = join(work, "out");
+    const lines: string[] = [];
+    const deps = {
+      fetch: fakeFetch({
+        "DLHC010000012019_1_2025-02-10.pdf": JUDGMENT,
+        "DLHC010000042021_1_2025-05-02.pdf": JUDGMENT,
+      }),
+      pdftotext: FAKE_PDFTOTEXT,
+      log: (l: string) => lines.push(l),
+      today: "2026-10-14",
+    };
+    await bulkCommand("bulk-list", ["--slot", "DL 2025", "--work-dir", work], deps);
+    await bulkCommand("bulk-fetch", ["--work-dir", work], deps);
+    lines.length = 0;
+    await bulkCommand("bulk-pending", ["--work-dir", work], deps);
+    expect(lines.filter((l) => l.startsWith("DLHC"))).toHaveLength(1);
+    expect(lines[lines.length - 1]).toBe("1 pending");
+
+    mkdirSync(join(work, "extractions"));
+    writeFileSync(
+      join(work, "extractions", "DLHC010000012019_1_2025-02-10.json"),
+      JSON.stringify(extraction()),
+    );
+    lines.length = 0;
+    await bulkCommand("bulk-pending", ["--work-dir", work], deps);
+    expect(lines).toEqual(["0 pending"]);
+    await bulkCommand("bulk-sheet", [out, "--work-dir", work], deps);
+    const sheet = JSON.parse(readFileSync(join(out, "sheet.json"), "utf8")) as Record<
+      string,
+      { values: unknown[][] }
+    >;
+    const row = sheet["Cases"]!.values[1]!;
+    expect(row[CASES_HEADER.indexOf("case")]).toBe("'MAC.APP. 101/2019; MAC.APP. 103/2021");
   });
 });

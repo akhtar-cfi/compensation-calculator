@@ -49,6 +49,8 @@ export const BulkExtractionFileSchema = z.strictObject({
   what_mattered: z.array(z.string().max(300)).default([]),
   archetypes: z.array(Archetype).default([]),
   audience: Audience.default("both"),
+  /** What the reviewers found and what was changed, one short line each. */
+  review_notes: z.array(z.string().max(300)).default([]),
 });
 export type BulkExtractionFile = z.infer<typeof BulkExtractionFileSchema>;
 

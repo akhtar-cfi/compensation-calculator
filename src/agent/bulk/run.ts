@@ -21,6 +21,7 @@ import {
 } from "./metadata.js";
 import { rank, topicsIn } from "./rank.js";
 import { getObject, type HttpFetch } from "./s3.js";
+import { sha256 } from "../rows.js";
 import { MIN_WORDS, pdfToText, wordCount } from "./text.js";
 
 /**
@@ -48,6 +49,8 @@ export interface Doc {
   pdf_key: string;
   words: number;
   status: "ok" | "scanned" | "missing" | "not_motor_claim";
+  /** sha256 of the text: two case numbers decided by one judgment share it. */
+  sha?: string;
   topics: string[];
   score: number;
   why: string[];
@@ -188,6 +191,7 @@ export async function fetchTexts(
       pdf_key: c.pdf_key,
       words,
       status,
+      ...(status === "ok" && { sha: sha256(text) }),
       topics,
       score: r.score,
       why: r.why,
@@ -242,4 +246,11 @@ export function parseSlot(slot: string): { court: string; year: number } {
   const m = /^([A-Z]{2})\s+(\d{4})$/.exec(slot.trim());
   if (!m) throw new Error(`a slot looks like "DL 2025" or "SC 2026", not "${slot}"`);
   return { court: m[1]!, year: Number(m[2]) };
+}
+
+/** The text hash of a fetched judgment (read from its text file for docs fetched before hashes were kept). */
+export function docSha(workDir: string, d: Doc): string | undefined {
+  if (d.sha) return d.sha;
+  const f = join(workDir, "text", `${d.doc_id}.txt`);
+  return existsSync(f) ? sha256(readFileSync(f, "utf8")) : undefined;
 }
