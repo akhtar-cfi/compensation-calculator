@@ -1,0 +1,116 @@
+{
+  "record_version": 1,
+  "doc_id": "2022_1_653_660",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2022 INSC 235",
+  "cnr": "ESCR010000442022",
+  "decided": "2022-02-25",
+  "citation": "2022 INSC 235; [2022] 1 S.C.R. 653",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2022/english/2022_1_653_660_EN.pdf",
+  "quote_check": "verified, 16/16 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2022_1_653_660",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "KA",
+      "accident_date": "2013-01-01",
+      "filing_date": null,
+      "award_date": null,
+      "age": 29,
+      "employment": null,
+      "occupation": "process supervisor at a bank",
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "pain_suffering": 1000000,
+        "loss_of_amenities": 1000000
+      },
+      "awarded_formula_head": null,
+      "total_award": 14194333,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": 9437300,
+        "by": null,
+        "note": "Tribunal award with 9% interest a year from the date of the petition. The head-wise table and the award date are not in the text."
+      },
+      {
+        "forum": "high_court",
+        "date": "2020-09-28",
+        "amount": 12494333,
+        "by": "both",
+        "note": "Common judgment on appeals by the insurer and the claimant: the claimant's appeal partly allowed and the award raised, but interest cut from 9% to 6%. It gave Rs 2 lakh for pain and suffering and Rs 1 lakh for loss of amenities."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2022-02-25",
+        "amount": 14194333,
+        "by": "claimant",
+        "note": "Claimant's appeal partly allowed: pain and suffering raised to Rs 10 lakh and loss of amenities and happiness to Rs 10 lakh; the 6% interest from filing was left unchanged."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [],
+      "holding": "Answering the insurer's reliance on rulings giving only a token sum for amenities where earning capacity loss is taken at 100%, the Court held no straitjacket formula applies to pain and suffering or loss of amenities; each case turns on its facts: pain on hospitalisation, injuries and operations; amenities on the claimant's post-accident condition and ability to enjoy life.",
+      "para": "8, 8.1",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 29, bank process supervisor, Karnataka (injury, coma)",
+    "family_summary": "A 29-year-old bank employee suffered severe brain injuries in a road accident in January 2013, had several operations and remained in a coma, bedridden; his mother brought the claim for him. The tribunal awarded about Rs 94.37 lakh with 9% interest; on appeals by both sides the Karnataka High Court raised this to about Rs 1.25 crore in September 2020 but cut interest to 6%. In February 2022 the Supreme Court raised pain and suffering from Rs 2 lakh and loss of amenities from Rs 1 lakh to Rs 10 lakh each, a total of about Rs 1.42 crore with 6% interest, to be kept in long-term deposits for his use. It took just over nine years from the accident.",
+    "what_mattered": [
+      "The long hospital stay, multiple brain surgeries and the claimant still being in a coma and bedridden years later led the Supreme Court to raise pain and suffering from Rs 2 lakh to Rs 10 lakh.",
+      "Relying on an earlier ruling, the insurer argued that once loss of earning capacity is paid at 100%, only a token sum is due for loss of amenities; the Court said there is no fixed formula and raised it from Rs 1 lakh to Rs 10 lakh for a person in a coma and bedridden for life.",
+      "The High Court's cut in interest from 9% to 6% a year was not disturbed."
+    ],
+    "archetypes": [
+      "injury_head",
+      "injury_severe_100"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "Precedent topics left empty: pain and suffering and loss of amenities have no TOPIC_PATTERNS id.",
+      "Checked rules/injury/bands.yaml (range-parameters.yaml has no pain or amenities rule): the combined Rs 20 lakh here is above the 80%+ band's claimant_max of Rs 15 lakh, but the holding itself states no amount, so departs_from_rules is false.",
+      "Precedent quote includes the page-margin letters E, F and G exactly as they appear in the text file.",
+      "fixed: what_mattered[1] now gives the insurer's condition (token sum only once loss of earning capacity is taken at 100%), per para 4.1.",
+      "fixed: family_summary now says the mother brought the claim as next friend and that the Court ordered the money kept in long-term deposits for the claimant (paras 2, 9).",
+      "fixed: precedent.holding now says para 8 answered the insurer's reliance on Raj Kumar and Lalan D.; reworded to keep the 100% earning-capacity condition of para 4.1 and stay at 59 words."
+    ]
+  }
+}

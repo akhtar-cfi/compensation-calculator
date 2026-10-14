@@ -1,0 +1,113 @@
+{
+  "record_version": 1,
+  "doc_id": "2018_6_838_852",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2018 INSC 531",
+  "cnr": "ESCR010007912018",
+  "decided": "2018-05-17",
+  "citation": "2018 INSC 531; [2018] 6 S.C.R. 838",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2018/english/2018_6_838_852_EN.pdf",
+  "quote_check": "verified, 17/17 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2018_6_838_852",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_dismissed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "PB",
+      "accident_date": "2013-02-19",
+      "filing_date": null,
+      "award_date": "2014-11-20",
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 1563120,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2014-11-20",
+        "amount": 1563120,
+        "by": null,
+        "note": "Tribunal held the insurer not liable because the truck had no permit, but ordered it to pay the family with 9% interest and recover from the owner and driver; the truck was attached until payment."
+      },
+      {
+        "forum": "high_court",
+        "date": "2016-08-10",
+        "amount": 1563120,
+        "by": "owner",
+        "note": "Owner's appeal dismissed: no proof the permit was applied for before the accident, and even an application would not allow the truck to be plied; award and pay-and-recover direction confirmed."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2018-05-17",
+        "amount": 1563120,
+        "by": "owner",
+        "note": "Appeal by the owner's side dismissed: using the truck without a permit was a fundamental breach; insurer pays the family and recovers from the owner and driver."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "pay_and_recover",
+        "liability"
+      ],
+      "holding": "Plying a transport vehicle without a permit is a fundamental statutory breach, unlike licence defects or extra passengers, so (2004) 3 SCC 297 and (2016) 3 SCC 100 do not apply. Once the insurer pleads no permit, the owner must prove one and any Section 66 exemption. The insurer pays the claimants and recovers from the owner and driver.",
+      "para": "23",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Married man, motorcyclist hit by a truck, Punjab (death)",
+    "family_summary": "A married man riding his motorcycle in Punjab was hit and killed by a truck in February 2013; the truck had no permit that day. In November 2014 the tribunal awarded his family Rs 15,63,120 with 9% interest, ordering the insurer to pay first and recover the money from the truck owner and driver. The High Court confirmed this in August 2016, and in May 2018 the Supreme Court dismissed the owner's appeal, so the award stood. The case took about five years from the accident.",
+    "what_mattered": [
+      "The truck was on the road without a permit (the permit was issued eight days after the accident). The court called this a fundamental breach of the law, so the insurer was not liable to cover the owner and can recover what it pays from the owner and driver.",
+      "The family was still protected: the insurer had to pay the award with interest first and then recover it from the truck owner and driver.",
+      "The owner had no permit valid on the day of the accident and could not show he had even applied before it. The court said that once the insurer said there was no permit, it was for the owner to prove one, not for the insurer."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": [
+      "fixed: precedent.holding names cited cases by citation, (2004) 3 SCC 297 and (2016) 3 SCC 100, not by party names (privacy).",
+      "fixed: precedent.holding rewritten: permit needed to ply a transport vehicle; once insurer pleads no permit, owner must prove one and any Section 66 exemption (para 23); pay and recover.",
+      "fixed: what_mattered[2] now says no permit was valid on the accident day and the owner could not show an application before it; a permit dated 27.02.2013 was on record.",
+      "fixed: what_mattered[0] says insurer not liable to cover the owner and can recover what it pays, permit issued eight days after the accident; added evidence quote for 27.02.2013.",
+      "fixed: journey[1].note adds the High Court's reason that even an application made before the accident would not allow the truck to be plied (para 5).",
+      "fixed: precedent.topics now [pay_and_recover, liability], as the ruling decides the insurer's no-permit liability defence."
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "record_version": 1,
+  "doc_id": "2025_4_603_607",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2025 INSC 469",
+  "cnr": "ESCR010001262025",
+  "decided": "2025-04-07",
+  "citation": "2025 INSC 469; [2025] 4 S.C.R. 603",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2025/english/2025_4_603_607_EN.pdf",
+  "quote_check": "verified, 6/6 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2025_4_603_607",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "No amount is decided or stated: the Supreme Court only set aside the High Court's deduction of just 50% of the compensation payable under the Haryana compassionate assistance Rules of 2006, with no recovery of sums already paid. No tribunal, High Court or final figure appears.",
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "HR",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": "Haryana government employee",
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": null,
+        "by": null,
+        "note": "Haryana tribunal decided the death claim of a state government employee's family; its award and date are not stated in this judgment."
+      },
+      {
+        "forum": "high_court",
+        "date": "2019-12-13",
+        "amount": null,
+        "by": null,
+        "note": "Punjab and Haryana High Court deducted only 50% of the compensation payable under the Haryana compassionate assistance Rules of 2006, following its own earlier ruling. The amount is not stated."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2025-04-07",
+        "amount": null,
+        "by": "insurer",
+        "note": "Insurer's appeal allowed: the 50%-only deduction set aside, as the Rules of 2006 compensation is deductible under Shashi [name]; no recovery of amounts already paid. No total stated."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [],
+      "holding": "Following Shashi [name], the compensation payable to a deceased Haryana government employee's dependants under the Haryana Compassionate Assistance Rules, 2006 is to be deducted from motor accident compensation, not only 50% of it. A High Court that notices a Supreme Court ruling but follows its own contrary judgment violates Article 141.",
+      "para": "7, 8",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Haryana government employee, age not stated, Haryana (death)",
+    "family_summary": "A Haryana government employee died and the family claimed motor accident compensation; they could also get state financial assistance under Haryana's 2006 compassionate assistance Rules. The tribunal's award is not stated in this judgment. In December 2019 the High Court took only half of that state assistance off the compensation. In April 2025, after an appeal begun in 2016, the Supreme Court said that was wrong but that the family need not repay money already paid.",
+    "what_mattered": [
+      "State assistance under Haryana's 2006 compassionate assistance Rules cannot be paid twice, so it comes off the motor accident compensation (Shashi [name]).",
+      "The High Court took off only 50%, following its own earlier ruling; the Supreme Court said ignoring its binding ruling breached Article 141.",
+      "The insurer undertook not to seek a refund, so nothing already paid to the family is recovered."
+    ],
+    "archetypes": [
+      "death_salaried"
+    ],
+    "audience": "lawyers",
+    "review_notes": []
+  }
+}
