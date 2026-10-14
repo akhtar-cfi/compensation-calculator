@@ -420,6 +420,14 @@ describe("Sheet store", () => {
         ["d", slots[slots.length - 1]!],
       ]),
     ).toBe("SC 2026");
+    // a run that covered several slots continues after the last one it lists; a pilot label is skipped
+    expect(
+      nextBulkSlot(slots, [
+        ["date", "scope"],
+        ["d1", "pilot: SC 8"],
+        ["d2", "SC 2026; DL 2026; UP 2026"],
+      ]),
+    ).toBe("RJ 2026");
   });
 });
 

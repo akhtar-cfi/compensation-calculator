@@ -230,13 +230,16 @@ export function bulkSlots(thisYear: number, from = FIRST_BULK_YEAR): string[] {
   return out;
 }
 
-/** The slot after the last one the Runs tab records (its "scope" column), or the first slot. */
+/**
+ * The slot after the last one the Runs tab records (its "scope" column, which lists the slots a run
+ * covered separated by "; "), or the first slot.
+ */
 export function nextBulkSlot(slots: readonly string[], runs: readonly (readonly unknown[])[]): string {
   const at = runs.findIndex((r) => r.map((c) => String(c ?? "")).includes("scope"));
   const col = at >= 0 ? runs[at]!.map((c) => String(c ?? "")).indexOf("scope") : -1;
-  const done = col >= 0 ? runs.slice(at + 1).map((r) => String(r[col] ?? "")) : [];
+  const done = col >= 0 ? runs.slice(at + 1).flatMap((r) => String(r[col] ?? "").split(/;\s*/)) : [];
   for (let i = done.length - 1; i >= 0; i--) {
-    const k = slots.indexOf(done[i]!);
+    const k = slots.indexOf(done[i]!.trim());
     if (k >= 0) return slots[(k + 1) % slots.length]!;
   }
   return slots[0]!;

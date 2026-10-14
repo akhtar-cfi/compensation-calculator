@@ -42,7 +42,7 @@ import {
 } from "./sheet.js";
 import type { Cell } from "../sheet.js";
 
-export const BULK_USAGE = `  mact agent bulk-next [--existing sheet.json]
+export const BULK_USAGE = `  mact agent bulk-next [--existing sheet.json] [--after "DL 2025"]
   mact agent bulk-list <SC|state code...|launch|all> [--from 2017] [--to 2026] [--slot "DL 2025"] [--work-dir DIR]
   mact agent bulk-fetch [--max 40] [--court SC|DL|...] [--seen sheet.json] [--work-dir DIR]
   mact agent bulk-pending [--limit 20] [--min-words 600] [--court SC|DL|...] [--work-dir DIR]
@@ -146,7 +146,11 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
   const thisYear = Number((deps.today ?? new Date().toISOString()).slice(0, 4));
 
   if (sub === "bulk-next") {
-    const runs = readSheetDump(flag(args, "existing"))[BULK_TABS.runs] ?? [];
+    const runs = [...(readSheetDump(flag(args, "existing"))[BULK_TABS.runs] ?? [])];
+    // --after: the slot this run has just covered, so a run can take several slots in turn.
+    const after = flag(args, "after");
+    if (after) runs.push(runs.length ? runs[0]!.map((h) => (h === "scope" ? after : "")) : ["scope", after]);
+    if (after && !runs.length) runs.unshift(["scope"]);
     log(nextBulkSlot(bulkSlots(thisYear), runs));
     return 0;
   }
@@ -159,7 +163,11 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
     if (to < from) throw new Error("--to is before --from");
     const years = Array.from({ length: to - from + 1 }, (_, i) => from + i);
     const named = slot ? [slot.court] : pos;
-    writeFileSync(join(work, "slot.txt"), slotArg?.trim() ?? `${named.join(" ")} ${from}-${to}`);
+    // A run may cover several slots in turn: they are listed in order, so the next run continues after the last.
+    const slotFile = join(work, "slot.txt");
+    const scope = slotArg?.trim() ?? `${named.join(" ")} ${from}-${to}`;
+    const before = slotArg && existsSync(slotFile) ? readFileSync(slotFile, "utf8").trim() : "";
+    writeFileSync(slotFile, before ? `${before}; ${scope}` : scope);
     const wanted = named.flatMap((p) =>
       p.toLowerCase() === "launch"
         ? [...LAUNCH_STATES]
