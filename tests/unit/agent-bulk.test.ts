@@ -109,6 +109,7 @@ describe("metadata", () => {
   it("reads dates in the bucket's formats and rejects impossible ones", () => {
     expect(isoDate("09-05-2019")).toBe("2019-05-09");
     expect(isoDate(new Date("2025-02-10T00:00:00Z"))).toBe("2025-02-10");
+    expect(isoDate(new Date("2023-11-05T18:30:00Z"))).toBe("2023-11-06");
     expect(isoDate("31-02-2020")).toBeUndefined();
     expect(isoDate("")).toBeUndefined();
   });

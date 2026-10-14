@@ -40,7 +40,11 @@ const str = (v: unknown): string => (v === null || v === undefined ? "" : String
 
 /** "24-11-2025" or a Date → "2025-11-24"; undefined when it is not a real date. */
 export function isoDate(v: unknown): string | undefined {
-  if (v instanceof Date) return Number.isNaN(v.getTime()) ? undefined : v.toISOString().slice(0, 10);
+  // Some courts store midnight in India (18:30 the day before, in UTC), others midnight UTC: read both as India dates.
+  if (v instanceof Date)
+    return Number.isNaN(v.getTime())
+      ? undefined
+      : new Date(v.getTime() + 5.5 * 3600e3).toISOString().slice(0, 10);
   const s = str(v);
   const m = /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/.exec(s) ?? undefined;
   const iso = m
