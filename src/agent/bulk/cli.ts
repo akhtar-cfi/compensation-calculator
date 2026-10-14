@@ -26,23 +26,26 @@ import {
   PRECEDENTS_HEADER,
   RUNS_HEADER,
   SEEN_HEADER,
-  byStateRows,
+  appendBlock,
+  byStateBlock,
   caseRow,
-  mergeHuman,
   precedentRow,
   reviewedCases,
   seenIds,
   seenRow,
+  type Block,
   type BulkCase,
 } from "./sheet.js";
 import type { Cell } from "../sheet.js";
 
 export const BULK_USAGE = `  mact agent bulk-next [--existing sheet.json]
   mact agent bulk-list <SC|state code...|launch|all> [--from 2017] [--to 2026] [--slot "DL 2025"] [--work-dir DIR]
-  mact agent bulk-fetch [--max 40] [--seen sheet.json] [--work-dir DIR]
+  mact agent bulk-fetch [--max 40] [--court SC|DL|...] [--seen sheet.json] [--work-dir DIR]
   mact agent bulk-pending [--limit 20] [--min-words 600] [--work-dir DIR]
   mact agent bulk-verify [--work-dir DIR]
   mact agent bulk-sheet <outdir> [--existing sheet.json] [--work-dir DIR]
+      (sheet.json: per tab, the start row and the rows to write there; --existing is the Sheet as read,
+       column A of Cases, Precedents, Seen and By state, and all of Runs)
   mact agent bulk-publish <sheet.json> [--dry-run]
       (public High Court / Supreme Court buckets: no account or key needed; work files go to
        .cache/agent/bulk; extractions are written to <work-dir>/extractions/<doc_id>.json)`;
@@ -179,8 +182,12 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
   }
 
   if (sub === "bulk-fetch") {
-    const candidates = readJsonl<Candidate>(join(work, "candidates.jsonl"));
-    if (!candidates.length) throw new Error("no candidates yet: run bulk-list first");
+    const only = flag(args, "court")?.toUpperCase();
+    const candidates = readJsonl<Candidate>(join(work, "candidates.jsonl")).filter(
+      (c) => !only || (only === "SC" ? c.source === "sc" : c.source === "hc" && c.state_code === only),
+    );
+    if (!candidates.length)
+      throw new Error(`no candidates${only ? ` for ${only}` : ""}: run bulk-list first`);
     const seen = seenIds(readSheetDump(flag(args, "seen")));
     const docs = await fetchTexts(work, fetchOrder(candidates), {
       max: intFlag(args, "max", 40),
@@ -253,28 +260,31 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
       n("failed"),
       problems.length ? `${problems.length} problem(s): ${problems.slice(0, 3).join("; ")}` : "",
     ];
-    const oldRuns = (existing[BULK_TABS.runs] ?? []).slice(1) as Cell[][];
-    const tabs: [string, Cell[][]][] = [
-      [BULK_TABS.cases, mergeHuman(CASES_HEADER, caseRows, existing[BULK_TABS.cases] ?? [])],
-      [BULK_TABS.precedents, mergeHuman(PRECEDENTS_HEADER, precRows, existing[BULK_TABS.precedents] ?? [])],
-      [BULK_TABS.byState, byStateRows(usable)],
-      [BULK_TABS.runs, [RUNS_HEADER, ...oldRuns, run]],
-      [
-        BULK_TABS.seen,
-        mergeHuman(
-          SEEN_HEADER,
-          docs.map((d) => seenRow(d, today)),
-          existing[BULK_TABS.seen] ?? [],
-        ),
-      ],
-    ];
+    const states = [
+      ...(existing[BULK_TABS.byState] ?? []).slice(1).map((r) => String(r[0] ?? "")),
+      ...caseRows.map((r) => String(r[3] ?? "")),
+    ].filter((s) => /^[A-Z]{2}$/.test(s));
+    const blocks: Record<string, Block & { clearFirst?: true }> = {
+      [BULK_TABS.cases]: appendBlock(CASES_HEADER, caseRows, existing[BULK_TABS.cases]),
+      [BULK_TABS.precedents]: appendBlock(PRECEDENTS_HEADER, precRows, existing[BULK_TABS.precedents]),
+      [BULK_TABS.byState]: { ...byStateBlock(states), clearFirst: true },
+      [BULK_TABS.seen]: appendBlock(
+        SEEN_HEADER,
+        docs.map((d) => seenRow(d, today)),
+        existing[BULK_TABS.seen],
+      ),
+    };
+    // Runs rows have no doc_id, so the run row is always appended.
+    const runsRows = (existing[BULK_TABS.runs] ?? []).length;
+    blocks[BULK_TABS.runs] = runsRows
+      ? { start: runsRows + 1, values: [run] }
+      : { start: 1, values: [RUNS_HEADER, run] };
     mkdirSync(pos[0], { recursive: true });
-    const out: Record<string, Cell[][]> = {};
-    for (const [tab, values] of tabs) {
-      out[tab] = values;
-      log(`${tab}\t${values.length - 1} row(s)`);
-    }
-    writeFileSync(join(pos[0], "sheet.json"), JSON.stringify(out) + "\n");
+    for (const [tab, b] of Object.entries(blocks))
+      log(
+        `${tab}\t${b.values.length} row(s) from row ${b.start}${b.clearFirst ? " (tab cleared first)" : ""}`,
+      );
+    writeFileSync(join(pos[0], "sheet.json"), JSON.stringify(blocks) + "\n");
     for (const p of problems) log(`✗ ${p}`);
     log(`wrote ${join(pos[0], "sheet.json")}`);
     return 0;

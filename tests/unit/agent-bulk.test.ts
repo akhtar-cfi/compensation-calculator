@@ -23,7 +23,14 @@ import {
   type Doc,
 } from "../../src/agent/bulk/run.js";
 import { objectUrl, parseListing, type HttpFetch } from "../../src/agent/bulk/s3.js";
-import { mergeHuman, reviewedCases, seenIds, CASES_HEADER } from "../../src/agent/bulk/sheet.js";
+import {
+  appendBlock,
+  byStateBlock,
+  caseRow,
+  reviewedCases,
+  seenIds,
+  CASES_HEADER,
+} from "../../src/agent/bulk/sheet.js";
 
 const FIX = join(import.meta.dirname, "fixtures", "bulk");
 const FAKE_PDFTOTEXT = join(FIX, "fake-pdftotext.mjs");
@@ -302,24 +309,55 @@ describe("journey verification", () => {
 });
 
 describe("Sheet store", () => {
-  it("keeps what reviewers typed, and rows the new export lacks", () => {
-    const header = ["doc_id", "court", "Status", "Show families", "Tags", "Notes"];
-    const existing = [
-      ["Cases"],
-      header,
-      ["a", "old court", "Approved", "yes", "death", "checked"],
-      ["gone", "x", "Rejected", "", "", "not a claim"],
-    ];
+  it("appends only new rows below the last one, with the header on an empty tab", () => {
+    const header = ["doc_id", "x", "formula"];
     const fresh = [
-      ["a", "new court", "Pending", "", "auto", ""],
-      ["b", "court b", "Pending", "", "", ""],
+      ["a", 1, "=B{r}*2"],
+      ["b", 2, "=B{r}*2"],
     ];
-    expect(mergeHuman(header, fresh, existing)).toEqual([
-      header,
-      ["a", "new court", "Approved", "yes", "death", "checked"],
-      ["b", "court b", "Pending", "", "", ""],
-      ["gone", "x", "Rejected", "", "", "not a claim"],
-    ]);
+    expect(appendBlock(header, fresh, undefined)).toEqual({
+      start: 1,
+      values: [header, ["a", 1, "=B2*2"], ["b", 2, "=B3*2"]],
+    });
+    expect(appendBlock(header, fresh, [header, ["a"], ["old"]])).toEqual({
+      start: 4,
+      values: [["b", 2, "=B4*2"]],
+    });
+  });
+
+  it("writes derived Cases figures and By state medians as formulas", () => {
+    const row = caseRow({
+      doc: {
+        doc_id: "d1",
+        source: "hc",
+        court: "High Court of Delhi",
+        state_code: "DL",
+        case_label: "MAC.APP. 1/2019",
+        cnr: "",
+        judges: 1,
+        decided: "2025-02-10",
+        pdf_key: "data/pdf/x.pdf",
+        words: 900,
+        status: "ok",
+        topics: [],
+        score: 30,
+        why: [],
+      },
+      x: extraction(),
+      report: { status: "verified", quotes: { total: 1, found: 1 }, fields: [] },
+    });
+    const at = (h: string) => row[CASES_HEADER.indexOf(h)];
+    expect(at("tribunal award (Rs)")).toBe(16203342);
+    expect(at("final ÷ tribunal")).toBe(
+      '=IF(OR(J{r}="",AND(K{r}="",L{r}="")),"",ROUND(IF(L{r}<>"",L{r},K{r})/J{r},2))',
+    );
+    expect(at("years, accident to this judgment")).toBe(
+      '=IF(OR(H{r}="",F{r}=""),"",ROUND((F{r}-H{r})/365.25,1))',
+    );
+    expect(String(at("data, do not edit")).startsWith("'{")).toBe(true);
+    const by = byStateBlock(["UP", "DL", "DL"]);
+    expect(by.values.slice(1, 3).map((r) => r[0])).toEqual(["DL", "UP"]);
+    expect(by.values[1]![1]).toBe("=COUNTIF(Cases!D2:D,A2)");
   });
 
   it("collects doc_ids already handled from Cases, Precedents and Seen", () => {
@@ -415,16 +453,36 @@ describe("mact agent bulk-* commands", () => {
     expect(lines.join("\n")).toContain("1 extraction(s): 1 verified, 0 partial, 0 failed");
 
     expect(await bulkCommand("bulk-sheet", [out, "--work-dir", work], deps)).toBe(0);
-    const sheet = JSON.parse(readFileSync(join(out, "sheet.json"), "utf8")) as Record<string, unknown[][]>;
-    expect(sheet["Cases"]![0]).toEqual(CASES_HEADER);
-    expect(sheet["Cases"]).toHaveLength(2);
-    expect(sheet["Runs"]![1]!.slice(0, 2)).toEqual(["2026-10-14", "DL 2025"]);
-    expect(sheet["Seen"]).toHaveLength(3);
-    expect(sheet["By state"]![1]!.slice(0, 2)).toEqual(["DL", 1]);
-    const rc = reviewedCases(sheet["Cases"]!);
+    type Blocks = Record<string, { start: number; values: unknown[][] }>;
+    const sheet = JSON.parse(readFileSync(join(out, "sheet.json"), "utf8")) as Blocks;
+    expect(sheet["Cases"]!.start).toBe(1);
+    expect(sheet["Cases"]!.values[0]).toEqual(CASES_HEADER);
+    expect(sheet["Cases"]!.values).toHaveLength(2);
+    expect(sheet["Runs"]!.values[1]!.slice(0, 2)).toEqual(["2026-10-14", "DL 2025"]);
+    expect(sheet["Seen"]!.values).toHaveLength(3);
+    expect(sheet["By state"]!.values[1]!.slice(0, 2)).toEqual(["DL", "=COUNTIF(Cases!D2:D,A2)"]);
+    const rc = reviewedCases(sheet["Cases"]!.values);
     expect(rc.cases[0]!.x.doc_id).toBe("DLHC010000012019_1_2025-02-10");
+    expect(rc.cases[0]!.case_label).toBe("MAC.APP. 101/2019");
 
-    expect(await bulkCommand("bulk-publish", [join(out, "sheet.json"), "--dry-run"], deps)).toBe(0);
+    // A second export against the Sheet as it now stands appends nothing to Cases and one Runs row.
+    const dump = {
+      Cases: sheet["Cases"]!.values,
+      Seen: sheet["Seen"]!.values,
+      Runs: sheet["Runs"]!.values,
+      "By state": sheet["By state"]!.values,
+    };
+    writeFileSync(join(work, "dump.json"), JSON.stringify(dump));
+    expect(
+      await bulkCommand("bulk-sheet", [out, "--work-dir", work, "--existing", join(work, "dump.json")], deps),
+    ).toBe(0);
+    const again = JSON.parse(readFileSync(join(out, "sheet.json"), "utf8")) as Blocks;
+    expect(again["Cases"]).toEqual({ start: 3, values: [] });
+    expect(again["Runs"]!.start).toBe(3);
+    expect(again["Seen"]!.values).toEqual([]);
+
+    writeFileSync(join(work, "cases.json"), JSON.stringify({ Cases: sheet["Cases"]!.values }));
+    expect(await bulkCommand("bulk-publish", [join(work, "cases.json"), "--dry-run"], deps)).toBe(0);
     expect(lines[lines.length - 1]).toBe("0 case(s) ready");
     expect(existsSync(join(work, "slot.txt"))).toBe(true);
   });
