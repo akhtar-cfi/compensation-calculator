@@ -4,6 +4,7 @@ import { minimumWage } from "../../src/engine/minimumWage.js";
 import { formatApprox } from "../../src/engine/money.js";
 import type { EstimateInput } from "../../src/engine/types.js";
 import { loadRules } from "../../src/rules/load.js";
+import { validateRules } from "../../src/rules/validate.js";
 
 // Fixes for the code-side open points listed in the 13 Oct 2026 methodology review.
 const rules = loadRules();
@@ -215,5 +216,27 @@ describe("income-tax returns and rounding (OP-25, OP-35)", () => {
     expect(formatApprox(12500000)).toBe("₹1.3 crore");
     expect(formatApprox(12345)).toBe("₹12,000");
     expect(formatApprox(0)).toBe("₹0");
+  });
+});
+
+describe("scenario order guard (OP-19)", () => {
+  it("flags an unskilled wage above the homemaker amount", () => {
+    const dl = rules.minimumWages.DL!;
+    const rev = dl.revisions.at(-1)!;
+    const high = {
+      ...rules,
+      minimumWages: {
+        ...rules.minimumWages,
+        DL: {
+          ...dl,
+          revisions: [
+            ...dl.revisions.slice(0, -1),
+            { ...rev, rates: { All: { ...rev.rates.All!, unskilled: 31000 } } },
+          ],
+        },
+      },
+    };
+    expect(validateRules(rules)).toEqual([]);
+    expect(validateRules(high).some((p) => p.includes("homemaker amount"))).toBe(true);
   });
 });

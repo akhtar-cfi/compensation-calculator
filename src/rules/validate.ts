@@ -94,6 +94,17 @@ export function validateRules(
       for (const [zone, set] of Object.entries(r.rates)) {
         if (!st.zones.includes(zone))
           problems.push(`${where} ${r.effective_from}: zone '${zone}' not declared`);
+        // The homemaker amount (Shishu Pal) is the standard / claimant-max income and the unskilled wage the
+        // conservative one, so the wage must not exceed it, or conservative <= standard <= claimant-max breaks.
+        const unskilled = set.unskilled;
+        const home = rules.notional.homemaker_domestic_care.monthly;
+        if (
+          typeof unskilled === "number" &&
+          (r.unit === "day" ? unskilled * st.days_per_month : unskilled) > home
+        )
+          problems.push(
+            `${where} ${r.effective_from} ${zone}: unskilled wage above the homemaker amount (${home}); scenario order breaks`,
+          );
         let prev: number | undefined;
         for (const cat of CATEGORY_ORDER) {
           const v = set[cat];
