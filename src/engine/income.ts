@@ -64,7 +64,7 @@ export function mw(
       ctx.warn.add(
         "ATTENDANT_WAGE_MISSING",
         "caution",
-        `No minimum wage on file for ${input.state} on ${input.accidentDate}, so the attendant charges are taken as nil.`,
+        `No minimum wage on file for ${input.state} on ${input.accidentDate}, so the attendant charges worked out from it (attendant days, permanent attendant) are taken as nil.`,
         { state: input.state, date: input.accidentDate },
       );
     else
@@ -245,17 +245,6 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
     };
   }
 
-  const mwPath = !["minor", "student", "homemaker", "pensioner"].includes(v.employment);
-  if ((proof === "salary_slip" || proof === "itr") && mwPath)
-    ctx.warn.add(
-      "INCOME_MISSING",
-      "caution",
-      proof === "salary_slip"
-        ? "Salary slips were chosen but no salary was entered, so the minimum wage is used instead."
-        : "Income-tax returns were chosen but no return income was entered, so the minimum wage is used instead.",
-      proof === "itr" ? { variant: "itr" } : undefined,
-    );
-
   switch (v.employment) {
     case "minor":
       return minorIncome(ctx);
@@ -379,6 +368,15 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
       const cat: SkillCategory = s === "conservative" ? "unskilled" : mapped;
       const w = mw(ctx, cat);
       if (!w) return undefined;
+      if (proof === "salary_slip" || proof === "itr")
+        ctx.warn.add(
+          "INCOME_MISSING",
+          "caution",
+          proof === "salary_slip"
+            ? "Salary slips were chosen but no salary was entered, so the minimum wage is used instead."
+            : "Income-tax returns were chosen but no return income was entered, so the minimum wage is used instead.",
+          proof === "itr" ? { variant: "itr" } : undefined,
+        );
       return {
         monthly: w.monthly,
         basis: `minimum_wage_${cat}`,

@@ -108,7 +108,7 @@ describe("web copy (EN/HI)", () => {
       {
         ...base,
         kind: "injury",
-        state: "UP",
+        state: "ZZ",
         injury: { certificatePct: 60, permanentAttendant: true },
       },
       { ...base, s164: "awarded_by_tribunal" },
@@ -132,6 +132,8 @@ describe("web copy (EN/HI)", () => {
         if (w.code === "MW_CONTESTED") continue; // its text comes from the wage data, in English
         const key = [`warnmsg.${w.code}.${w.vars?.variant}`, `warnmsg.${w.code}`].find((k) => en[k])!;
         expect(key, w.code).toBeDefined();
+        // A warning that names a variant must have its own wording for it.
+        if (w.vars?.variant !== undefined) expect(key, w.code).toBe(`warnmsg.${w.code}.${w.vars.variant}`);
         // ZONE_ASSUMED names the state in full in the engine's text; the page gives the name itself.
         if (w.code !== "ZONE_ASSUMED")
           expect(translate({ en, hi }, "en", key, w.vars), w.code).toBe(w.message);

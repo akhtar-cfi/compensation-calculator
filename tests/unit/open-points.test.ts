@@ -4,6 +4,7 @@ import { minimumWage } from "../../src/engine/minimumWage.js";
 import { formatApprox } from "../../src/engine/money.js";
 import type { EstimateInput } from "../../src/engine/types.js";
 import { loadRules } from "../../src/rules/load.js";
+import { testRules } from "../helpers.js";
 import { validateRules } from "../../src/rules/validate.js";
 
 // Fixes for the code-side open points listed in the 13 Oct 2026 methodology review.
@@ -24,7 +25,7 @@ describe("attendant wage lookups (OP-11, OP-13)", () => {
   it("raise a caution, not a stop, when no wage is on file and the income needs none", () => {
     const out = estimate(
       rules,
-      { ...salariedInjury, state: "UP", injury: { ...salariedInjury.injury, permanentAttendant: true } },
+      { ...salariedInjury, state: "ZZ", injury: { ...salariedInjury.injury, permanentAttendant: true } },
       { asOf },
     );
     expect(out.eligible).toBe(true);
@@ -34,26 +35,40 @@ describe("attendant wage lookups (OP-11, OP-13)", () => {
     expect(out.warnings.some((x) => x.code === "MW_MISSING")).toBe(false);
   });
   it("say nothing when the attendant band is used (no days entered, no permanent attendant)", () => {
-    expect(codes({ ...salariedInjury, state: "UP" })).not.toContain("ATTENDANT_WAGE_MISSING");
+    expect(codes({ ...salariedInjury, state: "ZZ" })).not.toContain("ATTENDANT_WAGE_MISSING");
   });
   it("raise the caution when attendant days are entered and no wage is on file", () => {
     const input = {
       ...salariedInjury,
-      state: "UP",
+      state: "ZZ",
       injury: { ...salariedInjury.injury, attendantDaysDuringTreatment: 30 },
     };
     expect(codes(input)).toContain("ATTENDANT_WAGE_MISSING");
   });
-  it("pay attendant days at the day rate (monthly wage / days per month), as before", () => {
-    const out = estimate(
-      rules,
-      { ...salariedInjury, injury: { ...salariedInjury.injury, attendantDaysDuringTreatment: 26 } },
-      { asOf },
-    );
-    const head = out.scenarios!.standard.heads.find((h) => h.id === "attendant_during_treatment");
-    const wage = minimumWage(rules, { state: "DL", category: "unskilled", on: "2025-06-01" })!.monthly;
-    expect(rules.minimumWages.DL!.days_per_month).toBe(26);
-    expect(head?.amount).toBe(Math.round(26 * (wage / 26)));
+  it("pay attendant days at the day rate (monthly wage / the file's days per month)", () => {
+    const base = testRules();
+    const ts = base.minimumWages.TS!;
+    const r30 = { ...base, minimumWages: { ...base.minimumWages, TS: { ...ts, days_per_month: 30 } } };
+    const input = {
+      ...salariedInjury,
+      state: "TS",
+      injury: { ...salariedInjury.injury, attendantDaysDuringTreatment: 45 },
+    };
+    const head = (r: typeof base) =>
+      estimate(r, input, { asOf }).scenarios!.standard.heads.find(
+        (h) => h.id === "attendant_during_treatment",
+      )!.amount;
+    const wage = minimumWage(base, { state: "TS", category: "unskilled", on: "2025-06-01" })!.monthly;
+    expect(head(base)).toBe(Math.round((45 * wage) / 26));
+    expect(head(r30)).toBe(Math.round((45 * wage) / 30));
+  });
+  it("look up no wage (and raise no caution) for zero attendant days", () => {
+    const input = {
+      ...salariedInjury,
+      state: "ZZ",
+      injury: { ...salariedInjury.injury, attendantDaysDuringTreatment: 0 },
+    };
+    expect(codes(input)).not.toContain("ATTENDANT_WAGE_MISSING");
   });
   it("warn when the area given is not an area of the state", () => {
     const out = estimate(
@@ -102,8 +117,32 @@ describe("unused items now raised (OP-22)", () => {
     };
     const w = estimate(rules, itr, { asOf }).warnings.find((x) => x.code === "INCOME_MISSING");
     expect(w?.vars?.variant).toBe("itr");
+    // Not raised where the income does not rest on the minimum wage, or where no wage exists (the estimate stops).
+    const pensioner = {
+      ...salariedInjury,
+      victim: {
+        ageYears: 66,
+        employment: "pensioner" as const,
+        income: { proof: "salary_slip" as const, pensionMonthly: 20000 },
+      },
+    };
+    expect(codes(pensioner)).not.toContain("INCOME_MISSING");
+    const homemaker = {
+      ...salariedInjury,
+      victim: { ageYears: 40, employment: "homemaker" as const, income: { proof: "salary_slip" as const } },
+    };
+    expect(codes(homemaker)).not.toContain("INCOME_MISSING");
+    const noWage = { ...slip, state: "ZZ" };
+    expect(codes(noWage)).toContain("MW_MISSING");
+    expect(codes(noWage)).not.toContain("INCOME_MISSING");
   });
   it("S164_AMOUNT_NOT_GIVEN when s.164 was awarded but no amount entered; nothing deducted", () => {
+    const stopped = {
+      ...salariedInjury,
+      s164: "awarded_by_tribunal" as const,
+      offendingVehicle: "unidentified" as const,
+    };
+    expect(codes(stopped)).not.toContain("S164_AMOUNT_NOT_GIVEN");
     const out = estimate(rules, { ...salariedInjury, s164: "awarded_by_tribunal" }, { asOf });
     expect(out.warnings.map((w) => w.code)).toContain("S164_AMOUNT_NOT_GIVEN");
     expect(out.scenarios!.standard.adjustments.some((a) => a.id === "s164")).toBe(false);
@@ -117,28 +156,42 @@ describe("unused items now raised (OP-22)", () => {
 });
 
 describe("draft-rules notice (OP-10)", () => {
-  it("checks every rules file with a verified flag", () => {
-    const signed = <T extends { verified: boolean }>(r: T): T => ({ ...r, verified: true });
-    const allSigned = {
-      ...rules,
-      multiplier: signed(rules.multiplier),
-      futureProspects: signed(rules.futureProspects),
-      deduction: signed(rules.deduction),
-      conventional: signed(rules.conventional),
-      notional: signed(rules.notional),
-      statutory: signed(rules.statutory),
-      tax: signed(rules.tax),
-      occupations: signed(rules.occupations),
-      injuryBands: signed(rules.injuryBands),
-      ...(rules.practiceSpread ? { practiceSpread: signed(rules.practiceSpread) } : {}),
-    };
-    expect(estimate(allSigned, salariedInjury, { asOf }).warnings.map((w) => w.code)).not.toContain(
-      "RULE_UNVERIFIED",
+  it("checks every rules file that has a verified flag, each one on its own", () => {
+    const flagged = Object.entries(rules).filter(
+      ([, r]) => typeof r === "object" && r !== null && "verified" in r && typeof r.verified === "boolean",
     );
-    const taxUnsigned = { ...allSigned, tax: { ...allSigned.tax, verified: false } };
-    expect(estimate(taxUnsigned, salariedInjury, { asOf }).warnings.map((w) => w.code)).toContain(
-      "RULE_UNVERIFIED",
+    expect(flagged.map(([k]) => k).sort()).toEqual(
+      [
+        "conventional",
+        "deduction",
+        "futureProspects",
+        "injuryBands",
+        "multiplier",
+        "notional",
+        "occupations",
+        "practiceSpread",
+        "settings",
+        "statutory",
+        "tax",
+      ].sort(),
     );
+    const allSigned = Object.fromEntries(
+      Object.entries(rules).map(([k, r]) => [
+        k,
+        flagged.some(([f]) => f === k) ? { ...(r as object), verified: true } : r,
+      ]),
+    ) as typeof rules;
+    const has = (r: typeof rules) =>
+      estimate(r, salariedInjury, { asOf }).warnings.some((w) => w.code === "RULE_UNVERIFIED");
+    expect(has(allSigned)).toBe(false);
+    for (const [k] of flagged)
+      expect(
+        has({
+          ...allSigned,
+          [k]: { ...(allSigned as unknown as Record<string, object>)[k], verified: false },
+        }),
+        k,
+      ).toBe(true);
   });
 });
 
@@ -198,12 +251,18 @@ describe("income-tax returns and rounding (OP-25, OP-35)", () => {
     const shuffled = [inOrder[3]!, inOrder[0]!, inOrder[2]!, inOrder[1]!];
     expect(net(itr(shuffled))).toBe(net(itr(inOrder)));
   });
-  it("keeps the order entered when the years are free text", () => {
+  it("keeps the order entered when the years are free text (or mixed)", () => {
     const rows = [
-      { fy: "latest", income: 600000 },
-      { fy: "older", income: 100000 },
+      { fy: "c", income: 900000 },
+      { fy: "a", income: 100000 },
+      { fy: "d", income: 200000 },
+      { fy: "b", income: 300000 },
     ];
-    expect(() => net(itr(rows))).not.toThrow();
+    // Last three as entered: 1,00,000 + 2,00,000 + 3,00,000. Sorting by label would give 1 + 3 + 9 lakh instead.
+    const asEntered = [{ fy: "x", income: 200000 }];
+    expect(net(itr(rows))).toBe(net(itr(asEntered)));
+    const mixed = [{ fy: "2023-24", income: 900000 }, ...rows.slice(1)];
+    expect(net(itr(mixed))).toBe(net(itr(asEntered)));
   });
   it("rounds the headline in words on whole rupees", () => {
     expect(formatApprox(115000)).toBe("₹1.2 lakh");

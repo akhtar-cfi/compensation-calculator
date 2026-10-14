@@ -133,11 +133,12 @@ const injuryInput = fc.record({
   }),
 });
 
-// Negligence reduces the whole gross while the ex-gratia offset is capped at the income head before negligence, so
-// with both entered the conservative figure can exceed the standard one by a few rupees. Which comes first is a legal
-// question left to the reviewers; until it is decided, the two are not generated together.
+// Negligence reduces the whole gross while the ex-gratia offset is capped at each scenario's income head before
+// negligence, so with both entered the scenarios can come out of order, by lakhs and in either direction (e.g. 50%
+// negligence with Rs 60 lakh ex-gratia gave conservative 5,48,500 > standard 4,93,200 > claimant-max 0). Which comes
+// first is a legal question left to the reviewers; until it is decided, the two are not generated together.
 const injuryCase = injuryInput.map((i) =>
-  i.contributoryNegligencePct !== undefined ? { ...i, received: {} } : i,
+  (i.contributoryNegligencePct ?? 0) > 0 && i.received.exGratiaEqualToPay ? { ...i, received: {} } : i,
 );
 
 describe("engine invariants", () => {

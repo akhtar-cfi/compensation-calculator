@@ -72,6 +72,15 @@ export function validateRules(
       problems.push(`practice_spread.${kind}: needs 0 < p25 <= median <= p75 and n >= 30`);
   }
 
+  const g = rules.settings;
+  const bands = g.offer_defaults.verdict_bands_pct;
+  if (!bands.every((x, i) => x > 0 && x < 100 && (i === 0 || x > bands[i - 1]!)))
+    problems.push(
+      "settings.offer_defaults.verdict_bands_pct: needs strictly rising values between 0 and 100",
+    );
+  for (const k of ["death", "injury"] as const)
+    if (g.range_bar_max_ratio[k] < 1) problems.push(`settings.range_bar_max_ratio.${k}: needs 1 or more`);
+
   const occ = new Set<string>();
   for (const o of rules.occupations.occupations) {
     if (occ.has(o.code)) problems.push(`occupations: duplicate code ${o.code}`);
@@ -91,6 +100,10 @@ export function validateRules(
     for (const r of st.revisions) {
       if (r.confidence === "official" && !r.notification.url)
         problems.push(`${where} ${r.effective_from}: official revision without a notification URL`);
+      if (r.confidence !== "gap")
+        for (const zone of st.zones)
+          if (!r.rates[zone])
+            problems.push(`${where} ${r.effective_from}: no rates for declared zone '${zone}'`);
       for (const [zone, set] of Object.entries(r.rates)) {
         if (!st.zones.includes(zone))
           problems.push(`${where} ${r.effective_from}: zone '${zone}' not declared`);

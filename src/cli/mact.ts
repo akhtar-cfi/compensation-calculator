@@ -21,7 +21,8 @@ import { renderCases, renderEstimate, renderOffer } from "./render.js";
 
 const USAGE = `Usage:
   mact estimate <input.json|yaml> [--as-of YYYY-MM-DD] [--format md|json]
-  mact offer <input.json|yaml> --offer <rupees> [--years 6] [--interest 7.5] [--discount 7] [--fee 0] [--as-of YYYY-MM-DD]
+  mact offer <input.json|yaml> --offer <rupees> [--years N] [--interest %] [--discount %] [--fee %] [--as-of YYYY-MM-DD]
+    (defaults: years from rules/statutory/statutory.yaml, the rest from rules/settings.yaml)
   mact cases match <input.json|yaml> [--limit 3] [--format md|json]
   mact cases coverage
   mact backtest <awards.csv> [--format md|json]

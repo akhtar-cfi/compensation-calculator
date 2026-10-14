@@ -231,8 +231,9 @@ function runScenario(
         : 0;
     const ctx = { rules, input, asOf, ch, warn };
     const daysGiven = inj.attendantDaysDuringTreatment !== undefined;
-    // Attendant days are paid at the unskilled day rate; the wage is looked up only when days are given.
-    const dailyUnskilled = daysGiven ? (mw(ctx, "unskilled", "attendant")?.daily ?? 0) : 0;
+    // Attendant days are paid at the unskilled day rate; the wage is looked up only when there are days to pay.
+    const dailyUnskilled =
+      (inj.attendantDaysDuringTreatment ?? 0) > 0 ? (mw(ctx, "unskilled", "attendant")?.daily ?? 0) : 0;
     let futureAttendantMonthly = 0;
     if (inj.permanentAttendant) {
       const s = ch.choose("attendant_rate", "Attendant wage: unskilled vs semi-skilled minimum wage");
@@ -298,18 +299,18 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
     );
     ok = false;
   }
-  if (input.s164 === "awarded_by_tribunal" && input.received?.s164 === undefined) {
-    warn.add(
-      "S164_AMOUNT_NOT_GIVEN",
-      "caution",
-      "No-fault compensation (s.164) was awarded by the tribunal, but no amount was entered, so nothing is deducted for it. Enter the amount received.",
-    );
-  }
   if (input.offendingVehicle === "identified_uninsured") {
     warn.add(
       "UNINSURED",
       "caution",
       "The vehicle was uninsured: the owner/driver must pay, which is harder to recover. Seek legal aid early.",
+    );
+  }
+  if (ok && input.s164 === "awarded_by_tribunal" && input.received?.s164 === undefined) {
+    warn.add(
+      "S164_AMOUNT_NOT_GIVEN",
+      "caution",
+      "No-fault compensation (s.164) was awarded by the tribunal, but no amount was entered, so nothing is deducted for it. Enter the amount received.",
     );
   }
   if (!input.claimFiledDate) {
@@ -456,18 +457,10 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
     "info",
     "This is the amount the Supreme Court's method gives on the facts entered — not a prediction of what a tribunal will award or when.",
   );
-  const unverified = [
-    rules.multiplier,
-    rules.futureProspects,
-    rules.deduction,
-    rules.conventional,
-    rules.notional,
-    rules.statutory,
-    rules.tax,
-    rules.occupations,
-    rules.injuryBands,
-    ...(rules.practiceSpread ? [rules.practiceSpread] : []),
-  ].some((r) => !r.verified);
+  // Every rules file that carries a verified flag (wage files record who verified each revision instead).
+  const unverified = Object.values(rules).some(
+    (r) => typeof r === "object" && r !== null && "verified" in r && r.verified === false,
+  );
   if (unverified)
     warn.add("RULE_UNVERIFIED", "info", "Draft rules: not yet signed off by the legal reviewers.");
 
