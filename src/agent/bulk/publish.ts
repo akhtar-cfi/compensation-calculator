@@ -6,7 +6,10 @@ import type { ReviewedCase } from "./sheet.js";
  * (data/cases/<id>.yaml). Only anonymised fields leave the Sheet: the title and summary the extractor
  * wrote without names, the case number (no party names) and a link to the public judgment.
  */
-export function toLibraryCase(r: ReviewedCase): { case?: Case; problems: string[] } {
+export function toLibraryCase(r: ReviewedCase & { x: NonNullable<ReviewedCase["x"]> }): {
+  case?: Case;
+  problems: string[];
+} {
   const problems: string[] = [];
   const x = r.x;
   const p = x.payload;

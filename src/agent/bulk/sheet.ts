@@ -7,8 +7,8 @@ import { objectUrl } from "./s3.js";
 /**
  * Tabs of the private Google Sheet "MACT cases", the bulk route's store and review surface. The
  * session writes these values with the Sheets connector; reviewers fill the columns from Status on.
- * Each Cases row ends with the extraction as JSON ("data, do not edit"), so a fresh session can
- * rebuild everything from the Sheet alone. New rows are only ever appended below the last one, so
+ * The full extractions (with their verbatim quotes) live as files in the work directory; the last
+ * Cases column can carry a copy ("data, do not edit": none, lean without quotes, or full). New rows are only ever appended below the last one, so
  * what reviewers typed is never overwritten. Derived figures are formulas over the row's own cells.
  */
 export const BULK_TABS = {
@@ -47,7 +47,10 @@ export interface BulkCase {
   report: VerifyReport;
   /** Other case numbers decided by the same judgment (cross-appeals uploaded once per case). */
   alsoDecides?: string[];
+  /** What the last column holds: nothing (default), the extraction without quotes, or all of it. */
+  dataMode?: DataMode;
 }
+export type DataMode = "none" | "lean" | "full";
 
 /**
  * The Cases tab, one column per entry, in order: identity, facts, timeline, method, tags, words for
@@ -133,7 +136,7 @@ const CASE_COLUMNS: readonly { h: string; v: (c: BulkCase) => Cell }[] = [
   { h: "Tags", v: () => "" },
   { h: "Notes", v: () => "" },
   { h: "Reviewed by", v: () => "" },
-  { h: "data, do not edit", v: (c) => `'${dataCell(c.x)}` },
+  { h: "data, do not edit", v: (c) => dataCell(c.x, c.dataMode ?? "none") },
 ];
 export const CASES_HEADER: readonly string[] = CASE_COLUMNS.map((c) => c.h);
 const C = (name: string) => col(CASES_HEADER, name);
@@ -194,9 +197,15 @@ export function caseRow(c: BulkCase): Cell[] {
 
 /** A Sheets cell holds at most 50,000 characters: an extraction too long for one drops its evidence quotes. */
 export const MAX_CELL = 49_000;
-export function dataCell(x: BulkExtractionFile): string {
-  const full = JSON.stringify(x);
-  return full.length <= MAX_CELL ? full : JSON.stringify({ ...x, evidence: [] });
+export function dataCell(x: BulkExtractionFile, mode: DataMode): string {
+  if (mode === "none") return "";
+  const lean = (): BulkExtractionFile => ({
+    ...x,
+    evidence: [],
+    precedent: x.precedent ? { ...x.precedent, quote: "-" } : null,
+  });
+  const full = JSON.stringify(mode === "full" ? x : lean());
+  return `'${full.length <= MAX_CELL ? full : JSON.stringify(lean())}`;
 }
 
 export function precedentRow(c: BulkCase): Cell[] | undefined {
@@ -293,7 +302,8 @@ export function seenIds(
 }
 
 export interface ReviewedCase {
-  x: BulkExtractionFile;
+  /** From the data column when it holds a copy; otherwise read from the work directory. */
+  x?: BulkExtractionFile;
   doc_id: string;
   link: string;
   court: string;
@@ -318,15 +328,17 @@ export function reviewedCases(values: readonly (readonly unknown[])[]): {
   values.slice(at + 1).forEach((r, i) => {
     const id = String(r[ix("doc_id")] ?? "");
     if (!id) return;
-    let x: BulkExtractionFile;
-    try {
-      x = JSON.parse(String(r[ix("data, do not edit")] ?? "").replace(/^'/, "")) as BulkExtractionFile;
-    } catch {
-      problems.push(`row ${at + i + 2} (${id}): the data column is not valid JSON`);
-      return;
-    }
+    let x: BulkExtractionFile | undefined;
+    const data = String(r[ix("data, do not edit")] ?? "").replace(/^'/, "");
+    if (data)
+      try {
+        x = JSON.parse(data) as BulkExtractionFile;
+      } catch {
+        problems.push(`row ${at + i + 2} (${id}): the data column is not valid JSON`);
+        return;
+      }
     cases.push({
-      x,
+      ...(x && { x }),
       doc_id: id,
       link: String(r[ix("judgment")] ?? ""),
       court: String(r[ix("court")] ?? ""),

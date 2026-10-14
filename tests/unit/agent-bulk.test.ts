@@ -32,6 +32,7 @@ import {
   reviewedCases,
   seenIds,
   CASES_HEADER,
+  type BulkCase,
 } from "../../src/agent/bulk/sheet.js";
 
 const FIX = join(import.meta.dirname, "fixtures", "bulk");
@@ -330,7 +331,7 @@ describe("Sheet store", () => {
   });
 
   it("writes derived Cases figures and By state medians as formulas", () => {
-    const row = caseRow({
+    const base: BulkCase = {
       doc: {
         doc_id: "d1",
         source: "hc",
@@ -349,7 +350,8 @@ describe("Sheet store", () => {
       },
       x: extraction(),
       report: { status: "verified", quotes: { total: 1, found: 1 }, fields: [] },
-    });
+    };
+    const row = caseRow(base);
     const at = (h: string) => row[CASES_HEADER.indexOf(h)];
     expect(at("tribunal award (Rs)")).toBe(16203342);
     const L = (h: string) => col(CASES_HEADER, h);
@@ -371,7 +373,12 @@ describe("Sheet store", () => {
     expect(at("lays down law")).toBe("no");
     expect(at("archetypes")).toBe("death_salaried");
     expect(at("CNR (eCourts)")).toBe("");
-    expect(String(at("data, do not edit")).startsWith("'{")).toBe(true);
+    expect(at("data, do not edit")).toBe("");
+    const leanCell = String(
+      caseRow({ ...base, dataMode: "lean" })[CASES_HEADER.indexOf("data, do not edit")],
+    );
+    expect(leanCell.startsWith("'{")).toBe(true);
+    expect(JSON.parse(leanCell.slice(1)).evidence).toEqual([]);
     const by = byStateBlock(["UP", "DL", "DL"]);
     expect(by.values.slice(1, 3).map((r) => r[0])).toEqual(["DL", "UP"]);
     expect(by.values[1]![1]).toBe("=COUNTIF(Cases!D2:D,A2)");
@@ -485,7 +492,8 @@ describe("mact agent bulk-* commands", () => {
     expect(sheet["Seen"]!.values).toHaveLength(3);
     expect(sheet["By state"]!.values[1]!.slice(0, 2)).toEqual(["DL", "=COUNTIF(Cases!D2:D,A2)"]);
     const rc = reviewedCases(sheet["Cases"]!.values);
-    expect(rc.cases[0]!.x.doc_id).toBe("DLHC010000012019_1_2025-02-10");
+    expect(rc.cases[0]!.doc_id).toBe("DLHC010000012019_1_2025-02-10");
+    expect(rc.cases[0]!.x).toBeUndefined();
     expect(rc.cases[0]!.case_label).toBe("MAC.APP. 101/2019");
 
     // A second export against the Sheet as it now stands appends nothing to Cases and one Runs row.
@@ -507,6 +515,16 @@ describe("mact agent bulk-* commands", () => {
     writeFileSync(join(work, "cases.json"), JSON.stringify({ Cases: sheet["Cases"]!.values }));
     expect(await bulkCommand("bulk-publish", [join(work, "cases.json"), "--dry-run"], deps)).toBe(0);
     expect(lines[lines.length - 1]).toBe("0 case(s) ready");
+
+    // Approved and marked for families: published from the extraction file in the work directory.
+    const reviewed = sheet["Cases"]!.values.map((r) => [...r]);
+    reviewed[1]![CASES_HEADER.indexOf("Status")] = "approved";
+    reviewed[1]![CASES_HEADER.indexOf("Show families")] = "yes";
+    writeFileSync(join(work, "cases.json"), JSON.stringify({ Cases: reviewed }));
+    expect(
+      await bulkCommand("bulk-publish", [join(work, "cases.json"), "--dry-run", "--work-dir", work], deps),
+    ).toBe(0);
+    expect(lines[lines.length - 1]).toBe("1 case(s) ready");
     expect(existsSync(join(work, "slot.txt"))).toBe(true);
   });
 

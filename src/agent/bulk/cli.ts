@@ -36,6 +36,7 @@ import {
   seenRow,
   type Block,
   type BulkCase,
+  type DataMode,
 } from "./sheet.js";
 import type { Cell } from "../sheet.js";
 
@@ -44,10 +45,10 @@ export const BULK_USAGE = `  mact agent bulk-next [--existing sheet.json]
   mact agent bulk-fetch [--max 40] [--court SC|DL|...] [--seen sheet.json] [--work-dir DIR]
   mact agent bulk-pending [--limit 20] [--min-words 600] [--court SC|DL|...] [--work-dir DIR]
   mact agent bulk-verify [--only DOC_ID] [--work-dir DIR]
-  mact agent bulk-sheet <outdir> [--existing sheet.json] [--work-dir DIR]
+  mact agent bulk-sheet <outdir> [--existing sheet.json] [--data none|lean|full] [--work-dir DIR]
       (sheet.json: per tab, the start row and the rows to write there; --existing is the Sheet as read,
        column A of Cases, Precedents, Seen and By state, and all of Runs)
-  mact agent bulk-publish <sheet.json> [--dry-run]
+  mact agent bulk-publish <sheet.json> [--dry-run] [--work-dir DIR]
       (public High Court / Supreme Court buckets: no account or key needed; work files go to
        .cache/agent/bulk; extractions are written to <work-dir>/extractions/<doc_id>.json)`;
 
@@ -273,7 +274,9 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
     }
     const extracted = new Set(cases.map((c) => c.doc.doc_id));
     const extractedSha = new Set(cases.map((c) => docSha(work, c.doc)).filter((h): h is string => !!h));
-    const caseRows = usable.filter((c) => c.x.payload.usable).map(caseRow);
+    const dataMode = (flag(args, "data") ?? "none") as DataMode;
+    if (!["none", "lean", "full"].includes(dataMode)) throw new Error("--data is none, lean or full");
+    const caseRows = usable.filter((c) => c.x.payload.usable).map((c) => caseRow({ ...c, dataMode }));
     const precRows = usable.map(precedentRow).filter((r): r is Cell[] => !!r);
     const n = (s: string) => cases.filter((c) => c.report.status === s).length;
     const run: Cell[] = [
@@ -333,14 +336,24 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
     let written = 0;
     for (const r of cases) {
       if (r.status !== "approved" || !r.showFamilies) continue;
-      const res = toLibraryCase(r);
+      const file = join(work, "extractions", `${r.doc_id}.json`);
+      const x =
+        r.x ??
+        (existsSync(file)
+          ? BulkExtractionFileSchema.parse(JSON.parse(readFileSync(file, "utf8")))
+          : undefined);
+      if (!x) {
+        problems.push(`${r.doc_id}: no extraction in the Sheet or in ${file}`);
+        continue;
+      }
+      const res = toLibraryCase({ ...r, x });
       if (!res.case) {
         problems.push(`${r.doc_id}: ${res.problems.join("; ")}`);
         continue;
       }
-      const file = join(REPO_ROOT, "data", "cases", `${res.case.id}.yaml`);
-      if (!args.includes("--dry-run")) writeFileSync(file, stringify(res.case, { lineWidth: 110 }));
-      log(`${args.includes("--dry-run") ? "would write" : "wrote"} ${file}`);
+      const out = join(REPO_ROOT, "data", "cases", `${res.case.id}.yaml`);
+      if (!args.includes("--dry-run")) writeFileSync(out, stringify(res.case, { lineWidth: 110 }));
+      log(`${args.includes("--dry-run") ? "would write" : "wrote"} ${out}`);
       written++;
     }
     for (const p of problems) log(`✗ ${p}`);
