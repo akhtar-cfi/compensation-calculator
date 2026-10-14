@@ -132,6 +132,18 @@ Sources: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), ba
 
 Signed off: **no — awaiting legal sign-off**.
 
+## Settings (product choices, not law)
+
+Fixed numbers the calculator uses that are product choices, not rules of law. They are kept here so that the reviewers can see and change them in one place.
+
+- **Range bar:** shown only when highest / lowest is at most 1.75 (death) or 2.5 (injury). The range bar is shown only when highest / lowest is at or below this; otherwise scenario cards.
+- **Wide-range notice:** 0.8. The page says the low end is far below the headline when conservative < this x standard.
+- **Negligence cards:** 25% and 50%. "What if" cards shown when the person drove an involved vehicle and no negligence % is entered.
+- **Minimum-wage freshness:** 7 months. States revise minimum wages about every six months. A wage older than this at the accident date, with no recorded check of the official source since, raises a caution; the weekly staleness check uses the same window.
+- **Offer check defaults:** interest 7.5%, discount 7%, lawyer's fee 0%; verdict bands at 25 / 50 / 80 / 95% of the standard figure. Offer check: simple interest a tribunal adds, the rate used to compare money now and later, and the lawyer's fee (an advocate may not take a share of the award). Verdicts: far below / well below / below / a little below / close to the estimate, at these percentages of the standard figure. Years come from statutory.yaml.
+
+Signed off: **no — awaiting legal sign-off**.
+
 ## Income tax (deducted from salary before the formula)
 
 Health and education cess 4%.

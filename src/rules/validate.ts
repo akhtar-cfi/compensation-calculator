@@ -22,6 +22,7 @@ export function validateRules(
     ["statutory.s164", rules.statutory.no_fault_s164.sources],
     ["statutory.s161", rules.statutory.hit_and_run_s161.sources],
     ["statutory.limitation", rules.statutory.limitation_s166_3.sources],
+    ["statutory.pendency", rules.statutory.pendency.sources],
     ["injury_bands", rules.injuryBands.sources],
     ["practice_spread", rules.practiceSpread?.sources ?? []],
     ...rules.rangeParameters.map((p): [string, readonly string[]] => [`range.${p.id}`, p.sources]),
@@ -111,7 +112,7 @@ export function validateRules(
       const latest = [...dates].sort().at(-1)!;
       const fresh = st.last_checked && st.last_checked > latest ? st.last_checked : latest;
       const months = monthsBetween(fresh, opts.asOf);
-      if (months > (opts.staleMonths ?? 7))
+      if (months > (opts.staleMonths ?? rules.settings.wage_freshness_months.value))
         problems.push(
           `${where}: latest revision ${latest}${st.last_checked ? `, last checked ${st.last_checked}` : ""} - ${months} months without a check (stale)`,
         );

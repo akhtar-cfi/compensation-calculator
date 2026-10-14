@@ -29,7 +29,6 @@ import {
 import { WarningSink } from "./warnings.js";
 
 export const ENGINE_VERSION = "0.1.0";
-const RANGE_RATIO_LIMIT = { death: 1.75, injury: 2.5 } as const;
 
 interface RunResult {
   result: ScenarioResult;
@@ -320,7 +319,7 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
       warn.add(
         "LIMITATION",
         "caution",
-        `More than ${lim.months} months since the accident. s.166(3) sets a 6-month limit, but the Supreme Court has directed (interim order, 4 Nov 2025) that claims not be dismissed as time-barred while it decides the challenge. File as soon as possible.`,
+        `${lim.months} months or more since the accident. s.166(3) sets a 6-month limit, but the Supreme Court has directed (interim order, 4 Nov 2025) that claims not be dismissed as time-barred while it decides the challenge. File as soon as possible.`,
         { months: lim.months },
       );
     }
@@ -422,7 +421,7 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
       "caution",
       "The person was driving a vehicle involved in the crash: the tribunal may reduce compensation for contributory negligence.",
     );
-    for (const pct of [25, 50]) {
+    for (const pct of rules.settings.negligence_cards_pct.values) {
       const r = runScenario(rules, input, asOf, allOf("standard"), "standard", new WarningSink(), {
         contributoryNegligencePct: pct,
       });
@@ -439,7 +438,7 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
   const m = runs.claimantMax.result.net;
   const lo = Math.min(c, stdNet);
   const hi = Math.max(m, stdNet);
-  const showBar = lo > 0 && hi / lo <= RANGE_RATIO_LIMIT[input.kind];
+  const showBar = lo > 0 && hi / lo <= rules.settings.range_bar_max_ratio[input.kind];
   if (!showBar)
     warn.add(
       "RANGE_TOO_WIDE",

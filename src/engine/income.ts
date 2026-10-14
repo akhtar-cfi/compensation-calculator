@@ -8,9 +8,6 @@ import { annualIncomeTax } from "./tax.js";
 import type { EstimateInput } from "./types.js";
 import type { WarningSink } from "./warnings.js";
 
-/** States revise minimum wages about every six months; beyond this, a newer rate may exist. */
-const MW_FRESH_MONTHS = 7;
-
 export interface IncomeResult {
   monthly: number;
   basis: string;
@@ -98,15 +95,17 @@ export function mw(
   const r = hit.revision;
   if (r.caution) ctx.warn.add("MW_CONTESTED", "caution", `${hit.state} minimum wage: ${r.caution}`);
   const checked = st?.last_checked;
+  // States revise minimum wages about every six months; beyond this window a newer rate may exist.
+  const freshMonths = rules.settings.wage_freshness_months.value;
   if (
-    wholeMonthsBetween(r.effective_from, input.accidentDate) > MW_FRESH_MONTHS &&
+    wholeMonthsBetween(r.effective_from, input.accidentDate) > freshMonths &&
     !(checked && checked >= input.accidentDate)
   ) {
     ctx.warn.add(
       "MW_MAY_BE_OUTDATED",
       "caution",
-      `The latest ${hit.state} minimum wage on file took effect on ${r.effective_from}, more than ${MW_FRESH_MONTHS} months before the accident, and the official source has not been checked since the accident date. A later revision may apply.`,
-      { state: hit.state, from: r.effective_from, months: MW_FRESH_MONTHS },
+      `The latest ${hit.state} minimum wage on file took effect on ${r.effective_from}, more than ${freshMonths} months before the accident, and the official source has not been checked since the accident date. A later revision may apply.`,
+      { state: hit.state, from: r.effective_from, months: freshMonths },
     );
   }
   return {

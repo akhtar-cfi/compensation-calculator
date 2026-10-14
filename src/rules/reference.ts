@@ -218,6 +218,24 @@ export function renderRulesReference(rules: RulesBundle): string {
   );
   L.push("", `Signed off: ${yes(s.verified)}.`, "");
 
+  const g = rules.settings;
+  L.push("## Settings (product choices, not law)", "", g.description, "");
+  L.push(
+    `- **Range bar:** shown only when highest / lowest is at most ${g.range_bar_max_ratio.death} (death) or ${g.range_bar_max_ratio.injury} (injury). ${g.range_bar_max_ratio.note}`,
+  );
+  L.push(`- **Wide-range notice:** ${g.wide_range_notice_ratio.value}. ${g.wide_range_notice_ratio.note}`);
+  L.push(
+    `- **Negligence cards:** ${g.negligence_cards_pct.values.join("% and ")}%. ${g.negligence_cards_pct.note}`,
+  );
+  L.push(
+    `- **Minimum-wage freshness:** ${g.wage_freshness_months.value} months. ${g.wage_freshness_months.note}`,
+  );
+  const o = g.offer_defaults;
+  L.push(
+    `- **Offer check defaults:** interest ${o.interest_pct}%, discount ${o.discount_pct}%, lawyer's fee ${o.lawyer_fee_pct}%; verdict bands at ${o.verdict_bands_pct.join(" / ")}% of the standard figure. ${o.note}`,
+  );
+  L.push("", `Signed off: ${yes(g.verified)}.`, "");
+
   const t = rules.tax;
   L.push(
     "## Income tax (deducted from salary before the formula)",

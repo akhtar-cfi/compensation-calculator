@@ -192,9 +192,9 @@ async function main(argv: string[]): Promise<number> {
     }
     const check = checkOffer(out, offer, {
       yearsToAward: Number(flag(args, "years") ?? rules.statutory.pendency.tribunal_years),
-      awardInterestPct: Number(flag(args, "interest") ?? 7.5),
-      discountPct: Number(flag(args, "discount") ?? 7),
-      lawyerFeePct: Number(flag(args, "fee") ?? 0),
+      awardInterestPct: Number(flag(args, "interest") ?? rules.settings.offer_defaults.interest_pct),
+      discountPct: Number(flag(args, "discount") ?? rules.settings.offer_defaults.discount_pct),
+      lawyerFeePct: Number(flag(args, "fee") ?? rules.settings.offer_defaults.lawyer_fee_pct),
     });
     console.log(renderEstimate(out) + "\n\n" + renderOffer(check));
     return 0;

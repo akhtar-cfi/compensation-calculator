@@ -139,3 +139,39 @@ describe("draft-rules notice (OP-10)", () => {
     );
   });
 });
+
+describe("limitation wording and settings (OP-24)", () => {
+  const death: EstimateInput = {
+    kind: "death",
+    accidentDate: "2026-04-14",
+    state: "DL",
+    victimRole: "pedestrian",
+    victim: { ageYears: 30, employment: "permanent", income: { proof: "salary_slip", monthlySalary: 30000 } },
+    family: { married: true, spouse: true },
+  };
+  it("fires on the 6-month anniversary with words that are true on that day", () => {
+    const w = estimate(rules, death, { asOf: "2026-10-14" }).warnings.find((x) => x.code === "LIMITATION");
+    expect(w?.message.startsWith("6 months or more since the accident.")).toBe(true);
+    expect(codes({ ...death, accidentDate: "2026-04-15" })).not.toContain("LIMITATION");
+  });
+  it("reads the range-bar limit and negligence cards from rules/settings.yaml", () => {
+    const tight = {
+      ...rules,
+      settings: {
+        ...rules.settings,
+        range_bar_max_ratio: { ...rules.settings.range_bar_max_ratio, death: 1 },
+      },
+    };
+    const out = estimate(tight, death, { asOf });
+    expect(out.range!.showBar).toBe(out.range!.claimantMax === out.range!.conservative);
+    const cards = {
+      ...rules,
+      settings: {
+        ...rules.settings,
+        negligence_cards_pct: { ...rules.settings.negligence_cards_pct, values: [10] },
+      },
+    };
+    const drv = estimate(cards, { ...death, victimRole: "driver_of_involved_vehicle" }, { asOf });
+    expect(drv.sensitivity.map((c) => c.id)).toEqual(["contributory_negligence_10"]);
+  });
+});
