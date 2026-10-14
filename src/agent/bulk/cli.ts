@@ -271,6 +271,8 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
       const others = h ? (bySha.get(h) ?? []).filter((d) => d.doc_id !== c.doc.doc_id) : [];
       if (others.length) c.alsoDecides = others.map((d) => d.case_label);
     }
+    const extracted = new Set(cases.map((c) => c.doc.doc_id));
+    const extractedSha = new Set(cases.map((c) => docSha(work, c.doc)).filter((h): h is string => !!h));
     const caseRows = usable.filter((c) => c.x.payload.usable).map(caseRow);
     const precRows = usable.map(precedentRow).filter((r): r is Cell[] => !!r);
     const n = (s: string) => cases.filter((c) => c.report.status === s).length;
@@ -296,9 +298,16 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
       [BULK_TABS.cases]: appendBlock(CASES_HEADER, caseRows, existing[BULK_TABS.cases]),
       [BULK_TABS.precedents]: appendBlock(PRECEDENTS_HEADER, precRows, existing[BULK_TABS.precedents]),
       [BULK_TABS.byState]: { ...byStateBlock(states), clearFirst: true },
+      // Seen holds only finished judgments: extracted (or the same text as one that was), or skipped for good.
       [BULK_TABS.seen]: appendBlock(
         SEEN_HEADER,
-        docs.map((d) => seenRow(d, today)),
+        docs
+          .filter((d) => {
+            if (d.status !== "ok") return true;
+            const h = docSha(work, d);
+            return extracted.has(d.doc_id) || (h !== undefined && extractedSha.has(h));
+          })
+          .map((d) => seenRow(d, today)),
         existing[BULK_TABS.seen],
       ),
     };

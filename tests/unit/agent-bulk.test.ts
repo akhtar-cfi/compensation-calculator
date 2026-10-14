@@ -481,6 +481,7 @@ describe("mact agent bulk-* commands", () => {
     expect(sheet["Cases"]!.values[0]).toEqual(CASES_HEADER);
     expect(sheet["Cases"]!.values).toHaveLength(2);
     expect(sheet["Runs"]!.values[1]!.slice(0, 2)).toEqual(["2026-10-14", "DL 2025"]);
+    // header + the extracted judgment + the missing one (an unextracted "ok" judgment would not be listed)
     expect(sheet["Seen"]!.values).toHaveLength(3);
     expect(sheet["By state"]!.values[1]!.slice(0, 2)).toEqual(["DL", "=COUNTIF(Cases!D2:D,A2)"]);
     const rc = reviewedCases(sheet["Cases"]!.values);
@@ -544,5 +545,31 @@ describe("mact agent bulk-* commands", () => {
     >;
     const row = sheet["Cases"]!.values[1]!;
     expect(row[CASES_HEADER.indexOf("case")]).toBe("'MAC.APP. 101/2019; MAC.APP. 103/2021");
+    // Both uploads are finished (one extracted, the other the same text), so both are in Seen.
+    expect(sheet["Seen"]!.values.slice(1).map((r) => r[0])).toEqual([
+      "DLHC010000042021_1_2025-05-02",
+      "DLHC010000012019_1_2025-02-10",
+    ]);
+  });
+
+  it("leaves fetched judgments that are not yet extracted out of Seen, so a later run picks them up", async () => {
+    const work = tmp();
+    const out = join(work, "out");
+    const deps = {
+      fetch: fakeFetch({ "DLHC010000012019_1_2025-02-10.pdf": JUDGMENT }),
+      pdftotext: FAKE_PDFTOTEXT,
+      log: () => {},
+      today: "2026-10-14",
+    };
+    await bulkCommand("bulk-list", ["--slot", "DL 2025", "--work-dir", work], deps);
+    await bulkCommand("bulk-fetch", ["--work-dir", work], deps);
+    await bulkCommand("bulk-sheet", [out, "--work-dir", work], deps);
+    const sheet = JSON.parse(readFileSync(join(out, "sheet.json"), "utf8")) as Record<
+      string,
+      { values: unknown[][] }
+    >;
+    expect(sheet["Seen"]!.values.slice(1).map((r) => [r[0], r[1]])).toEqual([
+      ["DLHC010000042021_1_2025-05-02", "missing"],
+    ]);
   });
 });
