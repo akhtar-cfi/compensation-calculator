@@ -94,7 +94,9 @@ export function splitCaseTitle(title: string): { type: string; no: string; year:
 
 export function headerForm(header: string, pages: number | undefined): HcRecord["form"] {
   if (/J\s?U\s?D\s?G\s?(E\s?)?M\s?E\s?N\s?T/.test(header)) return "judgment";
-  if (/O\s?R\s?D\s?E\s?R\b/.test(header) && (pages === undefined || pages <= 3)) return "order";
+  // Delhi prints short orders as "O R D E R" (letter-spaced); a plain "ORDER" also appears in case
+  // types such as Allahabad's "FIRST APPEAL FROM ORDER", so it is not taken as a sign.
+  if (/O\s+R\s+D\s+E\s+R\b/.test(header) && (pages === undefined || pages <= 3)) return "order";
   return "unknown";
 }
 

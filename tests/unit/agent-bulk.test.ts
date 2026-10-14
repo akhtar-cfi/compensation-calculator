@@ -128,6 +128,7 @@ describe("metadata", () => {
     expect(headerForm("+ MAC.APP. 1/2019 O R D E R 25.03.2025", undefined)).toBe("order");
     expect(headerForm("Page 1 of 15 ... J U D G M E N T", 15)).toBe("judgment");
     expect(headerForm("Page 1 of 9 ... ORDER", 9)).toBe("unknown");
+    expect(headerForm("Case :- FIRST APPEAL FROM ORDER No. - 2657 of 2006", undefined)).toBe("unknown");
   });
 });
 

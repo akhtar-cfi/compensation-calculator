@@ -101,8 +101,6 @@ export interface BulkCase {
 const link = (d: Doc) => objectUrl(d.source, d.pdf_key);
 const step = (j: readonly JourneyStep[], forums: readonly JourneyStep["forum"][]) =>
   [...j].reverse().find((s) => forums.includes(s.forum));
-const years = (from?: string | null, to?: string | null): Cell =>
-  from && to ? Number(((Date.parse(to) - Date.parse(from)) / (365.25 * 864e5)).toFixed(1)) : "";
 
 /** One Cases row; "{r}" in a formula stands for the row's own number until `placeRows` sets it. */
 export function caseRow(c: BulkCase): Cell[] {
