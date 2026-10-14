@@ -90,6 +90,8 @@ export const RangeParameterSchema = z.object({
   claimant_max: scenarioValue,
   sources: z.array(z.string()),
   note: z.string().optional(),
+  /** Set when the choice is made in the engine's code; the values above then describe it. */
+  implemented_in: z.string().optional(),
 });
 
 export const StatutoryRuleSchema = z.object({

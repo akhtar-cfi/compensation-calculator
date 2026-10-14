@@ -130,14 +130,19 @@ export function renderRulesReference(rules: RulesBundle): string {
   L.push(
     "## Contested points: conservative / standard / claimant-max",
     "",
-    "Only legal uncertainty moves the range. Each row is one contested point.",
+    'Only legal uncertainty moves the range. Each row is one contested point. "Decided in" says whether the',
+    "engine reads the values from rules/range-parameters.yaml or makes the choice in its code (the row then",
+    "describes the code).",
     "",
   );
-  L.push("| Point | Conservative | Standard | Claimant-max | Sources |", "|---|---|---|---|---|");
-  const cell = (x: string) => x.replace(/\|/g, "\\|").replace(/\n/g, " ");
+  L.push(
+    "| Point | Conservative | Standard | Claimant-max | Sources | Decided in |",
+    "|---|---|---|---|---|---|",
+  );
+  const cell = (x: string | number) => String(x).replace(/\|/g, "\\|").replace(/\n/g, " ");
   for (const p of rules.rangeParameters)
     L.push(
-      `| ${cell(p.description)}${p.note ? ` (${cell(p.note)})` : ""} | ${p.conservative} | ${p.standard} | ${p.claimant_max} | ${cite(p.sources)} |`,
+      `| ${cell(p.description)}${p.note ? ` (${cell(p.note)})` : ""} | ${cell(p.conservative)} | ${cell(p.standard)} | ${cell(p.claimant_max)} | ${p.sources.length ? cite(p.sources) : "none recorded"} | ${p.implemented_in ? `code (${p.implemented_in})` : "rules file"} |`,
     );
   L.push("");
 
