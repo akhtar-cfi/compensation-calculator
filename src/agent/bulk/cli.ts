@@ -179,12 +179,13 @@ export async function bulkCommand(sub: string, args: string[], deps: BulkDeps = 
     const found: Candidate[] = [];
     for (const w of [...new Set(wanted)]) {
       if (w === "SC") {
-        found.push(...(await listSc(years, deps.fetch, log)));
+        for (const c of await listSc(years, deps.fetch, log)) found.push(c);
         continue;
       }
       const court = courtByState(w);
       if (!court) throw new Error(`no High Court for state ${w} in the bucket table`);
-      found.push(...(await listHc(court, years, deps.fetch, log)));
+      // A loop, not push(...list): a large court-decade (Karnataka: tens of thousands of rows) overflows the stack.
+      for (const c of await listHc(court, years, deps.fetch, log)) found.push(c);
     }
     const file = join(work, "candidates.jsonl");
     const all = new Map(readJsonl<Candidate>(file).map((c) => [c.doc_id, c]));
