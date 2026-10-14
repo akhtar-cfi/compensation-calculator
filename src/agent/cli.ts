@@ -3,6 +3,7 @@ import { join } from "node:path";
 import type { FetchLike } from "../ingest/indiankanoon.js";
 import { REPO_ROOT } from "../rules/load.js";
 import { DEFAULT_DAILY_CAP_RUPEES } from "./budget.js";
+import { BULK_USAGE, bulkCommand } from "./bulk/cli.js";
 import { hasSupabaseConfig, readAgentConfig, readSupabaseConfig, type Env } from "./config.js";
 import { runFetch } from "./fetch.js";
 import { loadExisting, readExtractionDir } from "./load-existing.js";
@@ -34,7 +35,8 @@ export const AGENT_USAGE = `  mact agent fetch [--budget 30] [--max-docs 30] [--
   mact agent reviews-import <file.json>
   mact agent load-existing <cacheDir> <extractionDir...> [--ledger-at YYYY-MM-DDTHH:MM:SSZ]
       (need SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY; fetch also needs IK_API_TOKEN unless --dry-run;
-       work files go to .cache/agent, which is not committed)`;
+       work files go to .cache/agent, which is not committed)
+${BULK_USAGE}`;
 
 const AGENT_CACHE = join(REPO_ROOT, ".cache", "agent");
 const VALUE_FLAGS = [
@@ -112,6 +114,7 @@ export async function agentCommand(
   args: string[],
   deps: AgentDeps = {},
 ): Promise<number> {
+  if (sub?.startsWith("bulk-")) return bulkCommand(sub, args, { ...(deps.log && { log: deps.log }) });
   const env = deps.env ?? process.env;
   const log = deps.log ?? ((l: string) => console.log(l));
   const store = () => new Store(readSupabaseConfig(env), deps.fetch);

@@ -15,6 +15,8 @@ export interface BulkCourt {
   benches: readonly string[];
   mactTypes: readonly string[];
   exclusive: boolean;
+  /** Most PDFs are scanned images with no text layer (probe, Oct 2026): left out of the rotation until OCR exists. */
+  scanned?: true;
 }
 
 export const BULK_COURTS: readonly BulkCourt[] = [
@@ -33,6 +35,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     benches: ["phhc"],
     mactTypes: ["FAO"],
     exclusive: false,
+    scanned: true,
   },
   {
     code: "8_9",
@@ -47,7 +50,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     name: "Allahabad High Court",
     state_code: "UP",
     benches: ["cisdb_16012018", "cishclko"],
-    mactTypes: [],
+    mactTypes: ["FAFO", "FAFOD"],
     exclusive: false,
   },
   {
@@ -55,7 +58,7 @@ export const BULK_COURTS: readonly BulkCourt[] = [
     name: "High Court of Madhya Pradesh",
     state_code: "MP",
     benches: ["mphc_db_gwl", "mphc_db_ind", "mphc_db_jbp"],
-    mactTypes: [],
+    mactTypes: ["MA"],
     exclusive: false,
   },
   {

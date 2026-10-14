@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Archetype } from "../../cases/schema.js";
 import { EvidenceSchema, ExtractionPayloadSchema, PrecedentSchema } from "../extraction.js";
 import {
   dateQuoted,
@@ -46,6 +47,7 @@ export const BulkExtractionFileSchema = z.strictObject({
   /** Three or four plain sentences a family can follow: what happened, what each court gave, how long it took. */
   family_summary: opt(z.string().max(700)),
   what_mattered: z.array(z.string().max(300)).default([]),
+  archetypes: z.array(Archetype).default([]),
   audience: Audience.default("both"),
 });
 export type BulkExtractionFile = z.infer<typeof BulkExtractionFileSchema>;

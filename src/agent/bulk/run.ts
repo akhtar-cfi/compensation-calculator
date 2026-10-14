@@ -1,6 +1,13 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { courtByCode, isMotorClaimText, mactSignal, type BulkCourt, type MactSignal } from "./courts.js";
+import {
+  BULK_COURTS,
+  courtByCode,
+  isMotorClaimText,
+  mactSignal,
+  type BulkCourt,
+  type MactSignal,
+} from "./courts.js";
 import {
   HC_COLUMNS,
   hcRecord,
@@ -158,7 +165,7 @@ export async function fetchTexts(
       ? "missing"
       : words < MIN_WORDS
         ? "scanned"
-        : c.source === "hc" && c.signal === "type-only" && !isMotorClaimText(text)
+        : (c.source === "sc" || c.signal === "type-only") && !isMotorClaimText(text)
           ? "not_motor_claim"
           : "ok";
     if (status === "ok") writeFileSync(join(textDir, `${c.doc_id}.txt`), text);
@@ -199,4 +206,40 @@ export function fetchOrder(cs: readonly Candidate[]): Candidate[] {
       ? 0
       : ({ type: 1, "type+party": 1, "party+words": 2, words: 3, "type-only": 4 } as const)[c.signal];
   return [...cs].sort((a, b) => sig(a) - sig(b) || (b.decided ?? "").localeCompare(a.decided ?? ""));
+}
+
+/**
+ * The daily rotation: one slot ("SC 2026", "DL 2026", ...) per run, newest year first; within a year
+ * the Supreme Court, then the launch states, then the other High Courts. Courts whose PDFs are mostly
+ * scanned are left out until OCR exists. After the oldest year it starts again at the newest.
+ */
+export const FIRST_BULK_YEAR = 2017;
+export const SLOT_ORDER = ["SC", "DL", "UP", "RJ", "MP", "PB"] as const;
+
+export function bulkSlots(thisYear: number, from = FIRST_BULK_YEAR): string[] {
+  const states = [
+    ...SLOT_ORDER,
+    ...BULK_COURTS.map((c) => c.state_code).filter((s) => !(SLOT_ORDER as readonly string[]).includes(s)),
+  ].filter((s) => s === "SC" || !BULK_COURTS.find((c) => c.state_code === s)?.scanned);
+  const out: string[] = [];
+  for (let y = thisYear; y >= from; y--) for (const s of states) out.push(`${s} ${y}`);
+  return out;
+}
+
+/** The slot after the last one the Runs tab records (its "scope" column), or the first slot. */
+export function nextBulkSlot(slots: readonly string[], runs: readonly (readonly unknown[])[]): string {
+  const at = runs.findIndex((r) => r.map((c) => String(c ?? "")).includes("scope"));
+  const col = at >= 0 ? runs[at]!.map((c) => String(c ?? "")).indexOf("scope") : -1;
+  const done = col >= 0 ? runs.slice(at + 1).map((r) => String(r[col] ?? "")) : [];
+  for (let i = done.length - 1; i >= 0; i--) {
+    const k = slots.indexOf(done[i]!);
+    if (k >= 0) return slots[(k + 1) % slots.length]!;
+  }
+  return slots[0]!;
+}
+
+export function parseSlot(slot: string): { court: string; year: number } {
+  const m = /^([A-Z]{2})\s+(\d{4})$/.exec(slot.trim());
+  if (!m) throw new Error(`a slot looks like "DL 2025" or "SC 2026", not "${slot}"`);
+  return { court: m[1]!, year: Number(m[2]) };
 }
