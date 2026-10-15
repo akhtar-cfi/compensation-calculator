@@ -1,0 +1,91 @@
+{
+  "record_version": 1,
+  "doc_id": "ODHC010645402023_1_2026-08-20",
+  "source": "hc",
+  "court": "High Court of Orissa",
+  "case": "MACA 795/2023",
+  "cnr": "ODHC010645402023",
+  "decided": "2026-08-20",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/court%3D21_11/bench%3Dcisnc/ODHC010645402023_1_2026-08-20.pdf",
+  "quote_check": "verified, 22/22 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "ODHC010645402023_1_2026-08-20",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "High Court of Orissa",
+      "court_level": "hc",
+      "state_code": "OD",
+      "accident_date": "2019-04-27",
+      "filing_date": "2019-10-03",
+      "award_date": "2023-04-18",
+      "age": 37,
+      "employment": "permanent",
+      "occupation": "Assistant teacher, primary school",
+      "proof": null,
+      "claimed_monthly_income": 30000,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 4200000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2023-04-18",
+        "amount": 4476120,
+        "by": null,
+        "note": "Tribunal took her net monthly salary after tax (Rs 24,034) and a multiplier of 15, and awarded Rs 44,76,120 in all. The interest rate it allowed is not stated in this order."
+      },
+      {
+        "forum": "high_court",
+        "date": "2026-08-20",
+        "amount": 4200000,
+        "by": "both",
+        "note": "Insurer appealed for a cut and the family for an increase. The court invited a settlement: the family's counsel accepted Rs 42,00,000, the insurer left it to the court, which fixed Rs 42,00,000 with 6% interest a year from filing until deposit."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Woman, 37, primary school teacher, Odisha (death)",
+    "family_summary": "A 37-year-old primary school teacher in Odisha died on the spot in April 2019 when a truck hit the motorcycle she and her husband were on from behind. In April 2023 the tribunal awarded her family Rs 44,76,120. Both the insurer and the family appealed, and in August 2026 the High Court, with the family's agreement, set the award at Rs 42,00,000 with 6% interest a year from the date of the claim. The case took over seven years from the accident.",
+    "what_mattered": [
+      "The insurer argued the tribunal had counted a pay revision she received only after her death; the family argued the tribunal had not granted interest on the future-prospects part. The High Court decided neither point.",
+      "Instead the court asked the parties to settle. The family's counsel agreed to Rs 42,00,000 with 6% interest from the date of filing, the insurer left the figure to the court, and the court fixed that amount, about Rs 2.76 lakh less than the tribunal's award."
+    ],
+    "archetypes": [
+      "death_salaried"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "No precedent recorded: the High Court fixed the amount by consent and decided no point of law.",
+      "Two appeals (insurer's MACA 795/2023 and claimants' MACA 823/2023) were decided by one order; the journey's High Court step uses by = both."
+    ]
+  }
+}

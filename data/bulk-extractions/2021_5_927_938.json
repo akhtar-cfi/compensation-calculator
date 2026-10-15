@@ -1,0 +1,108 @@
+{
+  "record_version": 1,
+  "doc_id": "2021_5_927_938",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2021 INSC 373",
+  "cnr": "ESCR010002782021",
+  "decided": "2021-08-03",
+  "citation": "2021 INSC 373; [2021] 5 S.C.R. 927",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2021/english/2021_5_927_938_EN.pdf",
+  "quote_check": "verified, 25/25 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2021_5_927_938",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "No amount decided. In the lead appeal the Court set aside the High Court's lifelong prosthetic-limb directions and called for an affidavit on the limb's cost before fixing a lump sum later; in the companion appeal it set aside attendant directions and left the lump sum to the High Court.",
+      "kind": "injury",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "DL",
+      "accident_date": "2017-08-25",
+      "filing_date": null,
+      "award_date": "2020-01-22",
+      "age": 19,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2020-01-22",
+        "amount": null,
+        "by": null,
+        "note": "Tribunal award; its total is not stated. It included Rs 2 lakh for loss of amenities, life and disfigurement, meant to cover the prosthetic limb."
+      },
+      {
+        "forum": "high_court",
+        "date": "2020-11-04",
+        "amount": null,
+        "by": null,
+        "note": "Delhi High Court modified the award with consent: the insurer was to supply a good prosthetic limb with a lifetime warranty and repair or replace it whenever needed. No amount stated."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2021-08-03",
+        "amount": null,
+        "by": "insurer",
+        "note": "Insurer's appeal allowed: the lifelong prosthetic directions were set aside, to be replaced by a lump sum for maintenance and replacement. The Court asked for the limb's cost and said it would fix the amount later."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "multiplier"
+      ],
+      "holding": "Compensation must be fixed at one go, not by continuing directions (lifelong prosthetic upkeep by the insurer, or an insurer-held deposit paying monthly attendant wages). A lump sum should cover prosthetic maintenance or replacement. Where disability is high or mental, or the victim young, attendant charges may be fixed by the multiplier method used in Kajal.",
+      "para": null,
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 19, leg amputated below knee, and boy, 11, severely disabled, Delhi (injury): no amount fixed",
+    "family_summary": "Two Delhi injury cases were decided together, and the Supreme Court fixed no amount in either. A 19-year-old lost his right leg below the knee in an August 2017 accident; the tribunal's 2020 award gave Rs 2 lakh for loss of amenities and disfigurement, meant to cover the artificial limb, and the High Court then ordered the insurer to supply and maintain the limb for life. In August 2021, four years after the accident, the Supreme Court set that aside, said compensation must be fixed once as a lump sum, and asked for the limb's cost so it could fix the amount itself. An 11-year-old boy's lifelong attendant costs went back to the High Court to be fixed by the multiplier method.",
+    "what_mattered": [
+      "The Court held that an award must be fixed at one go: open-ended orders, like an insurer servicing an artificial limb for life or keeping a Rs 60 lakh deposit to pay monthly attendant wages, were set aside.",
+      "Instead a lump sum must cover the limb's upkeep and replacement, based on its actual cost and the maker's maintenance needs; for a young person with high or mental disability, attendant costs can be worked out with the multiplier method used in Kajal.",
+      "The High Court's move to ask the Delhi Government for a policy on disabled adolescents was sent to a public interest bench, as it went beyond a claims case."
+    ],
+    "archetypes": [
+      "injury_amputation",
+      "injury_child_severe"
+    ],
+    "audience": "lawyers",
+    "review_notes": []
+  }
+}

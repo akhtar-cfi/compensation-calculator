@@ -1,0 +1,106 @@
+{
+  "record_version": 1,
+  "doc_id": "2018_10_876_880",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2018 INSC 775",
+  "cnr": "ESCR010000472018",
+  "decided": "2018-08-31",
+  "citation": "2018 INSC 775; [2018] 10 S.C.R. 876",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2018/english/2018_10_876_880_EN.pdf",
+  "quote_check": "verified, 28/28 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2018_10_876_880",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "KA",
+      "accident_date": "2004-12-05",
+      "filing_date": null,
+      "award_date": "2011-04-12",
+      "age": 25,
+      "employment": "informal",
+      "occupation": "cleaner on a goods lorry",
+      "proof": null,
+      "claimed_monthly_income": 4000,
+      "income_monthly_accepted": 4000,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": 18,
+      "disability_pct": 25,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_earning_capacity": 216000,
+        "pain_suffering": 75000,
+        "medical": 25000,
+        "future_medical": 15000,
+        "loss_of_income_treatment": 12000,
+        "other:lump_sum_enhancement": 500000
+      },
+      "awarded_formula_head": 216000,
+      "total_award": 843000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 8,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": false,
+      "spouse": false,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": 25000,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2011-04-12",
+        "amount": 343000,
+        "by": null,
+        "note": "Tribunal took income of Rs 4,000 a month, 25% permanent whole-body disability and multiplier 18; held the driver solely negligent and the insurer liable; 8% interest from the claim date."
+      },
+      {
+        "forum": "high_court",
+        "date": "2015-03-19",
+        "amount": 343000,
+        "by": "both",
+        "note": "The claimant appealed for more and the insurer appealed to set the award aside; the High Court dismissed both appeals, leaving the tribunal award unchanged."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2018-08-31",
+        "amount": 843000,
+        "by": "claimant",
+        "note": "Added a lump sum of Rs 5,00,000 to the tribunal's Rs 3,43,000; no interest on the added amount; insurer to deposit within three months."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, 25, lorry cleaner, Karnataka (injury, 25% disability)",
+    "family_summary": "A 25-year-old lorry cleaner was hit in December 2004 when the lorry he worked on moved without warning; he broke both pelvic bones, needed four operations and lost his job. In April 2011 the tribunal awarded Rs 3,43,000, treating him as 25% permanently disabled. In March 2015 the High Court dismissed his appeal and the insurer's. In August 2018, nearly 14 years after the accident, the Supreme Court added Rs 5,00,000, making Rs 8,43,000.",
+    "what_mattered": [
+      "The Supreme Court found the award too low for a young man who had four operations, still could not move freely and lost his job. It added a lump sum of Rs 5,00,000 instead of recalculating each item of the award.",
+      "Interest at 8% was allowed only on the tribunal's Rs 3,43,000, not on the extra Rs 5,00,000.",
+      "The tribunal held the lorry driver solely to blame. It also found that the lorry's comprehensive insurance policy covered its cleaner too, so the insurer had to pay."
+    ],
+    "archetypes": [
+      "injury_partial_disability_self_employed_or_manual"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: what_mattered[0] reworded in plain language (no 'head'); states the Rs 5,00,000 lump sum added instead of recalculating each item, per para 15.",
+      "fixed: what_mattered[2] replaced 'package policy' jargon with plain wording that the lorry's comprehensive policy covered its cleaner, per para 4."
+    ]
+  }
+}

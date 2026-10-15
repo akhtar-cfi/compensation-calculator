@@ -1,0 +1,93 @@
+{
+  "record_version": 1,
+  "doc_id": "2023_12_241_249",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2023 INSC 832",
+  "cnr": "ESCR010006062023",
+  "decided": "2023-09-13",
+  "citation": "2023 INSC 832; [2023] 12 S.C.R. 241",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2023/english/2023_12_241_249_EN.pdf",
+  "quote_check": "verified, 12/12 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2023_12_241_249",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "Constitution Bench procedural order on a referred point of law (whether a light motor vehicle licence covers light transport vehicles up to 7,500 kg). It asks the Union Government to review the law, expresses no opinion on the merits and decides no amount; the accident and award are not described.",
+      "kind": null,
+      "outcome": "other",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "RJ",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": null,
+        "by": null,
+        "note": "Tribunal decision not described in this order."
+      },
+      {
+        "forum": "high_court",
+        "date": "2017-08-04",
+        "amount": null,
+        "by": null,
+        "note": "Rajasthan High Court (Jodhpur) decided a civil miscellaneous appeal; its result and amount are not stated in this order."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2023-09-13",
+        "amount": null,
+        "by": "insurer",
+        "note": "Insurer's appeal, referred to a Constitution Bench on the licence question. The bench asked the Union Government to review the law within two months and listed the case for directions; no amount decided."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Insurer's appeal from Rajasthan: Supreme Court reference on light motor vehicle licences (no amount decided)",
+    "family_summary": "This order decides no family's compensation. A Constitution Bench (a larger bench) of the Supreme Court was asked whether a driver with a light motor vehicle licence may drive a light transport vehicle (unladen weight up to 7,500 kg) without a separate licence; insurance companies questioned an earlier ruling that allowed it, and claimants defended it. In September 2023 the bench asked the Union Government to review the law within two months and listed the case for directions in November 2023, without deciding the question.",
+    "what_mattered": [
+      "The Court did not decide the licence question or any amount; it asked the Union Government to look at the law afresh first, saying many drivers and insured vehicle owners had relied on the Mukund Dewangan ruling for about six years.",
+      "The Court said it expressed no opinion on whether Mukund Dewangan is correct; the view that it does not match legislative intent was the Attorney General's submission, not the Court's finding."
+    ],
+    "archetypes": [],
+    "audience": "lawyers",
+    "review_notes": []
+  }
+}

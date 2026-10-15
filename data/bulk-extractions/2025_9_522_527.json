@@ -1,0 +1,105 @@
+{
+  "record_version": 1,
+  "doc_id": "2025_9_522_527",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2025 INSC 1078",
+  "cnr": "ESCR010003962025",
+  "decided": "2025-09-04",
+  "citation": "2025 INSC 1078; [2025] 9 S.C.R. 522",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2025/english/2025_9_522_527_EN.pdf",
+  "quote_check": "verified, 11/11 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2025_9_522_527",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "The Supreme Court decided no amount: it decided only the insurer's liability in five connected death claims (setting aside the High Court's 'pay and recover' order and restoring the tribunal's orders). No award amounts are stated.",
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "UK",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": null,
+        "by": null,
+        "note": "Tribunal found the van was driven rashly and negligently and was covered by a valid package policy, so the insurer was liable in the five death claims. Amounts and date not stated in this judgment."
+      },
+      {
+        "forum": "high_court",
+        "date": "2019-04-10",
+        "amount": null,
+        "by": "insurer",
+        "note": "On the insurer's five appeals, the Uttarakhand High Court held the policy's 'limitation as to use' barred passengers and ordered the insurer to pay the claimants and recover the money from the owner. Amounts not stated."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2025-09-04",
+        "amount": null,
+        "by": "owner",
+        "note": "Owner's appeals allowed: pay-and-recover order set aside and tribunal orders restored, so the insurer pays in full. In one claim the tribunal must first deduct one-third for personal expenses. No amounts stated."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "pay_and_recover"
+      ],
+      "holding": "Where a utility van is registered with 4+1 seats and holds a contract carriage permit, and the package policy records 4+1 seating, the policy's 'limitation as to use', which applies only to goods vehicles, does not exclude passengers. The insurer cannot avoid its liability to indemnify the owner, so a 'pay and recover' order was set aside.",
+      "para": "6-7",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Five killed when a utility van fell into a gorge, Uttarakhand (death; insurer must pay)",
+    "family_summary": "A utility van carrying passengers and goods fell into a gorge in Uttarakhand, killing people inside it and pedestrians it dragged down; five families claimed compensation. The tribunal held the insurer liable to pay (the amounts are not stated in this judgment). In April 2019 the Uttarakhand High Court said the policy did not cover passengers and let the insurer pay and then recover the money from the van's owner. In September 2025, more than 11 years after one of the claims was registered in 2014, the Supreme Court restored the tribunal's orders, so the insurer must pay in full.",
+    "what_mattered": [
+      "The van was registered as a utility van with 4+1 seats and had a contract carriage permit, and the policy itself recorded 4+1 seating, so the insurer could not use a clause meant for goods vehicles to refuse cover for passengers.",
+      "The insurer's own branch manager admitted the policy was issued after checking the registration, and an eyewitness's unchallenged evidence that the van carried only 4 passengers answered the overloading claim, since some victims were pedestrians.",
+      "In one of the five claims the Supreme Court told the tribunal to deduct one-third for the deceased's personal expenses before paying out."
+    ],
+    "archetypes": [],
+    "audience": "lawyers",
+    "review_notes": []
+  }
+}
