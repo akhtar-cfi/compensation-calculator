@@ -107,7 +107,8 @@ const CASE_COLUMNS: readonly { h: string; v: (c: BulkCase) => Cell }[] = [
   {
     h: "final ÷ tribunal",
     v: () =>
-      '=IF(OR({col:tribunal award (Rs)}{r}="",AND({col:High Court award (Rs)}{r}="",{col:Supreme Court award (Rs)}{r}="")),"",ROUND(IF({col:Supreme Court award (Rs)}{r}<>"",{col:Supreme Court award (Rs)}{r},{col:High Court award (Rs)}{r})/{col:tribunal award (Rs)}{r},2))',
+      // A tribunal that dismissed the claim awarded 0: no ratio then, rather than #DIV/0!.
+      '=IF(OR({col:tribunal award (Rs)}{r}="",{col:tribunal award (Rs)}{r}=0,AND({col:High Court award (Rs)}{r}="",{col:Supreme Court award (Rs)}{r}="")),"",ROUND(IF({col:Supreme Court award (Rs)}{r}<>"",{col:Supreme Court award (Rs)}{r},{col:High Court award (Rs)}{r})/{col:tribunal award (Rs)}{r},2))',
   },
   {
     h: "years, accident to this judgment",

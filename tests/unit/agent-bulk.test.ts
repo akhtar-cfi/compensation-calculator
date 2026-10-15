@@ -390,7 +390,7 @@ describe("Sheet store", () => {
       L("decided"),
     ];
     expect(at("final ÷ tribunal")).toBe(
-      `=IF(OR(${t}{r}="",AND(${h}{r}="",${s}{r}="")),"",ROUND(IF(${s}{r}<>"",${s}{r},${h}{r})/${t}{r},2))`,
+      `=IF(OR(${t}{r}="",${t}{r}=0,AND(${h}{r}="",${s}{r}="")),"",ROUND(IF(${s}{r}<>"",${s}{r},${h}{r})/${t}{r},2))`,
     );
     expect(at("years, accident to this judgment")).toBe(
       `=IF(OR(${a}{r}="",${d}{r}=""),"",ROUND((${d}{r}-${a}{r})/365.25,1))`,
