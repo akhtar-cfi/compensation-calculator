@@ -1,0 +1,37 @@
+id: delhi-mact-2026-163306372
+title: Navy marine commando, 23, Delhi tribunal, 100% disability (injury)
+citation: Lakhpat Singh Vs. Nabathi Sateesh & Ors., MACT No. 125/2020 (DLND010066332020)
+court: MACT
+source_url: https://indiankanoon.org/doc/163306372/
+kind: injury
+archetypes:
+- injury_severe_100
+state: DL
+facts:
+  accident_date: '2018-12-25'
+  claim_filed: '2020-12-19'
+  age: 23
+  employment: permanent
+  occupation: Indian Navy sailor serving as a MARCOS marine commando / diver
+  disability_pct: 100
+  family: injured man himself (stated his mother and father depend on his income)
+journey:
+- forum: mact
+  date: '2026-06-06'
+  amount: 16569404
+  note: Includes Rs.1,22,72,256 loss of future income (100% loss of earning capacity), Rs.15,89,388 loss of promotions
+    and Rs.17,57,760 lifetime attendant; no insurer offer recorded
+interest_pct: 9
+what_mattered:
+- Navy pay-directorate records (unrebutted) proved Rs.15,89,388 lost promotions during remaining service; the Rs.7.26
+  crore 22-years-of-service claim was rejected as not following the multiplier method
+- 88% disability (pelvis, right arm and leg) treated as 100% loss of earning capacity because a combat diver can
+  never dive again and is restricted to a desk job with attendants
+- Future loss computed on last drawn salary Rs.52,268 (excluding diving allowance and tax) + 50% future prospects,
+  less indicative pension Rs.14,484, using multiplier 16 for age 35 when his service would end
+- Lifetime attendant awarded by multiplier method on Andhra Pradesh unskilled minimum wage (Rs.9,155 x 12 x 16);
+  no medical expenses claimed as treatment was in service hospitals
+summary: A 23-year-old Navy marine commando was injured in 2018, and left with 100% functional disability. The tribunal
+  awarded Rs 1.66 crore in 2026, 7.4 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

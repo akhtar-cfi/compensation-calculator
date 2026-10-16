@@ -1,0 +1,36 @@
+id: delhi-mact-2025-133657285
+title: Painter whose income was not proved, 28, Delhi, 45% disability (injury)
+citation: Anup Singh vs. Jasbir & Ors., MACT No. 1439/2022 (DAR MACT no. 469/2023 clubbed)
+court: MACT
+source_url: https://indiankanoon.org/doc/133657285/
+kind: injury
+archetypes:
+- injury_amputation
+- injury_partial_disability_self_employed_or_manual
+state: DL
+facts:
+  accident_date: '2022-09-17'
+  claim_filed: '2022-12-23'
+  age: 28
+  employment: informal
+  occupation: claimed white-washer/painter (not proved); matriculate
+  disability_pct: 45
+  family: injured man himself (pillion rider; rider was his brother-in-law)
+journey:
+- forum: mact
+  date: '2025-07-22'
+  amount: 3055100
+  note: Total Rs.30,55,022.88 rounded off to Rs.30,55,100; no insurer offer recorded
+interest_pct: 7.5
+what_mattered:
+- No proof of work or income (no employer/contractor examined), so Delhi minimum wage for a matriculate Rs.20,019/month
+  used instead of claimed Rs.22,000
+- 90% right-lower-limb disability (hip disarticulation amputation) assessed as 45% functional disability because
+  his physical occupation was not proved; 40% future prospects, multiplier 17
+- Only original medical bills (Rs.16,915) allowed since treatment was at a government hospital; 14 months' loss
+  of income based on last prescription date
+- Insurer's licence defence failed for lack of evidence; 17-day FIR delay excused
+summary: A 28-year-old painter whose income was not proved was injured in Delhi in 2022, and left with 45% functional
+  disability. The tribunal awarded Rs 30.55 lakh in 2025, 2.8 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

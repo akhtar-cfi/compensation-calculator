@@ -1,0 +1,39 @@
+id: prabhavathi-2025
+title: Hotel executive, 38, Karnataka (death)
+citation: Prabhavathi & Ors. v. The Managing Director, Bangalore Metropolitan Transport Corporation, 2025 INSC 293,
+  Civil Appeal Nos. 3465-3466 of 2025 (arising out of SLP(C) Nos. 21450-21451/2023)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/prabhavathi-and-others-vs-the-managing-director-bangalore-metropolitan-transport-corporation--589124.pdf
+kind: death
+archetypes:
+- death_salaried
+- contributory_negligence
+state: KA
+facts:
+  accident_date: '2016-06-06'
+  age: 38
+  employment: fixed_salary
+  occupation: Executive in the housekeeping department of a hotel in Bengaluru
+  family: dependants of the deceased (relationships not stated); deceased was the only earning member
+journey:
+- forum: mact
+  date: '2017-12-12'
+  amount: 7597060
+- forum: high_court
+  date: '2020-10-01'
+  amount: 7750000
+- forum: supreme_court
+  date: '2025-02-28'
+  amount: 12084925
+interest_pct: 9
+what_mattered:
+- 'A bare allegation that both vehicles were speeding is not evidence: the 25% contributory-negligence finding was
+  set aside.'
+- Income was restored to the last salary on his pay slip (Rs 62,725 a month), with 40% future prospects.
+- The tribunal's 9% interest was restored.
+summary: A 38-year-old hotel executive in Bengaluru was killed by a bus in 2016. The tribunal awarded Rs 75.97 lakh;
+  the High Court found him 25% to blame and lowered his income, but stated a total of Rs 77.5 lakh. In 2025 the
+  Supreme Court awarded Rs 1.21 crore, about 9 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

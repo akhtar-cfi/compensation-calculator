@@ -1,0 +1,78 @@
+id: meenakshi-2024
+title: "Meenakshi v The Oriental Insurance Co. Ltd"
+citation: "2024 INSC 573" # C.A. @ SLP(C) Diary No. 39746 of 2018
+court: SC
+judgment_date: 2024-07-23
+source_url: "https://api.sci.gov.in/supremecourt/2018/39746/39746_2018_9_16_53935_Judgement_23-Jul-2024.pdf"
+kind: death
+facts:
+  accident_date: 2013-08-29
+  age_at_accident: 26
+  state: Karnataka # MACT Kalaburagi; Karnataka HC Kalaburagi Bench
+  occupation: "service consultant (private company), salaried"
+  employment: permanent # Court applied 50% FP (both forums fixed 50%); private salaried employee
+  claimants: { spouse: 0, children: 0, parents: 1 } # mother = sole claimant/dependant; deceased unmarried
+  disability: null
+judgment_params:
+  monthly_income: 45668 # 50,942 gross (incl. HRA, FBP, employer PF) - 200 prof. tax - 5,074 income tax (10%)
+  gross_monthly_income: 50942
+  future_prospects_pct: 50
+  personal_deduction: "1/2"
+  multiplier: 17
+  conventional: { funeral: 25000, loss_of_love_and_affection: 25000 } # no loss of estate / Pranay Sethi consortium awarded
+  interest_pct: null # SC silent; Tribunal had awarded 6% p.a.
+expected:
+  heads:
+    loss_of_dependency: 9316272
+    funeral: 25000
+    loss_of_love_and_affection: 25000
+  total: 9366272
+  lower_forums: { mact: 10401000, high_court: 4957035 }
+computation_quote: |
+  [para 10] Therefore, components of house rent allowance, flexible benefit plan and company
+  contribution to provident fund have to be included in the salary of the deceased while
+  applying the component of rise in income by future prospects to determine the dependency
+  factor. ...
+  [para 13] However, we are of the opinion that the High Court was justified in deducting
+  Income Tax from the gross salary of the deceased-Suryakanth for calculating his gross income.
+  This factor was overlooked by the Accident Claims Tribunal while quantifying the award.
+  [para 14] As a result, the re-assessed compensation payable to the appellant after making
+  deduction towards Income Tax is tabulated in the following manner: -
+  S. No. | Heads | Amount
+  1. Loss of Dependency
+     Monthly Salary of the Deceased - ₹ 50,942/- (inclusive of house rent allowance, flexible
+     benefit plan and contribution to provident fund).                           | -
+     (Less) Professional Tax of ₹ 200/month to be deducted (₹ 50,942-₹ 200)        | ₹ 50,742/-
+     (Less) Income Tax @ 10% as per 2013-2014 i.e., Rs. 5,074 (₹ 50,742 – ₹ 5,074)  | ₹ 45,668/-
+     Annual Gross Income (₹ 45,668 x 12)                                          | ₹ 5,48,016/-
+     (Less) 50% to be deducted towards dependency as the deceased was unmarried
+     (₹ 5,48,016 – ₹ 2,74,008)                                                    | ₹ 2,74,008/-
+     (Add) 50% to be added towards rise in income by future prospects
+     (₹ 5,48,016 + ₹ 2,74,008)                                                    | ₹ 5,48,016/-
+     Total Loss of Dependency = ₹ 5,48,016 X 17 (Multiplier as the deceased age was 26) | ₹ 93,16,272/-
+  1. Funeral Expenses                                                             | ₹ 25,000/-
+  2. Loss of Love and Affection                                                   | ₹ 25,000/-
+     Total Compensation                                                           | ₹ 93,66,272
+paragraphs: ["3", "4", "5", "10", "13", "14"]
+notes: >-
+  Arithmetic of the stated figures is internally consistent: 5,48,016 x 17 = 93,16,272;
+  + 25,000 + 25,000 = 93,66,272 (matches). BUT the method is NON-STANDARD and a Pranay Sethi
+  calculator will not reproduce it: the Court deducted 50% personal expenses from annual income
+  (5,48,016 -> 2,74,008) and then ADDED 50% OF THE PRE-DEDUCTION ANNUAL INCOME as future
+  prospects (2,74,008 + 2,74,008 = 5,48,016), so the multiplicand equals the full annual income
+  (net effect: FP and deduction cancel). The row label "(₹ 5,48,016 + ₹ 2,74,008)" does not
+  equal its stated result 5,48,016 (that sum is 8,22,024); the result actually equals
+  2,74,008 + 2,74,008. Standard method (income x 1.5 x 1/2 x 17) gives 5,48,016 x 1.5 x 0.5 =
+  4,11,012 x 17 = 69,87,204 for dependency, total 70,37,204. The Tribunal used the same
+  deduct-then-add-back approach. Income: professional tax 200/month and income tax at a flat
+  10% (5,074, rounded down from 5,074.20) deducted from monthly salary. Conventional heads are
+  the Tribunal's pre-Pranay-Sethi figures (funeral 25,000; loss of love and affection 25,000);
+  no loss of estate or Pranay Sethi filial consortium was awarded. Task brief's
+  'SC award ₹93,66,272' confirmed. MACT 1,04,01,368 rounded to 1,04,01,000. Interest not
+  restated by the SC (Tribunal: 6% p.a.). Wording verbatim; table layout normalised.
+verified: false
+known_deviations:
+  - head: loss_of_dependency
+    reason: >-
+      The Court's own arithmetic makes future prospects and the 1/2 deduction cancel (multiplicand = full annual
+      income). The standard Pranay Sethi computation gives a lower figure; kept as a documented deviation.

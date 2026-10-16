@@ -1,0 +1,153 @@
+# Central sphere minimum wages (Chief Labour Commissioner / Labour Bureau), per DAY, by Area A/B/C.
+# Schedule loaded: CONSTRUCTION OR MAINTENANCE OF ROADS OR RUNWAYS OR IN BUILDING OPERATIONS (S.O. 188(E), 19 Jan 2017).
+# Rates = basic + VDA, as printed in each order; every row checked (basic + VDA = total).
+# Central rates apply to central-sphere employments only. For a state accident they are a labelled fallback, never a
+# silent substitute for the state's own rates. Which schedule to use is a decision for legal sign-off.
+# NOTE: figures quoted elsewhere as "Central" minimum wages (e.g. Rs 13,599 / 15,057 / 20,361 a month) are BASIC ONLY,
+# without VDA, and understate the wage by about a third.
+code: CENTRAL
+name: Central sphere - construction schedule
+official_sources:
+  - url: https://clc.gov.in/clc/min-wages
+    description: Chief Labour Commissioner (C) - VDA orders by scheduled employment (archived copy of 19 Apr 2026 used)
+    language: en
+revision_pattern: >-
+  Basic rates fixed by notifications of 19 Jan 2017; VDA revised every 1 April and 1 October from CPI-IW. From
+  1 Oct 2026 the VDA orders are issued by the Labour Bureau, Chandigarh, under the Code on Wages, 2019 (s.69(2)).
+zones: [C, B, A]
+category_notes: >-
+  Areas: A, B and C by city (Annexure I of each order; A = largest cities). The first zone (C, lowest) is used when no
+  area is given, with a warning. Categories: unskilled; semi-skilled/unskilled supervisory; skilled/clerical; highly
+  skilled.
+days_per_month: 26
+# Latest official listing seen: CLC page captured 19 Apr 2026 (April 2026 order on top); October 2026 order seen as a
+# published copy only (see that revision).
+last_checked: 2026-04-19
+revisions:
+  - effective_from: 2022-10-01
+    unit: day
+    rates:
+      C: {unskilled: 477, semi_skilled: 557, skilled: 671, highly_skilled: 788}
+      B: {unskilled: 595, semi_skilled: 671, skilled: 788, highly_skilled: 866}
+      A: {unskilled: 711, semi_skilled: 788, skilled: 866, highly_skilled: 940}
+    notification:
+      number: "F.No.1/16(3)/2022-LS-II"
+      date: "2022-09-28"
+      url: https://clc.gov.in/clc/sites/default/files/mygov_16643418421.pdf
+    evidence_quote: "| Unskilled | 523+188=711 | 437+158=595 | 350+127=477 |"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official CLC file (via Firecrawl); file hash not recorded."
+  - effective_from: 2023-04-01
+    unit: day
+    rates:
+      C: {unskilled: 494, semi_skilled: 577, skilled: 695, highly_skilled: 816}
+      B: {unskilled: 616, semi_skilled: 695, skilled: 816, highly_skilled: 897}
+      A: {unskilled: 736, semi_skilled: 816, skilled: 897, highly_skilled: 973}
+    notification:
+      number: "F.No.1/5(3)/2023-LS-II"
+      date: "2023-04-03"
+      url: https://clc.gov.in/clc/sites/default/files/mygov_16805235131.pdf
+    evidence_quote: "| Unskilled | 523+213=736 | 437+179=616 | 350+144=494 |"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official CLC file (via Firecrawl); file hash not recorded."
+  - effective_from: 2023-10-01
+    unit: day
+    rates:
+      C: {unskilled: 504, semi_skilled: 589, skilled: 709, highly_skilled: 832}
+      B: {unskilled: 628, semi_skilled: 709, skilled: 832, highly_skilled: 915}
+      A: {unskilled: 751, semi_skilled: 832, skilled: 915, highly_skilled: 992}
+    notification:
+      number: "F.No.1/8(3)/2023-LS-II"
+      date: "2023-09-26"
+      url: https://clc.gov.in/clc/sites/default/files/mygov_16957148071.pdf
+    evidence_quote: "| Unskilled | 523+228=751 | 437+191=628 | 350+154=504 |"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official CLC file (via Firecrawl); file hash not recorded."
+  - effective_from: 2024-04-01
+    unit: day
+    rates:
+      C: {unskilled: 522, semi_skilled: 610, skilled: 734, highly_skilled: 862}
+      B: {unskilled: 651, semi_skilled: 734, skilled: 862, highly_skilled: 948}
+      A: {unskilled: 778, semi_skilled: 862, skilled: 948, highly_skilled: 1028}
+    notification:
+      number: "F.No.1/7(3)/2023-LS-II"
+      url: https://clc.gov.in/clc/sites/default/files/mygov_17120388671.pdf
+    evidence_quote: "| Unskilled | 523+255=778 | 437+214=651 | 350+172=522 |"
+    confidence: official
+    verified_by: []
+    notes: "Order dated March 2024 (day illegible in the scanned text). Text read from the Wayback Machine capture of the official CLC file (via Firecrawl); file hash not recorded."
+  - effective_from: 2024-10-01
+    unit: day
+    rates:
+      C: {unskilled: 526, semi_skilled: 614, skilled: 739, highly_skilled: 868}
+      B: {unskilled: 655, semi_skilled: 739, skilled: 868, highly_skilled: 954}
+      A: {unskilled: 783, semi_skilled: 868, skilled: 954, highly_skilled: 1035}
+    notification:
+      number: "F.No.1/27(3)/2024-LS-II"
+      url: https://clc.gov.in/clc/sites/default/files/mygov_17272659741.pdf
+    evidence_quote: "| Unskilled | 523+260=783 | 437+218=655 | 350+176=526 |"
+    confidence: official
+    verified_by: []
+    notes: "Order dated September 2024 (day illegible in the scanned text). Text read from the Wayback Machine capture of the official CLC file (via Firecrawl); file hash not recorded."
+  - effective_from: 2025-04-01
+    unit: day
+    rates:
+      C: {unskilled: 541, semi_skilled: 632, skilled: 760, highly_skilled: 893}
+      B: {unskilled: 674, semi_skilled: 760, skilled: 893, highly_skilled: 981}
+      A: {unskilled: 805, semi_skilled: 893, skilled: 981, highly_skilled: 1065}
+    notification:
+      number: "F.No.1/6(3)/2025-LS-II"
+      url: https://clc.gov.in/clc/sites/default/files/mygov_17431496131.pdf
+    evidence_quote: "| Unskilled | 523+282=805 | 437+237=674 | 350+191=541 |"
+    confidence: official
+    verified_by: []
+    notes: "Order dated March 2025 (day illegible in the scanned text). Text read from the Wayback Machine capture of the official CLC file (via Firecrawl); file hash not recorded."
+  - effective_from: 2025-10-01
+    unit: day
+    rates:
+      C: {unskilled: 541, semi_skilled: 632, skilled: 760, highly_skilled: 893}
+      B: {unskilled: 674, semi_skilled: 760, skilled: 893, highly_skilled: 981}
+      A: {unskilled: 805, semi_skilled: 893, skilled: 981, highly_skilled: 1065}
+    notification:
+      number: "F.No.1/6(3)/2025-LS-II"
+      date: "2025-09-25"
+      url: https://clc.gov.in/clc/sites/default/files/mygov_17592265211.pdf
+    evidence_quote: "| Unskilled | 523+282=805 | 437+237=674 | 350+191=541 |"
+    confidence: official
+    verified_by: []
+    notes: "No change in VDA: the CPI-IW rise was below one point; corrigendum of 14.10.2025 (mygov_17604458901.pdf) declares the increase NIL for construction and other schedules. Text read from the Wayback Machine capture of the official CLC file (via Firecrawl); file hash not recorded."
+  - effective_from: 2026-04-01
+    unit: day
+    rates:
+      C: {unskilled: 556, semi_skilled: 650, skilled: 781, highly_skilled: 918}
+      B: {unskilled: 693, semi_skilled: 781, skilled: 918, highly_skilled: 1008}
+      A: {unskilled: 827, semi_skilled: 918, skilled: 1008, highly_skilled: 1094}
+    notification:
+      number: "F.No.1/6(3)/2025-LS-II"
+      date: "2026-03-30"
+      url: https://clc.gov.in/clc/sites/default/files/mygov_17751372721.pdf
+    evidence_quote: "| Unskilled | 523+304=827 | 437+256=693 | 350+206=556 |"
+    confidence: official
+    verified_by: []
+    notes: "Text read from the Wayback Machine capture of the official CLC file (via Firecrawl); file hash not recorded."
+  - effective_from: 2026-10-01
+    unit: day
+    rates:
+      C: {unskilled: 565, semi_skilled: 661, skilled: 794, highly_skilled: 933}
+      B: {unskilled: 704, semi_skilled: 794, skilled: 933, highly_skilled: 1024}
+      A: {unskilled: 840, semi_skilled: 933, skilled: 1024, highly_skilled: 1111}
+    notification:
+      number: "File No. 6/1/2026-VDA (Labour Bureau, Chandigarh)"
+      date: "2026-09-30"
+      url: https://www.labourbureau.gov.in/uploads/public/notice/VDA-orders-October-2026-1pdf-f1c4d10c67a017bf34cd65319b294b99.pdf
+    evidence_quote: "| Unskilled | 523 + 317 = 840 | 437 + 267 = 704 | 350 + 215 = 565 |"
+    confidence: official
+    verified_by: []
+    notes: "Issued under S.O. 2451(E) of 12 May 2026 and s.69(2) of the Code on Wages, 2019 (CPI-IW average 424.80 to 431.42). Read from the Labour Bureau's own file (checked 10 Oct 2026); an earlier copy on staffnews.in gave the same figures."
+gaps:
+  - "Before 1 Oct 2022: not loaded. Older orders are on paged listings (clc.gov.in/clc/min-wages/minimum-wages-1..3) in Wayback captures from 2016 onwards."
+  - "1 Oct 2026: read from a published copy only; replace with the official Labour Bureau file when found."
+  - "Only the construction schedule is loaded; other schedules (sweeping and cleaning, watch and ward, loading and unloading, agriculture, mines) have different rates."

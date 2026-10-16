@@ -1,0 +1,37 @@
+id: delhi-mact-2025-117659043
+title: AC technician, 33, Delhi, 80% disability (injury)
+citation: 'Mohd. Arif Vs. Prakash & Ors., MACT No.: 844/2018 (CNR No.: DLSE01 007144-2018)'
+court: MACT
+source_url: https://indiankanoon.org/doc/117659043/
+kind: injury
+archetypes:
+- injury_amputation
+- injury_partial_disability_salaried
+state: DL
+facts:
+  accident_date: '2018-04-05'
+  claim_filed: '2018-08-31'
+  age: 33
+  employment: fixed_salary
+  occupation: AC technician employed by a private AC servicing firm (salary paid in cash)
+  disability_pct: 80
+  family: injured man himself (pillion rider on a motorcycle hit by a milk tanker)
+journey:
+- forum: mact
+  date: '2025-07-14'
+  amount: 7664161
+  note: Total after deduction (no deduction applied); includes Rs.27,20,000 for prosthetic limbs and Rs.37,63,200
+    loss of future income
+interest_pct: 7.5
+what_mattered:
+- Salary of Rs.17,500/month accepted from the 2016 appointment letter (above the matriculate minimum wage of Rs.16,858);
+  claimed overtime/commission income rejected for lack of documents
+- Functional disability taken equal to the 80% medical (limb) disability because an AC technician must climb ladders
+  and rooftops; 40% future prospects and multiplier 16 applied
+- Prosthetic limb cost awarded for 6 replacements at Rs.3,70,000 each plus Rs.5,00,000 lump-sum maintenance (Rs.27,20,000)
+- Contributory negligence for triple riding rejected (no causal link shown); insurer's permit/authorisation defence
+  also rejected, so insurer pays in full
+summary: A 33-year-old AC technician was injured in Delhi in 2018, and left with 80% functional disability. The
+  tribunal awarded Rs 76.64 lakh in 2025, 7.3 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

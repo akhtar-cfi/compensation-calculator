@@ -1,0 +1,38 @@
+id: delhi-mact-2026-173573057
+title: Security guard whose income was not proved, 63, Delhi (injury)
+citation: 'Bachan Singh Negi Vs. Prince Mehta & Ors., MACT No. 524/2023 (FIR No. 289/2023, PS Sarita Vihar; CNR
+  No.: DLSE01-011874-2023)'
+court: MACT
+source_url: https://indiankanoon.org/doc/173573057/
+kind: injury
+archetypes:
+- injury_head
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2023-06-18'
+  claim_filed: '2023-11-17'
+  age: 63
+  employment: informal
+  occupation: claimed night-shift security guard (no proof); matriculate
+  family: injured pedestrian died about six months later; claim continued by his wife and two married, earning adult
+    sons (whole award to the wife)
+journey:
+- forum: mact
+  date: '2026-01-20'
+  amount: 225418
+  note: Assessed as an injury claim only - later death not linked to accident; insurer's legal offer (amount not
+    stated, with 30% negligence cut and 2 months' income loss) not accepted
+interest_pct: 7.5
+what_mattered:
+- Victim died at home about six months after discharge with no post-mortem or medical link, so the claim was assessed
+  as an injury claim, not a death claim
+- No proof of the claimed Rs.22,000 security-guard salary, so Delhi matriculate minimum wage Rs.20,903/month used;
+  6 months' loss of income for severe head injury (insurer's offer allowed only 2 months)
+- Insurer's 30% contributory-negligence plea for a pedestrian crossing the road rejected (no zebra crossing or foot
+  over-bridge shown)
+- No medical bills, so only small lump sums for medicines, conveyance, diet and attendant
+summary: A 63-year-old security guard whose income was not proved was injured in Delhi in 2023. The tribunal awarded
+  Rs 2.25 lakh in 2026, 2.6 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

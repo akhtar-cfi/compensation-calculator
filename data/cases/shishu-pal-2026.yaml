@@ -1,0 +1,30 @@
+id: shishu-pal-2026
+title: Homemaker, 35, Haryana (death)
+citation: "Shishu Pal @ Shish Ram & Ors. v Surjeet & Ors., 2026 INSC 634"
+court: SC
+source_url: "https://www.verdictum.in/pdf_upload/2026/06/11/4969820252026-06-11watermark-1779118.pdf"
+golden_id: shishu-pal-2026
+kind: death
+archetypes: [death_homemaker]
+state: HR
+facts:
+  accident_date: 2001-11-25
+  age: 35
+  employment: homemaker
+  occupation: homemaker
+  family: husband and legal heirs (the Court counted 4 consortium claimants)
+journey:
+  - {forum: mact, amount: 242000}
+  - {forum: high_court, amount: 843400}
+  - {forum: supreme_court, date: 2026-06-11, amount: 6277900, note: "under the new 'loss of domestic care' rule"}
+interest_pct: 7.5
+what_mattered:
+  - "The Supreme Court valued a homemaker's unpaid work at Rs 30,000 a month ('loss of domestic care'), revised by 10% every three years."
+  - "Her claimed earnings from stitching (Rs 3,000 a month) had no proof, so the Rs 30,000 figure stood in as her income."
+  - "40% was added for future prospects, as for a self-employed person under 40."
+summary: >-
+  A 35-year-old homemaker died in 2001. The tribunal awarded Rs 2.42 lakh and the High Court Rs 8.43 lakh.
+  In 2026 the Supreme Court laid down that a homemaker's work is worth at least Rs 30,000 a month and awarded
+  Rs 62.78 lakh, about 26 times the tribunal's figure, nearly 25 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

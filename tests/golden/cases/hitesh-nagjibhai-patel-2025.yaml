@@ -1,0 +1,82 @@
+id: hitesh-nagjibhai-patel-2025
+title: "Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari & Anr."
+citation: "2025 INSC 1070" # C.A. No. 10278 of 2025 (@ SLP(C) No. 14444 of 2025)
+court: SC
+judgment_date: 2025-08-08
+source_url: "https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf"
+kind: injury
+facts:
+  accident_date: 2012-10-14
+  age_at_accident: 8
+  state: Gujarat # MACT Banaskantha at Deesa; Gujarat HC
+  occupation: child
+  employment: minor
+  claimants: null
+  disability: { certificate_pct: null, functional_pct: 90 } # HC: 70% physical impairment/mental disability -> 90% total; SC affirmed 90% functional
+judgment_params:
+  monthly_income: 6836 # Gujarat skilled MW 2012 = Rs.227.85/day -> Rs.6,835.5/month, rounded to 6,836
+  future_prospects_pct: 40
+  personal_deduction: null
+  multiplier: 18
+  disability_pct_applied: 90
+  conventional: null
+  interest_pct: 9 # as awarded by the Tribunal, from date of claim petition
+expected:
+  heads:
+    loss_of_earning_capacity: 1860489
+    medical: 30000
+    future_medical: 50000
+    conveyance_special_diet: 100000 # "Special diet and Transportation"
+    marriage_prospects: 300000
+    loss_of_income_during_treatment: 50000
+    pain_and_suffering: 500000
+    loss_of_amenities: 200000
+    artificial_limb: 500000
+  total: 3590489
+  lower_forums: { mact: 390000, high_court: 865000 }
+computation_quote: |
+  [para 10] Adverting to the facts at hand, the appellant was an 8-year-old child at the time
+  of the accident. In view of the above exposition of law, we must advert to the prevailing
+  minimum wages, which for the skilled ones, as in the year of accident, i.e., 2012, in Gujarat
+  would be Rs.227.85p. per day, therefore, in the interest of justice, we deem it appropriate
+  to determine the income of the appellant as Rs.6,835.5p. per month, rounding off to
+  Rs.6,836/- per month.
+  [para 11] ... we are in agreement with the finding of the High Court that the permanent
+  functional disability stands rightly fixed at 90%.
+  [para 13] In view of the aforesaid, the compensation now payable to the claimant-appellant
+  would be recalculated as under:
+  CALCULATION OF COMPENSATION
+  Compensation Heads          | Amount Awarded
+  Monthly Income              | Rs.6,836/-
+  Yearly Income               | Rs.82,032/-
+  Future Prospects (40%)      | 82,032 + 32,813 = Rs.1,14,845/-
+  Multiplier (18)             | Rs.1,14,845/- X 18 = Rs.20,67,210/-
+  Permanent Disability (90%)  | 90% of Rs.20,67,210/- = Rs.18,60,489/-
+  Loss of Income/Future Earnings due to Disability | Rs.18,60,489/-
+  Medical Expenses            | Rs.30,000/-
+  Future Medical Expenses     | Rs.50,000/-
+  Special diet and Transportation | Rs.1,00,000/-
+  Loss of Marriage Prospects  | Rs.3,00,000/-
+  Loss of Income during treatment | Rs.50,000/-
+  Pain and Suffering          | Rs.5,00,000/-
+  Loss of Amenities           | Rs.2,00,000/-
+  Cost of Artificial Limb     | Rs.5,00,000/-
+  TOTAL                       | Rs.35,90,489/-
+  Thus, the difference in compensation is as under :
+  MACT Rs.3,90,000/- | High Court Rs.8,65,000/- | This Court Rs.35,90,489/-
+  [para 17] ... Interest on the amount is to be paid, as awarded by the Tribunal, i.e., @ 9%
+  per annum, from the date of filing of the claim petition.
+paragraphs: ["4", "6", "9", "10", "11", "13", "15", "16", "17"]
+notes: >-
+  Arithmetic verified: heads sum to 35,90,489 (matches). ROUNDING: daily MW 227.85 x 30 =
+  6,835.50 rounded to 6,836/month; FP 40% of 82,032 = 32,812.80 rounded to 32,813;
+  1,14,845 x 18 x 90% = 18,60,489 exactly. A calculator using 6,835.50 unrounded would get ~18,60,350 (18,60,349.68).
+  Multiplier 18 for an 8-year-old (below the Sarla Verma table's lowest band; the minor/child
+  convention per Kajal). Monthly wage derived from a daily rate x 30 days. Holding: for a child,
+  loss of income must be computed on the skilled-worker minimum wage of the State at the
+  relevant time; insurers must place the applicable minimum-wage notification before the
+  Tribunal where income is unproved. 'Loss of income during treatment' (50,000) awarded to a
+  minor alongside the HC's 'loss of earnings of parents' head (which is not carried into the SC
+  table). Minor inconsistency: para 14 dates the Tribunal order 17.10.2021, elsewhere
+  17.09.2021. Wording verbatim; table layout normalised.
+verified: false

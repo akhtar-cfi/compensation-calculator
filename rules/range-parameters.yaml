@@ -1,0 +1,37 @@
+# Contested legal points. Each parameter gives the value used in the conservative (C), standard (L) and
+# claimant-max (M) scenarios, with the authority for each. Factual uncertainty is NOT modelled here.
+- id: under_15_multiplier
+  description: Multiplier for a person aged under 15.
+  conservative: 15
+  standard: 18
+  claimant_max: 18
+  sources: [kurvan_ansari_2021, kajal_2020, hitesh_patel_2025, hansraj_2026]
+  note: 15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).
+- id: conventional_escalation_steps
+  description: Number of 10% steps applied to the Pranay Sethi conventional heads.
+  conservative: 0
+  standard: 2
+  claimant_max: clock
+  sources: [pranay_sethi_2017, shishu_pal_2026, hasina_yasmin_2025]
+  note: >-
+    SC awards in 2025-26 mostly use Rs 18,150 / Rs 48,400 (two steps). "clock" = full 3-year steps since
+    31 Oct 2017 up to the as-of date (three steps from 31 Oct 2026). A larger-bench reference is pending.
+- id: spouse_only_deduction
+  description: Personal deduction for a married deceased whose only dependant is the spouse.
+  conservative: "1/2"
+  standard: "1/3"
+  claimant_max: "1/3"
+  sources: [sarla_verma_2009]
+- id: homemaker_income
+  description: Monthly income for a homemaker without monetary income.
+  conservative: unskilled_minimum_wage
+  standard: domestic_care
+  claimant_max: domestic_care
+  sources: [shishu_pal_2026, kirti_2021]
+- id: minor_death_income
+  description: Income basis for the death of a minor.
+  conservative: kurvan_notional
+  standard: skilled_minimum_wage
+  claimant_max: skilled_minimum_wage
+  sources: [kurvan_ansari_2021, kajal_2020, hansraj_2026]
+  note: The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.

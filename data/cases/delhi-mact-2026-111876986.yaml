@@ -1,0 +1,35 @@
+id: delhi-mact-2026-111876986
+title: Welder, Delhi (injury)
+citation: Purshottam vs. Arvind Kumar Singh & Ors., MACT Case No. 1327/2022 (CNR No.DLWT010105392022)
+court: MACT
+source_url: https://indiankanoon.org/doc/111876986/
+kind: injury
+archetypes:
+- injury_no_permanent_disability
+- contributory_negligence
+state: DL
+facts:
+  accident_date: '2022-01-05'
+  claim_filed: '2022-11-02'
+  employment: informal
+  occupation: welder at a vehicle repair workshop, paid per day of work
+  disability_pct: 0
+  family: injured man himself
+journey:
+- forum: mact
+  date: '2026-02-16'
+  amount: 886857
+  note: Rs.11,82,475 assessed, less 25% contributory negligence (Rs.2,95,618); legal offer not filed by insurer
+interest_pct: 9
+what_mattered:
+- Employer witness's income evidence (Rs.800-1200/day, Rs.25,000-30,000/month) disbelieved; Delhi minimum wage for
+  a skilled worker (Rs.19,473/month) used instead
+- Treating orthopaedic doctor's evidence of L1/L2 wedge collapse fracture overrode the MLC's 'simple injury' opinion
+  and the insurer's forensic-expert report
+- No disability certificate, so no loss of earning capacity; instead a notional lump sum of Rs.3,00,000 plus 12
+  months' loss of income; medical bills of Rs.1,08,799 reimbursed
+- 25% contributory negligence because the injured crossed the road on foot at a red-light junction
+summary: A welder was injured in Delhi in 2022, with no permanent disability. The tribunal awarded Rs 8.87 lakh
+  in 2026 after a 25% cut for the victim's own negligence, 4.1 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

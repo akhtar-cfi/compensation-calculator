@@ -1,0 +1,39 @@
+id: delhi-mact-2026-86402107
+title: Homemaker, 64, Delhi, 24% disability (injury)
+citation: Shakuntala Devi Vs. Satyveer & Anr., MACT No.21/2020 (FIR No. 488/2019, PS Dwarka North)
+court: MACT
+source_url: https://indiankanoon.org/doc/86402107/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2019-11-23'
+  claim_filed: '2020-01-16'
+  age: 64
+  employment: homemaker
+  occupation: homemaker; pillion rider on a scooty
+  disability_pct: 24
+  family: the injured herself (married; husband was riding the scooty)
+journey:
+- forum: insurer_offer
+  amount: 68375
+  note: legal offer not acceptable to the petitioner
+- forum: mact
+  date: '2026-06-08'
+  amount: 1285146
+  note: 7.5% interest on Rs.6,80,131 from 16.01.2020; Rs.6,05,015 of later medical bills carries interest only from
+    the award date
+interest_pct: 7.5
+what_mattered:
+- Homemaker's income taken as Delhi unskilled minimum wage (Rs.14,842) following Arvind Kumar Pandey
+- 47% permanent disability of both lower limbs translated into 24% functional disability given her household work
+  and age 64; multiplier 7, no future prospects added
+- Medical bills reimbursed by ECHS were excluded, but 2024-25 implant-infection and knee-replacement bills (Rs.6,05,015)
+  were allowed as linked to the accident since the insurer led no medical evidence
+- Interest denied on the late-filed medical bills until the award date
+summary: A 64-year-old homemaker was injured in Delhi in 2019, and left with 24% functional disability. The insurer
+  offered Rs 68,375, which was not accepted. The tribunal awarded Rs 12.85 lakh in 2026, 6.5 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

@@ -1,0 +1,36 @@
+id: delhi-mact-2026-126959079
+title: Air Force sergeant, 34, Delhi (injury)
+citation: Chhannu Kumar Choudhary Vs. Dimpy Singh & Ors., Misc DJ No. 1299/23 (DLND010073142023)
+court: MACT
+source_url: https://indiankanoon.org/doc/126959079/
+kind: injury
+archetypes:
+- injury_no_permanent_disability
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2023-07-18'
+  claim_filed: '2023-10-11'
+  age: 34
+  employment: permanent
+  occupation: Sergeant in the Indian Air Force
+  disability_pct: 0
+  family: injured man himself
+journey:
+- forum: insurer_offer
+  amount: 10000
+  note: Legal offer not accepted by claimant
+- forum: mact
+  date: '2026-03-30'
+  amount: 134856
+  note: Simple injuries; no medical bills filed
+interest_pct: 7.5
+what_mattered:
+- Pay slip proved gross salary Rs.90,123; income tax Rs.6,666 deducted, so Rs.83,457/month used
+- Leave certificate proved 19 days' leave; loss of earnings paid for those 19 days even though leave was paid leave
+- No medical bills filed, so nil medical expenses; injuries were simple with no permanent disability
+- Award of Rs.1,34,856 against the insurer's legal offer of Rs.10,000
+summary: A 34-year-old Air Force sergeant was injured in Delhi in 2023, with no permanent disability. The insurer
+  offered Rs 10,000, which was not accepted. The tribunal awarded Rs 1.35 lakh in 2026, 2.7 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

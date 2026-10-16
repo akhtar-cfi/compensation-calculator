@@ -1,0 +1,41 @@
+id: chandramani-nanda-2024
+title: Branch manager, 32, Odisha, head injury (injury)
+citation: Chandramani Nanda v. Sarat Chandra Swain and Another, 2024 INSC 777 (Civil Appeal arising out of S.L.P.(C)
+  No. 3050 of 2023)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/3660820222024-10-151-566138.pdf
+kind: injury
+archetypes:
+- injury_head
+- injury_severe_100
+state: OR
+facts:
+  accident_date: '2014-01-16'
+  age: 32
+  employment: fixed_salary
+  occupation: Branch Manager at a private infrastructure company on a consolidated salary; car occupant hit by a
+    bus
+  disability_pct: 100
+  family: the injured claimant himself (cared for by his mother)
+journey:
+- forum: mact
+  date: '2019-01-15'
+  amount: 2060385
+- forum: high_court
+  date: '2022-08-24'
+  amount: 3099873
+- forum: supreme_court
+  date: '2024-10-15'
+  amount: 5231000
+interest_pct: 6
+what_mattered:
+- A 60% certified neuro-cognitive disability meant 100% loss of earning capacity, since he could no longer work.
+- Income was taken from a later salary certificate rather than an older tax return, and 40% future prospects were
+  added.
+- The award can exceed the amount claimed (Rs 30 lakh had been claimed).
+summary: A 32-year-old branch manager suffered a severe head injury when a bus hit his car in Odisha in 2014. The
+  tribunal awarded Rs 20.6 lakh; the High Court raised it to Rs 31 lakh by treating his 60% certified disability
+  as 100%. In 2024 the Supreme Court awarded Rs 52.31 lakh, more than 10 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

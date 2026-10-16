@@ -1,0 +1,13 @@
+# How far real tribunal awards land from the engine's standard estimate, on facts a family knows.
+# NOT part of the legal entitlement and not a prediction for any one case: it shows evidence and practice risk
+# (e.g. a claimed income the tribunal does not accept) that the legal range does not carry.
+# Ratio = award / standard estimate, on the back-test predict check. Reproduce:
+#   npm run mact -- backtest data/backtest/awards.csv   (line "Award / estimate (middle half)")
+# Delhi tribunal awards 2024-26 only; re-measure after any rule change that moves estimates.
+id: practice_spread
+verified: false
+label: Delhi tribunal awards, 2024-26
+basis: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test predict check, 10 Oct 2026
+sources: [delhi_awards_backtest_2026]
+death: { n: 112, p25: 0.69, median: 1.0, p75: 1.15 }
+injury: { n: 113, p25: 0.89, median: 1.19, p75: 1.82 }

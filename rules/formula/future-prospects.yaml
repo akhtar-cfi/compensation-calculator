@@ -1,0 +1,15 @@
+id: future_prospects
+description: Addition for future prospects, by age and nature of employment (percent of income).
+sources: [pranay_sethi_2017, kirti_2021, sushila_2026]
+confidence: settled
+verified: false
+permanent:
+  - { below_age: 40, pct: 50 }
+  - { below_age: 50, pct: 30 }
+  - { below_age: 61, pct: 15 }
+self_employed_or_fixed:
+  - { below_age: 40, pct: 40 }
+  - { below_age: 50, pct: 25 }
+  - { below_age: 61, pct: 10 }
+# Notional income (homemaker, minor, student, unemployed) uses the self_employed_or_fixed slabs (Kirti).
+# No addition at age 61 and above ("above 60").

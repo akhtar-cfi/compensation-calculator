@@ -1,0 +1,41 @@
+id: delhi-mact-2025-77315895
+title: Technician whose income was not proved, 38, Delhi, 20% disability (injury)
+citation: Devanand Yadav vs. Vikas Singh Rathore & Anr., MACT Case No.188/2023, CNR No.-DLWT010022432023
+court: MACT
+source_url: https://indiankanoon.org/doc/77315895/
+kind: injury
+archetypes:
+- injury_head
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2022-01-13'
+  claim_filed: '2023-03-13'
+  age: 38
+  employment: informal
+  occupation: said he was a multi-technician at a home-theatre manufacturer (not proved); cyclist
+  disability_pct: 20
+  family: the injured himself (has wife and minor children)
+journey:
+- forum: insurer_offer
+  amount: 123192
+  note: plus medical expenses; matter could not be settled on the offer
+- forum: mact
+  date: '2025-11-26'
+  amount: 2262011
+  note: 9% interest from 13.03.2023; insurer to indemnify driver-cum-owner
+interest_pct: 9
+what_mattered:
+- Employment and Rs.16,000 salary not proved, so minimum wage of an unskilled worker in Delhi (Rs.16,064) was used
+- 'Two skull surgeries (bone stored in abdomen, later cranioplasty) with difficulty comprehending and in fine hand
+  work: 12% whole-body impairment raised to 20% functional disability'
+- Original bills totalled only Rs.9,603 against Rs.5 lakh claimed, but large lump sums were given for pain (Rs.3
+  lakh), amenities, expectation of life and disfigurement (Rs.2 lakh each)
+- Because a legal offer was filed, the inquiry was framed as whether the offer was just and the claimant entitled
+  to enhancement (Gohar Mohammed)
+summary: A 38-year-old technician whose income was not proved was injured in Delhi in 2022, and left with 20% functional
+  disability. The insurer offered Rs 1.23 lakh, which was not accepted. The tribunal awarded Rs 22.62 lakh in 2025,
+  3.9 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

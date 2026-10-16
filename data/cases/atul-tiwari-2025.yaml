@@ -1,0 +1,35 @@
+id: atul-tiwari-2025
+title: Engineering student, Madhya Pradesh, 60% disability (injury)
+citation: Atul Tiwari v. Regional Manager, Oriental Insurance Company Limited, 2025 INSC 29 (Civil Appeal No. 151
+  of 2025, arising out of SLP (Civil) No. 24205 of 2022)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/41470202211150258263judgement06-jan-20251-580080.pdf
+kind: injury
+archetypes:
+- injury_head
+state: MP
+facts:
+  accident_date: '2009-10-03'
+  employment: student
+  occupation: B.Tech third-year student
+  disability_pct: 60
+  family: the injured student himself, through his father as natural guardian
+journey:
+- forum: mact
+  date: '2014-06-30'
+  amount: 1943800
+- forum: supreme_court
+  date: '2025-01-06'
+  amount: 4800000
+what_mattered:
+- Notional income of Rs 15,000 a month for an engineering student, with 40% future prospects and multiplier 18,
+  was upheld.
+- Speech therapy, physiotherapy and attendant costs should not be cut to short fixed periods when doctors advise
+  longer treatment.
+- Non-pecuniary compensation was too low, so the Court fixed a lump sum.
+summary: A third-year engineering student in Madhya Pradesh was left with 60% disability and impaired speech after
+  an accident in 2009. The tribunal awarded Rs 19.44 lakh; the High Court raised only the loss-of-income head. In
+  2025 the Supreme Court awarded Rs 48 lakh, the full amount originally claimed, more than 15 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

@@ -1,0 +1,31 @@
+id: kajal-2020
+title: Girl, 12, Haryana, 100% disability (injury)
+citation: "Kajal v Jagdish Chand & Ors., (2020) 4 SCC 413"
+court: SC
+source_url: "https://api.sci.gov.in/supremecourt/2019/19924/19924_2019_11_1502_20257_Judgement_05-Feb-2020.pdf"
+golden_id: kajal-2020
+kind: injury
+archetypes: [injury_child_severe, injury_severe_100]
+state: HR
+facts:
+  accident_date: 2007-10-18
+  age: 12
+  employment: minor
+  occupation: school student
+  disability_pct: 100
+journey:
+  - {forum: mact, amount: 1108501}
+  - {forum: high_court, amount: 2578501}
+  - {forum: supreme_court, date: 2020-02-05, amount: 6227000}
+interest_pct: 7.5
+what_mattered:
+  - "A child's lost earnings were based on the state's skilled-worker minimum wage (Rs 4,846 a month), not a token Rs 15,000 a year."
+  - "She was awarded two attendants for life: Rs 5,000 each a month x 12 x 18 = Rs 21.6 lakh."
+  - "The multiplier was 18 by her age; the High Court had used 44 years for attendant charges."
+  - "The family placed the minimum-wage notification before the Court."
+summary: >-
+  A 12-year-old girl was left 100% disabled in 2007. The tribunal awarded Rs 11.09 lakh and the High Court
+  Rs 25.79 lakh. In 2020 the Supreme Court awarded Rs 62.27 lakh, mainly by using the skilled minimum wage for
+  her lost earnings and paying for two attendants for life, more than 12 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

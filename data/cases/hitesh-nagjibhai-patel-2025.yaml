@@ -1,0 +1,30 @@
+id: hitesh-nagjibhai-patel-2025
+title: Child, 8, Gujarat, 90% disability (injury)
+citation: "Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari & Anr., 2025 INSC 1070"
+court: SC
+source_url: "https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf"
+golden_id: hitesh-nagjibhai-patel-2025
+kind: injury
+archetypes: [injury_child_severe]
+state: GJ
+facts:
+  accident_date: 2012-10-14
+  age: 8
+  employment: minor
+  occupation: child
+  disability_pct: 90
+journey:
+  - {forum: mact, amount: 390000}
+  - {forum: high_court, amount: 865000}
+  - {forum: supreme_court, date: 2025-08-08, amount: 3590489}
+interest_pct: 9
+what_mattered:
+  - "A child's income must be the state's skilled minimum wage at the time (Rs 227.85 a day in Gujarat in 2012, about Rs 6,836 a month)."
+  - "Where income is not proved, the Court said insurers must place the minimum-wage notification before the tribunal."
+  - "90% functional disability, found by the High Court, was upheld; Rs 3 lakh was added for loss of marriage prospects."
+summary: >-
+  An 8-year-old child was left with 90% functional disability in 2012. The tribunal awarded Rs 3.9 lakh and the
+  High Court Rs 8.65 lakh. In 2025 the Supreme Court awarded Rs 35.9 lakh, about 9 times the tribunal's figure,
+  nearly 13 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

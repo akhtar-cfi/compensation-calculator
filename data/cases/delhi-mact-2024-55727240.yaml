@@ -1,0 +1,44 @@
+id: delhi-mact-2024-55727240
+title: Salaried driver, 39, Delhi, 5% disability (injury)
+citation: 'Satbir Vs. Sameem & Ors., MACT No. 1293/2016 (CNR No. DLSW01-002201-2016)'
+court: MACT
+source_url: https://indiankanoon.org/doc/55727240/
+kind: injury
+archetypes:
+- injury_burns
+- injury_partial_disability_salaried
+state: DL
+facts:
+  accident_date: '2015-11-10'
+  claim_filed: '2016-02-23'
+  age: 39
+  employment: fixed_salary
+  occupation: driver employed by a private company (salary shown in the employer's ledger)
+  disability_pct: 5
+  family: injured man himself (motorcyclist hit by a truck at a traffic signal)
+journey:
+- forum: mact
+  date: '2024-09-06'
+  amount: 599000
+  note: Heads total Rs.5,98,963, rounded off to Rs.5,99,000; no negligence cut; 9% interest from filing of the DAR;
+    insurer pays
+interest_pct: 9
+what_mattered:
+- The employer's witness produced the company ledger showing Rs.16,500/month (more than the Rs.15,000 he claimed),
+  which was taken as his income; his salary kept being paid, but one month's loss of earnings was still allowed for
+  the hospital stays
+- Medical bills of Rs.2,22,563 allowed in full; Rs.50,000 claimed for future treatment refused because no prescription
+  or report supported it
+- Hospital records show a fracture of the 5th metatarsal and a partial-thickness burn on the left thigh treated by
+  debridement and skin grafting; the 10% permanent disability certified for the left leg was taken as 5% loss of
+  earning capacity because he kept working as a driver for the same employer
+- Loss of future income on Rs.16,500 + 40% future prospects, multiplier 15 (age 39 per driving licence), at 5% =
+  Rs.2,07,900
+- The insurer sought recovery rights because the licensing authority had no record of the driver's licence; relying
+  on the Supreme Court (an employer need not verify a licence), the tribunal made the insurer pay and granted no
+  recovery right
+summary: A 39-year-old salaried driver suffered a foot fracture and a thigh burn needing skin grafting in Delhi in
+  2015, and was left with 5% functional disability. The tribunal awarded Rs 5.99 lakh in 2024, 8.8 years after the
+  accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

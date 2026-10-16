@@ -1,0 +1,29 @@
+id: hansraj-2026
+title: Boy, 14, Rajasthan, 100% disability (injury)
+citation: "Hansraj v Mukesh Nath & Ors., 2026 INSC 454"
+court: SC
+source_url: "https://api.sci.gov.in/supremecourt/2024/24731/24731_2024_3_1501_70801_Judgement_06-May-2026.pdf"
+golden_id: hansraj-2026
+kind: injury
+archetypes: [injury_child_severe, injury_severe_100]
+state: RJ
+facts:
+  accident_date: 2016-11-08
+  age: 14
+  employment: minor
+  occupation: school student
+  disability_pct: 100
+journey:
+  - {forum: mact, amount: 776543}
+  - {forum: high_court, amount: 1217543}
+  - {forum: supreme_court, date: 2026-05-06, amount: 5683663}
+interest_pct: 6
+what_mattered:
+  - "Lost earnings used Rajasthan's 2016 skilled minimum wage (Rs 5,746, rounded to Rs 5,800 a month), not Rs 30,000 a year."
+  - "Two attendants round the clock at Rs 5,000 each a month x 12 x 18 = Rs 21.6 lakh, following Kajal."
+  - "40% future prospects were added to a child's notional income."
+summary: >-
+  A 14-year-old boy was left 100% disabled in 2016. The tribunal awarded Rs 7.77 lakh and the High Court
+  Rs 12.18 lakh. In 2026 the Supreme Court awarded Rs 56.84 lakh, about 9.5 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

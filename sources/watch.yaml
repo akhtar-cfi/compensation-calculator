@@ -1,0 +1,86 @@
+# Where each state's minimum-wage orders are published, and how they reach this repo.
+# Rates are loaded ONLY from official orders (sources/minimum-wages/<STATE>.yaml). This file is the map and the watch list.
+#
+# access:
+#   wayback          - official files are archived and can be read through the Wayback Machine
+#   manual_download  - the official site refuses automated access and is not archived; someone in India downloads
+#                      the orders (docs/minimum-wage-intake.md)
+# search_queries feed the weekly watcher (src/watch/), which reports new official URLs as a GitHub issue.
+# Checked 10 Oct 2026: every state site below refused automated access; Wayback had DL and the Central page only.
+- code: DL
+  name: Delhi (NCT)
+  listing_urls:
+    - https://labour.delhi.gov.in/labour/current-minimum-wage-rate
+  file_patterns:
+    - https://labour.delhi.gov.in/sites/default/files/Labour/generic_multiple_files/*.pdf
+  language: [en]
+  cadence: DA every 1 April and 1 October (orders often issued weeks later)
+  access: wayback
+  search_queries:
+    - site:labour.delhi.gov.in minimum wages dearness allowance order
+  notes: Loaded (sources/minimum-wages/DL.yaml). A forged order for 1 Oct 2025 circulated; check any new order against the official list.
+
+- code: CENTRAL
+  name: Central sphere (Chief Labour Commissioner)
+  listing_urls:
+    - https://clc.gov.in/clc/min-wages
+  file_patterns:
+    - https://clc.gov.in/clc/sites/default/files/mygov_*.pdf
+    - https://clc.gov.in/wp-content/uploads/*/*/mygov_*.pdf
+  language: [en, hi]
+  cadence: VDA every 1 April and 1 October; rates by Area A/B/C and by scheduled employment, per day
+  access: wayback
+  search_queries:
+    - site:clc.gov.in minimum wages VDA order
+    - site:labourbureau.gov.in VDA order minimum wages
+  notes: Loaded (sources/minimum-wages/CENTRAL.yaml, construction schedule). From 1 Oct 2026 VDA orders come from the Labour Bureau, Chandigarh (Code on Wages s.69(2)); find its official URL. Central rates are a labelled fallback for state accidents, never silent.
+
+- code: HR
+  name: Haryana
+  listing_urls:
+    - https://hrylabour.gov.in/home/readmore?cat_id=53&status=1
+  gazette_urls:
+    - https://www.egazetteharyana.gov.in/
+  file_patterns:
+    - https://storage.hrylabour.gov.in/uploads/labour_laws/Y{yyyy}/{Month}/W{n}/D{dd}/{id}.pdf
+  language: [en, hi]
+  cadence: DA half-yearly (to confirm from the orders) plus a large revision reported in April 2026
+  access: manual_download
+  search_queries:
+    - site:hrylabour.gov.in minimum wages notification
+    - site:storage.hrylabour.gov.in minimum wages
+  notes: Example official file (April 2026 gazette) - https://storage.hrylabour.gov.in/uploads/labour_laws/Y2026/April/W2/D09/1775725409.pdf
+
+- code: RJ
+  name: Rajasthan
+  listing_urls:
+    - https://labour.rajasthan.gov.in/Notification.aspx
+    - https://labour.rajasthan.gov.in/Circulars.aspx
+    - https://labour.rajasthan.gov.in/DisplayNews.aspx
+  language: [en, hi]
+  cadence: Irregular basic revisions (notifications of 30/07/2021 and 28/06/2022 listed) plus VDA notices
+  access: manual_download
+  search_queries:
+    - site:labour.rajasthan.gov.in minimum wages notification
+
+- code: UP
+  name: Uttar Pradesh
+  listing_urls:
+    - https://uplabour.gov.in/Pages/MWA.aspx
+    - https://uplabour.gov.in/
+  language: [hi, en]
+  cadence: VDA every 1 April and 1 October; basic rates revised for 74 scheduled employments from 1 April 2026
+  access: manual_download
+  search_queries:
+    - site:uplabour.gov.in minimum wages VDA
+  notes: Rates are per scheduled employment; which schedule applies to a motor-accident victim is a decision for legal sign-off.
+
+- code: MP
+  name: Madhya Pradesh
+  listing_urls:
+    - https://labour.mp.gov.in/LabourCommissioner/Default.aspx?g=10
+  language: [hi]
+  cadence: VDA every 1 April and 1 October (to confirm from the orders)
+  access: manual_download
+  search_queries:
+    - site:labour.mp.gov.in minimum wages VDA
