@@ -55,9 +55,31 @@ export const EVIDENCE: { finding: string; source: string; consequence: string }[
     consequence:
       "The accident is asked as a month and a year (what families know); a full date, where one is needed, is day / month / year boxes. Errors appear when focus leaves an answer.",
   },
+  {
+    finding:
+      "Four story-card hero options were compared on a design canvas; the CFI team chose a simple hero that says what the tool does, followed by 'What happened to your family?' cards that scroll sideways and carry example stories. The page is to be hosted on crashfreeindia.org.",
+    source: "CFI review of the round 4 canvas, 16 Oct 2026",
+    consequence:
+      "A short hero, situation cards that start the calculator in the right place (three with a worked example, labelled as made up), and the website's own header, footer and 'Need help?' band around the calculator.",
+  },
+  {
+    finding:
+      "The live website's tokens are purple #5D2DF7 (its logo art is #4736FE), light band #F6F7FF, text #020618, hairlines #E2E8F0; header 68 px (64 px on a phone) with the logo 32 px (28 px) tall; 48 px pill buttons; cards with 18 px corners; a 12-column footer.",
+    source:
+      "Measurements of crashfreeindia.org (Crash Claim Compensation page and the calculator page) at 1366 and 390 px, 16 Oct 2026",
+    consequence: "Those values, so the calculator reads as part of the website.",
+  },
 ];
 
 export const PRINCIPLES: Principle[] = [
+  {
+    title: "Start from your situation",
+    body: "The first screen says what the tool does in one line and five short points, then asks 'What happened to your family?' with one card per situation. A card answers what it settles (an injury, a death, a homemaker, a vehicle never found) and moves the focus to the next question; its link can be sent to a family and opens the calculator the same way.",
+  },
+  {
+    title: "Examples are labelled, and worked out live",
+    body: "An example story is always marked 'Example · not a real person'. Its amount is not typed into the page: the engine works it out from the example's answers on the day it is shown, so a card can never quote a stale figure. Real cases are shown separately, from public judgments, with names left out.",
+  },
   {
     title: "Quick estimate first",
     body: "Only the answers a number needs come first, as up to eight numbered steps in one column: what happened, three checks on whether a claim can be made, age, work, family, the injury, the month and year, and the state. Every other fact is an optional detail in a closed group below the estimate.",
@@ -98,6 +120,18 @@ export const PRINCIPLES: Principle[] = [
 
 export const DEVIATIONS: { what: string; why: string }[] = [
   {
+    what: "Secondary text in slate #475569, not the website's #62748E",
+    why: "Families read this on a phone, often outdoors: 7.6:1 on white rather than 4.8:1.",
+  },
+  {
+    what: "On a phone the header scrolls away (the website keeps it at the top); it stays at the top from a tablet up",
+    why: "On a 640–800 px tall screen with the keyboard open, a fixed 65 px header leaves too little room for the question being answered.",
+  },
+  {
+    what: "The header wraps onto two lines with very large text",
+    why: "At 200% text size its controls do not fit one line at 360 px; wrapping keeps the page from scrolling sideways (WCAG 1.4.10).",
+  },
+  {
     what: "Field edges in slate #8391A7, not the website's slate-200 #E2E8F0",
     why: "A field's edge must be visible (WCAG 1.4.11 asks for 3:1); slate-200 is 1.2:1 on white, #8391A7 is 3.2:1.",
   },
@@ -129,9 +163,37 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Header",
     file: "components/chrome.tsx",
-    use: "The website's logo, three links (calculator, how it is calculated, rules and sources) and the language switch.",
-    avoid: "Marketing navigation.",
-    rules: ["44 px targets.", "The language switch keeps every answer.", "Skip link to the main content."],
+    use: "The website's header: its logo, its menu and Donate from a laptop up; on a phone the logo, the language switch and a Menu button that opens this calculator's pages and the website's links in place.",
+    avoid: "Links that hide this calculator's own pages (they come first in the phone menu).",
+    rules: [
+      "68 px tall from a tablet up (64 px on a phone), with a hairline; stays at the top from a tablet up.",
+      "The menu is a disclosure: Escape closes it and returns the focus to the button; its links are 48 px tall.",
+      "The language switch keeps every answer.",
+      "Skip link to the main content.",
+    ],
+  },
+  {
+    name: "Hero",
+    file: "pages/Home.tsx",
+    use: "The first screen: one headline, one line on what the law sets, the main action ('See what you're owed') and 'Got an offer? Check it'; then what the tool tells you, in five short points.",
+    avoid: "Statistics and long explanations (facts come after the calculator).",
+    rules: [
+      "The headline is the page's only h1.",
+      "Pill buttons 48 px tall, full width on a phone.",
+      "On a phone the five points follow the situation cards, so the cards are the second thing a family sees.",
+    ],
+  },
+  {
+    name: "Situation cards",
+    file: "pages/Home.tsx",
+    use: "'What happened to your family?': one card per situation, each a door into the calculator; three carry a worked example with the engine's amount.",
+    avoid: "Moving by themselves, or an example without its 'not a real person' label.",
+    rules: [
+      "A row that scrolls sideways with snap points; the next card always peeks in. Arrows from a tablet up, swipe on a phone.",
+      "The photo is decorative (alt text empty): the title says what the card is.",
+      "'Start' answers what the card settles and keeps every other answer; 'Try this example' asks first when there are answers to replace.",
+      "Each card has a link that can be shared (#/start/… and #/example/…).",
+    ],
   },
   {
     name: "Quick estimate card and steps",
@@ -329,9 +391,13 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Case card",
     file: "pages/Result.tsx",
-    use: "A real public case: summary, its journey as a timeline, what mattered, how it is similar and different.",
+    use: "'Cases like yours', in its own card right after the estimate: real public cases with similar facts, each with a summary, its journey as a timeline, what mattered, and how it is similar and different.",
     avoid: "Implying the person will get the same amount.",
-    rules: ["English case text is marked lang='en' on Hindi pages.", "Links to the judgment."],
+    rules: [
+      "English case text is marked lang='en' on Hindi pages.",
+      "Links to the judgment.",
+      "The case library is fetched when an estimate first appears.",
+    ],
   },
   {
     name: "Buttons",
@@ -358,9 +424,30 @@ export const COMPONENTS: ComponentSpec[] = [
     rules: ["Tables become labelled cards on a phone; the page never scrolls sideways."],
   },
   {
+    name: "Facts and read more",
+    file: "pages/Home.tsx",
+    use: "After the calculator: three plain facts on why this matters, each with its source one tap away, and the website's own pages on compensation, legal help and free treatment.",
+    avoid: "A figure without its source, or totals a family cannot picture (crore of rupees pending).",
+    rules: [
+      "Each fact is a short sentence under its number.",
+      "Sources open in a new tab when they leave the site.",
+    ],
+  },
+  {
+    name: "Help band",
+    file: "components/chrome.tsx",
+    use: "'Need help? Talk to a person': the website's helpline and email, on every page, before the footer.",
+    avoid:
+      "Replacing the free legal aid line (DLSA, NALSA 15100), which stays in the next steps and the footer.",
+    rules: [
+      "The number dials on a phone; the address opens the mail app.",
+      "A long address wraps rather than push the page sideways.",
+    ],
+  },
+  {
     name: "Footer",
     file: "components/chrome.tsx",
-    use: "Privacy line, what visit counts record, legal aid, sources, versions.",
+    use: "The website's footer (brand, four columns of links, the line at the bottom), with this calculator's notes: not legal advice, legal aid, privacy, visit counts, sources, versions.",
     avoid: "—",
     rules: ["Rules and engine versions shown so a printout can be traced."],
   },
@@ -376,7 +463,7 @@ export function renderDesignDoc(): string {
   );
   L.push("");
   L.push(
-    'Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, which uses shadcn "new-york" on slate neutrals with the CFI blue as an accent. This document adds what a mobile, form-heavy public tool needs: the evidence behind the pattern, principles, every component with when to use it, and the deliberate deviations.',
+    'Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, which uses shadcn "new-york" on slate neutrals with the CFI purple as an accent. This document adds what a mobile, form-heavy public tool needs: the evidence behind the pattern, principles, every component with when to use it, and the deliberate deviations.',
   );
   L.push("", "## Evidence", "", "| Finding | Source | What we do |", "|---|---|---|");
   for (const e of EVIDENCE) L.push(`| ${e.finding} | ${e.source} | ${e.consequence} |`);

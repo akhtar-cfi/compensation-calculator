@@ -2,7 +2,7 @@
 
 _Generated from `web/src/design/catalog.ts` by `npm run web:design-doc`. Do not edit by hand: a test fails if this file and the catalogue disagree. The live gallery is at `#/design` on the site._
 
-Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, which uses shadcn "new-york" on slate neutrals with the CFI blue as an accent. This document adds what a mobile, form-heavy public tool needs: the evidence behind the pattern, principles, every component with when to use it, and the deliberate deviations.
+Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, which uses shadcn "new-york" on slate neutrals with the CFI purple as an accent. This document adds what a mobile, form-heavy public tool needs: the evidence behind the pattern, principles, every component with when to use it, and the deliberate deviations.
 
 ## Evidence
 
@@ -13,9 +13,13 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 | One question per screen (tested on PR #1) was judged too slow by the CFI team: people want to see all the questions at once and change any answer in place. | CFI review, 12 Oct 2026 | All questions on one page, grouped in four sections; the estimate updates beside the form as answers change. |
 | The one-page form was then judged scattered and unpolished: about 20 questions of equal weight in a two-column grid whose rows did not line up, a side panel that cut off its own content on a laptop, and a hint under most fields. | CFI review and a live bug hunt, 12 Oct 2026 | Quick estimate first: up to eight numbered steps in one column, the estimate right under them, and everything optional in closed groups below. |
 | Use three boxes for dates; avoid sliders; mark optional questions '(optional)'; show errors after the person leaves a field, not while typing. | GOV.UK Design System (date input, error messages); Baymard Institute form usability research | The accident is asked as a month and a year (what families know); a full date, where one is needed, is day / month / year boxes. Errors appear when focus leaves an answer. |
+| Four story-card hero options were compared on a design canvas; the CFI team chose a simple hero that says what the tool does, followed by 'What happened to your family?' cards that scroll sideways and carry example stories. The page is to be hosted on crashfreeindia.org. | CFI review of the round 4 canvas, 16 Oct 2026 | A short hero, situation cards that start the calculator in the right place (three with a worked example, labelled as made up), and the website's own header, footer and 'Need help?' band around the calculator. |
+| The live website's tokens are purple #5D2DF7 (its logo art is #4736FE), light band #F6F7FF, text #020618, hairlines #E2E8F0; header 68 px (64 px on a phone) with the logo 32 px (28 px) tall; 48 px pill buttons; cards with 18 px corners; a 12-column footer. | Measurements of crashfreeindia.org (Crash Claim Compensation page and the calculator page) at 1366 and 390 px, 16 Oct 2026 | Those values, so the calculator reads as part of the website. |
 
 ## Principles
 
+- **Start from your situation.** The first screen says what the tool does in one line and five short points, then asks 'What happened to your family?' with one card per situation. A card answers what it settles (an injury, a death, a homemaker, a vehicle never found) and moves the focus to the next question; its link can be sent to a family and opens the calculator the same way.
+- **Examples are labelled, and worked out live.** An example story is always marked 'Example · not a real person'. Its amount is not typed into the page: the engine works it out from the example's answers on the day it is shown, so a card can never quote a stale figure. Real cases are shown separately, from public judgments, with names left out.
 - **Quick estimate first.** Only the answers a number needs come first, as up to eight numbered steps in one column: what happened, three checks on whether a claim can be made, age, work, family, the injury, the month and year, and the state. Every other fact is an optional detail in a closed group below the estimate.
 - **One column, one path.** Steps, then the estimate, then the details, top to bottom on every screen size. An answer shows or hides only what depends on it, in place. Nothing sits beside the form, and nothing scrolls inside its own box.
 - **The estimate updates as you go.** As soon as the quick steps are answered, the amount, its range and how far real awards land appear under them and change with every answer. Until then the estimate card says how many answers are left and links to the first three.
@@ -38,12 +42,32 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 
 ### Header
 
-- **Use for:** The website's logo, three links (calculator, how it is calculated, rules and sources) and the language switch.
-- **Not for:** Marketing navigation.
-- 44 px targets.
+- **Use for:** The website's header: its logo, its menu and Donate from a laptop up; on a phone the logo, the language switch and a Menu button that opens this calculator's pages and the website's links in place.
+- **Not for:** Links that hide this calculator's own pages (they come first in the phone menu).
+- 68 px tall from a tablet up (64 px on a phone), with a hairline; stays at the top from a tablet up.
+- The menu is a disclosure: Escape closes it and returns the focus to the button; its links are 48 px tall.
 - The language switch keeps every answer.
 - Skip link to the main content.
 - _Code:_ `web/src/components/chrome.tsx`
+
+### Hero
+
+- **Use for:** The first screen: one headline, one line on what the law sets, the main action ('See what you're owed') and 'Got an offer? Check it'; then what the tool tells you, in five short points.
+- **Not for:** Statistics and long explanations (facts come after the calculator).
+- The headline is the page's only h1.
+- Pill buttons 48 px tall, full width on a phone.
+- On a phone the five points follow the situation cards, so the cards are the second thing a family sees.
+- _Code:_ `web/src/pages/Home.tsx`
+
+### Situation cards
+
+- **Use for:** 'What happened to your family?': one card per situation, each a door into the calculator; three carry a worked example with the engine's amount.
+- **Not for:** Moving by themselves, or an example without its 'not a real person' label.
+- A row that scrolls sideways with snap points; the next card always peeks in. Arrows from a tablet up, swipe on a phone.
+- The photo is decorative (alt text empty): the title says what the card is.
+- 'Start' answers what the card settles and keeps every other answer; 'Try this example' asks first when there are answers to replace.
+- Each card has a link that can be shared (#/start/… and #/example/…).
+- _Code:_ `web/src/pages/Home.tsx`
 
 ### Quick estimate card and steps
 
@@ -215,10 +239,11 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 
 ### Case card
 
-- **Use for:** A real public case: summary, its journey as a timeline, what mattered, how it is similar and different.
+- **Use for:** 'Cases like yours', in its own card right after the estimate: real public cases with similar facts, each with a summary, its journey as a timeline, what mattered, and how it is similar and different.
 - **Not for:** Implying the person will get the same amount.
 - English case text is marked lang='en' on Hindi pages.
 - Links to the judgment.
+- The case library is fetched when an estimate first appears.
 - _Code:_ `web/src/pages/Result.tsx`
 
 ### Buttons
@@ -244,9 +269,25 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 - Tables become labelled cards on a phone; the page never scrolls sideways.
 - _Code:_ `web/src/pages/Doc.tsx`
 
+### Facts and read more
+
+- **Use for:** After the calculator: three plain facts on why this matters, each with its source one tap away, and the website's own pages on compensation, legal help and free treatment.
+- **Not for:** A figure without its source, or totals a family cannot picture (crore of rupees pending).
+- Each fact is a short sentence under its number.
+- Sources open in a new tab when they leave the site.
+- _Code:_ `web/src/pages/Home.tsx`
+
+### Help band
+
+- **Use for:** 'Need help? Talk to a person': the website's helpline and email, on every page, before the footer.
+- **Not for:** Replacing the free legal aid line (DLSA, NALSA 15100), which stays in the next steps and the footer.
+- The number dials on a phone; the address opens the mail app.
+- A long address wraps rather than push the page sideways.
+- _Code:_ `web/src/components/chrome.tsx`
+
 ### Footer
 
-- **Use for:** Privacy line, what visit counts record, legal aid, sources, versions.
+- **Use for:** The website's footer (brand, four columns of links, the line at the bottom), with this calculator's notes: not legal advice, legal aid, privacy, visit counts, sources, versions.
 - **Not for:** —
 - Rules and engine versions shown so a printout can be traced.
 - _Code:_ `web/src/components/chrome.tsx`
@@ -255,6 +296,9 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 
 | What | Why |
 |---|---|
+| Secondary text in slate #475569, not the website's #62748E | Families read this on a phone, often outdoors: 7.6:1 on white rather than 4.8:1. |
+| On a phone the header scrolls away (the website keeps it at the top); it stays at the top from a tablet up | On a 640–800 px tall screen with the keyboard open, a fixed 65 px header leaves too little room for the question being answered. |
+| The header wraps onto two lines with very large text | At 200% text size its controls do not fit one line at 360 px; wrapping keeps the page from scrolling sideways (WCAG 1.4.10). |
 | Field edges in slate #8391A7, not the website's slate-200 #E2E8F0 | A field's edge must be visible (WCAG 1.4.11 asks for 3:1); slate-200 is 1.2:1 on white, #8391A7 is 3.2:1. |
 | Controls 44 px tall on a phone (40 px from the small breakpoint), not the website's 36 px | WCAG 2.2 target size and Android's touch guidance; 36 px is easy to mis-tap on a 360 px phone. |
 | Orange #F57C00 and red #F10015 used for edges and icons only | They are 2.7:1 and about 4.4:1 on white, below the 4.5:1 needed for small text, so the text beside them stays dark. |
