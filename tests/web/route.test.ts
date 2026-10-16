@@ -28,4 +28,16 @@ describe("addresses", () => {
       expect(isLegacy(h), h).toBe(true);
     for (const h of ["#/", "#/how", "#main"]) expect(isLegacy(h), h).toBe(false);
   });
+
+  it("opens the calculator from a situation card's link, ready to share", () => {
+    expect(parseRoute("#/start/homemaker")).toEqual({ name: "calc", start: "homemaker" });
+    expect(parseRoute("#/start/hit-and-run")).toEqual({ name: "calc", start: "hit-and-run" });
+    expect(parseRoute("#/start/offer")).toEqual({ name: "calc", start: "offer" });
+    expect(parseRoute("#/start/nonsense")).toEqual({ name: "calc" });
+    expect(parseRoute("#/example/hurt")).toEqual({ name: "calc", example: "hurt" });
+    // Only a card with a worked example has an example link.
+    expect(parseRoute("#/example/offer")).toEqual({ name: "calc" });
+    expect(parseRoute("#/example/nonsense")).toEqual({ name: "calc" });
+    for (const h of ["#/start/hurt", "#/example/hurt"]) expect(isLegacy(h), h).toBe(false);
+  });
 });

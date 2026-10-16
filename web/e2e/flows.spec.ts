@@ -2,6 +2,8 @@ import type { Page } from "@playwright/test";
 import { examples, expect, fillDate, fillForm, openGroup, pickMonth, radio, test } from "./helpers";
 
 const h1 = (page: Page) => page.getByRole("heading", { level: 1 });
+const H1_EN = "Know what you’re owed before you accept any offer.";
+const H1_HI = "जानिए आपका हक़ कितना है कोई भी ऑफ़र मानने से पहले।";
 const block = (page: Page, id: string) => page.locator(`[data-question="${id}"]`);
 /** Moves focus out of a question, as a person does when they go on to the next one. */
 const leave = (page: Page) => page.locator("#page-title").focus();
@@ -10,7 +12,7 @@ test("the form starts empty: nothing pre-selected, and the estimate says what is
   page,
 }) => {
   await page.goto("#/");
-  await expect(h1(page)).toHaveText("Motor accident compensation calculator");
+  await expect(h1(page)).toHaveText(H1_EN);
   await expect(page.locator("input[type=radio]:checked")).toHaveCount(0);
   await expect(page.locator("#accidentDate-year")).toHaveValue("");
   await expect(page.getByTestId("answers-left")).toContainText("answers still needed");
@@ -184,7 +186,7 @@ test("switching to Hindi keeps every answer", async ({ page }) => {
   await pickMonth(page, "2025-06-01");
   await page.getByRole("button", { name: "हिंदी" }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "hi");
-  await expect(h1(page)).toHaveText("मोटर दुर्घटना मुआवज़ा कैलकुलेटर");
+  await expect(h1(page)).toHaveText(H1_HI);
   await expect(page.locator("#accidentDate-month")).toHaveValue("6");
   await expect(page.locator('input[name="kind"][value="injury"]')).toBeChecked();
   await page.getByRole("button", { name: "English" }).click();
@@ -194,11 +196,11 @@ test("switching to Hindi keeps every answer", async ({ page }) => {
 test("?lang=hi opens the page in Hindi, until the person chooses otherwise", async ({ page }) => {
   await page.goto("?lang=hi#/");
   await expect(page.locator("html")).toHaveAttribute("lang", "hi");
-  await expect(h1(page)).toHaveText("मोटर दुर्घटना मुआवज़ा कैलकुलेटर");
+  await expect(h1(page)).toHaveText(H1_HI);
   await page.getByRole("button", { name: "English" }).click();
   await expect(page).not.toHaveURL(/lang=hi/);
   await page.reload();
-  await expect(h1(page)).toHaveText("Motor accident compensation calculator");
+  await expect(h1(page)).toHaveText(H1_EN);
 });
 
 test("the estimate in Hindi shows the same amounts", async ({ page }) => {
@@ -230,7 +232,7 @@ test("older addresses open the calculator at the matching place", async ({ page 
   for (const old of ["#/estimate", "#/check", "#/result", "#/offer"]) {
     await page.goto(old);
     await expect(page).toHaveURL(/#\/$/);
-    await expect(h1(page)).toHaveText("Motor accident compensation calculator");
+    await expect(h1(page)).toHaveText(H1_EN);
   }
 });
 
@@ -264,7 +266,7 @@ test("the public documents are on the page, and coming back keeps your place", a
   await page.getByRole("link", { name: "Skip to content" }).press("Enter");
   await expect(page).toHaveURL(/#\/offer-study$/);
   await expect(page.locator("#main")).toBeFocused();
-  await page.getByRole("link", { name: "Estimate", exact: true }).click();
+  await page.getByRole("link", { name: "Back to the calculator" }).click();
   await expect(page).toHaveURL(/#\/$/);
   await expect(page.locator("#page-title")).toBeFocused();
 

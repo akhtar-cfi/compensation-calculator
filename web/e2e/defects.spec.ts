@@ -226,7 +226,8 @@ test("the estimate says how the last change moved it", async ({ page }) => {
 test("on a laptop, a short summary of the estimate stays in view beside the questions", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await fillForm(page, salaried());
-  await page.evaluate(() => window.scrollTo(0, 0));
+  // At the top of the questions, and below the website's header (which stays at the top from a tablet up).
+  await page.evaluate(() => document.getElementById("calc")!.scrollIntoView());
   const rail = page.getByTestId("rail");
   await expect(rail).toBeInViewport();
   await expect(rail).toContainText("₹");

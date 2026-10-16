@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-preact";
 import { Card, Page } from "../components/ui";
 import { loadDocs, useLoaded, type Docs } from "../data";
 import { useLang, useT } from "../i18n";
@@ -21,6 +22,13 @@ export function Doc(props: { page: DocPage }) {
   return (
     <div class="bg-subtle">
       <Page narrow>
+        <a
+          href="#/"
+          class="no-print mb-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand underline underline-offset-4 hover:no-underline"
+        >
+          <ArrowLeft aria-hidden="true" class="h-4 w-4" />
+          {t("doc.back")}
+        </a>
         <p
           class="text-xs font-semibold tracking-[0.2em] text-brand uppercase outline-none"
           id="page-title"

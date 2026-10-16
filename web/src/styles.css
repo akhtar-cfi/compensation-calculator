@@ -24,20 +24,30 @@
 }
 
 /*
- * Design tokens, matched to crashfreeindia.org (its src/styles.css: shadcn "new-york" on slate neutrals, with the
- * CFI blue as an accent only). The ONLY place colours are defined.
+ * Design tokens, matched to the live crashfreeindia.org (its :root in styles-*.css: shadcn "new-york" on slate, the
+ * CFI purple as an accent). The ONLY place colours are defined.
  */
 @theme {
-  --color-brand: #4a35ff;
+  --color-brand: #5d2df7;
   --color-brand-foreground: #ffffff;
-  /* Selected-answer tint only (never a section background). */
-  --color-brand-lite: #f5f3ff;
+  /* The website's light band, and the selected-answer tint. */
+  --color-brand-lite: #f6f7ff;
+  /* The purple at 10% and 25% on white: label chips and icon tiles, as on the website. */
+  --color-brand-tint: #efeafe;
+  --color-brand-line: #d7cafd;
   --color-danger: #f10015;
   --color-warning: #f57c00;
   --color-success: #16a34a;
-  /* Slate, as on the website. */
-  --color-foreground: #020617;
-  --color-muted-foreground: #64748b;
+  /* Warm accent for an insurer's offer in the example stories (the fill is decoration; text uses the ink). */
+  --color-marigold: #f5a524;
+  --color-marigold-ink: #92400e;
+  --color-marigold-tint: #fff4db;
+  /* "How the tool helps" and free help. */
+  --color-teal-tint: #e6f6f3;
+  --color-teal-ink: #115e59;
+  /* Slate, as on the website; secondary text one step darker than its #62748e, for reading on a phone outdoors. */
+  --color-foreground: #020618;
+  --color-muted-foreground: #475569;
   --color-muted: #f1f5f9;
   --color-subtle: #f8fafc;
   --color-border: #e2e8f0;
@@ -50,11 +60,33 @@
   --radius-lg: 0.625rem;
   --radius-xl: 0.875rem;
   --radius-2xl: 1.125rem;
+  --radius-3xl: 1.375rem;
   /* Devanagari is not in Montserrat/Geist: Hindi falls back to the device's Devanagari font. */
   --font-heading: "Montserrat", "Noto Sans Devanagari", sans-serif;
   --font-sans:
     "Geist", "Noto Sans Devanagari", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
     sans-serif;
+}
+
+/* From a tablet up the header stays at the top (as on the website): in-page jumps stop below it. */
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: 5rem;
+  }
+}
+
+/* Sections and headings that receive focus only so a screen reader starts reading there (tabindex -1, never a tab
+   stop) show no outline: there is nothing to operate. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* A row that scrolls sideways (the situation cards): no scrollbar, the cards say there is more. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -161,6 +193,14 @@ html:lang(hi) .leading-tight {
    inside one would push the page sideways. */
 @layer base {
   fieldset {
+    min-width: 0;
+  }
+}
+
+/* The same for grid items: with very large text, one long word (a case citation, a caution) must wrap, not push the
+   page sideways. In the base layer, so a utility on an item still wins. */
+@layer base {
+  main .grid > * {
     min-width: 0;
   }
 }

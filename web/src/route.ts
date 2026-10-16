@@ -1,4 +1,5 @@
 import { isStopCode, STOP_FIELD } from "./questions.js";
+import { isSituationId, situation, type SituationId } from "./situations.js";
 
 /** The question pages of the earlier version, and the answer each now opens at. */
 const OLD_QUESTION: Readonly<Record<string, string>> = {
@@ -26,10 +27,19 @@ export type DocPage = "how" | "rules" | "offer-study";
 
 /**
  * The calculator is one page. Older addresses (one page per question, Check, stop pages, the result and the offer
- * page) still work: they open the calculator at the matching place (`target`, an element id).
+ * page) still work: they open the calculator at the matching place (`target`, an element id). A situation card's
+ * link ("#/start/homemaker", "#/example/hurt") opens it with that situation's answers given, so a helper can send a
+ * family a link that starts in the right place.
  */
 export type Route =
-  { name: "calc"; target?: string | undefined } | { name: "doc"; page: DocPage } | { name: "design" };
+  | {
+      name: "calc";
+      target?: string | undefined;
+      start?: SituationId | undefined;
+      example?: SituationId | undefined;
+    }
+  | { name: "doc"; page: DocPage }
+  | { name: "design" };
 
 /** Reads the page from the address. Anything after "#" that is not "#/…" is an in-page anchor: undefined. */
 export function parseRoute(hash: string): Route | undefined {
@@ -43,6 +53,8 @@ export function parseRoute(hash: string): Route | undefined {
   if (a === "stop" && b && isStopCode(b)) return { name: "calc", target: STOP_FIELD[b] };
   if (a === "result") return { name: "calc", target: "result" };
   if (a === "offer") return { name: "calc", target: "offer" };
+  if (a === "start" && b && isSituationId(b)) return { name: "calc", start: b };
+  if (a === "example" && b && isSituationId(b) && situation(b).example) return { name: "calc", example: b };
   return { name: "calc" };
 }
 

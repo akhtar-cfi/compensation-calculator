@@ -25,10 +25,8 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
   const enOnly = lang === "hi" ? "en" : undefined;
   const warnText = useWarnText();
   const warnings = [...est.warnings].sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
-  const cases = useLoaded(loadCases);
   if (!est.eligible || !est.scenarios) return null;
   const std = est.scenarios.standard;
-  const matches = cases ? matchCases(input, cases) : undefined;
   const important = warnings.filter((w) => w.severity !== "info");
   const notes = warnings.filter((w) => w.severity === "info");
 
@@ -186,10 +184,6 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
             </Disclosure>
           )}
 
-          <Disclosure id="cases" title={t("res.cases")}>
-            {matches && <Cases matches={matches} />}
-          </Disclosure>
-
           {notes.length > 0 && (
             <Disclosure id="notes" title={t("det.notes")}>
               {warningList(notes)}
@@ -268,6 +262,25 @@ function NextSteps() {
   );
 }
 
+/**
+ * Cases like yours, right after the estimate: real, public judgments with similar facts, each as its journey (the
+ * offer or first award, the final amount, the years in between) and what made the difference. The case library is
+ * fetched when an estimate first appears.
+ */
+export function CasesCard(props: { input: EstimateInput }) {
+  const t = useT();
+  const cases = useLoaded(loadCases);
+  const matches = cases ? matchCases(props.input, cases) : undefined;
+  return (
+    <Card class="p-5 sm:p-6" id="cases">
+      <section aria-labelledby="cases-h" data-testid="cases-card">
+        <H2 id="cases-h">{t("cases.title")}</H2>
+        <div class="mt-3">{matches && <Cases matches={matches} />}</div>
+      </section>
+    </Card>
+  );
+}
+
 function Cases(props: { matches: CaseMatch[] }) {
   const t = useT();
   const lang = useLang();
@@ -277,7 +290,7 @@ function Cases(props: { matches: CaseMatch[] }) {
     <>
       <p class="text-sm text-muted-foreground">{t("res.cases.lead")}</p>
       <p class="mt-1 text-xs text-muted-foreground">{t("res.cases.disclaimer")}</p>
-      <div class="mt-4 grid gap-4 md:grid-cols-2" data-testid="cases">
+      <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2" data-testid="cases">
         {props.matches.map((m) => {
           const c = m.case;
           const j = summariseJourney(c);
@@ -293,13 +306,13 @@ function Cases(props: { matches: CaseMatch[] }) {
           return (
             <article
               key={c.id}
-              class="flex flex-col rounded-lg border border-border bg-card p-4"
+              class="flex min-w-0 flex-col rounded-lg border border-border bg-card p-4"
               data-case={c.id}
             >
               <h4 class="font-heading text-base font-semibold" lang="en">
                 {c.title}
               </h4>
-              <p class="mt-1 text-xs text-muted-foreground">{c.citation}</p>
+              <p class="mt-1 text-xs [overflow-wrap:anywhere] text-muted-foreground">{c.citation}</p>
               <p class="mt-3 text-sm leading-relaxed text-muted-foreground" lang={enOnly}>
                 {c.summary}
               </p>

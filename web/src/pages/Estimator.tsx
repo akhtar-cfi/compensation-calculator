@@ -6,7 +6,7 @@ import type { EstimateInput, EstimateOutput } from "../../../src/engine/types.js
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { focusField } from "../components/form";
 import { rules } from "../data";
-import { Card, H1, Lead } from "../components/ui";
+import { Card, Notice, linkCls, wrap } from "../components/ui";
 import { BlockFields, fieldLabels, type FieldError, type SetField } from "../fields";
 import { EMPTY_FORM, incomeFields, type FormState } from "../form-to-input";
 import { useApprox, useT } from "../i18n";
@@ -23,9 +23,30 @@ import {
   type StepId,
 } from "../questions";
 import type { FieldName, Validation } from "../validate";
-import { ResultDetails } from "./Result";
 import { ResultSummary, StopNotice } from "./ResultSummary";
 import { ChangeLine } from "../components/result";
+
+/**
+ * Everything below the estimate (cases like it, how it is built, the offer check) is a separate file, fetched when
+ * the browser is idle after the first screen, or at once when an estimate appears: the first download stays small.
+ */
+type ResultModule = typeof import("./Result");
+let resultP: Promise<ResultModule> | undefined;
+const loadResult = () => (resultP ??= import("./Result"));
+function useResultModule(needed: boolean): ResultModule | undefined {
+  const [m, setM] = useState<ResultModule | undefined>(undefined);
+  useEffect(() => {
+    let live = true;
+    const get = () => void loadResult().then((x) => live && setM(() => x));
+    if (needed) get();
+    else if ("requestIdleCallback" in window) requestIdleCallback(get, { timeout: 4000 });
+    else setTimeout(get, 2000);
+    return () => {
+      live = false;
+    };
+  }, [needed]);
+  return m;
+}
 
 /** Errors that only say "not answered yet" are shown in the list of answers left, not under each field. */
 const EMPTY = new Set(["err.required", "err.count"]);
@@ -44,7 +65,7 @@ const STEP_TITLE: Record<StepId, string> = {
 /**
  * The calculator, in one column:
  * 1. the quick estimate: a few numbered steps, each needed for a number;
- * 2. the estimate itself, as soon as those are answered;
+ * 2. the estimate itself, as soon as those are answered, and real cases like it;
  * 3. "make it more accurate": optional details that narrow it;
  * 4. how it is built, what to prove, the offer check and the rest.
  */
@@ -55,6 +76,8 @@ export function Estimator(props: {
   computed?: { input: EstimateInput; est: EstimateOutput } | undefined;
   today: string;
   onRestart: () => void;
+  /** Came from "Got an offer?": say where the offer check is. */
+  intent?: "offer" | undefined;
 }) {
   const t = useT();
   const { form: f, v } = props;
@@ -119,6 +142,7 @@ export function Estimator(props: {
   };
   const answered = JSON.stringify(f) !== JSON.stringify(EMPTY_FORM);
   const complete = Boolean(props.computed?.est.eligible && props.computed.est.headline) && !stop;
+  const R = useResultModule(complete);
 
   // The last estimate shown, kept on screen (marked out of date) while an answer is being corrected, so a slip in
   // one box does not make the number vanish.
@@ -165,200 +189,235 @@ export function Estimator(props: {
   const canProve = ["salary", "itr"].some((x) => incomeFields(f.employment).includes(x as "salary"));
 
   return (
-    <div class="bg-subtle">
-      <div class="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 md:py-10 lg:max-w-6xl">
-        <H1 id="page-title">{t("calc.title")}</H1>
-        <Lead class="print:hidden">{t("calc.lead")}</Lead>
-        {complete && (
-          <p class="mt-2 hidden text-sm text-muted-foreground print:block">{t("calc.printNote")}</p>
-        )}
-        <div class="mt-1 flex min-h-11 flex-wrap items-center justify-between gap-x-4 print:hidden">
-          <p class="text-xs text-muted-foreground">{t("calc.meta")}</p>
-          {answered &&
-            (confirming ? (
-              <div
-                role="group"
-                aria-label={t("app.clearQ")}
-                class="no-print flex flex-wrap items-center gap-2 text-sm"
-              >
-                <span class="font-medium text-foreground">{t("app.clearQ")}</span>
-                <button
-                  type="button"
-                  data-testid="restart-confirm"
-                  onClick={restart}
-                  class="inline-flex min-h-11 items-center rounded-md border border-danger px-3 font-medium text-foreground hover:bg-danger/5 sm:min-h-9"
-                >
-                  {t("app.clear")}
-                </button>
-                <button
-                  type="button"
-                  autoFocus
-                  onClick={keep}
-                  class="inline-flex min-h-11 items-center rounded-md border border-input px-3 font-medium text-foreground hover:bg-background sm:min-h-9"
-                >
-                  {t("app.keep")}
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                data-testid="restart"
-                onClick={() => setConfirming(true)}
-                class="no-print -mr-2 inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-muted-foreground hover:text-foreground sm:min-h-9"
-              >
-                <RotateCcw aria-hidden="true" class="h-4 w-4" />
-                {t("app.restart")}
-              </button>
-            ))}
-        </div>
-
-        {/* One column; from a laptop width up, a slim summary stays in view beside it. */}
-        <div class="mt-4 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start lg:gap-8">
-          <div class="grid min-w-0 grid-cols-1 gap-6">
-            {/* 1. The quick estimate */}
-            <Card class="no-print overflow-hidden">
-              <div class="bg-brand px-4 py-3.5 text-brand-foreground sm:px-6">
-                <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                  <h2 class="font-heading text-lg font-bold">{t("quick.title")}</h2>
-                  <p class="text-sm text-brand-foreground/85" data-testid="progress">
-                    {stop ? t("quick.stopped") : t("quick.progress", { done, total })}
-                  </p>
-                </div>
-                <div
-                  aria-hidden="true"
-                  class="mt-2.5 h-1 overflow-hidden rounded-full bg-brand-foreground/25"
-                >
-                  <div
-                    class="h-full rounded-full bg-brand-foreground transition-[width] duration-300 motion-reduce:transition-none"
-                    style={{ width: `${stop ? 100 : Math.round((done / Math.max(1, total)) * 100)}%` }}
-                  />
-                </div>
-              </div>
-              <form noValidate onSubmit={(e) => e.preventDefault()} aria-labelledby="page-title">
-                <ol class="divide-y divide-border">
-                  {steps.map((s, i) => {
-                    if (stop && i > 1) return null;
-                    const ok = Object.keys(errorsFor(v, s.id, f)).length === 0;
-                    return (
-                      <Step
-                        key={s.id}
-                        id={s.id}
-                        n={i + 1}
-                        done={ok && !stop}
-                        title={t(STEP_TITLE[s.id])}
-                        onLeave={leave(s.id)}
-                      >
-                        <BlockFields
-                          id={s.id}
-                          f={f}
-                          set={set}
-                          err={err}
-                          setForm={props.setForm}
-                          today={props.today}
-                        />
-                        {s.id === "checks" &&
-                          stops.map((c) => (
-                            <div key={c} class="mt-4" data-stop-for={STOP_FIELD[c]}>
-                              <StopNotice code={c} />
-                            </div>
-                          ))}
-                      </Step>
-                    );
-                  })}
-                </ol>
-                {stop && (
-                  <p
-                    class="border-t border-border px-4 py-4 text-sm text-muted-foreground sm:px-6"
-                    data-testid="skipped"
-                  >
-                    {t("stop.skip")}
-                  </p>
+    <section
+      id="calc"
+      tabIndex={-1}
+      aria-labelledby="calc-h"
+      class="border-t border-border bg-subtle outline-none"
+    >
+      <div class={`${wrap} py-8 md:py-12`}>
+        <div class="mx-auto w-full max-w-3xl lg:max-w-6xl">
+          <p class="hidden font-heading text-xl font-bold text-foreground print:block">{t("app.name")}</p>
+          {complete && (
+            <p class="mt-2 hidden text-sm text-muted-foreground print:block">{t("calc.printNote")}</p>
+          )}
+          {props.intent === "offer" && (
+            <div
+              id="offer-hint"
+              tabIndex={-1}
+              data-testid="offer-hint"
+              class="mb-4 outline-none print:hidden"
+            >
+              <Notice severity="info" title={t("calc.offerHint")}>
+                {complete && (
+                  <a href="#offer-amount" class={linkCls}>
+                    {t("res.offer")}
+                  </a>
                 )}
-              </form>
-            </Card>
+              </Notice>
+            </div>
+          )}
+          <div class="flex min-h-11 flex-wrap items-center justify-between gap-x-4 print:hidden">
+            <p class="text-xs text-muted-foreground">
+              {t("calc.meta")} ·{" "}
+              <a href="#/how" class="underline underline-offset-4 hover:text-brand">
+                {t("nav.how")}
+              </a>
+            </p>
+            {answered &&
+              (confirming ? (
+                <div
+                  role="group"
+                  aria-label={t("app.clearQ")}
+                  class="no-print flex flex-wrap items-center gap-2 text-sm"
+                >
+                  <span class="font-medium text-foreground">{t("app.clearQ")}</span>
+                  <button
+                    type="button"
+                    data-testid="restart-confirm"
+                    onClick={restart}
+                    class="inline-flex min-h-11 items-center rounded-md border border-danger px-3 font-medium text-foreground hover:bg-danger/5 sm:min-h-9"
+                  >
+                    {t("app.clear")}
+                  </button>
+                  <button
+                    type="button"
+                    autoFocus
+                    onClick={keep}
+                    class="inline-flex min-h-11 items-center rounded-md border border-input px-3 font-medium text-foreground hover:bg-background sm:min-h-9"
+                  >
+                    {t("app.keep")}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  data-testid="restart"
+                  onClick={() => setConfirming(true)}
+                  class="no-print -mr-2 inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-muted-foreground hover:text-foreground sm:min-h-9"
+                >
+                  <RotateCcw aria-hidden="true" class="h-4 w-4" />
+                  {t("app.restart")}
+                </button>
+              ))}
+          </div>
 
-            {/* 2. The estimate */}
-            <section aria-label={t("sum.title")} id="summary">
-              <ResultSummary
-                est={stop ? undefined : (stale?.est ?? props.computed?.est)}
-                input={stale?.input ?? props.computed?.input}
-                stale={Boolean(stale)}
-                stop={stop}
-                missing={missing}
-                progress={{ done, total }}
-                state={f.state}
-                canProve={canProve}
-                change={complete ? change : undefined}
-                accidentLabel={accidentLabel}
-                parentsAssumed={stale ? undefined : parentsAssumed}
-                onMissing={goTo}
-              />
-              <p class="sr-only" aria-live="polite">
-                {announce}
-              </p>
-            </section>
-
-            {/* 3. Make it more accurate */}
-            {!stop && groups.length > 0 && (
-              <Card class="no-print overflow-hidden" id="more">
-                <div class="flex items-start gap-3 px-4 pt-5 sm:px-6">
-                  <SlidersHorizontal aria-hidden="true" class="mt-1 h-5 w-5 shrink-0 text-brand" />
-                  <div>
-                    <h2 class="font-heading text-lg font-bold text-foreground">{t("more.title")}</h2>
-                    <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t("more.lead")}</p>
+          {/* One column; from a laptop width up, a slim summary stays in view beside it. */}
+          <div class="mt-4 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start lg:gap-8">
+            <div class="grid min-w-0 grid-cols-1 gap-6">
+              {/* 1. The quick estimate */}
+              <Card class="no-print overflow-hidden">
+                <div class="bg-brand px-4 py-3.5 text-brand-foreground sm:px-6">
+                  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <h2 id="calc-h" class="font-heading text-lg font-bold">
+                      {t("calc.h2")}{" "}
+                      <span class="font-sans text-sm font-normal text-brand-foreground/85">
+                        {t("calc.time")}
+                      </span>
+                    </h2>
+                    <p class="text-sm text-brand-foreground/85" data-testid="progress">
+                      {stop ? t("quick.stopped") : t("quick.progress", { done, total })}
+                    </p>
+                  </div>
+                  <div
+                    aria-hidden="true"
+                    class="mt-2.5 h-1 overflow-hidden rounded-full bg-brand-foreground/25"
+                  >
+                    <div
+                      class="h-full rounded-full bg-brand-foreground transition-[width] duration-300 motion-reduce:transition-none"
+                      style={{ width: `${stop ? 100 : Math.round((done / Math.max(1, total)) * 100)}%` }}
+                    />
                   </div>
                 </div>
-                <form noValidate onSubmit={(e) => e.preventDefault()} class="mt-4 border-t border-border">
-                  {groups.map((g) => {
-                    const fields = g.fields(f);
-                    // The exact day is part of the accident date, asked here as its own box.
-                    const day = g.id === "dates" ? 1 : 0;
-                    const filled =
-                      fields.filter((k) => filledIn(f, k)).length +
-                      (day && f.accidentDate.split("-")[2] ? 1 : 0);
-                    return (
-                      <Group
-                        key={g.id}
-                        id={g.id}
-                        title={t(`group.${g.id}`)}
-                        count={t("group.count", { n: filled, total: fields.length + day })}
-                        problem={fields.some((k) => err(k))}
-                        onLeave={leave(g.id)}
-                      >
-                        <BlockFields
-                          id={g.id}
-                          f={f}
-                          set={set}
-                          err={err}
-                          setForm={props.setForm}
-                          today={props.today}
-                        />
-                      </Group>
-                    );
-                  })}
+                <form noValidate onSubmit={(e) => e.preventDefault()} aria-labelledby="calc-h">
+                  <ol class="divide-y divide-border">
+                    {steps.map((s, i) => {
+                      if (stop && i > 1) return null;
+                      const ok = Object.keys(errorsFor(v, s.id, f)).length === 0;
+                      return (
+                        <Step
+                          key={s.id}
+                          id={s.id}
+                          n={i + 1}
+                          done={ok && !stop}
+                          title={t(STEP_TITLE[s.id])}
+                          onLeave={leave(s.id)}
+                        >
+                          <BlockFields
+                            id={s.id}
+                            f={f}
+                            set={set}
+                            err={err}
+                            setForm={props.setForm}
+                            today={props.today}
+                          />
+                          {s.id === "checks" &&
+                            stops.map((c) => (
+                              <div key={c} class="mt-4" data-stop-for={STOP_FIELD[c]}>
+                                <StopNotice code={c} />
+                              </div>
+                            ))}
+                        </Step>
+                      );
+                    })}
+                  </ol>
+                  {stop && (
+                    <p
+                      class="border-t border-border px-4 py-4 text-sm text-muted-foreground sm:px-6"
+                      data-testid="skipped"
+                    >
+                      {t("stop.skip")}
+                    </p>
+                  )}
                 </form>
               </Card>
-            )}
 
-            {/* 4. The details */}
-            {complete && props.computed && (
-              <ResultDetails input={props.computed.input} est={props.computed.est} />
-            )}
+              {/* 2. The estimate */}
+              <section aria-label={t("sum.title")} id="summary">
+                <ResultSummary
+                  est={stop ? undefined : (stale?.est ?? props.computed?.est)}
+                  input={stale?.input ?? props.computed?.input}
+                  stale={Boolean(stale)}
+                  stop={stop}
+                  missing={missing}
+                  progress={{ done, total }}
+                  state={f.state}
+                  canProve={canProve}
+                  change={complete ? change : undefined}
+                  accidentLabel={accidentLabel}
+                  parentsAssumed={stale ? undefined : parentsAssumed}
+                  onMissing={goTo}
+                />
+                <p class="sr-only" aria-live="polite">
+                  {announce}
+                </p>
+              </section>
+
+              {/* 2b. Real cases like this one */}
+              {complete && props.computed && R && <R.CasesCard input={props.computed.input} />}
+
+              {/* 3. Make it more accurate */}
+              {!stop && groups.length > 0 && (
+                <Card class="no-print overflow-hidden" id="more">
+                  <div class="flex items-start gap-3 px-4 pt-5 sm:px-6">
+                    <SlidersHorizontal aria-hidden="true" class="mt-1 h-5 w-5 shrink-0 text-brand" />
+                    <div>
+                      <h2 class="font-heading text-lg font-bold text-foreground">{t("more.title")}</h2>
+                      <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t("more.lead")}</p>
+                    </div>
+                  </div>
+                  <form noValidate onSubmit={(e) => e.preventDefault()} class="mt-4 border-t border-border">
+                    {groups.map((g) => {
+                      const fields = g.fields(f);
+                      // The exact day is part of the accident date, asked here as its own box.
+                      const day = g.id === "dates" ? 1 : 0;
+                      const filled =
+                        fields.filter((k) => filledIn(f, k)).length +
+                        (day && f.accidentDate.split("-")[2] ? 1 : 0);
+                      return (
+                        <Group
+                          key={g.id}
+                          id={g.id}
+                          title={t(`group.${g.id}`)}
+                          count={t("group.count", { n: filled, total: fields.length + day })}
+                          problem={fields.some((k) => err(k))}
+                          onLeave={leave(g.id)}
+                        >
+                          <BlockFields
+                            id={g.id}
+                            f={f}
+                            set={set}
+                            err={err}
+                            setForm={props.setForm}
+                            today={props.today}
+                          />
+                        </Group>
+                      );
+                    })}
+                  </form>
+                </Card>
+              )}
+
+              {/* 4. The details */}
+              {complete && props.computed && R && (
+                <R.ResultDetails input={props.computed.input} est={props.computed.est} />
+              )}
+            </div>
+            <aside aria-label={t("sum.rail")} class="no-print hidden lg:sticky lg:top-24 lg:block">
+              <SummaryRail
+                est={complete ? props.computed?.est : undefined}
+                stop={stop}
+                progress={{ done, total }}
+                missing={missing}
+                change={complete ? change : undefined}
+                onMissing={goTo}
+              />
+            </aside>
           </div>
-          <aside aria-label={t("sum.rail")} class="no-print hidden lg:sticky lg:top-4 lg:block">
-            <SummaryRail
-              est={complete ? props.computed?.est : undefined}
-              stop={stop}
-              progress={{ done, total }}
-              missing={missing}
-              change={complete ? change : undefined}
-              onMissing={goTo}
-            />
-          </aside>
         </div>
       </div>
       <BottomBar amount={amount} exact={headline} change={change} stopped={Boolean(stop)} />
-    </div>
+    </section>
   );
 }
 

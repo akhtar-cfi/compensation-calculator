@@ -1,15 +1,18 @@
 import type { ComponentType } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { estimate } from "../../src/engine/index.js";
-import { DraftBanner, Footer, Header } from "./components/chrome";
+import { DraftBanner, Footer, Header, HelpBand } from "./components/chrome";
 import { focusField } from "./components/form";
 import { rules } from "./data";
 import { EMPTY_FORM, type FormState } from "./form-to-input";
 import { LangProvider } from "./i18n";
 import { Doc } from "./pages/Doc";
 import { Estimator } from "./pages/Estimator";
+import { Facts, Hero, ReadMore, Situations, Tells } from "./pages/Home";
 import { countView } from "./analytics";
+import { STEPS, STOP_FIELD, stopsOf } from "./questions";
 import { isLegacy, parseRoute, routeKey, type Route } from "./route";
+import { applyExample, applyStart, situation, type SituationId } from "./situations";
 import { todayISO, type Lang } from "./translate";
 import { validate } from "./validate";
 
@@ -66,7 +69,50 @@ export function App() {
     }
   };
   const [form, setForm] = useState<FormState>(saved.form ?? EMPTY_FORM);
+  // Came in through "Got an offer?": the calculator says where the offer check is.
+  const [intent, setIntent] = useState<"offer" | undefined>(undefined);
   const today = todayISO();
+
+  /**
+   * Starting from a situation card: its answers are given, every other answer is kept, and the keyboard focus moves
+   * to the first question still to answer (or to the guidance, for a situation that ends the claim).
+   */
+  const start = (id: SituationId) => {
+    const next = applyStart(form, id);
+    setForm(next);
+    setIntent(situation(id).intent);
+    requestAnimationFrame(() => {
+      if (situation(id).intent === "offer") {
+        const hint = document.getElementById("offer-hint");
+        hint?.focus({ preventScroll: true });
+        hint?.scrollIntoView({ block: "start" });
+        return;
+      }
+      const stop = stopsOf(next)[0];
+      if (stop) {
+        focusField(STOP_FIELD[stop]);
+        document.querySelector(`[data-stop-for="${STOP_FIELD[stop]}"]`)?.scrollIntoView({ block: "center" });
+        return;
+      }
+      const errors = validate(next, today).errors;
+      const first = STEPS.flatMap((s) => s.fields(next)).find((k) => errors[k]);
+      if (first) focusField(first);
+    });
+  };
+  /** A situation's worked example: every answer filled in, then the estimate it gives. */
+  const example = (id: SituationId) => {
+    const ex = applyExample(id);
+    if (!ex) return;
+    setForm(ex);
+    setIntent(undefined);
+    requestAnimationFrame(() => {
+      const r = document.getElementById("result");
+      if (!r) return;
+      r.setAttribute("tabindex", "-1");
+      r.focus({ preventScroll: true });
+      r.scrollIntoView({ block: "start" });
+    });
+  };
 
   // Listen for route changes from the first render on (a layout effect runs with the render; a plain effect waits
   // for the next paint, and a click in that gap was lost), then catch up on any change made before this ran.
@@ -134,6 +180,15 @@ export function App() {
     el?.focus({ preventScroll: true });
   }, [key]);
 
+  // A situation card's link ("#/start/homemaker", "#/example/hurt"), as sent to a family: the calculator opens with
+  // that situation's answers, and the address becomes the calculator's own.
+  useLayoutEffect(() => {
+    if (route.name !== "calc" || !(route.start || route.example)) return;
+    history.replaceState(null, "", `${location.pathname}${location.search}#/`);
+    if (route.start) start(route.start);
+    else if (route.example) example(route.example);
+  }, [route]);
+
   // Older addresses (a question page, Check, a stop page, the result, the offer page) open the calculator at the
   // matching place, and the address becomes the calculator's own.
   useLayoutEffect(() => {
@@ -161,6 +216,7 @@ export function App() {
 
   const restart = () => {
     setForm(EMPTY_FORM);
+    setIntent(undefined);
     try {
       sessionStorage.removeItem(STORE);
     } catch {
@@ -180,24 +236,43 @@ export function App() {
       break;
     default:
       page = (
-        <Estimator
-          form={form}
-          setForm={setForm}
-          v={v}
-          computed={computed}
-          today={today}
-          onRestart={restart}
-        />
+        <>
+          {/* Phone order (the cards straight after the hero) is the reading order; from a tablet up, what the tool
+              tells you moves up into the hero. */}
+          <div class="flex flex-col">
+            <Hero />
+            <Situations
+              class="md:order-3"
+              answered={JSON.stringify(form) !== JSON.stringify(EMPTY_FORM)}
+              today={today}
+              onStart={start}
+              onExample={example}
+            />
+            <Tells class="border-t border-border md:order-2 md:border-t-0" />
+          </div>
+          <Estimator
+            form={form}
+            setForm={setForm}
+            v={v}
+            computed={computed}
+            today={today}
+            onRestart={restart}
+            intent={intent}
+          />
+          <Facts />
+          <ReadMore />
+        </>
       );
   }
 
   return (
     <LangProvider lang={lang} setLang={setLang}>
-      <Header route={route} />
+      <Header />
       <DraftBanner />
       <main id="main" tabIndex={-1} class="outline-none">
         {page}
       </main>
+      <HelpBand />
       <Footer spaceForBar={route.name === "calc"} />
     </LangProvider>
   );

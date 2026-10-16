@@ -7,6 +7,18 @@ import { useT } from "../i18n";
  * and a soft shadow, slate text, and the CFI blue only for the main action, links, focus and the headline figure.
  */
 
+/**
+ * The website's section frame: full width with its side padding (24, 40, 64, 96 px as the screen grows; 16 px on
+ * the narrowest phones, where every pixel goes to the answers), centred beyond a 1366 px screen.
+ */
+export const wrap = "mx-auto w-full max-w-[1366px] px-4 min-[375px]:px-6 md:px-10 lg:px-16 xl:px-24";
+
+/* The website's 48 px pill buttons, for the first screen's main actions. */
+const pillBase =
+  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+export const pillPrimary = `${pillBase} bg-brand text-brand-foreground shadow-lg shadow-brand/30 hover:bg-brand/90`;
+export const pillOutline = `${pillBase} border border-border bg-background text-foreground shadow-sm hover:bg-muted`;
+
 /** The page container: the website's max width, with phone gutters of 16 px. */
 export function Page(props: { children: ComponentChildren; narrow?: boolean; class?: string }) {
   return (
