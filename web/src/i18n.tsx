@@ -47,15 +47,23 @@ export function hasKey(lang: Lang, key: string): boolean {
   return Boolean(dicts()[lang][key]);
 }
 
+/** Engine messages that say "for <state code>": English shows the state's name there instead. */
+const NAMES_STATE = new Set(["MW_MISSING", "ATTENDANT_WAGE_MISSING"]);
+
 /**
- * An engine warning in the page's language. English shows the engine's own text. Hindi words it from the warning's
- * code and values; `en` is true when there is no Hindi wording (the text is then English, to be marked lang="en").
+ * An engine warning in the page's language. English shows the engine's own text (with the state named, not coded,
+ * where the text says "for <state>"). Hindi words it from the warning's code and values; `en` is true when there is
+ * no Hindi wording (the text is then English, to be marked lang="en").
  */
 export function useWarnText(): (w: Warning) => { text: string; en: boolean } {
   const { lang } = useContext(LangContext);
   return (w) => {
-    if (lang === "en") return { text: w.message, en: false };
     const v = w.vars ?? {};
+    if (lang === "en") {
+      const st = NAMES_STATE.has(w.code) && typeof v.state === "string" ? v.state : undefined;
+      const name = st && hasKey("en", `stname.${st}`) ? translate(dicts(), "en", `stname.${st}`) : undefined;
+      return { text: name ? w.message.replace(`for ${st} on`, `for ${name} on`) : w.message, en: false };
+    }
     const key = [v.variant !== undefined ? `warnmsg.${w.code}.${v.variant}` : "", `warnmsg.${w.code}`].find(
       (k) => k && hasKey(lang, k),
     );

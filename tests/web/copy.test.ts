@@ -105,6 +105,25 @@ describe("web copy (EN/HI)", () => {
         victim: { ageYears: 25, employment: "informal" },
         injury: { certificatePct: 40, certificateBasis: "limb" },
       },
+      {
+        ...base,
+        kind: "injury",
+        state: "ZZ",
+        injury: { certificatePct: 60, permanentAttendant: true },
+      },
+      { ...base, s164: "awarded_by_tribunal" },
+      { ...base, victim: { ageYears: 30, employment: "permanent", income: { proof: "salary_slip" } } },
+      { ...base, victim: { ageYears: 30, employment: "self_employed", income: { proof: "itr" } } },
+      { ...base, state: "CENTRAL", zone: "Z", victim: { ageYears: 30, employment: "informal" } },
+      {
+        ...base,
+        accidentDate: "2017-06-01",
+        victim: {
+          ageYears: 40,
+          employment: "self_employed",
+          income: { proof: "itr", itrAnnualIncomes: [{ fy: "2016-17", income: 600000 }] },
+        },
+      },
     ];
     const seen = new Set<string>();
     for (const input of inputs)
@@ -113,6 +132,8 @@ describe("web copy (EN/HI)", () => {
         if (w.code === "MW_CONTESTED") continue; // its text comes from the wage data, in English
         const key = [`warnmsg.${w.code}.${w.vars?.variant}`, `warnmsg.${w.code}`].find((k) => en[k])!;
         expect(key, w.code).toBeDefined();
+        // A warning that names a variant must have its own wording for it.
+        if (w.vars?.variant !== undefined) expect(key, w.code).toBe(`warnmsg.${w.code}.${w.vars.variant}`);
         // ZONE_ASSUMED names the state in full in the engine's text; the page gives the name itself.
         if (w.code !== "ZONE_ASSUMED")
           expect(translate({ en, hi }, "en", key, w.vars), w.code).toBe(w.message);

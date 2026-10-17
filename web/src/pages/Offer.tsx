@@ -20,9 +20,9 @@ interface OfferForm {
 const defaults = (): OfferForm => ({
   amount: "",
   years: String(rules.statutory.pendency.tribunal_years),
-  interest: "7.5",
-  discount: "7",
-  fee: "0",
+  interest: String(rules.settings.offer_defaults.interest_pct),
+  discount: String(rules.settings.offer_defaults.discount_pct),
+  fee: String(rules.settings.offer_defaults.lawyer_fee_pct),
 });
 
 const LIMITS: Record<keyof OfferForm, [number, number]> = {
@@ -56,8 +56,9 @@ function readOffer(f: OfferForm): {
 }
 
 /** The plain answer to "is the offer fair?", from the offer as a share of the estimate. */
+const [FAR, WELL, BELOW, NEAR] = rules.settings.offer_defaults.verdict_bands_pct;
 const verdict = (pct: number) =>
-  pct < 25 ? "far" : pct < 50 ? "well" : pct < 80 ? "below" : pct < 95 ? "near" : "close";
+  pct < FAR ? "far" : pct < WELL ? "well" : pct < BELOW ? "below" : pct < NEAR ? "near" : "close";
 
 /**
  * "Got an offer from the insurer?": the offer as a share of the estimate, what the award would be worth with

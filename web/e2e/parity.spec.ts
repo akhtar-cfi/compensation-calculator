@@ -38,9 +38,9 @@ test("offer check matches checkOffer()", async ({ page }) => {
   await page.getByRole("button", { name: "Check the offer" }).click();
   const c = checkOffer(expected(input), 1_000_000, {
     yearsToAward: rules.statutory.pendency.tribunal_years,
-    awardInterestPct: 7.5,
-    discountPct: 7,
-    lawyerFeePct: 0,
+    awardInterestPct: rules.settings.offer_defaults.interest_pct,
+    discountPct: rules.settings.offer_defaults.discount_pct,
+    lawyerFeePct: rules.settings.offer_defaults.lawyer_fee_pct,
   });
   await expect(page.getByTestId("offer-pct-std")).toHaveText(`${c.offerPctOfStandard}%`);
   await expect(page.getByTestId("offer-award")).toContainText(c.awardWithInterest.toLocaleString("en-IN"));

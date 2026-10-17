@@ -130,14 +130,19 @@ export function renderRulesReference(rules: RulesBundle): string {
   L.push(
     "## Contested points: conservative / standard / claimant-max",
     "",
-    "Only legal uncertainty moves the range. Each row is one contested point.",
+    'Only legal uncertainty moves the range. Each row is one contested point. "Decided in" says whether the',
+    "engine reads the values from rules/range-parameters.yaml or makes the choice in its code (the row then",
+    "describes the code).",
     "",
   );
-  L.push("| Point | Conservative | Standard | Claimant-max | Sources |", "|---|---|---|---|---|");
-  const cell = (x: string) => x.replace(/\|/g, "\\|").replace(/\n/g, " ");
+  L.push(
+    "| Point | Conservative | Standard | Claimant-max | Sources | Decided in |",
+    "|---|---|---|---|---|---|",
+  );
+  const cell = (x: string | number) => String(x).replace(/\|/g, "\\|").replace(/\n/g, " ");
   for (const p of rules.rangeParameters)
     L.push(
-      `| ${cell(p.description)}${p.note ? ` (${cell(p.note)})` : ""} | ${p.conservative} | ${p.standard} | ${p.claimant_max} | ${cite(p.sources)} |`,
+      `| ${cell(p.description)}${p.note ? ` (${cell(p.note)})` : ""} | ${cell(p.conservative)} | ${cell(p.standard)} | ${cell(p.claimant_max)} | ${p.sources.length ? cite(p.sources) : "none recorded"} | ${p.implemented_in ? `code (${p.implemented_in})` : "rules file"} |`,
     );
   L.push("");
 
@@ -217,6 +222,24 @@ export function renderRulesReference(rules: RulesBundle): string {
     `- **Typical time to award:** ${s.pendency.tribunal_years} years at tribunals, ${s.pendency.high_court_years} at High Courts. Sources: ${cite(s.pendency.sources)}.`,
   );
   L.push("", `Signed off: ${yes(s.verified)}.`, "");
+
+  const g = rules.settings;
+  L.push("## Settings (product choices, not law)", "", g.description, "");
+  L.push(
+    `- **Range bar:** shown only when highest / lowest is at most ${g.range_bar_max_ratio.death} (death) or ${g.range_bar_max_ratio.injury} (injury). ${g.range_bar_max_ratio.note}`,
+  );
+  L.push(`- **Wide-range notice:** ${g.wide_range_notice_ratio.value}. ${g.wide_range_notice_ratio.note}`);
+  L.push(
+    `- **Negligence cards:** ${g.negligence_cards_pct.values.join("% and ")}%. ${g.negligence_cards_pct.note}`,
+  );
+  L.push(
+    `- **Minimum-wage freshness:** ${g.wage_freshness_months.value} months. ${g.wage_freshness_months.note}`,
+  );
+  const o = g.offer_defaults;
+  L.push(
+    `- **Offer check defaults:** interest ${o.interest_pct}%, discount ${o.discount_pct}%, lawyer's fee ${o.lawyer_fee_pct}%; verdict bands at ${o.verdict_bands_pct.join(" / ")}% of the standard figure. ${o.note}`,
+  );
+  L.push("", `Signed off: ${yes(g.verified)}.`, "");
 
   const t = rules.tax;
   L.push(
