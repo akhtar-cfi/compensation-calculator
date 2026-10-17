@@ -1,0 +1,123 @@
+{
+  "record_version": 1,
+  "doc_id": "2025_3_1113_1121",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2025 INSC 394",
+  "cnr": "ESCR010004402025",
+  "decided": "2025-03-25",
+  "citation": "2025 INSC 394; [2025] 3 S.C.R. 1113",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2025/english/2025_3_1113_1121_EN.pdf",
+  "quote_check": "verified, 31/31 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2025_3_1113_1121",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "WB",
+      "accident_date": "1999-11-03",
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": "permanent",
+      "occupation": "Block Development Officer (government)",
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "pain_suffering_amenities": 500000,
+        "other:medical_and_artificial_limbs": 900000,
+        "attendant": 200000
+      },
+      "awarded_formula_head": null,
+      "total_award": 1600000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 7,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": 750000,
+        "by": null,
+        "note": "Tribunal assessed Rs 7,50,000 with no interest; it put 60% (Rs 4,50,000) on the trailer's insurer and the Rs 3,00,000 balance on the scooter owner-driver, with the insurer to pay all and recover that share. Award date not stated."
+      },
+      {
+        "forum": "high_court",
+        "date": "2018-05-04",
+        "amount": 750000,
+        "by": "claimant",
+        "note": "Claimant's appeal dismissed; the High Court upheld partial negligence of the scooter driver (learner's licence, collision at the trailer's tail-end), so the tribunal amount stood."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2025-03-25",
+        "amount": 1600000,
+        "by": "claimant",
+        "note": "Appeal allowed: trailer driver alone negligent. Award raised to Rs 16,00,000 (Rs 5 lakh disability and amenities, Rs 9 lakh treatment and artificial limbs, Rs 2 lakh attendant), 7% interest from the award date, less Rs 25,000 already paid, all from the trailer's insurer."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "contributory_negligence",
+        "composite_negligence"
+      ],
+      "holding": "Where the other vehicle was found to be driven rashly and negligently, the mere fact that the scooter driver held only a learner's licence does not necessarily mean contributory negligence. Nor can negligence be presumed merely because the collision was at the tail-end of a long trailer; that is a question of fact to be proved.",
+      "para": "13",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, young (age not stated), block development officer, pillion rider, West Bengal (injury, both legs amputated)",
+    "family_summary": "A young government officer riding pillion on a scooter lost both legs when it collided with a trailer in November 1999 in West Bengal. The tribunal assessed Rs 7.5 lakh without interest, blaming the scooter driver for part of the accident, and the High Court dismissed his appeal in May 2018. In March 2025 the Supreme Court found the trailer driver alone negligent and raised the award to Rs 16 lakh with 7% interest, payable by the trailer's insurer. It took about 25 years from the accident.",
+    "what_mattered": [
+      "The police charge-sheeted the trailer driver, the insurer never pleaded contributory negligence and the scooter owner never gave evidence, so there was no proof the scooter driver was at fault.",
+      "A learner's licence, or hitting the tail-end of a long trailer, does not by itself prove negligence; it must be proved, not presumed.",
+      "Artificial limbs wear out and must be replaced, so the Court gave Rs 9 lakh for treatment and limbs together, more than the Rs 5 lakh claimed for them (a claim does not cap just compensation); it cut the disability and amenities heads to Rs 5 lakh, so the total equalled the Rs 16 lakh claimed.",
+      "Keeping his government career despite the disability only ruled out an award for lost income; the Court still gave Rs 5 lakh for the disability and the loss of life's amenities."
+    ],
+    "archetypes": [
+      "injury_amputation",
+      "contributory_negligence"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: what_mattered[2] now compares the Rs 9 lakh composite with the Rs 5 lakh claimed for treatment and limbs (Rs 2 lakh + Rs 3 lakh) and notes the disability heads were cut to Rs 5 lakh, so the Rs 16 lakh total equals the claim (numbers and privacy+law findings).",
+      "fixed: evidence quote 'Total ₹16,00,000/- ₹7,50,000/-' moved from journey.1 to journey.0; the table's Awarded column is the Tribunal's award.",
+      "fixed: payload.uncertain[6] no longer names the precedent's claimant (a minor); it cites (2008) 12 SCC 436 instead.",
+      "fixed: payload.occupation set to 'Block Development Officer (government)'; uncertain[4] now says the claimant continued in government service, dropping the identifying later-promotion detail.",
+      "fixed: added what_mattered line that keeping his government career only ruled out lost income, not disability and amenities compensation (para 16).",
+      "fixed: precedent.topics now contributory_negligence and composite_negligence (pillion claimant; fault alleged against the scooter driver, a co-tortfeasor).",
+      "fixed: added what_mattered evidence quotes for the Rs 16 lakh claim, Rs 3 lakh limbs claim, Rs 9 lakh disability claim cut to Rs 5 lakh, and the loss-of-income point.",
+      "fixed: journey.1 Rs 7,50,000 now backed by a quote giving the Tribunal's amount followed by the unsuccessful appeal, since the High Court amount is inferred from the dismissal."
+    ]
+  }
+}

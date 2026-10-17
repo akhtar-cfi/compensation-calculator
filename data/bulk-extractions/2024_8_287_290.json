@@ -1,0 +1,95 @@
+{
+  "record_version": 1,
+  "doc_id": "2024_8_287_290",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2024 INSC 598",
+  "cnr": "ESCR010003672024",
+  "decided": "2024-08-09",
+  "citation": "2024 INSC 598; [2024] 8 S.C.R. 287",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/english/2024_8_287_290_EN.pdf",
+  "quote_check": "verified, 24/24 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2024_8_287_290",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "KA",
+      "accident_date": "2013-01-27",
+      "filing_date": null,
+      "award_date": "2014-06-28",
+      "age": null,
+      "employment": "self_employed",
+      "occupation": "agriculturist",
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": 25,
+      "certificate_pct": 50,
+      "certificate_basis": "whole_body",
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 538872,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2014-06-28",
+        "amount": 538872,
+        "by": null,
+        "note": "Tribunal took functional disability at 25% (half of the 50% in the doctor's certificate) and awarded compensation with 6% interest a year from the date of the petition."
+      },
+      {
+        "forum": "high_court",
+        "date": "2018-11-13",
+        "amount": 474072,
+        "by": "insurer",
+        "note": "Insurer's appeal partly allowed: disability cut from 25% to 20% and the award reduced."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2024-08-09",
+        "amount": 538872,
+        "by": "claimant",
+        "note": "Injured man's appeal allowed: the High Court cut the disability without a plausible reason, so its judgment was set aside and the tribunal's award with interest restored."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, pillion rider, agriculturist, Karnataka (injury)",
+    "family_summary": "A man riding pillion on a motorcycle broke bones in both forearms in a January 2013 accident and needed surgery with plates and screws. In June 2014 the tribunal awarded Rs 5,38,872 with 6% interest, taking his disability as 25%. On the insurer's appeal, the High Court in November 2018 cut the disability to 20% and the award to Rs 4,74,072. In August 2024, about eleven and a half years after the accident, the Supreme Court restored the tribunal's award in full.",
+    "what_mattered": [
+      "The doctor who certified 50% permanent disability was examined as a witness, and the tribunal had already taken only half of that (25%) for loss of earning capacity.",
+      "The High Court lowered the disability to 20% without a plausible reason; the Supreme Court said a cut in compensation needs some basis in the evidence and restored the tribunal's figure."
+    ],
+    "archetypes": [
+      "injury_partial_disability_self_employed_or_manual"
+    ],
+    "audience": "both",
+    "review_notes": []
+  }
+}

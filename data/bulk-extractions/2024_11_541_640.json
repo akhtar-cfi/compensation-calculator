@@ -1,0 +1,105 @@
+{
+  "record_version": 1,
+  "doc_id": "2024_11_541_640",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2024 INSC 840",
+  "cnr": "ESCR010005462024",
+  "decided": "2024-11-06",
+  "citation": "2024 INSC 840; [2024] 11 S.C.R. 541",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/english/2024_11_541_640_EN.pdf",
+  "quote_check": "verified, 11/11 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2024_11_541_640",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "Constitution Bench reference on a point of law only: whether an LMV licence holder may drive a transport vehicle under 7,500 kg without a separate endorsement. The reference was answered and the appeals sent for listing before a regular bench; no compensation amount is decided or stated.",
+      "kind": null,
+      "outcome": "other",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "RJ",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": null,
+        "by": null,
+        "note": "Inferred: the judgment does not name the tribunal or give its award or date for the lead case; it says only that the reference arises from compensation claims."
+      },
+      {
+        "forum": "high_court",
+        "date": "2017-08-04",
+        "amount": null,
+        "by": null,
+        "note": "The Rajasthan High Court decided the lead civil miscellaneous appeal (registered in 2011) on 4 August 2017. Who appealed and any amount are not stated."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2024-11-06",
+        "amount": null,
+        "by": "insurer",
+        "note": "Insurer's appeal. A five-judge bench answered the licensing question referred to it and directed the appeals to be listed before a regular bench. No amount decided."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "pay_and_recover"
+      ],
+      "holding": "A driver with a Light Motor Vehicle licence may drive a transport vehicle with gross vehicle weight under 7,500 kg without a separate transport-vehicle authorisation. The extra eligibility conditions for transport vehicles apply only to vehicles over 7,500 kg; special rules for e-carts, e-rickshaws and hazardous goods remain. Mukund Dewangan (2017) is upheld.",
+      "para": "131",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Insurer's appeal on LMV licences for light transport vehicles, Rajasthan (Constitution Bench, no award)",
+    "family_summary": "This judgment decides no compensation amount: five Supreme Court judges answered a question of law that had divided courts for years. Insurers often disputed claims when a light goods or passenger vehicle was driven by someone holding only a Light Motor Vehicle licence; in November 2024 the Court ruled this licence is enough for transport vehicles under 7,500 kg, so insurers cannot use that technical plea to defeat a legitimate claim. The lead case, an insurer's appeal from a 2017 Rajasthan High Court order in an appeal registered in 2011, was sent back to a regular bench after about 13 years. Insurers told the Court that compensation ordered by the lower courts was paid or would be paid.",
+    "what_mattered": [
+      "The Act defines a Light Motor Vehicle as including a transport vehicle of not more than 7,500 kg, so the Court held the extra transport-vehicle licence rules apply only to medium and heavy vehicles.",
+      "Insurers produced no data showing that LMV licence holders driving light transport vehicles cause more accidents, so road-safety fears did not change the result.",
+      "Earlier rulings that let insurers refuse on this ground (Prabhu Lal, Roshanben Rahemansha Fakir, Angad Kol) were overruled; special rules for e-carts, e-rickshaws and hazardous goods still apply."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": []
+  }
+}

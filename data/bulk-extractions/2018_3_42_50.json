@@ -1,0 +1,104 @@
+{
+  "record_version": 1,
+  "doc_id": "2018_3_42_50",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2018 INSC 207",
+  "cnr": "ESCR010005012018",
+  "decided": "2018-03-06",
+  "citation": "2018 INSC 207; [2018] 3 S.C.R. 42",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2018/english/2018_3_42_50_EN.pdf",
+  "quote_check": "partial, 27/27 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2018_3_42_50",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "OD",
+      "accident_date": "2009-04-25",
+      "filing_date": null,
+      "award_date": "2014-02-26",
+      "age": 32,
+      "employment": "self_employed",
+      "occupation": "B-Class contractor",
+      "proof": "itr",
+      "claimed_monthly_income": 18500,
+      "income_monthly_accepted": null,
+      "income_basis": "proved_itr",
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": 55,
+      "certificate_pct": 55,
+      "certificate_basis": "unclear",
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_earning_capacity": 500000,
+        "pain_suffering": 200000,
+        "medical": 209622
+      },
+      "awarded_formula_head": null,
+      "total_award": 910000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": 209622,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2014-02-26",
+        "amount": 2285322,
+        "by": null,
+        "note": "Tribunal took income as Rs 2,22,000 a year (claimant's evidence of Rs 18,500 a month), treated 55% disability as permanent with a multiplier of 17: Rs 20,75,700 plus Rs 2,09,622 medical, with 7.5% interest."
+      },
+      {
+        "forum": "high_court",
+        "date": "2015-04-15",
+        "amount": 1200000,
+        "by": "insurer",
+        "note": "Insurer's appeal. The High Court cut the award to Rs 12,00,000 and interest from 7.5% to 7% in a short order that gave no reasons."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2018-03-06",
+        "amount": 910000,
+        "by": "both",
+        "note": "Insurer's appeal heard with a connected appeal. Disability held temporary: Rs 5 lakhs loss of income, Rs 2 lakhs pain and suffering, Rs 2,09,622 medical, rounded to Rs 9,10,000, with 9% interest from filing."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, 32, contractor, Odisha (injury)",
+    "family_summary": "A 32-year-old contractor broke his left elbow and thigh bone in 2009 when the vehicle he was travelling in fell over a bridge in Odisha. In 2014 the tribunal awarded Rs 22,85,322, treating his 55% disability as permanent; on the insurer's appeal the High Court cut this to Rs 12,00,000 in 2015 without giving reasons. In 2018 the Supreme Court found the disability was temporary and awarded Rs 9,10,000 (Rs 5 lakhs for lost income, Rs 2 lakhs for pain and suffering, plus medical bills) with 9% yearly interest from the date the claim was filed. The case took about nine years from the accident.",
+    "what_mattered": [
+      "The doctor who issued the disability certificate admitted in court that he altered it without the other signing doctors' consent, ticked 'permanent' by mistake, and that the disability was temporary and likely to improve, so the Supreme Court would not pay for a permanent loss of earnings.",
+      "The tribunal's income figures contradicted each other. The Supreme Court used his tax-return average (Rs 1,45,231 a year) and a 55% loss (Rs 79,877 a year), but, because the disability was temporary, gave a one-time Rs 5 lakhs instead of counting that loss over his remaining working years.",
+      "The High Court's order gave no reasons; to avoid more delay the Supreme Court fixed the amount itself instead of sending the case back."
+    ],
+    "archetypes": [
+      "injury_no_permanent_disability"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: what_mattered[1] reworded in plain language (one-time Rs 5 lakhs instead of counting the yearly loss over his working years, because the disability was temporary); figures unchanged (para 12).",
+      "fixed: what_mattered[0] now also says the doctor altered the certificate, signed by four doctors, without the other signatories' consent (para 4 and his answer to court question 5).",
+      "fixed: family_summary now says '9% yearly interest from the date the claim was filed' instead of 'from filing' (para 12)."
+    ]
+  }
+}

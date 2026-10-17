@@ -1,0 +1,100 @@
+{
+  "record_version": 1,
+  "doc_id": "2018_3_1022_1026",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2018 INSC 328",
+  "cnr": "ESCR010004702018",
+  "decided": "2018-04-11",
+  "citation": "2018 INSC 328; [2018] 3 S.C.R. 1022",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2018/english/2018_3_1022_1026_EN.pdf",
+  "quote_check": "verified, 14/14 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2018_3_1022_1026",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "KA",
+      "accident_date": "2004-07-12",
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": "milk supplier to a local dairy",
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 431000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 1,
+      "parents": 1,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": 431000,
+        "by": null,
+        "note": "Tribunal held the tractor's owner-driver rash and negligent; owner and insurer jointly liable for Rs 4,31,000 to the widow and son (plus Rs 10,000 to the father in a separate claim), with 6% interest from the claim date."
+      },
+      {
+        "forum": "high_court",
+        "date": "2015-07-10",
+        "amount": 0,
+        "by": "insurer",
+        "note": "Insurer's appeal allowed: the High Court treated the family's claim as false, set the tribunal award aside and absolved the insurer."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2018-04-11",
+        "amount": 431000,
+        "by": "claimant",
+        "note": "Family's appeal allowed: the tribunal's finding was restored on the eyewitness evidence; owner and insurer jointly liable for Rs 4,31,000 with 6% interest from the date of the claim."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, milk supplier, pedestrian hit by tractor, Karnataka (death)",
+    "family_summary": "A man walking home on a footpath in Karnataka in July 2004 was crushed and killed by a ground-levelling tractor driven rashly by its owner. The claims tribunal awarded his widow and son Rs 4,31,000 (and Rs 10,000 to his father) with 6% interest, payable by the owner and the insurer together. The insurer said he had been riding on the tractor, not walking, and on its appeal the High Court set the award aside in July 2015, treating the family's claim as false. In April 2018 the Supreme Court restored the Rs 4,31,000 with interest, almost 14 years after the accident.",
+    "what_mattered": [
+      "An independent eyewitness said the man was walking on the footpath, and the police FIR said the same; the insurer's only contrary evidence was its own manager's statement that he was riding on the tractor.",
+      "The tractor's owner-driver never testified and did not appeal the tribunal's award, which the Supreme Court read as supporting the family.",
+      "The Supreme Court said the tribunal's conclusion was one the evidence could support, so the High Court could not overturn it with sweeping, casual remarks and no reliable evidence."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": [
+      "fixed: payload.parents set to 1 (father filed his own claim and was awarded Rs 10,000); evidence quote added; dependent_parents left null as dependency is not stated.",
+      "fixed: added uncertain note that parents is recorded as 1 because the father filed a separate claim and the mother is not mentioned (merged with the matching numbers finding).",
+      "fixed: what_mattered[2] reworded to avoid the jargon 'possible view': the tribunal's conclusion was one the evidence could support.",
+      "fixed: family_summary now says the insurer's case was that he was riding on the tractor, not walking.",
+      "fixed: what_mattered[0] now notes the police FIR also showed he was a pedestrian, alongside the eyewitness."
+    ]
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "record_version": 1,
+  "doc_id": "2026_9_112_124",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2026 INSC 864",
+  "cnr": "ESCR010002912026",
+  "decided": "2026-08-14",
+  "citation": "2026 INSC 864; [2026] 9 S.C.R. 112",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/english/2026_9_112_124_EN.pdf",
+  "quote_check": "verified, 29/29 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2026_9_112_124",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "TS",
+      "accident_date": "2012-06-23",
+      "filing_date": null,
+      "award_date": null,
+      "age": 48,
+      "employment": "fixed_salary",
+      "occupation": "private security personnel (claimants said chief security in-charge)",
+      "proof": "other",
+      "claimed_monthly_income": 9000,
+      "income_monthly_accepted": 7000,
+      "income_basis": "proved_salary",
+      "future_prospects_pct": 25,
+      "deduction": "1/4",
+      "multiplier": 13,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": 4,
+      "heads": {
+        "loss_of_dependency": 1023672,
+        "consortium": 193600,
+        "funeral": 15000,
+        "loss_of_estate": 15000
+      },
+      "awarded_formula_head": 1023672,
+      "total_award": 1247272,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 7.5,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 3,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": 844000,
+        "by": null,
+        "note": "Tribunal took income at Rs 7,000 a month with no future prospects, 1/4 deduction, multiplier 13; Rs 10,000 each for funeral and estate, Rs 5,000 consortium to the widow only; 7.5% interest."
+      },
+      {
+        "forum": "high_court",
+        "date": "2022-06-30",
+        "amount": 1100672,
+        "by": "claimant",
+        "note": "Claimants' appeal partly allowed: 25% future prospects added; Rs 77,000 for all conventional heads together; 7.5% interest from the tribunal's order date."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2026-08-14",
+        "amount": 1247272,
+        "by": "claimant",
+        "note": "Claimants' appeal allowed: Rs 48,400 consortium to the widow and to each of three children aged 18 to 21; funeral and estate Rs 15,000 each; dependency kept at Rs 10,23,672."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "consortium"
+      ],
+      "holding": "The widow gets spousal consortium and each child, including children aged 18 to 21 who depended on the deceased, gets separate parental consortium: Rs 40,000 each, raised 10% every three years (Pranay Sethi). Courts must award it to each claimant; giving the widow only Rs 5,000, or one lump sum for all fixed heads together, falls short of the law.",
+      "para": "5.3, 5.7, 6, 7",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": "conventional_heads"
+    },
+    "title_anon": "Man, 48, private security guard, Telangana (death)",
+    "family_summary": "A 48-year-old security guard was hit by a speeding car while walking in Telangana in 2012 and died in hospital; his widow and three children, described by the Supreme Court as aged 18 to 21, claimed compensation. The tribunal awarded Rs 8,44,000. In 2022 the High Court raised it to Rs 11,00,672 by adding 25% to his income for likely future increases and allowing Rs 77,000 in all for funeral, estate and companionship. In August 2026, about 14 years after the accident, the Supreme Court raised it to Rs 12,47,272, giving Rs 48,400 for loss of companionship and guidance (consortium) to the widow and to each child, and Rs 15,000 each for funeral and loss of estate.",
+    "what_mattered": [
+      "The Supreme Court held that the widow and each of the three children (aged 18 to 21 and dependent on their father) were owed Rs 48,400 each for loss of companionship and guidance (consortium); the tribunal gave the widow only Rs 5,000 and the children nothing.",
+      "Income stayed at Rs 7,000 a month because the employer's director testified to that salary, even though a salary certificate said Rs 9,000."
+    ],
+    "archetypes": [
+      "death_salaried"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: precedent.holding now limited to the widow (spousal) and dependent children aged 18 to 21 (parental), Rs 40,000 each plus 10% every three years, and names the Rs 5,000-only and lump-sum errors (paras 6, 6.1, 7).",
+      "fixed: family_summary now says the High Court rise came from 25% future prospects plus Rs 77,000 for fixed heads, adds the Rs 15,000 funeral and estate, explains consortium, and hedges the children's ages.",
+      "fixed: uncertain now notes the judgment does not say at what date the children were 18 to 21; journey step 3 note changed from 'adult children' to 'children aged 18 to 21' to match.",
+      "fixed: what_mattered[0] now says the widow and each dependent child got Rs 48,400 consortium, while the tribunal gave the widow only Rs 5,000 and the children nothing (para 6.1)."
+    ]
+  }
+}

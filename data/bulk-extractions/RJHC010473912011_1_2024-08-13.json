@@ -1,0 +1,93 @@
+{
+  "record_version": 1,
+  "doc_id": "RJHC010473912011_1_2024-08-13",
+  "source": "hc",
+  "court": "High Court of Rajasthan",
+  "case": "CMA 5384/2011",
+  "cnr": "RJHC010473912011",
+  "decided": "2024-08-13",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/court%3D8_9/bench%3Drhcjodh240618/RJHC010473912011_1_2024-08-13.pdf",
+  "quote_check": "verified, 13/13 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "RJHC010473912011_1_2024-08-13",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_dismissed",
+      "court": "High Court of Rajasthan at Jodhpur",
+      "court_level": "hc",
+      "state_code": "RJ",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": "2011-09-27",
+      "age": null,
+      "employment": null,
+      "occupation": "salaried employee",
+      "proof": "salary_slip",
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 1704656,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 7,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2011-09-27",
+        "amount": 1704656,
+        "by": null,
+        "note": "MACT, Rajsamand awarded Rs 17,04,656 with 7% yearly interest and made the truck's insurer liable."
+      },
+      {
+        "forum": "high_court",
+        "date": "2024-08-13",
+        "amount": 1704656,
+        "by": "insurer",
+        "note": "Insurer's appeal (income said to be above the salary certificate) dismissed; tribunal award upheld in full."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Salaried man, Rajasthan (death): insurer's appeal dismissed",
+    "family_summary": "A salaried man died in a road accident involving an insured truck, and his widow and another family member claimed compensation before the motor accident tribunal at Rajsamand, Rajasthan. In September 2011 the tribunal awarded Rs 17,04,656 with 7% yearly interest and made the insurer pay. The insurer appealed, saying the tribunal had taken his income higher than his salary certificate showed. In August 2024, almost 13 years later, the Rajasthan High Court dismissed the appeal and left the award unchanged.",
+    "what_mattered": [
+      "The High Court followed its own ruling of a week earlier and a July 2024 Supreme Court decision that house rent allowance, flexible benefits and the employer's provident fund contribution count as part of a salaried person's income.",
+      "The High Court did not discuss this case's own figures: it accepted the family's argument that the case was covered by those two rulings, rejected the insurer's complaint that income was set above the salary certificate, and found no error in the tribunal's award."
+    ],
+    "archetypes": [
+      "death_salaried"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: what_mattered[1] no longer gives allowances as the court's reason; the order only dismissed the appeal in view of Kamla Bai and Meenakshi without discussing this case's figures.",
+      "fixed: uncertain now flags that 'man', 'widow' and married/spouse are inferred from the cause title (wife of a man who had died); the order never names the deceased or the relationships.",
+      "fixed: family_summary no longer places the accident in Rajasthan; it now says the claim was brought before the tribunal at Rajsamand, Rajasthan.",
+      "fixed: uncertain[4] no longer says the second claimant died during the appeal or that the adult representative is her husband; the order shows only an adult man and his minor son as her legal representatives."
+    ]
+  }
+}
