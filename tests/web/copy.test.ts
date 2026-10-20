@@ -60,6 +60,25 @@ describe("web copy (EN/HI)", () => {
     }
   });
 
+  it("words every reason a similar case is like this one, or not, and every group of work, in both languages", () => {
+    const match = readFileSync(join(REPO_ROOT, "src/cases/match.ts"), "utf8");
+    const block = (from: string, to: string) => match.slice(match.indexOf(from), match.indexOf(to));
+    const literals = (s: string) => [...s.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]!);
+    const codes = literals(block("export type Reason", "export interface CaseMatch"));
+    const groups = literals(block("export type WorkGroup", "/**\n * Why a case"));
+    expect(codes.length).toBeGreaterThanOrEqual(11);
+    expect(groups).toHaveLength(5);
+    const keys = [
+      ...codes.map((c) => `case.why.${c}`),
+      "case.why.workOther",
+      ...groups.map((g) => `case.group.${g}`),
+    ];
+    for (const k of keys) {
+      expect(en[k], k).toBeTruthy();
+      expect(hi[k], k).toBeTruthy();
+    }
+  });
+
   it("words every engine warning in Hindi, and its English wording matches the engine's", () => {
     const rules = loadRules();
     const base: EstimateInput = {

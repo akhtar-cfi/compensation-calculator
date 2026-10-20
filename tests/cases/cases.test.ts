@@ -153,7 +153,10 @@ describe("matchCases", () => {
       cases,
     );
     expect(m[0]?.case.id).toBe("delhi-mact-2026-dar-350-2020");
-    expect(m[0]?.different).toContain("a single tribunal award; it may still be appealed");
+    expect(m[0]?.different).toContainEqual({
+      code: "tribunal_only",
+      text: "a single tribunal award; it may still be appealed",
+    });
   });
 
   it("drops weak matches instead of padding the list", () => {
@@ -197,7 +200,7 @@ describe("older-law flag", () => {
     );
     const jitendra = m.find((x) => x.case.id === "jitendra-2025");
     expect(jitendra).toBeDefined();
-    expect(jitendra!.different).not.toContain("the tribunal decided it under older law");
+    expect(jitendra!.different.map((r) => r.code)).not.toContain("older_law");
     const sidram = matchCases(
       input({
         kind: "injury",
@@ -207,6 +210,6 @@ describe("older-law flag", () => {
       }),
       cases,
     ).find((x) => x.case.id === "sidram-2022");
-    expect(sidram?.different).toContain("the tribunal decided it under older law");
+    expect(sidram?.different.map((r) => r.code)).toContain("older_law");
   });
 });

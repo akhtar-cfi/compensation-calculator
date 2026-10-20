@@ -25,7 +25,8 @@ import type { ModeProps } from "../intent";
 import { usePageFocus, useResultModule } from "../lazy";
 import { situation } from "../situations";
 import type { FieldName } from "../validate";
-import { accidentLabel, parentsAssumed, unsureChecks } from "../estimate-extras";
+import { accidentLabel, parentsAssumed } from "../estimate-extras";
+import { unsureChecks } from "../checks";
 import { ResultSummary, StopNotice } from "./ResultSummary";
 import { ChangeLine, useChange } from "../components/result";
 import { Restart } from "../components/restart";
@@ -300,6 +301,7 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
                   onMissing={goTo}
                   example={props.example}
                   unsure={unsureChecks(f)}
+                  form={f}
                 />
                 <p class="sr-only" aria-live="polite">
                   {announce}

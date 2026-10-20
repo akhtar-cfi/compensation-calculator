@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { REPO_ROOT, loadRules } from "../../src/rules/load.js";
-import { CONTESTED, contested, type ContestedId } from "../../web/src/contested.js";
+import { BASES, CONTESTED, contested, standardBasis, type ContestedId } from "../../web/src/contested.js";
 import type { Dict } from "../../web/src/translate.js";
 
 const rules = loadRules();
@@ -44,6 +44,34 @@ describe("the contested points of law, in plain words", () => {
       for (const s of contested(id, rules).sources) expect(known.has(s), `${id}: ${s}`).toBe(true);
     for (const p of rules.rangeParameters)
       if (p.id in CONTESTED) expect(contested(p.id as ContestedId, rules).sources).toEqual(p.sources);
+  });
+
+  it("says what each standard position rests on, never a Supreme Court ruling unless one is cited", () => {
+    const court = new Map(rules.sources.map((s) => [s.id, s.court]));
+    for (const id of Object.keys(CONTESTED) as ContestedId[])
+      for (const kind of ["death", "injury"] as const) {
+        const b = standardBasis(id, kind);
+        expect(BASES).toContain(b);
+        const cited = contested(id, rules).sources;
+        if (b === "sc")
+          expect(
+            cited.some((s) => court.get(s) === "SC"),
+            `${id} (${kind})`,
+          ).toBe(true);
+        if (cited.length === 0) expect(b, id).toBe("none");
+      }
+    // The rules file itself calls the income for a child's death an extension of the rule for injured children.
+    expect(rules.rangeParameters.find((p) => p.id === "minor_death_income")?.note).toMatch(/HC extension/);
+    expect(standardBasis("minor_death_income", "death")).toBe("extension");
+    expect(standardBasis("under_15_multiplier", "death")).toBe("extension");
+    expect(standardBasis("under_15_multiplier", "injury")).toBe("sc");
+    // Functional disability read from a certificate, and the injury bands, follow Delhi tribunal practice.
+    expect(standardBasis("functional_pct", "injury")).toBe("practice");
+    expect(standardBasis("non_pecuniary_band", "injury")).toBe("practice");
+    for (const b of BASES) {
+      expect(en[`basis.${b}`], b).toBeTruthy();
+      expect(hi[`basis.${b}`], b).toBeTruthy();
+    }
   });
 
   it("says so where no authority is recorded for a choice", () => {

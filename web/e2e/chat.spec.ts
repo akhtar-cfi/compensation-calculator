@@ -146,6 +146,21 @@ test("the amount arrives as a card, then an offer to make it more accurate", asy
   expect(outside, "requests outside the page's own origin").toEqual([]);
 });
 
+test("the amount is in view where the chat is, when it arrives and when an answer changes it", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await fillChat(page, salaried, { details: false });
+  const mini = ask(page).getByTestId("mini-amount");
+  await expect(mini).toContainText("lakh");
+  await expect(mini).toBeInViewport();
+  await page.locator("[data-change=age]").click();
+  await page.fill("#age", "45");
+  await ask(page).locator("[data-action=send]").click();
+  await expect(ask(page).getByTestId("mini-amount")).toContainText(/from ₹/);
+  await expect(ask(page).getByTestId("mini-amount")).toBeInViewport();
+});
+
 test("each detail after the amount moves it, and can be skipped", async ({ page }) => {
   await fillChat(page, salaried, { details: false });
   await ask(page).locator("[data-action=more]").click();

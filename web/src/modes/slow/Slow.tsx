@@ -7,7 +7,8 @@ import { ChangeLine, useChange } from "../../components/result";
 import { Restart } from "../../components/restart";
 import { pillOutline, pillPrimary, quietBtn, wrap } from "../../components/ui";
 import { loadCases, rules, useLoaded } from "../../data";
-import { accidentLabel, parentsAssumed, unsureChecks } from "../../estimate-extras";
+import { accidentLabel, parentsAssumed } from "../../estimate-extras";
+import { unsureChecks } from "../../checks";
 import {
   afterRefine,
   afterScreen,
@@ -423,6 +424,7 @@ export function Slow(props: ModeProps) {
           moreHref={queue[0] ? placeHref({ type: "refine", id: queue[0] }) : null}
           example={props.example}
           unsure={unsureChecks(f)}
+          form={f}
         />
         <div class="mt-5 grid gap-3 sm:grid-cols-2">
           {queue.length > 0 && (

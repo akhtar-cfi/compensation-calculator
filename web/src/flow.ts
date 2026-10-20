@@ -136,6 +136,15 @@ export function onPath(f: FormState): ScreenId[] {
   return SCREENS.filter((s) => screenFields(s, f).length > 0);
 }
 
+/** Every question answered on the way to this estimate, quick answers then details, in the order asked. */
+export function answeredOnPath(f: FormState): QuestionId[] {
+  const asked = [
+    ...onPath(f).flatMap((s) => screenFields(s, f)),
+    ...REFINES.flatMap((r) => refineFields(r, f)),
+  ];
+  return [...new Set(asked)].filter((k) => rawAnswer(f, k) !== "");
+}
+
 export function screenComplete(id: ScreenId, f: FormState, v: Validation, today: string): boolean {
   return screenFields(id, f).every((k) => !hasError(f, v, k, today));
 }

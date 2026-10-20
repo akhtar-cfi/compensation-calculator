@@ -74,3 +74,35 @@ export function contested(id: ContestedId, rules: RulesBundle): ContestedPoint {
       : (IN_CODE[id as keyof typeof IN_CODE] ?? []);
   return { id, label: `cp.${id}`, c: `cp.${id}.c`, l: `cp.${id}.l`, m: `cp.${id}.m`, sources };
 }
+
+/**
+ * What the standard position on a point rests on, so that a High Court's reading or tribunal practice is never
+ * called the Supreme Court's method: a Supreme Court ruling; a Supreme Court rule for injured children, extended to
+ * a death (rules/range-parameters.yaml calls it an HC extension); Delhi tribunal practice (the back-test of Delhi
+ * awards); or no court authority recorded.
+ */
+export const BASES = ["sc", "extension", "practice", "none"] as const;
+export type Basis = (typeof BASES)[number];
+
+const STANDARD_BASIS: Readonly<Record<ContestedId, Basis | { death: Basis; injury: Basis }>> = {
+  under_15_multiplier: { death: "extension", injury: "sc" },
+  spouse_only_deduction: "sc",
+  bachelor_large_family: "sc",
+  conventional_escalation_steps: "sc",
+  minor_death_income: "extension",
+  itr_post_accident: "sc",
+  student_income: "sc",
+  homemaker_income: "sc",
+  injured_homemaker_income: "sc",
+  pension_basis: "sc",
+  non_earning_elderly: "none",
+  mw_category: "none",
+  functional_pct: "practice",
+  non_pecuniary_band: "practice",
+  attendant_rate: "none",
+};
+
+export function standardBasis(id: ContestedId, kind: "death" | "injury"): Basis {
+  const b = STANDARD_BASIS[id];
+  return typeof b === "string" ? b : b[kind];
+}

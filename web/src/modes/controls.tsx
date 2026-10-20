@@ -1,8 +1,9 @@
 import { Check, type LucideIcon } from "lucide-preact";
 import { choices, chosen, QUESTION, type ChoiceField, type QuestionId } from "../answers";
-import { useState } from "preact/hooks";
+import { useMemo, useState } from "preact/hooks";
 import { Counter, DateInput, MoneyInput, MonthYear, Select, TextInput } from "../components/form";
 import { rules } from "../data";
+import { noWageStates } from "../checks";
 import { ICONS } from "../fields";
 import type { FormState } from "../form-to-input";
 import { useLang, useT } from "../i18n";
@@ -92,6 +93,41 @@ export function useTileOptions(): (k: ChoiceField, f: FormState) => TileOption[]
     }));
 }
 
+/** The states, each with no minimum wage on file marked so when the amount would rest on one. */
+function StateTiles(props: {
+  id: QuestionId;
+  f: FormState;
+  labelledBy: string;
+  today: string;
+  options: TileOption[];
+  onAnswer: (value: string) => void;
+}) {
+  const t = useT();
+  const gaps = useMemo(() => noWageStates(props.f, props.today, rules), [props.f, props.today]);
+  return (
+    <ChoiceTiles
+      id={props.id}
+      labelledBy={props.labelledBy}
+      options={props.options.map((o) => (gaps.includes(o.value) ? { ...o, hint: t("state.noWage") } : o))}
+      value={chosen("state", props.f)}
+      onPick={props.onAnswer}
+    />
+  );
+}
+
+/** For the chat's state question: the states with no minimum wage on file, when the amount would rest on one. */
+export function NoWageNote(props: { f: FormState; today: string }) {
+  const t = useT();
+  const gaps = useMemo(() => noWageStates(props.f, props.today, rules), [props.f, props.today]);
+  if (!gaps.length) return null;
+  const name = (s: string) => t(s === "OTHER" || s === "CENTRAL" ? `chip.state.${s}` : `stname.${s}`);
+  return (
+    <p class="mt-3 text-sm text-muted-foreground" data-testid="no-wage">
+      {t("state.noWage.list", { states: gaps.map(name).join(", ") })}
+    </p>
+  );
+}
+
 /**
  * One question's answer control. `labelledBy`: the question is asked by a heading or bubble with this id (choices);
  * typed answers carry their own label (`label`, hidden when `hideLabel`).
@@ -116,6 +152,7 @@ export function QuestionInput(props: {
   switch (c.type) {
     case "choice":
       if (id === "children") return <Children {...props} options={tiles("children", f)} />;
+      if (id === "state") return <StateTiles {...props} options={tiles("state", f)} />;
       return (
         <ChoiceTiles
           id={id}

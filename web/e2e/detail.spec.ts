@@ -49,6 +49,17 @@ for (const [name, input] of [
     }
   });
 
+test("each point says what its standard position rests on", async ({ page }) => {
+  await fillForm(page, rider, "#/detail");
+  await expect(page.locator("[data-param=functional_pct] [data-testid=basis]")).toContainText(
+    "Delhi tribunal practice",
+  );
+  await fillForm(page, homemaker, "#/detail");
+  await expect(page.locator("[data-param=homemaker_income] [data-testid=basis]")).toContainText(
+    "a Supreme Court ruling",
+  );
+});
+
 test("your choices recompute the amount exactly as the engine does, and are kept", async ({ page }) => {
   await fillForm(page, homemaker, "#/detail");
   const [first] = points(homemaker);

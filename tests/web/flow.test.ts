@@ -2,10 +2,18 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { REPO_ROOT } from "../../src/rules/load.js";
-import { askKey, choices, QUESTION, type ChoiceField, type QuestionId } from "../../web/src/answers.js";
+import {
+  askKey,
+  choices,
+  QUESTION,
+  rawAnswer,
+  type ChoiceField,
+  type QuestionId,
+} from "../../web/src/answers.js";
 import {
   afterScreen,
   afterTap,
+  answeredOnPath,
   blockingRefine,
   chatStep,
   giveAnswer,
@@ -149,6 +157,25 @@ describe("asking one question at a time", () => {
       last = now;
     }
     expect(last).toBe(0);
+  });
+
+  it("lists every answer given on the way to the estimate, in the order asked, for the printout", () => {
+    const f = applyExample("hurt")!;
+    const given = answeredOnPath(f);
+    for (const k of [
+      "kind",
+      "victimRole",
+      "vehicleTraced",
+      "s164",
+      "age",
+      "certificatePct",
+      "state",
+    ] as const)
+      expect(given, k).toContain(k);
+    expect(given.indexOf("kind")).toBeLessThan(given.indexOf("state"));
+    expect(new Set(given).size).toBe(given.length);
+    expect(given.every((k) => rawAnswer(f, k) !== "")).toBe(true);
+    expect(answeredOnPath(EMPTY_FORM)).toEqual([]);
   });
 
   it("opens an address only where it fits the answers", () => {

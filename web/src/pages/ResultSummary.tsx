@@ -1,6 +1,11 @@
 import { CircleAlert, ListChecks } from "lucide-preact";
+import { Fragment } from "preact";
+import { answerText, askKey } from "../answers";
+import { answeredOnPath } from "../flow";
+import type { FormState } from "../form-to-input";
+import { isContested, standardBasis } from "../contested";
 import type { SituationId } from "../situations";
-import type { Unsure } from "../estimate-extras";
+import type { Unsure } from "../checks";
 import type { EstimateInput, EstimateOutput, Warning } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { rules } from "../data";
@@ -107,6 +112,8 @@ export function ResultSummary(props: {
   example?: SituationId | undefined;
   /** Checks answered "Not sure": the amount assumes the claim can be made, and says so right under it. */
   unsure?: readonly Unsure[] | undefined;
+  /** The answers, listed in full on the printout (what a family takes away must show what it rests on). */
+  form?: FormState | undefined;
 }) {
   const t = useT();
   const lang = useLang();
@@ -114,6 +121,11 @@ export function ResultSummary(props: {
   const approx = useApprox();
   const { est } = props;
   const noCert = Boolean(est?.warnings.some((w) => w.code === "NO_CERTIFICATE"));
+  // A usual position this amount takes that no Supreme Court ruling settles (a High Court's reading, tribunal
+  // practice, or nothing recorded): said under the amount, and point by point under "What could move it".
+  const unsettled = Boolean(
+    est?.swingFactors.some((s) => isContested(s.parameter) && standardBasis(s.parameter, est.kind) !== "sc"),
+  );
   const unsure = props.unsure ?? [];
   const unsureVars = {
     death: formatINR(rules.statutory.hit_and_run_s161.death),
@@ -266,6 +278,11 @@ export function ResultSummary(props: {
             meaning={t("res.meaning")}
           />
           {props.change && <ChangeLine change={props.change} class="mt-2" />}
+          {unsettled && (
+            <p class="mt-2 text-xs text-muted-foreground" data-testid="basis">
+              {t("res.basis")}
+            </p>
+          )}
         </div>
 
         {/* What decides whether this amount applies at all, right under it. */}
@@ -368,6 +385,21 @@ export function ResultSummary(props: {
         )}
       </div>
 
+      {props.form && (
+        <div class="mt-5 hidden border-t border-border pt-4 print:block" data-testid="print-answers">
+          <h3 class="text-sm font-semibold text-foreground">{t("print.answers")}</h3>
+          <dl class="mt-1 grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-x-4 text-sm">
+            {answeredOnPath(props.form).map((k) => (
+              <Fragment key={k}>
+                <dt class="text-muted-foreground">{t(askKey(k, props.form!))}</dt>
+                <dd class="text-foreground">
+                  {answerText(props.form!, k, t, { lang, occupations: rules.occupations.occupations })}
+                </dd>
+              </Fragment>
+            ))}
+          </dl>
+        </div>
+      )}
       <div class={`no-print mt-5 grid gap-2 border-t border-border pt-4 ${props.stale ? "hidden" : ""}`}>
         {props.moreHref !== null && (
           <a

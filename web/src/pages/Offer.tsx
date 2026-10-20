@@ -140,10 +140,11 @@ export function OfferCheck(props: { est: EstimateOutput }) {
   );
 
   return (
-    <Card class="no-print p-5 sm:p-6" id="offer">
+    // The form is for the screen; a checked offer's answer is printed with the estimate.
+    <Card class={`${result ? "" : "no-print "}p-5 sm:p-6`} id="offer">
       <H2>{t("offer.h")}</H2>
-      <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t("offer.lead")}</p>
-      <form class="mt-5 grid gap-5" noValidate onSubmit={submit}>
+      <p class="no-print mt-1 text-sm leading-relaxed text-muted-foreground">{t("offer.lead")}</p>
+      <form class="no-print mt-5 grid gap-5" noValidate onSubmit={submit}>
         <div class="max-w-sm">
           <MoneyInput
             id="offer-amount"

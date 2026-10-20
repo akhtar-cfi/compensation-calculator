@@ -146,8 +146,8 @@ export function renderCases(matches: readonly CaseMatch[]): string {
     if (facts.length) L.push("", facts.join(" · "));
     L.push("", "What mattered:");
     for (const w of c.what_mattered) L.push(`- ${w}`);
-    if (m.similar.length) L.push(`- _Similar to you:_ ${m.similar.join("; ")}`);
-    if (m.different.length) L.push(`- _Different:_ ${m.different.join("; ")}`);
+    if (m.similar.length) L.push(`- _Similar to you:_ ${m.similar.map((r) => r.text).join("; ")}`);
+    if (m.different.length) L.push(`- _Different:_ ${m.different.map((r) => r.text).join("; ")}`);
     L.push("", `Source: ${c.citation} — ${c.source_url}`);
   }
   return L.join("\n");

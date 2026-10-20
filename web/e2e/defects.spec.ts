@@ -255,6 +255,21 @@ test("the two salaried kinds of work say how they differ", async ({ page }) => {
   await expect(page.locator("#employment-fixed_salary-hint")).toContainText("no regular pay rises");
 });
 
+test("the printout lists every answer used, and the offer checked", async ({ page }) => {
+  const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+  await fillForm(page, input);
+  await page.fill("#offer-amount", "8,00,000");
+  await page.getByRole("button", { name: "Check the offer" }).click();
+  await expect(page.getByTestId("offer-verdict")).toBeVisible();
+  await page.emulateMedia({ media: "print" });
+  const answers = page.locator("#result").getByTestId("print-answers");
+  await expect(answers).toBeVisible();
+  await expect(answers).toContainText(`${input.injury!.certificatePct}%`);
+  await expect(answers).toContainText("vehicle that hit");
+  await expect(page.getByTestId("offer-result")).toBeVisible();
+  await expect(page.locator("#offer-amount")).toBeHidden();
+});
+
 test("the printout names the facts the estimate rests on", async ({ page }) => {
   await fillForm(page, salaried());
   await page.emulateMedia({ media: "print" });

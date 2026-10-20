@@ -16,7 +16,8 @@ import { ChangeLine, useChange } from "../../components/result";
 import { Restart } from "../../components/restart";
 import { pillOutline, pillPrimary, wrap } from "../../components/ui";
 import { loadCases, rules, useLoaded } from "../../data";
-import { accidentLabel, parentsAssumed, unsureChecks } from "../../estimate-extras";
+import { accidentLabel, parentsAssumed } from "../../estimate-extras";
+import { unsureChecks } from "../../checks";
 import {
   answered,
   chatQuestions,
@@ -37,7 +38,7 @@ import { ResultSummary, StopNotice } from "../../pages/ResultSummary";
 import { STOP_FIELD, stopsOf } from "../../questions";
 import { validate, type FieldName } from "../../validate";
 import { Counter, TextInput } from "../../components/form";
-import { QuestionInput } from "../controls";
+import { NoWageNote, QuestionInput } from "../controls";
 import { PictureChips, pictures, type Picture } from "./PictureChips";
 
 /**
@@ -81,7 +82,11 @@ export function Chat(props: ModeProps) {
     setTried(false);
     setInfo(false);
     setMany(false);
-    if (acted.current) document.getElementById("chat-q")?.focus();
+    // The question takes the focus, and the whole step (the question and its answers) comes into view.
+    if (acted.current) {
+      document.getElementById("chat-q")?.focus({ preventScroll: true });
+      document.querySelector("[data-chat-step]")?.scrollIntoView({ block: "nearest" });
+    }
     acted.current = false;
   }, [stepKey]);
   usePageFocus(props.arrived);
@@ -96,6 +101,14 @@ export function Chat(props: ModeProps) {
   const change = useChange(headline, JSON.stringify(f) !== JSON.stringify(EMPTY_FORM));
 
   const stopped = stopsOf(f).length > 0;
+  // The amount where the conversation is (the card with it may be well above), and how the last answer moved it.
+  const miniAmount = headline !== undefined && (
+    <p class="mb-3 rounded-2xl bg-brand-lite px-4 py-3 text-sm text-foreground" data-testid="mini-amount">
+      {t("slow.yourAmount")}{" "}
+      <span class="font-heading text-lg font-bold text-brand">{approx(formatApprox(headline))}</span>
+      {change && change.to === headline && <ChangeLine change={change} class="mt-0.5" />}
+    </p>
+  );
   const amount = Boolean(v.input) && !stopped;
   const R = useResultModule(amount);
 
@@ -319,19 +332,11 @@ export function Chat(props: ModeProps) {
     const infoText = [hint ? t(hint) : undefined, ...optionHints].filter(Boolean).join(" ");
     now = (
       <>
-        {step.type === "refine" && headline !== undefined && (
-          <p
-            class="mb-3 rounded-2xl bg-brand-lite px-4 py-3 text-sm text-foreground"
-            data-testid="mini-amount"
-          >
-            {t("slow.yourAmount")}{" "}
-            <span class="font-heading text-lg font-bold text-brand">{approx(formatApprox(headline))}</span>
-            {change && change.to === headline && <ChangeLine change={change} class="mt-0.5" />}
-          </p>
-        )}
+        {step.type === "refine" && miniAmount}
         {question(t(askKey(asking, f)), infoText || undefined)}
         {infoBox(infoText)}
         <div class="mt-4">{answerFor(asking)}</div>
+        {asking === "state" && <NoWageNote f={f} today={today} />}
       </>
     );
   } else if (step.type === "stop") {
@@ -359,6 +364,7 @@ export function Chat(props: ModeProps) {
   } else if (step.type === "offerRefine") {
     now = (
       <>
+        {miniAmount}
         <p id="chat-q" tabIndex={-1} data-bubble="" class={`${bot} enter`}>
           {t("chat.more.ask")}
         </p>
@@ -382,6 +388,7 @@ export function Chat(props: ModeProps) {
     const more = chatRefineQuestions(f).some((k) => !answered(f, v, k, ctx));
     now = (
       <>
+        {v.input && miniAmount}
         <p id="chat-q" tabIndex={-1} data-bubble="" class={`${bot} enter`}>
           {t(v.input ? "chat.done" : "res.none")}
         </p>
@@ -463,6 +470,7 @@ export function Chat(props: ModeProps) {
                 moreHref={null}
                 example={props.example}
                 unsure={unsureChecks(f)}
+                form={f}
               />
             </div>
           )}

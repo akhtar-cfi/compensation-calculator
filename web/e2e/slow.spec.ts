@@ -166,6 +166,16 @@ test("the amount and the list of answers have Start again, which asks first", as
   await expect(page.locator("[data-chip]")).toHaveCount(0);
 });
 
+test("the state question says, before a state is picked, where there is no wage to estimate from", async ({
+  page,
+}) => {
+  const { input } = examples().find((e) => e.name === "death-homemaker.yaml")!;
+  await fillSlow(page, input, { details: false });
+  await page.goto("#/slow/state");
+  await expect(page.locator('[data-field=state] [data-value="HR"]')).toContainText("No wage data yet");
+  await expect(page.locator('[data-field=state] [data-value="DL"]')).not.toContainText("No wage data yet");
+});
+
 test("the phone's back gesture steps back one question, keeping the answer", async ({ page }) => {
   await begin(page);
   await page.locator('[data-field=kind] [data-value="injury"]').click();

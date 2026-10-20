@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-preact";
-import { matchCases, summariseJourney, type CaseMatch } from "../../../src/cases/match.js";
+import { isContested, standardBasis } from "../contested";
+import { matchCases, summariseJourney, type CaseMatch, type Reason } from "../../../src/cases/match.js";
 import type { EstimateInput, EstimateOutput, Intermediate, Warning } from "../../../src/engine/types.js";
 import { formatINR } from "../../../src/engine/money.js";
 import { Card, H2, Notice, Tag, Tel, linkCls } from "../components/ui";
@@ -133,6 +134,11 @@ export function ResultDetails(props: {
                     ) : (
                       <p class="text-sm font-medium text-foreground" lang={enOnly}>
                         {s.description}
+                      </p>
+                    )}
+                    {isContested(s.parameter) && (
+                      <p class="mt-1 text-xs text-muted-foreground" data-basis={s.parameter}>
+                        {t("res.swing.basis", { b: t(`basis.${standardBasis(s.parameter, est.kind)}`) })}
                       </p>
                     )}
                     <dl class="mt-2 grid gap-1 text-sm sm:grid-cols-2">
@@ -292,6 +298,24 @@ export function CasesCard(props: { input: EstimateInput }) {
   );
 }
 
+/** Why a case is like this one, or not, in the page's language: the case's own age, disability or kind of work. */
+function reasonText(t: ReturnType<typeof useT>, r: Reason): string {
+  switch (r.code) {
+    case "group":
+      return t("case.why.group", { g: t(`case.group.${r.group}`) });
+    case "work":
+      return r.group ? t("case.why.work", { g: t(`case.group.${r.group}`) }) : t("case.why.workOther");
+    case "age_near":
+    case "age":
+      return t(`case.why.${r.code}`, { n: r.age });
+    case "disability_near":
+    case "disability":
+      return t(`case.why.${r.code}`, { n: r.pct });
+    default:
+      return t(`case.why.${r.code}`);
+  }
+}
+
 function Cases(props: { matches: CaseMatch[] }) {
   const t = useT();
   const lang = useLang();
@@ -301,6 +325,11 @@ function Cases(props: { matches: CaseMatch[] }) {
     <>
       <p class="text-sm text-muted-foreground">{t("res.cases.lead")}</p>
       <p class="mt-1 text-xs text-muted-foreground">{t("res.cases.disclaimer")}</p>
+      {lang === "hi" && (
+        <p class="mt-1 text-xs text-muted-foreground" data-testid="cases-in-english">
+          {t("res.cases.inEnglish")}
+        </p>
+      )}
       <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2" data-testid="cases">
         {props.matches.map((m) => {
           const c = m.case;
@@ -339,16 +368,16 @@ function Cases(props: { matches: CaseMatch[] }) {
                 {m.similar.length > 0 && (
                   <div>
                     <dt class="inline font-semibold">{t("res.cases.similar")}: </dt>
-                    <dd class="inline text-muted-foreground" lang={enOnly}>
-                      {m.similar.join("; ")}
+                    <dd class="inline text-muted-foreground" data-why="similar">
+                      {m.similar.map((r) => reasonText(t, r)).join("; ")}
                     </dd>
                   </div>
                 )}
                 {m.different.length > 0 && (
                   <div>
                     <dt class="inline font-semibold">{t("res.cases.different")}: </dt>
-                    <dd class="inline text-muted-foreground" lang={enOnly}>
-                      {m.different.join("; ")}
+                    <dd class="inline text-muted-foreground" data-why="different">
+                      {m.different.map((r) => reasonText(t, r)).join("; ")}
                     </dd>
                   </div>
                 )}

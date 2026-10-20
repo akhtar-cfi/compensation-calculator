@@ -5,7 +5,7 @@ import { formatINR } from "../../../../src/engine/money.js";
 import type { EstimateInput, EstimateOutput, Scenario, ScenarioMix } from "../../../../src/engine/types.js";
 import { Radios } from "../../components/form";
 import { Card, H2, pillOutline } from "../../components/ui";
-import { contested, isContested } from "../../contested";
+import { contested, isContested, standardBasis } from "../../contested";
 import { rules } from "../../data";
 import { useT } from "../../i18n";
 
@@ -76,6 +76,9 @@ export function Contested(props: {
                     {sw
                       ? t("cp.effect", { c: signed(sw.toConservative), m: signed(sw.toClaimantMax) })
                       : t("cp.noEffect")}
+                  </p>
+                  <p class="mt-1 text-sm text-muted-foreground" data-testid="basis">
+                    {t("cp.basis", { b: t(`basis.${standardBasis(c.id, props.est.kind)}`) })}
                   </p>
                   <p class="mt-1 text-sm text-muted-foreground">
                     <span class="font-semibold text-foreground">{t("cp.sources")}: </span>

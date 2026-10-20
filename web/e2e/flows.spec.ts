@@ -171,6 +171,20 @@ test("with no disability certificate yet, the amount says what it leaves out, an
   await expect(page.getByTestId("offer-pct-std")).toHaveCount(0);
 });
 
+test("the amount says when some of its usual positions are not Supreme Court rulings", async ({ page }) => {
+  const rider = examples().find((e) => e.name === "injury-delivery-rider.yaml")!.input;
+  await fillForm(page, rider);
+  await expect(page.locator("#result").getByTestId("basis")).toContainText("not Supreme Court rulings");
+  await expect(page.locator("#result [data-scenario=standard] dt")).toHaveText("Standard");
+  await expect(page.locator("[data-disclosure=swing] [data-basis=functional_pct]")).toContainText(
+    "Delhi tribunal practice",
+  );
+  const salaried = examples().find((e) => e.name === "death-salaried.yaml")!.input;
+  await fillForm(page, salaried);
+  await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
+  await expect(page.locator("#result").getByTestId("basis")).toHaveCount(0);
+});
+
 test("an offer above the estimate is said to be above it", async ({ page }) => {
   const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
   await fillForm(page, input);

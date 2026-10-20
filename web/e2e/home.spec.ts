@@ -359,6 +359,22 @@ test("with an estimate on the one page, cases like yours come right after it", a
   expect(order[1]).toBeLessThan(order[2]!);
 });
 
+test("in Hindi, the cases card says in Hindi why each case is like this one, and that the stories are in English", async ({
+  page,
+}) => {
+  await remembered(page, "all");
+  await page.goto("?lang=hi#/example/homemaker");
+  const cases = page.getByTestId("cases-card");
+  await expect(cases.locator("[data-case]").first()).toBeVisible();
+  await expect(cases.getByTestId("cases-in-english")).toBeVisible();
+  const why = await cases.locator("[data-why]").allTextContents();
+  expect(why.length).toBeGreaterThan(0);
+  expect(why.filter((w) => /[A-Za-z]/.test(w))).toEqual([]);
+  await page.getByRole("button", { name: "English" }).click();
+  await expect(cases.getByTestId("cases-in-english")).toHaveCount(0);
+  await expect(cases.locator("[data-why]").first()).toContainText(/also homemaker|same state|similar age/);
+});
+
 test("in Hindi the cards still work", async ({ page }) => {
   await remembered(page, "all");
   await page.goto("?lang=hi#/");
