@@ -162,3 +162,19 @@ for (const width of WIDTHS) {
     await shot(page, "detail-02-points", width);
   });
 }
+
+test("the start page and 'Full detail' with text at 200% on a phone do not scroll sideways", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto("#/");
+  // Like a phone's own text-size setting (set through the DOM: the page's security policy refuses inline CSS).
+  await page.evaluate(() => (document.documentElement.style.fontSize = "200%"));
+  await checkLayout(page, "start page at 200%");
+  const { input } = examples().find((e) => e.name === "death-homemaker.yaml")!;
+  await page.evaluate(() => (document.documentElement.style.fontSize = ""));
+  await fillForm(page, input, "#/detail");
+  await page.evaluate(() => (document.documentElement.style.fontSize = "200%"));
+  await expect(page.locator("[data-contested]")).toBeVisible();
+  await checkLayout(page, "full detail at 200%");
+});

@@ -97,7 +97,10 @@ export function ResultDetails(props: {
                   </p>
                 </li>
               ))}
-              <li class="flex items-baseline justify-between gap-4 bg-subtle p-3" data-testid="total">
+              <li
+                class="flex flex-wrap items-baseline justify-between gap-x-4 bg-subtle p-3"
+                data-testid="total"
+              >
                 <p class="text-sm font-bold">{t("res.total")}</p>
                 <p class="font-heading text-lg font-bold text-brand tabular-nums">{formatINR(std.net)}</p>
               </li>
@@ -106,7 +109,10 @@ export function ResultDetails(props: {
             <p class="mt-1 text-xs text-muted-foreground">{t("res.intermediate.note")}</p>
             <dl class="mt-2 grid gap-x-6 gap-y-1 sm:grid-cols-2">
               {std.intermediates.map((i) => (
-                <div key={i.id} class="flex justify-between gap-4 border-b border-border py-1 text-sm">
+                <div
+                  key={i.id}
+                  class="flex flex-wrap justify-between gap-x-4 border-b border-border py-1 text-sm"
+                >
                   <dt class="text-muted-foreground">
                     {lang === "hi" && hasKey("hi", `int.${i.id}`) ? t(`int.${i.id}`) : i.label}
                   </dt>
@@ -130,13 +136,13 @@ export function ResultDetails(props: {
                       </p>
                     )}
                     <dl class="mt-2 grid gap-1 text-sm sm:grid-cols-2">
-                      <div class="flex justify-between gap-4 sm:block">
+                      <div class="flex flex-wrap justify-between gap-x-4 sm:block">
                         <dt class="text-muted-foreground">{t("res.swing.down")}</dt>
                         <dd class="shrink-0 font-semibold whitespace-nowrap tabular-nums">
                           {s.toConservative === 0 ? t("res.swing.none") : signed(s.toConservative)}
                         </dd>
                       </div>
-                      <div class="flex justify-between gap-4 sm:block">
+                      <div class="flex flex-wrap justify-between gap-x-4 sm:block">
                         <dt class="text-muted-foreground">{t("res.swing.up")}</dt>
                         <dd class="shrink-0 font-semibold whitespace-nowrap tabular-nums">
                           {s.toClaimantMax === 0 ? t("res.swing.none") : signed(s.toClaimantMax)}
