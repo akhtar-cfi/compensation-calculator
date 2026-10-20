@@ -77,6 +77,15 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 - In Hindi every bubble is in Hindi.
 - _Code:_ `web/src/modes/chat/Chat.tsx`
 
+### Points courts differ on
+
+- **Use for:** 'Full detail': each point of law this case turns on as a switch between the conservative, standard and claimant's-best positions, with what each takes, its effect on this case and its authorities; 'Your choices' is the engine's amount for the positions picked.
+- **Not for:** The family-facing ways of answering (the three standard amounts already show the spread), or changing the three standard amounts.
+- Only the points this case meets, in the order the engine meets them; the labels and authorities come from web/src/contested.ts (tested against every point the engine can consult).
+- Where no authority is recorded for a choice, it says so rather than leaving the list empty.
+- The choices are kept in this tab with the answers; 'Back to standard' clears them.
+- _Code:_ `web/src/modes/detail/Contested.tsx`
+
 ### Step-by-step frame
 
 - **Use for:** Around each 'Take it slow' screen: Back, the steps-left meter, the answers given so far as chips, then one card holding the question.

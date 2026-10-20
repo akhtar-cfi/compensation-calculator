@@ -50,7 +50,17 @@ const STEP_TITLE: Record<StepId, string> = {
  * 3. "make it more accurate": optional details that narrow it;
  * 4. how it is built, what to prove, the offer check and the rest.
  */
-export function Estimator(props: ModeProps) {
+/** The estimate and the answers it came from (what "Full detail" builds on). */
+export interface Computed {
+  input: EstimateInput;
+  est: EstimateOutput;
+}
+
+/**
+ * `detail` ("Full detail"): every group of details starts open, the breakdown is open, and what it draws (the points
+ * of law the case turns on) comes right after the estimate.
+ */
+export function Estimator(props: ModeProps & { detail?: (c: Computed) => ComponentChildren }) {
   const t = useT();
   const { form: f, v } = props;
   const [touched, setTouched] = useState<ReadonlySet<FieldName>>(new Set());
@@ -336,6 +346,9 @@ export function Estimator(props: ModeProps) {
                 </p>
               </section>
 
+              {/* 2a. Full detail: the points courts differ on, and the amount with your own choices */}
+              {props.detail && complete && props.computed && props.detail(props.computed)}
+
               {/* 2b. Real cases like this one */}
               {complete && props.computed && R && <R.CasesCard input={props.computed.input} />}
 
@@ -364,6 +377,7 @@ export function Estimator(props: ModeProps) {
                           title={t(`group.${g.id}`)}
                           count={t("group.count", { n: filled, total: fields.length + day })}
                           problem={fields.some((k) => err(k))}
+                          open={Boolean(props.detail)}
                           onLeave={leave(g.id)}
                         >
                           <BlockFields
@@ -383,7 +397,11 @@ export function Estimator(props: ModeProps) {
 
               {/* 4. The details */}
               {complete && props.computed && R && (
-                <R.ResultDetails input={props.computed.input} est={props.computed.est} />
+                <R.ResultDetails
+                  input={props.computed.input}
+                  est={props.computed.est}
+                  open={Boolean(props.detail)}
+                />
               )}
             </div>
             <aside aria-label={t("sum.rail")} class="no-print hidden lg:sticky lg:top-24 lg:block">
@@ -446,6 +464,8 @@ function Group(props: {
   title: string;
   count: string;
   problem: boolean;
+  /** Starts open ("Full detail"). */
+  open?: boolean;
   onLeave: (e: FocusEvent) => void;
   children: ComponentChildren;
 }) {
@@ -453,6 +473,10 @@ function Group(props: {
   useEffect(() => {
     if (props.problem && ref.current) ref.current.open = true;
   }, [props.problem]);
+  // Open from the start in "Full detail", once: the person can still close a group.
+  useEffect(() => {
+    if (props.open && ref.current) ref.current.open = true;
+  }, []);
   return (
     <details
       ref={ref}

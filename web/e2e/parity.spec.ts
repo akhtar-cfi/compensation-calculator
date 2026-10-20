@@ -1,4 +1,6 @@
+import type { Page } from "@playwright/test";
 import { checkOffer } from "../../src/engine/index.js";
+import type { EstimateInput } from "../../src/engine/types.js";
 import {
   examples,
   expect,
@@ -13,7 +15,12 @@ import {
 
 // The page runs the same engine as the CLI and the tests. Each worked example, answered in each way of answering,
 // must show exactly what estimate() gives for the same input: headline, range and every head.
-const FILL = { all: fillForm, slow: fillSlow, chat: fillChat } as const;
+const FILL = {
+  all: fillForm,
+  slow: fillSlow,
+  chat: fillChat,
+  detail: (page: Page, input: EstimateInput) => fillForm(page, input, "#/detail"),
+} as const;
 for (const [mode, fill] of Object.entries(FILL))
   for (const { name, input } of examples()) {
     test(`the page matches estimate() for ${name} (${mode})`, async ({ page, baseURL }) => {

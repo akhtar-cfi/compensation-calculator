@@ -202,9 +202,10 @@ async function answer(page: Page, block: string, input: EstimateInput) {
 /**
  * Fills the page from an engine input, the way a person would: the quick steps top to bottom (an answer can bring
  * up a follow-up), then any details the input has. Returns what the estimate then shows: an estimate, or a stop.
+ * `at`: the address of the page with the form (the start page, or "See it all" and "Full detail").
  */
-export async function fillForm(page: Page, input: EstimateInput): Promise<"result" | "stop"> {
-  await page.goto("#/");
+export async function fillForm(page: Page, input: EstimateInput, at = "#/"): Promise<"result" | "stop"> {
+  await page.goto(at);
   await expect(page.locator("[data-question]").first()).toBeVisible();
   // From a clean form, whatever an earlier step left ("Start again" shows only when there are answers).
   if (await page.getByTestId("restart").count()) {

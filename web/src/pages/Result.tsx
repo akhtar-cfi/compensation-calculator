@@ -18,7 +18,12 @@ const signed = (n: number) => `${n >= 0 ? "+" : "−"}${formatINR(Math.abs(n))}`
  * demand (how it is built, what could move it, what to prove, interest, real cases, sources), the insurer-offer
  * check and what to do next. Panels always print in full.
  */
-export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput }) {
+export function ResultDetails(props: {
+  input: EstimateInput;
+  est: EstimateOutput;
+  /** Every section starts open ("Full detail"). */
+  open?: boolean;
+}) {
   const t = useT();
   const lang = useLang();
   const { est, input } = props;
@@ -55,7 +60,7 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
         )}
 
         <div class="mt-4 border-t border-border">
-          <Disclosure id="built" title={t("res.built")}>
+          <Disclosure id="built" title={t("res.built")} open={props.open}>
             <ul class="divide-y divide-border rounded-lg border border-border" data-testid="heads">
               {std.heads.map((h) => (
                 <li key={h.id} class="grid gap-1 p-3" data-head={h.id} data-amount={h.amount}>
@@ -112,7 +117,7 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
           </Disclosure>
 
           {(est.swingFactors.length > 0 || est.sensitivity.length > 0) && (
-            <Disclosure id="swing" title={t("res.swing")}>
+            <Disclosure id="swing" title={t("res.swing")} open={props.open}>
               <p class="text-sm text-muted-foreground">{t("res.swing.lead")}</p>
               <ul class="mt-3 grid gap-2">
                 {est.swingFactors.map((s) => (
@@ -162,13 +167,13 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
             </Disclosure>
           )}
 
-          <Disclosure id="prove" title={t("res.prove")}>
+          <Disclosure id="prove" title={t("res.prove")} open={props.open}>
             <p class="mb-3 text-xs text-muted-foreground">{t("res.prove.note")}</p>
             <Checklist items={proofItems(input).map((k) => t(k))} testId="prove" />
           </Disclosure>
 
           {est.interest && (
-            <Disclosure id="interest" title={t("res.interest")}>
+            <Disclosure id="interest" title={t("res.interest")} open={props.open}>
               <p class="text-sm text-muted-foreground">{t("res.interest.lead")}</p>
               <ul class="mt-3 grid gap-1.5 text-sm">
                 {est.interest.illustrations.map((i) => (
@@ -185,12 +190,12 @@ export function ResultDetails(props: { input: EstimateInput; est: EstimateOutput
           )}
 
           {notes.length > 0 && (
-            <Disclosure id="notes" title={t("det.notes")}>
+            <Disclosure id="notes" title={t("det.notes")} open={props.open}>
               {warningList(notes)}
             </Disclosure>
           )}
 
-          <Disclosure id="sources" title={t("det.sources")}>
+          <Disclosure id="sources" title={t("det.sources")} open={props.open}>
             <h4 class="text-sm font-semibold">{t("res.assumptions")}</h4>
             <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground" lang={enOnly}>
               {est.assumptions.map((a) => (

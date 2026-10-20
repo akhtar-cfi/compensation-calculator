@@ -111,3 +111,17 @@ for (const lang of ["en", "hi"] as const) {
     await noSeriousViolations(page, "chat: missing answer");
   });
 }
+
+for (const lang of ["en", "hi"] as const) {
+  test(`'Full detail' has no serious accessibility violations (${lang})`, async ({ page }) => {
+    test.setTimeout(60_000);
+    await page.goto(lang === "hi" ? "?lang=hi#/detail" : "#/detail");
+    await noSeriousViolations(page, "detail: empty");
+    const { input } = examples().find((e) => e.name === "death-homemaker.yaml")!;
+    await fillForm(page, input, "#/detail");
+    await expect(page.locator("[data-contested]")).toBeVisible();
+    await page.locator("[data-param] input[value=conservative]").first().check();
+    await expect(page.locator("[data-action=reset-mix]")).toBeVisible();
+    await noSeriousViolations(page, "detail: estimate with choices");
+  });
+}

@@ -50,7 +50,7 @@ export function RangeBar(props: { conservative: number; standard: number; claima
 export function Disclosure(props: {
   id: string;
   title: string;
-  open?: boolean;
+  open?: boolean | undefined;
   children: ComponentChildren;
 }) {
   const [open, setOpen] = useState(props.open ?? false);

@@ -148,3 +148,15 @@ test("'Talk it through' with text at 200% on a phone does not scroll sideways", 
   await page.locator("[data-change=children]").click();
   await checkLayout(page, "chat children at 200%");
 });
+
+for (const width of WIDTHS) {
+  test(`'Full detail' layout at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+    await fillForm(page, input, "#/detail");
+    await expect(page.locator("[data-contested]")).toBeVisible();
+    await shot(page, "detail-01-estimate", width);
+    await page.locator("[data-contested]").scrollIntoViewIfNeeded();
+    await shot(page, "detail-02-points", width);
+  });
+}
