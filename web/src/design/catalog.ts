@@ -195,13 +195,37 @@ export const COMPONENTS: ComponentSpec[] = [
     ],
   },
   {
+    name: "Picture chips",
+    file: "modes/chat/PictureChips.tsx",
+    use: "Answers in the chat: a picture (or a large count or state code, as on number plates) and one or two words, for people who read little.",
+    avoid:
+      "Long answers that need a sentence to tell apart (their hints go behind the question's (i) button).",
+    rules: [
+      "Buttons with aria-pressed and the words as their name; two columns on a phone, three from a small tablet up; at least 96 px tall.",
+      "Yes, No and Not sure always have the same pictures (tick, cross, question mark), whatever the question.",
+    ],
+  },
+  {
+    name: "Chat",
+    file: "modes/chat/Chat.tsx",
+    use: "'Talk it through': each question as a short bubble, each answer as a bubble of its own with Change beside it, the estimate as a card when it is ready.",
+    avoid:
+      "Free text, or anything said by the page that does not come from the answers (no AI, nothing sent anywhere).",
+    rules: [
+      "Past questions and answers are a polite live log; the question asked now sits below it and takes the focus, so a screen reader hears it once.",
+      "A tap answers at once; a typed answer waits for Send, so the chat never moves on halfway through a number.",
+      "Change asks again; answers that no longer apply drop out. A reload keeps the whole conversation (it is worked out from the answers).",
+      "In Hindi every bubble is in Hindi.",
+    ],
+  },
+  {
     name: "Step-by-step frame",
     file: "modes/slow/Slow.tsx",
     use: "Around each 'Take it slow' screen: Back, the steps-left meter, the answers given so far as chips, then one card holding the question.",
     avoid: "More than one topic per card, or a meter that can go up.",
     rules: [
       "Each screen has its own address (#/slow/work), so the back gesture steps back one question; an address that skips ahead leads to where the person actually is.",
-      "A chip opens its question and, once answered, returns to where the person was; 'See all' lists every answer with Change links.",
+      "A chip opens its question and, once answered, returns to where the person was; 'See all' lists every answer with Change links. An answer that says little alone carries a word about what it answers ('Vehicle found: Not sure').",
       "Once the type of claim and the work are known, a line says how many real cases are like this one: a count only, so no figure comes before the person's own.",
       "A new screen fades up in 150 ms, only for people who have not asked for less motion.",
     ],

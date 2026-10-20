@@ -328,3 +328,87 @@ export async function fillSlow(
   }
   throw new Error("'Take it slow' did not reach the amount or a stop");
 }
+
+/* ------------------------------------------- "Talk it through" ------------------------------------------- */
+
+/** What the chat asks now: "lang", "ask:<id>", "refine:<id>", "offerRefine", "stop" or "done". */
+export const chatAt = async (page: Page) =>
+  (await page.locator("[data-chat-step]").getAttribute("data-chat-step")) ?? "";
+
+/** Gives one answer in the chat as a person would: a tap on a picture, or typing (or picking) and Send. */
+export async function giveChat(page: Page, k: QuestionId, want: FormState) {
+  const ask = page.locator("[data-chat-step]");
+  const send = () => ask.locator("[data-action=send]").click();
+  switch (QUESTION[k].control.type) {
+    case "choice": {
+      const value = chosen(k as ChoiceField, want);
+      await ask.locator(`[data-value="${value}"]`).click();
+      if (k === "children" && value === "more") {
+        await page.fill("#childrenMore", want.children);
+        await send();
+      }
+      return;
+    }
+    case "flag":
+      return ask.locator(`[data-value="${want.permanentAttendant ? "yes" : "no"}"]`).click();
+    case "certificate":
+      if (want.noCertificate) return ask.locator('[data-value="none"]').click();
+      await page.fill("#certificatePct", want.certificatePct);
+      return send();
+    case "number":
+    case "money":
+      await page.fill(`#${k}`, rawAnswer(want, k));
+      return send();
+    case "monthYear": {
+      const [y = "", m = ""] = want.accidentDate.split("-");
+      await page.selectOption("#accidentDate-month", m);
+      await page.selectOption("#accidentDate-year", y);
+      return send();
+    }
+    case "date":
+      await fillDate(page, "claimFiledDate", want.claimFiledDate);
+      return send();
+    case "occupation":
+      await page.selectOption("#occupationCode", want.occupationCode);
+      return send();
+    case "zone":
+      await page.selectOption("#zone", want.zone);
+      return send();
+  }
+}
+
+/**
+ * Answers "Talk it through" from an engine input, as a person would: the language, each question as it is asked
+ * (optional ones the input leaves empty are skipped), then, if the input has details and `details` is not false,
+ * "make it more accurate" and the details one by one. Returns where it ended: the amount, or a stop.
+ */
+export async function fillChat(
+  page: Page,
+  input: EstimateInput,
+  opts: { lang?: "en" | "hi"; details?: boolean } = {},
+): Promise<"result" | "stop"> {
+  const want = formFromInput(input);
+  const details =
+    opts.details !== false &&
+    REFINES.some((r) => refineFields(r, want).some((k) => rawAnswer(want, k) !== ""));
+  await page.goto("#/chat");
+  await page.evaluate(() => sessionStorage.clear());
+  await page.reload();
+  for (let step = 0; step < 120; step++) {
+    await settle(page);
+    const at = await chatAt(page);
+    const ask = page.locator("[data-chat-step]");
+    if (at === "lang") await ask.locator(`button[data-value=${opts.lang ?? "en"}]`).click();
+    else if (at === "stop") return "stop";
+    else if (at === "done") return "result";
+    else if (at === "offerRefine") await ask.locator(`[data-value=${details ? "yes" : "no"}]`).click();
+    else if (at.startsWith("ask:") || at.startsWith("refine:")) {
+      const k = at.slice(at.indexOf(":") + 1) as QuestionId;
+      if (rawAnswer(want, k) === "") {
+        if (!QUESTION[k].optional) throw new Error(`no answer for ${k}`);
+        await ask.locator("[data-action=skip]").click();
+      } else await giveChat(page, k, want);
+    } else throw new Error(`unexpected chat step "${at}"`);
+  }
+  throw new Error("the chat did not reach the amount or a stop");
+}

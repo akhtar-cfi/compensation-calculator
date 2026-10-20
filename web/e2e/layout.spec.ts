@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { examples, expect, fillForm, fillSlow, openGroup, radio, test } from "./helpers";
+import { examples, expect, fillChat, fillForm, fillSlow, openGroup, radio, test } from "./helpers";
 
 const WIDTHS = [320, 360, 390, 768, 1280];
 const SHOTS = process.env.SCREENSHOTS === "1";
@@ -32,6 +32,11 @@ async function checkLayout(page: Page, where: string) {
 
 async function shot(page: Page, name: string, width: number) {
   await checkLayout(page, `${name} @${width}`);
+  // A screen that has just come in is still fading up: picture it once settled.
+  if (SHOTS)
+    await page.evaluate(() =>
+      Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))),
+    );
   if (SHOTS) await page.screenshot({ path: `web/test-results/screens/${name}-${width}.png`, fullPage: true });
 }
 
@@ -117,4 +122,29 @@ test("'Take it slow' with text at 200% on a phone does not scroll sideways", asy
   await page.goto("#/slow/family");
   await expect(page.locator("[data-field=children]")).toBeVisible();
   await checkLayout(page, "family at 200%");
+});
+
+for (const width of WIDTHS) {
+  test(`'Talk it through' layout at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("#/chat");
+    await shot(page, "chat-01-language", width);
+    const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+    await fillChat(page, input, { details: false });
+    await shot(page, "chat-02-amount", width);
+    await page.locator("[data-change=employment]").click();
+    await shot(page, "chat-03-change-work", width);
+  });
+}
+
+test("'Talk it through' with text at 200% on a phone does not scroll sideways", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
+  await fillChat(page, input, { details: false });
+  await page.evaluate(() => (document.documentElement.style.fontSize = "200%"));
+  await checkLayout(page, "chat amount at 200%");
+  await page.locator("[data-change=state]").click();
+  await checkLayout(page, "chat states at 200%");
+  await page.locator("[data-change=children]").click();
+  await checkLayout(page, "chat children at 200%");
 });

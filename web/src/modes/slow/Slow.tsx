@@ -64,6 +64,19 @@ const STOP_SCREEN: Record<StopCode, ScreenId> = {
 const TITLE: Partial<Record<ScreenId, string>> = { family: "slow.family", injury: "slow.injury" };
 const TITLE_HINT: Partial<Record<ScreenId, string>> = { family: "q.family.hint" };
 
+/** Answers that say little on their own ("Not sure", "No") carry a word about what they answer in the strip. */
+const STRIP: Partial<Record<QuestionId, string>> = {
+  vehicleTraced: "strip.vehicleTraced",
+  s164: "strip.s164",
+  proof: "strip.proof",
+  married: "strip.married",
+  spouse: "strip.spouse",
+  dependentParents: "strip.dependentParents",
+  vehicleInsured: "strip.vehicleInsured",
+  claimFiled: "strip.claimFiled",
+  permanentAttendant: "strip.permanentAttendant",
+};
+
 const isTap = (k: QuestionId) => ["choice", "flag"].includes(QUESTION[k].control.type);
 
 export function Slow(props: ModeProps) {
@@ -516,6 +529,7 @@ export function Slow(props: ModeProps) {
                       class="inline-flex min-h-11 max-w-56 items-center rounded-full border border-brand-line bg-background px-3.5 text-sm font-medium text-foreground hover:border-brand"
                     >
                       <span class="truncate">
+                        {STRIP[k] && `${t(STRIP[k])}: `}
                         {answerText(f, k, t, { lang, occupations: rules.occupations.occupations })}
                       </span>
                       <span class="sr-only">

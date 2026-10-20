@@ -33,7 +33,7 @@ function load(): Partial<Saved> {
 }
 
 /** The ways of answering built so far (each is added as it is finished). */
-export const READY_MODES: readonly Mode[] = ["slow", "all"];
+export const READY_MODES: readonly Mode[] = ["slow", "chat", "all"];
 
 /** A language the person chose on this tab wins over a shared "?lang=hi" link. */
 const initialLang = (saved?: Lang): Lang =>
@@ -47,7 +47,7 @@ const currentRoute = (fallback: Route): Route => parseRoute(location.hash) ?? fa
 /** Each way of answering is its own file, fetched when it is opened. */
 const LOADERS: Record<Mode, () => Promise<ComponentType<ModeProps>>> = {
   slow: () => import("./modes/slow/Slow").then((m) => m.Slow),
-  chat: () => import("./pages/Estimator").then((m) => m.Estimator),
+  chat: () => import("./modes/chat/Chat").then((m) => m.Chat),
   all: () => import("./pages/Estimator").then((m) => m.Estimator),
   detail: () => import("./pages/Estimator").then((m) => m.Estimator),
 };

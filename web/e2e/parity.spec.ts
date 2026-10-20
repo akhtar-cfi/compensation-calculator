@@ -1,9 +1,19 @@
 import { checkOffer } from "../../src/engine/index.js";
-import { examples, expect, expected, fillForm, fillSlow, guardRequests, rules, test } from "./helpers";
+import {
+  examples,
+  expect,
+  expected,
+  fillChat,
+  fillForm,
+  fillSlow,
+  guardRequests,
+  rules,
+  test,
+} from "./helpers";
 
 // The page runs the same engine as the CLI and the tests. Each worked example, answered in each way of answering,
 // must show exactly what estimate() gives for the same input: headline, range and every head.
-const FILL = { all: fillForm, slow: fillSlow } as const;
+const FILL = { all: fillForm, slow: fillSlow, chat: fillChat } as const;
 for (const [mode, fill] of Object.entries(FILL))
   for (const { name, input } of examples()) {
     test(`the page matches estimate() for ${name} (${mode})`, async ({ page, baseURL }) => {

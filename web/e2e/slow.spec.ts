@@ -165,6 +165,12 @@ test("the phone's back gesture steps back one question, keeping the answer", asy
   await expect(page).toHaveURL(/#\/$/);
 });
 
+test("an answer that says little on its own says what it answers in the strip", async ({ page }) => {
+  await fillSlowTo(page, "age");
+  await expect(page.locator("[data-chip=vehicleTraced]")).toContainText("Vehicle found: Yes");
+  await expect(page.locator("[data-chip=kind]")).toContainText("They died");
+});
+
 test("a reload keeps the place and every answer", async ({ page }) => {
   await fillSlowTo(page, "family");
   await page.reload();

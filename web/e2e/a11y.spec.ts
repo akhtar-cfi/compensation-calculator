@@ -1,10 +1,12 @@
 import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
-import { examples, expect, fillForm, fillSlow, openGroup, radio, settle, test } from "./helpers";
+import { examples, expect, fillChat, fillForm, fillSlow, openGroup, radio, settle, test } from "./helpers";
 
 async function noSeriousViolations(page: Page, where: string) {
-  // A screen that has just come in is still fading up: scan it as people read it, once it has settled.
+  // A screen that has just come in is still fading up: scan it as people read it, once it has settled. From the top
+  // of the page: a target scrolled under the sticky header would count as "obscured" wherever the scroll happened to be.
   await settle(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.evaluate(() =>
     Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))),
   );
@@ -76,5 +78,36 @@ for (const lang of ["en", "hi"] as const) {
     await page.locator("[data-action=continue]").click();
     await expect(page.locator("#age-error")).toBeVisible();
     await noSeriousViolations(page, "slow: missing answer");
+  });
+}
+
+for (const lang of ["en", "hi"] as const) {
+  test(`'Talk it through' has no serious accessibility violations (${lang})`, async ({ page }) => {
+    test.setTimeout(60_000);
+    await page.goto("#/chat");
+    await noSeriousViolations(page, "chat: language");
+    await page.locator(`[data-chat-step] button[data-value=${lang}]`).click();
+    await expect(page.locator("[data-chat-step=ask\\:kind]")).toBeVisible();
+    await noSeriousViolations(page, "chat: first question");
+    await page.locator('[data-chat-step] [data-value="injury"]').click();
+    await page.locator('[data-chat-step] [data-value="owner_driver_single_vehicle"]').click();
+    await expect(page.locator("[data-chat-step] [data-stop]")).toBeVisible();
+    await noSeriousViolations(page, "chat: stop");
+    const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+    await fillChat(page, input, { lang, details: false });
+    await noSeriousViolations(page, "chat: amount");
+    await page.locator("[data-action=more]").click();
+    await expect(page.getByTestId("mini-amount")).toBeVisible();
+    await page
+      .locator("[data-chat-step] [data-action=send]")
+      .or(page.locator("[data-chat-step] [data-action=skip]"))
+      .first()
+      .click();
+    await noSeriousViolations(page, "chat: details");
+    await page.locator("[data-change=age]").click();
+    await page.fill("#age", "");
+    await page.locator("[data-chat-step] [data-action=send]").click();
+    await expect(page.locator("#age-error")).toBeVisible();
+    await noSeriousViolations(page, "chat: missing answer");
   });
 }
