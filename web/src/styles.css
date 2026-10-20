@@ -1,7 +1,11 @@
 @import "tailwindcss";
-@import "@fontsource/montserrat/500.css";
-@import "@fontsource/montserrat/600.css";
-@import "@fontsource/montserrat/700.css";
+/* Montserrat in the Latin sets only (latin-ext has the ₹ sign); Hindi uses the phone's own Devanagari font. */
+@import "@fontsource/montserrat/latin-500.css";
+@import "@fontsource/montserrat/latin-ext-500.css";
+@import "@fontsource/montserrat/latin-600.css";
+@import "@fontsource/montserrat/latin-ext-600.css";
+@import "@fontsource/montserrat/latin-700.css";
+@import "@fontsource/montserrat/latin-ext-700.css";
 
 /* Geist, self-hosted (no font CDN: nothing about the visitor leaves the page). */
 @font-face {

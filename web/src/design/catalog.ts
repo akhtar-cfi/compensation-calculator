@@ -436,12 +436,12 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Help band",
     file: "components/chrome.tsx",
-    use: "'Need help? Talk to a person': the website's helpline and email, on every page, before the footer.",
+    use: "'Need help? Talk to a person': free legal aid (the District Legal Services Authority, or the national legal aid helpline 15100), on every page, before the footer.",
     avoid:
-      "Replacing the free legal aid line (DLSA, NALSA 15100), which stays in the next steps and the footer.",
+      "Naming a helpline nobody has confirmed is staffed. Crashfree India's own number and email return here (one switch in the code) once confirmed.",
     rules: [
-      "The number dials on a phone; the address opens the mail app.",
-      "A long address wraps rather than push the page sideways.",
+      "The number dials on a phone.",
+      "A long address or number wraps rather than push the page sideways.",
     ],
   },
   {

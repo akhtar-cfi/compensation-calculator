@@ -4,6 +4,7 @@ import { estimate } from "../../../src/engine/index.js";
 import { ArrowDown, ArrowUp, Check, ChevronDown, RotateCcw, SlidersHorizontal } from "lucide-preact";
 import type { EstimateInput, EstimateOutput } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
+import { setAnswer } from "../answers";
 import { focusField } from "../components/form";
 import { rules } from "../data";
 import { Card, Notice, linkCls, wrap } from "../components/ui";
@@ -88,7 +89,7 @@ export function Estimator(props: {
   const approx = useApprox();
 
   const set: SetField = (k, val) => {
-    props.setForm({ ...f, [k]: val });
+    props.setForm(setAnswer(f, k, val));
     // The month and year are picked, not typed: a problem with them (a future month) shows at once.
     if (k === "accidentDate" && !touched.has(k)) setTouched(new Set([...touched, k]));
   };

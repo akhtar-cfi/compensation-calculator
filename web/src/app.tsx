@@ -13,29 +13,17 @@ import { countView } from "./analytics";
 import { STEPS, STOP_FIELD, stopsOf } from "./questions";
 import { isLegacy, parseRoute, routeKey, type Route } from "./route";
 import { applyExample, applyStart, situation, type SituationId } from "./situations";
+import { parseSaved, type Saved } from "./saved";
 import { todayISO, type Lang } from "./translate";
 import { validate } from "./validate";
 
-/** Answers are kept in this tab only (sessionStorage): they survive a reload or the phone discarding the tab in
- * the background, vanish when the tab is closed, and are never sent anywhere. */
+/** Answers are kept in this tab only (sessionStorage): see saved.ts. */
 const STORE = "mact-calculator.v2";
-
-interface Saved {
-  form: FormState;
-  lang: Lang;
-}
 
 function load(): Partial<Saved> {
   try {
     const raw = sessionStorage.getItem(STORE);
-    if (!raw) return {};
-    const s = JSON.parse(raw) as Partial<Saved>;
-    // Keep only known answers, so an older saved shape cannot break the page.
-    const form = { ...EMPTY_FORM };
-    for (const k of Object.keys(EMPTY_FORM) as (keyof FormState)[])
-      if (s.form && typeof s.form[k] === typeof EMPTY_FORM[k])
-        (form as Record<string, unknown>)[k] = s.form[k];
-    return { form, ...(s.lang === "hi" || s.lang === "en" ? { lang: s.lang } : {}) };
+    return raw ? parseSaved(JSON.parse(raw)) : {};
   } catch {
     return {};
   }

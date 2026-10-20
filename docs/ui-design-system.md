@@ -279,10 +279,10 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 
 ### Help band
 
-- **Use for:** 'Need help? Talk to a person': the website's helpline and email, on every page, before the footer.
-- **Not for:** Replacing the free legal aid line (DLSA, NALSA 15100), which stays in the next steps and the footer.
-- The number dials on a phone; the address opens the mail app.
-- A long address wraps rather than push the page sideways.
+- **Use for:** 'Need help? Talk to a person': free legal aid (the District Legal Services Authority, or the national legal aid helpline 15100), on every page, before the footer.
+- **Not for:** Naming a helpline nobody has confirmed is staffed. Crashfree India's own number and email return here (one switch in the code) once confirmed.
+- The number dials on a phone.
+- A long address or number wraps rather than push the page sideways.
 - _Code:_ `web/src/components/chrome.tsx`
 
 ### Footer

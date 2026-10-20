@@ -10,6 +10,8 @@ import {
   Landmark,
   Store,
 } from "lucide-preact";
+import type { LucideIcon } from "lucide-preact";
+import { choices, chosen, LABEL, setAnswer, type ChoiceField, type IconName } from "./answers";
 import { rules } from "./data";
 import { incomeFields, type FormState } from "./form-to-input";
 import { useLang, useT } from "./i18n";
@@ -28,69 +30,25 @@ import {
 import type { BlockId } from "./questions";
 import type { FieldName } from "./validate";
 
-export const STATES = ["DL", "HR", "UP", "RJ", "MP", "CENTRAL", "OTHER"] as const;
-const EMPLOYMENT = [
-  "permanent",
-  "fixed_salary",
-  "self_employed",
-  "informal",
-  "homemaker",
-  "student",
-  "minor",
-  "pensioner",
-  "unemployed",
-] as const;
-const WORK_ICON = {
-  permanent: Landmark,
-  fixed_salary: Briefcase,
-  self_employed: Store,
-  informal: HardHat,
-  homemaker: House,
-  student: GraduationCap,
-  minor: Baby,
-  pensioner: Armchair,
-  unemployed: CircleOff,
-} as const;
+/** The drawing for each icon name used by the choices (answers.ts names them, so it stays free of the page). */
+export const ICONS: Readonly<Record<IconName, LucideIcon>> = {
+  landmark: Landmark,
+  briefcase: Briefcase,
+  store: Store,
+  hardHat: HardHat,
+  house: House,
+  graduationCap: GraduationCap,
+  baby: Baby,
+  armchair: Armchair,
+  circleOff: CircleOff,
+};
 
 export type SetField = <K extends FieldName>(k: K, v: FormState[K]) => void;
 export type FieldError = (k: FieldName) => string | undefined;
 
 /** Each answer's label as shown on the page, used in the list of answers left. */
 export function fieldLabels(t: (k: string) => string): Partial<Record<FieldName, string>> {
-  return {
-    kind: t("step.kind"),
-    victimRole: t("f.role"),
-    vehicleTraced: t("f.traced"),
-    s164: t("f.s164q"),
-    age: t("step.age"),
-    employment: t("step.work"),
-    proof: t("f.proof"),
-    monthlySalary: t("f.monthlySalary"),
-    itrAnnualIncome: t("f.itr"),
-    occupationCode: t("q.occupation.title"),
-    pensionMonthly: t("f.pension"),
-    married: t("f.married"),
-    spouse: t("f.spouse"),
-    children: t("f.children"),
-    parents: t("f.parents"),
-    certificatePct: t("f.certificatePct"),
-    certificateBasis: t("f.certificateBasis"),
-    monthsOffWork: t("f.monthsOffWork"),
-    accidentDate: t("step.when"),
-    state: t("step.state"),
-    claimFiled: t("q.claim.title"),
-    claimFiledDate: t("f.claimFiledDate"),
-    vehicleInsured: t("f.insured"),
-    monthlyTax: t("f.monthlyTax"),
-    claimedMonthly: t("f.claimed"),
-    familyPensionMonthly: t("f.familyPension"),
-    studentCourse: t("q.course.title"),
-    zone: t("f.zone"),
-    dependentParents: t("f.dependentParents"),
-    workCapacity: t("q.workNow.title"),
-    medicalBills: t("f.medicalBills"),
-    cashlessPaid: t("f.cashless"),
-  };
+  return Object.fromEntries(Object.entries(LABEL).map(([k, key]) => [k, t(key)]));
 }
 
 /** The first and last month with official minimum wages for a state ("Oct 2011"), for the state hint. */
@@ -119,10 +77,14 @@ export function BlockFields(props: {
   const t = useT();
   const lang = useLang();
   const { id, f, set, err } = props;
-  const opt = (prefix: string, vals: readonly string[]): RadioOption[] =>
-    vals.map((v) => ({ value: v, label: t(`${prefix}${v}`) }));
-  const notSure = { value: "unknown", label: t("opt.notSure") };
-  const yesNo = opt("f.", ["yes", "no"]);
+  /** A question's choices (answers.ts), in the page's language. */
+  const opts = (k: ChoiceField): RadioOption[] =>
+    choices(k, f).map((o) => ({
+      value: o.value,
+      label: t(o.label),
+      hint: o.hint ? t(o.hint) : undefined,
+      icon: o.icon ? ICONS[o.icon] : undefined,
+    }));
   const inc = incomeFields(f.employment);
 
   switch (id) {
@@ -135,10 +97,7 @@ export function BlockFields(props: {
           value={f.kind}
           error={err("kind")}
           onChange={(v) => set("kind", v as FormState["kind"])}
-          options={[
-            { value: "death", label: t("f.kind.death"), hint: t("f.kind.death.hint") },
-            { value: "injury", label: t("f.kind.injury"), hint: t("f.kind.injury.hint") },
-          ]}
+          options={opts("kind")}
           layout="stack"
         />
       );
@@ -152,11 +111,7 @@ export function BlockFields(props: {
             value={f.victimRole}
             error={err("victimRole")}
             onChange={(v) => set("victimRole", v as FormState["victimRole"])}
-            options={[
-              { value: "not_driving", label: t("f.role.not_driving"), hint: t("f.role.not_driving.hint") },
-              { value: "driver_of_involved_vehicle", label: t("f.role.driver") },
-              { value: "owner_driver_single_vehicle", label: t("f.role.owner") },
-            ]}
+            options={opts("victimRole")}
           />
           <Radios
             id="vehicleTraced"
@@ -164,7 +119,7 @@ export function BlockFields(props: {
             value={f.vehicleTraced}
             error={err("vehicleTraced")}
             onChange={(v) => set("vehicleTraced", v as FormState["vehicleTraced"])}
-            options={[...opt("f.traced.", ["yes", "no"]), notSure]}
+            options={opts("vehicleTraced")}
           />
           <Radios
             id="s164"
@@ -173,7 +128,7 @@ export function BlockFields(props: {
             value={f.s164}
             error={err("s164")}
             onChange={(v) => set("s164", v as FormState["s164"])}
-            options={[...opt("f.s164.", ["none", "accepted_via_insurer"]), notSure]}
+            options={opts("s164")}
           />
         </div>
       );
@@ -204,13 +159,7 @@ export function BlockFields(props: {
             value={f.employment}
             error={err("employment")}
             onChange={(v) => set("employment", v as FormState["employment"])}
-            options={EMPLOYMENT.map((e) => ({
-              value: e,
-              label: t(`chip.emp.${e}`),
-              // The two salaried kinds differ in the future-prospects addition (50% or 40% under 40): say how.
-              hint: e === "permanent" || e === "fixed_salary" ? t(`chip.emp.${e}.hint`) : undefined,
-              icon: WORK_ICON[e],
-            }))}
+            options={opts("employment")}
           />
           {canProve && (
             <Reveal>
@@ -221,10 +170,7 @@ export function BlockFields(props: {
                   value={f.proof}
                   error={err("proof")}
                   onChange={(v) => set("proof", v as FormState["proof"])}
-                  options={[
-                    { value: proofKind, label: t("f.yes") },
-                    { value: "none", label: t("f.no") },
-                  ]}
+                  options={opts("proof")}
                 />
                 {f.proof === "salary_slip" && inc.includes("salary") && (
                   <MoneyInput
@@ -283,14 +229,8 @@ export function BlockFields(props: {
               label={t("f.married")}
               value={f.married}
               error={err("married")}
-              onChange={(v) =>
-                props.setForm({
-                  ...f,
-                  married: v as FormState["married"],
-                  spouse: v === "yes" ? f.spouse : "",
-                })
-              }
-              options={yesNo}
+              onChange={(v) => set("married", v as FormState["married"])}
+              options={opts("married")}
             />
             {f.kind === "death" && f.married === "yes" && (
               <Radios
@@ -299,7 +239,7 @@ export function BlockFields(props: {
                 value={f.spouse}
                 error={err("spouse")}
                 onChange={(v) => set("spouse", v as FormState["spouse"])}
-                options={yesNo}
+                options={opts("spouse")}
               />
             )}
           </Pair>
@@ -309,13 +249,10 @@ export function BlockFields(props: {
                 <Radios
                   id="children"
                   label={t("f.children")}
-                  value={Number(f.children) >= 5 ? "more" : f.children}
+                  value={chosen("children", f)}
                   error={Number(f.children) >= 5 ? undefined : err("children")}
-                  onChange={(v) => set("children", v === "more" ? "5" : v)}
-                  options={[
-                    ...["0", "1", "2", "3", "4"].map((n) => ({ value: n, label: n })),
-                    { value: "more", label: t("f.children.more") },
-                  ]}
+                  onChange={(v) => set("children", v)}
+                  options={opts("children")}
                 />
                 {Number(f.children) >= 5 && (
                   <div class="mt-3">
@@ -339,8 +276,8 @@ export function BlockFields(props: {
                   label={t("f.parents")}
                   value={f.parents}
                   error={err("parents")}
-                  onChange={(v) => props.setForm({ ...f, parents: v, dependentParents: "" })}
-                  options={["0", "1", "2"].map((n) => ({ value: n, label: n }))}
+                  onChange={(v) => set("parents", v)}
+                  options={opts("parents")}
                 />
                 {Number(f.parents) > 0 && (
                   <Radios
@@ -349,19 +286,7 @@ export function BlockFields(props: {
                     value={f.dependentParents}
                     error={err("dependentParents")}
                     onChange={(v) => set("dependentParents", v)}
-                    options={[
-                      ...(f.parents === "1"
-                        ? [
-                            { value: "1", label: t("f.yes") },
-                            { value: "0", label: t("f.no") },
-                          ]
-                        : [
-                            { value: "2", label: t("f.depends.both") },
-                            { value: "1", label: t("f.depends.oneOf") },
-                            { value: "0", label: t("f.depends.neither") },
-                          ]),
-                      notSure,
-                    ]}
+                    options={opts("dependentParents")}
                   />
                 )}
               </Pair>
@@ -401,7 +326,7 @@ export function BlockFields(props: {
               value={f.certificateBasis}
               error={err("certificateBasis")}
               onChange={(v) => set("certificateBasis", v as FormState["certificateBasis"])}
-              options={[...opt("f.basis.", ["whole_body", "limb"]), notSure]}
+              options={opts("certificateBasis")}
             />
           )}
           <TextInput
@@ -444,11 +369,8 @@ export function BlockFields(props: {
           })}
           value={f.state}
           error={err("state")}
-          onChange={(v) => props.setForm({ ...f, state: v, zone: "" })}
-          options={STATES.map((s) => ({
-            value: s,
-            label: s === "OTHER" || s === "CENTRAL" ? t(`chip.state.${s}`) : t(`stname.${s}`),
-          }))}
+          onChange={(v) => set("state", v)}
+          options={opts("state")}
         />
       );
     }
@@ -463,10 +385,7 @@ export function BlockFields(props: {
             hint={t("f.accidentDay.hint")}
             value={f.accidentDate.split("-")[2] ?? ""}
             error={(f.accidentDate.split("-")[2] ?? "") !== "" ? err("accidentDate") : undefined}
-            onInput={(v) => {
-              const [y = "", m = ""] = f.accidentDate.split("-");
-              set("accidentDate", `${y}-${m}-${v.replace(/\D/g, "").slice(0, 2)}`);
-            }}
+            onInput={(v) => props.setForm(setAnswer(f, "accidentDay", v))}
           />
           <Radios
             id="claimFiled"
@@ -474,7 +393,7 @@ export function BlockFields(props: {
             value={f.claimFiled}
             error={err("claimFiled")}
             onChange={(v) => set("claimFiled", v as FormState["claimFiled"])}
-            options={yesNo}
+            options={opts("claimFiled")}
           />
           {f.claimFiled === "yes" && (
             <Reveal>
@@ -499,7 +418,7 @@ export function BlockFields(props: {
           value={f.vehicleInsured}
           error={err("vehicleInsured")}
           onChange={(v) => set("vehicleInsured", v as FormState["vehicleInsured"])}
-          options={[...yesNo, notSure]}
+          options={opts("vehicleInsured")}
         />
       );
     case "earnings": {
@@ -552,7 +471,7 @@ export function BlockFields(props: {
               label={t("q.course.title")}
               value={f.studentCourse}
               onChange={(v) => set("studentCourse", v as FormState["studentCourse"])}
-              options={[...opt("f.course.", ["school", "college", "professional"]), notSure]}
+              options={opts("studentCourse")}
             />
           )}
           {zones.length > 1 && (
@@ -587,7 +506,7 @@ export function BlockFields(props: {
             value={f.workCapacity}
             error={err("workCapacity")}
             onChange={(v) => set("workCapacity", v as FormState["workCapacity"])}
-            options={[...opt("f.work.", ["full", "with_difficulty", "lighter_only", "none"]), notSure]}
+            options={opts("workCapacity")}
           />
           <TextInput
             id="functionalPct"

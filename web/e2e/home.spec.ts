@@ -170,15 +170,13 @@ test("facts carry their sources, and help is one tap away", async ({ page }) => 
   const facts = page.getByTestId("facts").locator("li");
   await expect(facts).toHaveCount(3);
   for (let i = 0; i < 3; i++) await expect(facts.nth(i).getByRole("link")).toHaveAttribute("href", /\S/);
+  // Free legal aid only, until Crashfree India confirms its own helpline: no CFI number, email or promise of help.
   const help = page.getByTestId("help");
-  await expect(help.getByRole("link", { name: "+91 87429 10592" })).toHaveAttribute(
-    "href",
-    "tel:+918742910592",
-  );
-  await expect(help.getByRole("link", { name: "help@crashfreeindia.org" })).toHaveAttribute(
-    "href",
-    "mailto:help@crashfreeindia.org",
-  );
+  await expect(help).toContainText("District Legal Services Authority");
+  await expect(help.getByRole("link", { name: "Call 15100" })).toHaveAttribute("href", "tel:15100");
+  await expect(help).not.toContainText("87429");
+  await expect(help).not.toContainText("help@crashfreeindia.org");
+  await expect(help).not.toContainText("helps families file");
   const footer = page.locator("footer");
   await expect(footer.getByRole("link", { name: "Privacy Policy" })).toHaveAttribute(
     "href",

@@ -203,8 +203,17 @@ export function DraftBanner() {
 }
 
 /** Talk to a person: the website's "Need help?" band, with the same number and address. */
+/**
+ * Crashfree India's own helpline (the number and email on its Crash Claim Compensation page). Off until CFI confirms
+ * it runs one today: the band then offers free legal aid only. Turning this on brings the number, the email and the
+ * "our team helps" line back.
+ */
+const CFI_HELPLINE = false;
+
 export function HelpBand() {
   const t = useT();
+  const pill =
+    "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-foreground";
   return (
     <section
       aria-labelledby="help-h"
@@ -214,31 +223,39 @@ export function HelpBand() {
       <div
         class={`${wrap} flex flex-col gap-6 py-12 md:flex-row md:items-center md:justify-between md:py-14`}
       >
-        <div>
+        <div class="max-w-2xl">
           <p class="text-xs font-semibold tracking-[0.25em] text-brand-foreground/80 uppercase">
             {t("help.eyebrow")}
           </p>
           <h2 id="help-h" class="mt-2 font-heading text-2xl font-bold tracking-tight sm:text-3xl">
             {t("help.title")}
           </h2>
-          <p class="mt-2 text-base leading-relaxed text-brand-foreground/90">{t("help.lead")}</p>
+          <p class="mt-2 text-base leading-relaxed text-brand-foreground/90">
+            {t(CFI_HELPLINE ? "help.lead" : "help.aid")}
+          </p>
         </div>
         <div class="flex flex-col gap-3 sm:flex-row md:shrink-0">
-          <a
-            href="tel:+918742910592"
-            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-background px-7 text-base font-medium text-foreground shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-foreground"
-          >
-            <Phone aria-hidden="true" class="h-4 w-4" />
-            +91 87429 10592
-          </a>
-          <a
-            href="mailto:help@crashfreeindia.org"
-            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-brand-foreground/40 px-7 text-base font-medium text-brand-foreground hover:bg-brand-foreground/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-foreground"
-          >
-            <Mail aria-hidden="true" class="h-4 w-4 shrink-0" />
-            {/* With very large text, the address breaks rather than push the page sideways. */}
-            <span class="min-w-0 [overflow-wrap:anywhere]">help@crashfreeindia.org</span>
-          </a>
+          {CFI_HELPLINE ? (
+            <>
+              <a href="tel:+918742910592" class={`${pill} bg-background text-foreground shadow-lg`}>
+                <Phone aria-hidden="true" class="h-4 w-4" />
+                +91 87429 10592
+              </a>
+              <a
+                href="mailto:help@crashfreeindia.org"
+                class={`${pill} border border-brand-foreground/40 text-brand-foreground hover:bg-brand-foreground/10`}
+              >
+                <Mail aria-hidden="true" class="h-4 w-4 shrink-0" />
+                {/* With very large text, the address breaks rather than push the page sideways. */}
+                <span class="min-w-0 [overflow-wrap:anywhere]">help@crashfreeindia.org</span>
+              </a>
+            </>
+          ) : (
+            <a href="tel:15100" class={`${pill} bg-background text-foreground shadow-lg`}>
+              <Phone aria-hidden="true" class="h-4 w-4" />
+              {t("help.call")}
+            </a>
+          )}
         </div>
       </div>
     </section>
