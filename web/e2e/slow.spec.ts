@@ -151,6 +151,21 @@ test("the list of answers has a Change link for each, which comes back to the li
   await expect(page.locator("[data-review=state]")).toContainText("Haryana");
 });
 
+test("the amount and the list of answers have Start again, which asks first", async ({ page }) => {
+  await fillSlow(page, salaried);
+  for (const at of ["amount", "review"]) {
+    await page.goto(`#/slow/${at}`);
+    await page.getByTestId("restart").click();
+    await page.getByRole("button", { name: "Keep my answers" }).click();
+    await expect(page.getByTestId("restart")).toBeFocused();
+  }
+  await expect(page.locator("[data-review=age]")).toContainText(String(salaried.victim.ageYears));
+  await page.getByTestId("restart").click();
+  await page.getByTestId("restart-confirm").click();
+  await expect(page).toHaveURL(/#\/slow\/kind$/);
+  await expect(page.locator("[data-chip]")).toHaveCount(0);
+});
+
 test("the phone's back gesture steps back one question, keeping the answer", async ({ page }) => {
   await begin(page);
   await page.locator('[data-field=kind] [data-value="injury"]').click();

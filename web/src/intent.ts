@@ -43,4 +43,6 @@ export interface ModeProps {
   place?: string | undefined;
   /** Moves to an address in this app (`replace`: without a new history entry, for a redirect). */
   go: (href: string, replace?: boolean) => void;
+  /** The answers are this worked example's (the result says so), until the person starts their own case. */
+  example?: SituationId | undefined;
 }

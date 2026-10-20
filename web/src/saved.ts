@@ -1,6 +1,7 @@
 import { SCENARIOS, type Scenario } from "../../src/engine/types.js";
 import { ALL_FIELDS } from "./questions.js";
 import { EMPTY_FORM, type FormState } from "./form-to-input.js";
+import { isSituationId, situation, type SituationId } from "./situations.js";
 import type { Lang } from "./translate.js";
 
 /**
@@ -19,6 +20,8 @@ export interface Saved {
   mix?: Partial<Record<string, Scenario>>;
   /** The chat: whether the person asked for the optional questions after the amount. */
   chatRefine?: "yes" | "no";
+  /** The answers are a worked example's (a situation card's), until the person starts their own case. */
+  example?: SituationId;
 }
 
 const isObject = (x: unknown): x is Record<string, unknown> =>
@@ -47,5 +50,7 @@ export function parseSaved(raw: unknown): Partial<Saved> {
     out.mix = mix;
   }
   if (raw.chatRefine === "yes" || raw.chatRefine === "no") out.chatRefine = raw.chatRefine;
+  if (typeof raw.example === "string" && isSituationId(raw.example) && situation(raw.example).example)
+    out.example = raw.example;
   return out;
 }

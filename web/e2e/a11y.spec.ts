@@ -127,3 +127,29 @@ for (const lang of ["en", "hi"] as const) {
     await noSeriousViolations(page, "detail: estimate with choices");
   });
 }
+
+for (const lang of ["en", "hi"] as const) {
+  test(`asking whether a card starts a new case, and an example's answers, have no serious violations (${lang})`, async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    await page.addInitScript(() => localStorage.setItem("mact-calculator.mode", "all"));
+    await page.goto(lang === "hi" ? "?lang=hi#/all" : "#/all");
+    await page.fill("#age", "30");
+    await page.locator("#age").blur();
+    await page.goto(lang === "hi" ? "?lang=hi#/" : "#/");
+    await page.locator('[data-situation="hurt"] [data-action=start]').click();
+    await expect(page.getByTestId("start-confirm")).toBeVisible();
+    await noSeriousViolations(page, "start: a new case?");
+    await page.getByTestId("start-confirm").locator("button").first().click();
+    await page.goto(lang === "hi" ? "?lang=hi#/" : "#/");
+    await page.locator('[data-situation="earner"] [data-action=example]').click();
+    await page.getByTestId("example-confirm").locator("button").first().click();
+    await expect(page.getByTestId("example-notice")).toBeVisible();
+    await expect(page.getByTestId("example-mark")).toBeVisible();
+    await noSeriousViolations(page, "an example's answers");
+    await page.getByTestId("restart").click();
+    await expect(page.getByTestId("restart-confirm")).toBeVisible();
+    await noSeriousViolations(page, "start again?");
+  });
+}

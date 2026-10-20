@@ -87,6 +87,20 @@ test("Change asks again, and answers that no longer apply drop out", async ({ pa
   await expect(ask(page)).toHaveAttribute("data-chat-step", "ask:married");
 });
 
+test("Start again asks before clearing the answers", async ({ page }) => {
+  await begin(page);
+  await tap(page, "death");
+  await expect(ask(page)).toHaveAttribute("data-chat-step", "ask:victimRole");
+  await page.getByTestId("restart").click();
+  await page.getByRole("button", { name: "Keep my answers" }).click();
+  await expect(page.getByTestId("restart")).toBeFocused();
+  await expect(page.locator("[data-said=kind]")).toBeVisible();
+  await page.getByTestId("restart").click();
+  await page.getByTestId("restart-confirm").click();
+  await expect(page.locator("[data-said]")).toHaveCount(0);
+  await expect(ask(page)).toHaveAttribute("data-chat-step", "ask:kind");
+});
+
 test("a reload keeps the whole conversation", async ({ page }) => {
   await upToAge(page);
   await page.fill("#age", "30");

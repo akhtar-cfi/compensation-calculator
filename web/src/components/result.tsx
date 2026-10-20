@@ -1,5 +1,5 @@
 import type { ComponentChildren } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { ChevronDown, Copy, Printer, Share2, Square } from "lucide-preact";
 import type { JourneySummary } from "../../../src/cases/match.js";
 import type { Case } from "../../../src/cases/schema.js";
@@ -167,6 +167,27 @@ export function ShareActions(props: { text: string; title: string }) {
 }
 
 /** "Up ₹50,000 from ₹16,58,186": how the amount moved with the last change. */
+/**
+ * How the amount moved with the last answer ("up ₹50,000 from ₹16,58,186"). Forgotten once every answer is cleared
+ * (Start again, or a new case), so a new case never reads as a change from the last one.
+ */
+export function useChange(headline: number | undefined, answered: boolean) {
+  const previous = useRef<number | undefined>(undefined);
+  const [change, setChange] = useState<{ from: number; to: number } | undefined>(undefined);
+  useEffect(() => {
+    if (!answered) {
+      previous.current = undefined;
+      setChange(undefined);
+      return;
+    }
+    if (headline === undefined) return;
+    if (previous.current !== undefined && previous.current !== headline)
+      setChange({ from: previous.current, to: headline });
+    previous.current = headline;
+  }, [headline, answered]);
+  return change;
+}
+
 export function ChangeLine(props: { change: { from: number; to: number }; class?: string }) {
   const t = useT();
   const { from, to } = props.change;

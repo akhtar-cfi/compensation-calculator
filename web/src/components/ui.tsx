@@ -18,6 +18,9 @@ const pillBase =
   "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 export const pillPrimary = `${pillBase} bg-brand text-brand-foreground shadow-lg shadow-brand/30 hover:bg-brand/90`;
 export const pillOutline = `${pillBase} border border-border bg-background text-foreground shadow-sm hover:bg-muted`;
+/** A quiet text button, for an action that must be there but not compete (Start again). */
+export const quietBtn =
+  "inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-brand";
 
 /** The page container: the website's max width, with phone gutters of 16 px. */
 export function Page(props: { children: ComponentChildren; narrow?: boolean; class?: string }) {
@@ -130,14 +133,21 @@ export function Notice(props: {
   title: string;
   children?: ComponentChildren;
   code?: string;
-  /** Announce a stop as it appears (off for a second copy of the same notice). */
+  /** Announce a stop as it appears (off for a second copy of the same notice); `true` on another notice announces
+   * it politely. */
   live?: boolean | undefined;
 }) {
   const t = useT();
   const s = sevStyle[props.severity];
   return (
     <div
-      role={props.severity === "stop" && props.live !== false ? "alert" : undefined}
+      role={
+        props.severity === "stop" && props.live !== false
+          ? "alert"
+          : props.live === true
+            ? "status"
+            : undefined
+      }
       data-code={props.code}
       data-severity={props.severity}
       class={`rounded-lg border p-4 ${s.box}`}

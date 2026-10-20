@@ -1,12 +1,13 @@
-import { ArrowLeft, ArrowRight, ListChecks, RotateCcw, Scale, SlidersHorizontal } from "lucide-preact";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { ArrowLeft, ArrowRight, ListChecks, Scale, SlidersHorizontal } from "lucide-preact";
+import { useLayoutEffect, useMemo, useState } from "preact/hooks";
 import { countSimilar } from "../../../../src/cases/match.js";
 import { formatApprox } from "../../../../src/engine/money.js";
 import { answerText, askKey, QUESTION, rawAnswer, type QuestionId } from "../../answers";
-import { ChangeLine } from "../../components/result";
-import { pillOutline, pillPrimary, wrap } from "../../components/ui";
+import { ChangeLine, useChange } from "../../components/result";
+import { Restart } from "../../components/restart";
+import { pillOutline, pillPrimary, quietBtn, wrap } from "../../components/ui";
 import { loadCases, rules, useLoaded } from "../../data";
-import { accidentLabel, parentsAssumed } from "../../estimate-extras";
+import { accidentLabel, parentsAssumed, unsureChecks } from "../../estimate-extras";
 import {
   afterRefine,
   afterScreen,
@@ -38,7 +39,7 @@ import { EMPTY_FORM, incomeFields, type FormState } from "../../form-to-input";
 import { useApprox, useLang, useT } from "../../i18n";
 import type { ModeProps } from "../../intent";
 import { usePageFocus, useResultModule } from "../../lazy";
-import { ResultSummary, StopNotice } from "../../pages/ResultSummary";
+import { ResultSummary, StopNotice, stopHeading } from "../../pages/ResultSummary";
 import type { StopCode } from "../../questions";
 import { validate, type FieldName } from "../../validate";
 import { QuestionInput } from "../controls";
@@ -112,14 +113,12 @@ export function Slow(props: ModeProps) {
 
   // How the amount moved with the last answer ("up ₹50,000").
   const headline = props.computed?.est.headline?.amount;
-  const previousAmount = useRef<number | undefined>(undefined);
-  const [change, setChange] = useState<{ from: number; to: number } | undefined>(undefined);
-  useEffect(() => {
-    if (headline === undefined) return;
-    if (previousAmount.current !== undefined && previousAmount.current !== headline)
-      setChange({ from: previousAmount.current, to: headline });
-    previousAmount.current = headline;
-  }, [headline]);
+  const change = useChange(headline, JSON.stringify(f) !== JSON.stringify(EMPTY_FORM));
+  /** Start again (after asking): every answer goes, and the first question is asked. */
+  const startAgain = () => {
+    props.onRestart();
+    props.go("#/slow/kind", true);
+  };
 
   const R = useResultModule(place.type === "amount");
 
@@ -334,7 +333,7 @@ export function Slow(props: ModeProps) {
           tabIndex={-1}
           class="font-heading text-2xl leading-tight font-bold tracking-tight text-foreground sm:text-3xl"
         >
-          {t("res.none")}
+          {t(stopHeading(place.code))}
         </h1>
         <div class="mt-5">
           <StopNotice code={place.code} />
@@ -347,17 +346,7 @@ export function Slow(props: ModeProps) {
           >
             {t("stop.change")}
           </a>
-          <button
-            type="button"
-            class={pillOutline}
-            onClick={() => {
-              props.onRestart();
-              props.go("#/slow/kind", true);
-            }}
-          >
-            <RotateCcw aria-hidden="true" class="h-4 w-4" />
-            {t("app.restart")}
-          </button>
+          <Restart class={pillOutline} onRestart={startAgain} />
         </div>
       </>
     );
@@ -407,6 +396,9 @@ export function Slow(props: ModeProps) {
           {v.input ? t("check.continue") : t("wiz.next")}
           <ArrowRight aria-hidden="true" class="h-4 w-4" />
         </button>
+        <div class="mt-6">
+          <Restart class={quietBtn} onRestart={startAgain} />
+        </div>
       </>
     );
   } else {
@@ -429,6 +421,8 @@ export function Slow(props: ModeProps) {
           parentsAssumed={parentsAssumed(computed, today)}
           onMissing={() => undefined}
           moreHref={queue[0] ? placeHref({ type: "refine", id: queue[0] }) : null}
+          example={props.example}
+          unsure={unsureChecks(f)}
         />
         <div class="mt-5 grid gap-3 sm:grid-cols-2">
           {queue.length > 0 && (
@@ -441,6 +435,9 @@ export function Slow(props: ModeProps) {
             <ListChecks aria-hidden="true" class="h-4 w-4" />
             {t("check.title")}
           </a>
+        </div>
+        <div class="mt-3">
+          <Restart class={quietBtn} onRestart={startAgain} />
         </div>
         {computed && R && (
           <div class="mt-6 grid gap-6">

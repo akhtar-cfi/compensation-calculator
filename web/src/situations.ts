@@ -111,6 +111,12 @@ export const SITUATIONS: readonly Situation[] = [
   { id: "hit-and-run", img: "img/situations/hit-and-run.webp", start: { vehicleTraced: "no" } },
 ];
 
+/** A question the start page asks on a card before acting on it: a new case or the same one, or the example. */
+export interface Ask {
+  id: SituationId;
+  kind: "start" | "example";
+}
+
 export const isSituationId = (s: string): s is SituationId =>
   (SITUATION_IDS as readonly string[]).includes(s);
 
@@ -121,6 +127,19 @@ export function situation(id: SituationId): Situation {
 /** The answers after starting from a situation: its own answers set, every other answer kept. */
 export function applyStart(f: FormState, id: SituationId): FormState {
   return { ...f, ...situation(id).start };
+}
+
+/** Answers from before in a few words ("a death · 30 years old · Delhi"), to ask whether a card starts a new case. */
+export function caseSummary(
+  f: FormState,
+  t: (k: string, vars?: Record<string, string | number>) => string,
+): string {
+  const parts = [
+    f.kind ? t(`case.${f.kind}`) : "",
+    f.age.trim() ? t("case.age", { n: f.age.trim() }) : "",
+    f.state ? t(`stname.${f.state}`) : "",
+  ].filter(Boolean);
+  return parts.length ? parts.join(" · ") : t("case.some");
 }
 
 /** The answers of a situation's worked example (undefined when it has none). */

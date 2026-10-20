@@ -14,7 +14,15 @@ import {
 import { formatINR } from "../../../src/engine/money.js";
 import { rules } from "../data";
 import { useApprox, useT } from "../i18n";
-import { SITUATIONS, exampleEstimate, type Situation, type SituationId } from "../situations";
+import {
+  SITUATIONS,
+  caseSummary,
+  exampleEstimate,
+  type Ask,
+  type Situation,
+  type SituationId,
+} from "../situations";
+import type { FormState } from "../form-to-input";
 import { wrap } from "../components/ui";
 import { SITE } from "../components/chrome";
 import { ModeDrawing } from "../components/drawings";
@@ -42,10 +50,15 @@ export function Home(props: {
   /** The way of answering picked last time on this phone. */
   last: Mode | undefined;
   onChoose: (m: Mode) => void;
-  /** True when the person has answered anything (trying an example then asks first). */
+  /** The answers so far (summed up when a card asks whether this is a new case). */
+  form: FormState;
+  /** True when the person has answered anything (a card's Start or example then asks first). */
   answered: boolean;
+  /** A card's shared link opened over answers from before: ask on that card. */
+  ask?: Ask | undefined;
+  onAsked: () => void;
   today: string;
-  onStart: (id: SituationId) => void;
+  onStart: (id: SituationId, fresh: boolean) => void;
   onExample: (id: SituationId) => void;
 }) {
   const t = useT();
@@ -72,7 +85,10 @@ export function Home(props: {
           <Chooser class="lg:col-start-1 lg:row-start-2" last={props.last} onChoose={props.onChoose} />
           <Situations
             class="min-w-0 lg:col-start-2 lg:row-span-3 lg:row-start-1"
+            form={props.form}
             answered={props.answered}
+            ask={props.ask}
+            onAsked={props.onAsked}
             today={props.today}
             onStart={props.onStart}
             onExample={props.onExample}
@@ -180,16 +196,26 @@ export function Tells(props: { class?: string }) {
  */
 export function Situations(props: {
   class?: string;
-  /** True when the person has answered anything (trying an example then asks first). */
+  form: FormState;
+  /** True when the person has answered anything (a card's Start or example then asks first). */
   answered: boolean;
+  /** A card's shared link opened over answers from before: ask on that card. */
+  ask?: Ask | undefined;
+  onAsked: () => void;
   today: string;
-  onStart: (id: SituationId) => void;
+  onStart: (id: SituationId, fresh: boolean) => void;
   onExample: (id: SituationId) => void;
 }) {
   const t = useT();
   const track = useRef<HTMLUListElement>(null);
   const [edge, setEdge] = useState({ start: true, end: false });
-  const [confirming, setConfirming] = useState<SituationId | undefined>(undefined);
+  // Over answers from before, a card asks first: is this a new case (Start), or replace them (an example)?
+  const [asking, setAsking] = useState<Ask | undefined>(undefined);
+  useEffect(() => {
+    if (!props.ask) return;
+    setAsking(props.ask);
+    props.onAsked();
+  }, [props.ask]);
   const examples = useMemo(
     () => new Map(SITUATIONS.map((s) => [s.id, exampleEstimate(s, rules, props.today)])),
     [props.today],
@@ -222,16 +248,21 @@ export function Situations(props: {
     });
   };
 
+  const start = (id: SituationId) => {
+    if (props.answered) setAsking({ id, kind: "start" });
+    else props.onStart(id, true);
+  };
   const tryExample = (id: SituationId) => {
-    if (props.answered) setConfirming(id);
+    if (props.answered) setAsking({ id, kind: "example" });
     else props.onExample(id);
   };
   const keep = (id: SituationId) => {
-    setConfirming(undefined);
+    setAsking(undefined);
     requestAnimationFrame(() =>
       document.querySelector<HTMLElement>(`[data-situation="${id}"] [data-action=example]`)?.focus(),
     );
   };
+  const summary = props.answered ? caseSummary(props.form, t) : "";
 
   const arrow =
     "inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-40";
@@ -275,11 +306,14 @@ export function Situations(props: {
             key={s.id}
             s={s}
             amount={examples.get(s.id)?.headline}
-            confirming={confirming === s.id}
-            onStart={() => props.onStart(s.id)}
+            asking={asking?.id === s.id ? asking.kind : undefined}
+            summary={summary}
+            onStart={() => start(s.id)}
+            onNew={() => props.onStart(s.id, true)}
+            onSame={() => props.onStart(s.id, false)}
             onTry={() => tryExample(s.id)}
             onUse={() => {
-              setConfirming(undefined);
+              setAsking(undefined);
               props.onExample(s.id);
             }}
             onKeep={() => keep(s.id)}
@@ -293,13 +327,23 @@ export function Situations(props: {
 function SituationCard(props: {
   s: Situation;
   amount?: { amount: number; approx: string } | undefined;
-  confirming: boolean;
+  /** Asking first, over answers from before: whether this is a new case, or whether the example replaces them. */
+  asking?: "start" | "example" | undefined;
+  /** The answers from before, in a few words. */
+  summary: string;
   onStart: () => void;
+  onNew: () => void;
+  onSame: () => void;
   onTry: () => void;
   onUse: () => void;
   onKeep: () => void;
 }) {
   const t = useT();
+  // The question's first answer takes the focus, so a keyboard or screen-reader user hears it at once.
+  const first = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (props.asking) first.current?.focus();
+  }, [props.asking]);
   const approx = useApprox();
   const { s } = props;
   const hnr = rules.statutory.hit_and_run_s161;
@@ -341,17 +385,43 @@ function SituationCard(props: {
           </div>
         )}
         <div class="mt-auto grid gap-2 pt-1">
-          <button
-            type="button"
-            data-action="start"
-            onClick={props.onStart}
-            class={`${small} gap-2 bg-brand text-brand-foreground shadow-sm hover:bg-brand/90`}
-          >
-            {t(`sit.${s.id}.cta`)}
-            <ArrowRight aria-hidden="true" class="h-4 w-4" />
-          </button>
+          {props.asking === "start" ? (
+            <div
+              role="group"
+              aria-label={t("sit.newQ", { summary: props.summary })}
+              data-testid="start-confirm"
+              class="grid gap-2 rounded-xl border border-brand-line bg-brand-tint p-3"
+            >
+              <p class="text-sm text-foreground">{t("sit.newQ", { summary: props.summary })}</p>
+              <button
+                ref={first}
+                type="button"
+                onClick={props.onNew}
+                class={`${small} bg-brand text-brand-foreground shadow-sm hover:bg-brand/90`}
+              >
+                {t("sit.newYes")}
+              </button>
+              <button
+                type="button"
+                onClick={props.onSame}
+                class={`${small} border border-input bg-background text-foreground hover:bg-muted`}
+              >
+                {t("sit.same")}
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              data-action="start"
+              onClick={props.onStart}
+              class={`${small} gap-2 bg-brand text-brand-foreground shadow-sm hover:bg-brand/90`}
+            >
+              {t(`sit.${s.id}.cta`)}
+              <ArrowRight aria-hidden="true" class="h-4 w-4" />
+            </button>
+          )}
           {s.example &&
-            (props.confirming ? (
+            (props.asking === "example" ? (
               <div
                 role="group"
                 aria-label={t("sit.replace")}
@@ -368,8 +438,8 @@ function SituationCard(props: {
                     {t("sit.replaceYes")}
                   </button>
                   <button
+                    ref={first}
                     type="button"
-                    autoFocus
                     onClick={props.onKeep}
                     class={`${small} border border-input text-foreground hover:bg-muted`}
                   >

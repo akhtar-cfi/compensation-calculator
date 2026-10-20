@@ -1,5 +1,5 @@
-import { Check, FileX, Info, RotateCcw, Scale, Send, SlidersHorizontal, X } from "lucide-preact";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { Check, FileX, Info, Scale, Send, SlidersHorizontal, X } from "lucide-preact";
+import { useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { countSimilar } from "../../../../src/cases/match.js";
 import { formatApprox } from "../../../../src/engine/money.js";
 import {
@@ -12,10 +12,11 @@ import {
   type ChoiceField,
   type QuestionId,
 } from "../../answers";
-import { ChangeLine } from "../../components/result";
+import { ChangeLine, useChange } from "../../components/result";
+import { Restart } from "../../components/restart";
 import { pillOutline, pillPrimary, wrap } from "../../components/ui";
 import { loadCases, rules, useLoaded } from "../../data";
-import { accidentLabel, parentsAssumed } from "../../estimate-extras";
+import { accidentLabel, parentsAssumed, unsureChecks } from "../../estimate-extras";
 import {
   answered,
   chatQuestions,
@@ -28,7 +29,7 @@ import {
   type ChatCtx,
 } from "../../flow";
 import { focusField } from "../../focus";
-import { incomeFields, type FormState } from "../../form-to-input";
+import { EMPTY_FORM, incomeFields, type FormState } from "../../form-to-input";
 import { useApprox, useLang, useT } from "../../i18n";
 import type { ModeProps } from "../../intent";
 import { usePageFocus, useResultModule } from "../../lazy";
@@ -92,14 +93,7 @@ export function Chat(props: ModeProps) {
 
   // How the amount moved with the last detail ("up ₹50,000").
   const headline = props.computed?.est.headline?.amount;
-  const previousAmount = useRef<number | undefined>(undefined);
-  const [change, setChange] = useState<{ from: number; to: number } | undefined>(undefined);
-  useEffect(() => {
-    if (headline === undefined) return;
-    if (previousAmount.current !== undefined && previousAmount.current !== headline)
-      setChange({ from: previousAmount.current, to: headline });
-    previousAmount.current = headline;
-  }, [headline]);
+  const change = useChange(headline, JSON.stringify(f) !== JSON.stringify(EMPTY_FORM));
 
   const stopped = stopsOf(f).length > 0;
   const amount = Boolean(v.input) && !stopped;
@@ -467,6 +461,8 @@ export function Chat(props: ModeProps) {
                 parentsAssumed={parentsAssumed(props.computed, today)}
                 onMissing={() => undefined}
                 moreHref={null}
+                example={props.example}
+                unsure={unsureChecks(f)}
               />
             </div>
           )}
@@ -486,17 +482,13 @@ export function Chat(props: ModeProps) {
 
           {said.length > 0 && (
             <div class="mt-8">
-              <button
-                type="button"
+              <Restart
                 class={pillOutline}
-                onClick={() => {
+                onRestart={() => {
                   setChanging(undefined);
                   props.onRestart();
                 }}
-              >
-                <RotateCcw aria-hidden="true" class="h-4 w-4" />
-                {t("app.restart")}
-              </button>
+              />
             </div>
           )}
         </div>

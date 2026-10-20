@@ -22,6 +22,12 @@ describe("answers kept in the tab", () => {
     expect(parseSaved({ form: EMPTY_FORM, langPicked: "yes" }).langPicked).toBeUndefined();
   });
 
+  it("keeps which worked example the answers came from, only as one of the examples", () => {
+    expect(parseSaved({ example: "hurt" }).example).toBe("hurt");
+    expect(parseSaved({ example: "offer" }).example).toBeUndefined(); // a card without an example
+    expect(parseSaved({ example: "somebody" }).example).toBeUndefined();
+  });
+
   it("keeps the details already asked, as answer names only", () => {
     expect(parseSaved({ seen: ["medicalBills", "accidentDay", "nope", 4] }).seen).toEqual([
       "medicalBills",

@@ -1,4 +1,6 @@
 import { CircleAlert, ListChecks } from "lucide-preact";
+import type { SituationId } from "../situations";
+import type { Unsure } from "../estimate-extras";
 import type { EstimateInput, EstimateOutput, Warning } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { rules } from "../data";
@@ -15,25 +17,48 @@ const STOP_COPY: Record<StopCode, { title: string; body: string }> = {
   s164_insurer: { title: "warn.S164_LAPSES_166", body: "elig.s164" },
 };
 
-/** What a stop answer means and what to do instead (shown under the answer and in the summary). */
+/** The heading where an answer leaves no estimate: a vehicle never found still has its own claim. */
+export const stopHeading = (code: StopCode | undefined) => (code === "unidentified" ? "res.hnr" : "res.none");
+
+/**
+ * What a stop answer means and what to do instead (shown under the answer and in the summary). A vehicle never found
+ * is not the end of a claim, only of this one: it is told in amber, with what the hit-and-run scheme pays.
+ */
 export function StopNotice(props: { code: StopCode; live?: boolean | undefined }) {
   const t = useT();
   const c = STOP_COPY[props.code];
+  const hnr = props.code === "unidentified";
+  const nf = rules.statutory.no_fault_s164;
   return (
     <div data-stop={props.code}>
-      <Notice severity="stop" title={t(c.title)} live={props.live}>
+      <Notice
+        severity={hnr ? "caution" : "stop"}
+        title={t(c.title)}
+        live={hnr ? props.live !== false : props.live}
+      >
         <p>{t(c.body)}</p>
         <ul class="mt-2 list-disc space-y-1 pl-4">
-          {props.code === "unidentified" && (
-            <li>
-              {t("stop.hnr", {
-                death: formatINR(rules.statutory.hit_and_run_s161.death),
-                hurt: formatINR(rules.statutory.hit_and_run_s161.grievous_hurt),
-              })}
-            </li>
+          {hnr && (
+            <>
+              <li>
+                {t("stop.hnr", {
+                  death: formatINR(rules.statutory.hit_and_run_s161.death),
+                  hurt: formatINR(rules.statutory.hit_and_run_s161.grievous_hurt),
+                })}
+              </li>
+              <li>{t("stop.hnr.later")}</li>
+            </>
+          )}
+          {props.code === "s164_insurer" && (
+            <>
+              <li>
+                {t("stop.s164.what", { nfDeath: formatINR(nf.death), nfHurt: formatINR(nf.grievous_hurt) })}
+              </li>
+              <li>{t("stop.s164.not")}</li>
+            </>
           )}
           <li>
-            <Tel text={t("res.next.1")} />
+            <Tel text={t(props.code === "s164_insurer" ? "stop.s164.check" : "res.next.1")} />
           </li>
         </ul>
       </Notice>
@@ -78,12 +103,24 @@ export function ResultSummary(props: {
   /** Where "Make it more accurate" leads (the details on the one page; the first detail question elsewhere; null:
    * no details left to ask). */
   moreHref?: string | null | undefined;
+  /** The answers are this worked example's: said next to the amount, so it is never read as the family's own. */
+  example?: SituationId | undefined;
+  /** Checks answered "Not sure": the amount assumes the claim can be made, and says so right under it. */
+  unsure?: readonly Unsure[] | undefined;
 }) {
   const t = useT();
   const lang = useLang();
   const warnText = useWarnText();
   const approx = useApprox();
   const { est } = props;
+  const noCert = Boolean(est?.warnings.some((w) => w.code === "NO_CERTIFICATE"));
+  const unsure = props.unsure ?? [];
+  const unsureVars = {
+    death: formatINR(rules.statutory.hit_and_run_s161.death),
+    hurt: formatINR(rules.statutory.hit_and_run_s161.grievous_hurt),
+    nfDeath: formatINR(rules.statutory.no_fault_s164.death),
+    nfHurt: formatINR(rules.statutory.no_fault_s164.grievous_hurt),
+  };
 
   const heading = <h2 class="font-heading text-lg font-bold text-foreground">{t("sum.title")}</h2>;
 
@@ -121,7 +158,7 @@ export function ResultSummary(props: {
       <Card class="p-5 sm:p-6" id="result">
         {heading}
         <p class="mt-2 font-heading text-lg font-bold text-foreground" data-testid="no-estimate">
-          {t("res.none")}
+          {t(stopHeading(props.stop))}
         </p>
         <p class="mt-1 text-sm text-muted-foreground">{t("sum.stop.lead")}</p>
         <div class="mt-4">
@@ -199,6 +236,14 @@ export function ResultSummary(props: {
   return (
     <Card class="p-5 sm:p-6" id="result">
       {heading}
+      {props.example && (
+        <p
+          data-testid="example-mark"
+          class="mt-2 inline-flex rounded-full bg-marigold-tint px-2.5 py-0.5 text-xs font-semibold text-marigold-ink"
+        >
+          {t("ex.mark", { who: t(`sit.${props.example}.who`) })}
+        </p>
+      )}
       {props.input && (
         <ul class="mt-2 hidden text-sm text-foreground print:block" data-testid="print-facts">
           {factLines(props.input, t, props.accidentLabel).map((l) => (
@@ -222,6 +267,26 @@ export function ResultSummary(props: {
           />
           {props.change && <ChangeLine change={props.change} class="mt-2" />}
         </div>
+
+        {/* What decides whether this amount applies at all, right under it. */}
+        {(noCert || unsure.length > 0) && (
+          <div class="mt-4 grid gap-2">
+            {noCert && (
+              <div data-testid="no-cert">
+                <Notice severity="caution" title={t("res.noCert")}>
+                  {t("res.noCert.do")}
+                </Notice>
+              </div>
+            )}
+            {unsure.map((u) => (
+              <div key={u} data-testid={`unsure-${u}`}>
+                <Notice severity="caution" title={t(`res.unsure.${u}`)}>
+                  {t(`res.unsure.${u}.do`, unsureVars)}
+                </Notice>
+              </div>
+            ))}
+          </div>
+        )}
 
         <h3 class="mt-5 text-sm font-semibold text-foreground">{t("res.range")}</h3>
         <dl class="mt-2 grid gap-1.5 text-sm" data-testid="range">

@@ -321,7 +321,7 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
       warn.add(
         "LIMITATION",
         "caution",
-        `More than ${lim.months} months since the accident. s.166(3) sets a 6-month limit, but the Supreme Court has directed (interim order, 4 Nov 2025) that claims not be dismissed as time-barred while it decides the challenge. File as soon as possible.`,
+        `More than ${lim.months} months since the accident. s.166(3) sets a 6-month limit, but the Supreme Court (Bhagirathi Dash v Union of India, W.P.(C) 166/2024: interim order of 4 Nov 2025, continued on 17 Feb 2026) has directed that claims not be dismissed as time-barred while it decides the challenge. Check that the order still stands, and file as soon as possible.`,
         { months: lim.months },
       );
     }
@@ -485,6 +485,8 @@ export function estimate(
   const usedSources = new Set<string>();
   for (const h of std.result.heads) h.sources.forEach((s) => usedSources.add(s));
   for (const a of std.result.adjustments) a.sources.forEach((s) => usedSources.add(s));
+  // The order behind the six-month caution is listed with the authorities whenever the caution is shown.
+  if (warn.has("LIMITATION")) rules.statutory.limitation_s166_3.sources.forEach((s) => usedSources.add(s));
   const citations = rules.sources
     .filter((s) => usedSources.has(s.id))
     .map((s) => ({

@@ -153,6 +153,59 @@ test("the offer check follows a changed estimate", async ({ page }) => {
   await expect(page.getByTestId("offer-summary")).toContainText("₹10 lakh");
 });
 
+test("with no disability certificate yet, the amount says what it leaves out, and an offer is not judged", async ({
+  page,
+}) => {
+  const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+  const injury = { ...input.injury };
+  delete injury.certificatePct;
+  delete injury.certificateBasis;
+  await fillForm(page, { ...input, injury });
+  await expect(page.locator("#result").getByTestId("no-cert")).toContainText("lost future earnings");
+  await page.fill("#offer-amount", "3,00,000");
+  await page.getByRole("button", { name: "Check the offer" }).click();
+  await expect(page.getByTestId("offer-verdict")).toHaveText("Too early to judge this offer");
+  await expect(page.getByTestId("offer-result")).toContainText(
+    "Get the certificate before you sign anything",
+  );
+  await expect(page.getByTestId("offer-pct-std")).toHaveCount(0);
+});
+
+test("an offer above the estimate is said to be above it", async ({ page }) => {
+  const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
+  await fillForm(page, input);
+  const standard = Number(
+    await page.locator("#result [data-testid=headline] [data-amount]").getAttribute("data-amount"),
+  );
+  await page.fill("#offer-amount", String(Math.round(standard * 1.2)));
+  await page.getByRole("button", { name: "Check the offer" }).click();
+  await expect(page.getByTestId("offer-verdict")).toHaveText("Above the estimate");
+});
+
+test("a check answered 'Not sure' is said, under the amount, to be assumed", async ({ page }) => {
+  const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
+  await fillForm(page, input);
+  await radio(page, "vehicleTraced", "unknown");
+  await radio(page, "s164", "unknown");
+  const result = page.locator("#result");
+  await expect(result.getByTestId("unsure-vehicle")).toContainText("assumes the vehicle was traced");
+  await expect(result.getByTestId("unsure-vehicle")).toContainText("₹2,00,000");
+  await expect(result.getByTestId("unsure-s164")).toContainText("section 164");
+  await radio(page, "vehicleTraced", "yes");
+  await expect(result.getByTestId("unsure-vehicle")).toHaveCount(0);
+});
+
+test("taking the insurer's no-fault settlement says what that payment is, and what money does not end a claim", async ({
+  page,
+}) => {
+  await page.goto("#/all");
+  await radio(page, "s164", "accepted_via_insurer");
+  const stop = block(page, "checks").locator("[data-stop=s164_insurer]");
+  await expect(stop).toContainText("₹5,00,000 (death)");
+  await expect(stop).toContainText("Other money does not end the claim");
+  await expect(stop).toContainText("before you give up the claim");
+});
+
 test("answers survive a reload (kept in this tab only), and Start again clears them", async ({ page }) => {
   // On a slow phone, an answer changed just before a reload must still be kept (it was lost when saving waited for
   // the next paint).
@@ -201,6 +254,14 @@ test("?lang=hi opens the page in Hindi, until the person chooses otherwise", asy
   await expect(page).not.toHaveURL(/lang=hi/);
   await page.reload();
   await expect(h1(page)).toHaveText(H1_EN);
+});
+
+test("a shared ?lang=hi link opens in Hindi in a tab that had only shown English", async ({ page }) => {
+  await page.goto("#/all");
+  await page.fill("#age", "30");
+  await page.goto("?lang=hi#/all");
+  await expect(page.locator("html")).toHaveAttribute("lang", "hi");
+  await expect(page.locator("#age")).toHaveValue("30");
 });
 
 test("the estimate in Hindi shows the same amounts", async ({ page }) => {

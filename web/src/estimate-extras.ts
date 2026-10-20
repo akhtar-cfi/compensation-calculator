@@ -30,3 +30,14 @@ export function parentsAssumed(
   const d = (computed.est.headline?.amount ?? 0) - (alt.headline?.amount ?? 0);
   return d > 0 ? d : undefined;
 }
+
+/** A check on whether a claim can be made that was answered "Not sure": the estimate assumes the claim can be made. */
+export type Unsure = "vehicle" | "s164";
+
+/** The checks answered "Not sure", to say under the amount what the estimate assumes about them. */
+export function unsureChecks(f: FormState): Unsure[] {
+  const out: Unsure[] = [];
+  if (f.vehicleTraced === "unknown") out.push("vehicle");
+  if (f.s164 === "unknown") out.push("s164");
+  return out;
+}

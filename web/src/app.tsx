@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/ho
 import { estimate } from "../../src/engine/index.js";
 import type { ScenarioMix } from "../../src/engine/types.js";
 import { DraftBanner, Footer, Header, HelpBand } from "./components/chrome";
-import { ModeBar } from "./components/modebar";
+import { ExampleBar, ModeBar } from "./components/modebar";
 import { rules } from "./data";
 import { pageTitle } from "./focus";
 import { EMPTY_FORM, type FormState } from "./form-to-input";
@@ -16,7 +16,7 @@ import { Home } from "./pages/Home";
 import { countView } from "./analytics";
 import { isLegacy, parseRoute, routeKey, type Route } from "./route";
 import { parseSaved, type Saved } from "./saved";
-import { applyExample, applyStart, situation, type SituationId } from "./situations";
+import { applyExample, applyStart, situation, type Ask, type SituationId } from "./situations";
 import { todayISO, type Lang } from "./translate";
 import { validate } from "./validate";
 
@@ -35,12 +35,15 @@ function load(): Partial<Saved> {
 /** The ways of answering built so far (each is added as it is finished). */
 export const READY_MODES: readonly Mode[] = ["slow", "chat", "all", "detail"];
 
-/** A language the person chose on this tab wins over a shared "?lang=hi" link. */
+/** A language the person chose on this tab wins over a shared "?lang=hi" link (one only shown first does not). */
 const initialLang = (saved?: Lang): Lang =>
   saved ?? (new URLSearchParams(location.search).get("lang") === "hi" ? "hi" : "en");
 
 /** The language the page will open in (read before the first render, to fetch the Hindi text first). */
-export const startLang = (): Lang => initialLang(load().lang);
+export const startLang = (): Lang => {
+  const s = load();
+  return initialLang(s.langPicked ? s.lang : undefined);
+};
 
 const currentRoute = (fallback: Route): Route => parseRoute(location.hash) ?? fallback;
 
@@ -55,7 +58,7 @@ const LOADERS: Record<Mode, () => Promise<ComponentType<ModeProps>>> = {
 export function App() {
   const saved = useMemo(load, []);
   const [route, setRoute] = useState<Route>(() => currentRoute({ name: "home" }));
-  const [lang, setLangState] = useState<Lang>(() => initialLang(saved.lang));
+  const [lang, setLangState] = useState<Lang>(() => initialLang(saved.langPicked ? saved.lang : undefined));
   // A language counts as chosen once picked here, or when a shared link names one.
   const [langPicked, setLangPicked] = useState<boolean>(
     () => saved.langPicked ?? new URLSearchParams(location.search).has("lang"),
@@ -79,6 +82,11 @@ export function App() {
   const [seen, setSeen] = useState<readonly string[]>(saved.seen ?? []);
   const [mix, setMix] = useState<ScenarioMix>(saved.mix ?? {});
   const [chatRefine, setChatRefine] = useState<"yes" | "no" | undefined>(saved.chatRefine);
+  // The answers are a worked example's, until the person starts their own case.
+  const [example, setExample] = useState<SituationId | undefined>(saved.example);
+  // A card's shared link opened over answers from before: the start page asks on that card first.
+  const [ask, setAsk] = useState<Ask | undefined>(undefined);
+  const answered = JSON.stringify(form) !== JSON.stringify(EMPTY_FORM);
   // Came in through "Got an offer?": the calculator says where the offer check is.
   const [intent, setIntent] = useState<"offer" | undefined>(undefined);
   // Something the page should do once it has drawn the new answers: go to the next question, the estimate, or a
@@ -107,18 +115,31 @@ export function App() {
   const openMode = () => {
     location.hash = modeHref(remembered ?? "slow");
   };
-  /** Starting from a situation card: its answers are given, every other answer is kept. */
-  const start = (id: SituationId) => {
-    setForm(applyStart(form, id));
+  /** A new case: the details already asked, the choices on contested points and the chat's progress go too. */
+  const clearCase = () => {
+    setSeen([]);
+    setMix({});
+    setChatRefine(undefined);
+    setExample(undefined);
+  };
+  /**
+   * Starting from a situation card: its answers are given. A new case starts from no other answer; the same case
+   * keeps every other answer (the start page asks which, when there are answers from before).
+   */
+  const start = (id: SituationId, fresh: boolean) => {
+    if (fresh) clearCase();
+    setForm(applyStart(fresh ? EMPTY_FORM : form, id));
     setIntent(situation(id).intent);
     setPending({ kind: "start", id });
     openMode();
   };
-  /** A situation's worked example: every answer filled in, then the estimate it gives. */
-  const example = (id: SituationId) => {
+  /** A situation's worked example: every answer filled in, then the estimate it gives, marked as the example's. */
+  const tryExample = (id: SituationId) => {
     const ex = applyExample(id);
     if (!ex) return;
+    clearCase();
     setForm(ex);
+    setExample(id);
     setIntent(undefined);
     setPending({ kind: "example", id });
     openMode();
@@ -172,11 +193,12 @@ export function App() {
     try {
       const s: Saved = { form, lang, langPicked, seen: [...seen], mix: { ...mix } };
       if (chatRefine) s.chatRefine = chatRefine;
+      if (example) s.example = example;
       sessionStorage.setItem(STORE, JSON.stringify(s));
     } catch {
       // Storage can be unavailable (private mode, full): the page still works, answers just are not kept.
     }
-  }, [form, lang, langPicked, seen, mix, chatRefine]);
+  }, [form, lang, langPicked, seen, mix, chatRefine, example]);
 
   const key = routeKey(route);
   const firstRender = useRef(true);
@@ -199,12 +221,18 @@ export function App() {
   }, [key]);
 
   // A situation card's link ("#/start/homemaker", "#/example/hurt"), as sent to a family: the way of answering picked
-  // last time (or "Take it slow") opens with that situation's answers.
+  // last time (or "Take it slow") opens with that situation's answers. Over answers from before, the start page asks
+  // first, on that card, so one family's answers never run into another's.
   useLayoutEffect(() => {
     if (route.name !== "home" || !(route.start || route.example)) return;
     history.replaceState(null, "", `${location.pathname}${location.search}#/`);
-    if (route.start) start(route.start);
-    else if (route.example) example(route.example);
+    if (route.start) {
+      if (answered) setAsk({ id: route.start, kind: "start" });
+      else start(route.start, true);
+    } else if (route.example) {
+      if (answered) setAsk({ id: route.example, kind: "example" });
+      else tryExample(route.example);
+    }
     setRoute({ name: "home" });
   }, [route]);
 
@@ -250,9 +278,7 @@ export function App() {
 
   const restart = () => {
     setForm(EMPTY_FORM);
-    setSeen([]);
-    setMix({});
-    setChatRefine(undefined);
+    clearCase();
     setIntent(undefined);
     setPending(undefined);
     window.scrollTo(0, 0);
@@ -279,6 +305,7 @@ export function App() {
     setChatRefine,
     arrived: navigated,
     go,
+    example,
   };
 
   let page;
@@ -293,6 +320,7 @@ export function App() {
       page = (
         <>
           <ModeBar mode={route.mode} ready={READY_MODES} onChoose={remember} />
+          {example && <ExampleBar id={example} onOwn={restart} />}
           <ModePage mode={route.mode} props={{ ...modeProps, page: true, place: route.place }} />
         </>
       );
@@ -302,10 +330,13 @@ export function App() {
         <Home
           last={remembered}
           onChoose={remember}
-          answered={JSON.stringify(form) !== JSON.stringify(EMPTY_FORM)}
+          form={form}
+          answered={answered}
+          ask={ask}
+          onAsked={() => setAsk(undefined)}
           today={today}
           onStart={start}
-          onExample={example}
+          onExample={tryExample}
         />
       );
   }

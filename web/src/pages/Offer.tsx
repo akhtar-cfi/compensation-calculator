@@ -57,7 +57,17 @@ function readOffer(f: OfferForm): {
 
 /** The plain answer to "is the offer fair?", from the offer as a share of the estimate. */
 const verdict = (pct: number) =>
-  pct < 25 ? "far" : pct < 50 ? "well" : pct < 80 ? "below" : pct < 95 ? "near" : "close";
+  pct < 25
+    ? "far"
+    : pct < 50
+      ? "well"
+      : pct < 80
+        ? "below"
+        : pct < 95
+          ? "near"
+          : pct <= 105
+            ? "close"
+            : "above";
 
 /**
  * "Got an offer from the insurer?": the offer as a share of the estimate, what the award would be worth with
@@ -73,6 +83,9 @@ export function OfferCheck(props: { est: EstimateOutput }) {
   // follows when an answer above changes the estimate.
   const [checked, setChecked] = useState<Record<keyof OfferForm, number> | undefined>();
   const est = props.est;
+  // An injury without a disability certificate: lost future earnings, often the largest part, are not in the
+  // estimate yet, so no offer can be judged against it.
+  const tooEarly = est.warnings.some((w) => w.code === "NO_CERTIFICATE");
   const result = useMemo(
     () =>
       checked &&
@@ -161,54 +174,59 @@ export function OfferCheck(props: { est: EstimateOutput }) {
       {result && (
         <div class="mt-6 border-t border-border pt-5" data-testid="offer-result" aria-live="polite">
           <p class="font-heading text-lg font-bold text-foreground" data-testid="offer-verdict">
-            {t(`offer.verdict.${verdict(result.offerPctOfStandard)}`)}
+            {tooEarly ? t("offer.verdict.early") : t(`offer.verdict.${verdict(result.offerPctOfStandard)}`)}
           </p>
+          {tooEarly && <p class="mt-1 text-sm text-foreground">{t("offer.early")}</p>}
           <p class="mt-1 text-sm text-foreground">
             <Tel text={t("offer.advice")} />
           </p>
-          <p class="mt-3 text-sm font-semibold text-foreground" data-testid="offer-summary">
-            {t("offer.summary", {
-              offer: approx(formatApprox(checked!.amount)),
-              p: result.offerPctOfStandard,
-              est: approx(formatApprox(est.range!.standard)),
-            })}
-          </p>
-          <div class="mt-4 grid gap-3 sm:grid-cols-3">
-            <div class="rounded-lg border border-border p-4">
-              <p class="font-heading text-xl font-bold text-brand" data-testid="offer-pct-std">
-                {result.offerPctOfStandard}%
+          {!tooEarly && (
+            <>
+              <p class="mt-3 text-sm font-semibold text-foreground" data-testid="offer-summary">
+                {t("offer.summary", {
+                  offer: approx(formatApprox(checked!.amount)),
+                  p: result.offerPctOfStandard,
+                  est: approx(formatApprox(est.range!.standard)),
+                })}
               </p>
-              <p class="mt-1 text-xs text-muted-foreground">
-                {t("offer.pctStd", { p: result.offerPctOfStandard })}{" "}
-                {t("offer.pctCon", { p: result.offerPctOfConservative })}
+              <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                <div class="rounded-lg border border-border p-4">
+                  <p class="font-heading text-xl font-bold text-brand" data-testid="offer-pct-std">
+                    {result.offerPctOfStandard}%
+                  </p>
+                  <p class="mt-1 text-xs text-muted-foreground">
+                    {t("offer.pctStd", { p: result.offerPctOfStandard })}{" "}
+                    {t("offer.pctCon", { p: result.offerPctOfConservative })}
+                  </p>
+                </div>
+                <div class="rounded-lg border border-border p-4">
+                  <p class="font-heading text-xl font-bold text-foreground" data-testid="offer-award">
+                    {formatINR(result.awardWithInterest)}
+                  </p>
+                  <p class="mt-1 text-xs text-muted-foreground">
+                    {t("offer.award", { y: checked?.years ?? "" })}
+                  </p>
+                </div>
+                <div class="rounded-lg border border-border p-4">
+                  <p class="font-heading text-xl font-bold text-foreground" data-testid="offer-pv">
+                    {formatINR(result.presentValueOfWaiting)}
+                  </p>
+                  <p class="mt-1 text-xs text-muted-foreground">{t("offer.pv")}</p>
+                </div>
+              </div>
+              <p class="mt-4 text-sm font-semibold text-foreground" data-testid="offer-vs-pv">
+                {t("offer.vsPv", { p: result.offerVsPresentValuePct })}
               </p>
-            </div>
-            <div class="rounded-lg border border-border p-4">
-              <p class="font-heading text-xl font-bold text-foreground" data-testid="offer-award">
-                {formatINR(result.awardWithInterest)}
-              </p>
-              <p class="mt-1 text-xs text-muted-foreground">
-                {t("offer.award", { y: checked?.years ?? "" })}
-              </p>
-            </div>
-            <div class="rounded-lg border border-border p-4">
-              <p class="font-heading text-xl font-bold text-foreground" data-testid="offer-pv">
-                {formatINR(result.presentValueOfWaiting)}
-              </p>
-              <p class="mt-1 text-xs text-muted-foreground">{t("offer.pv")}</p>
-            </div>
-          </div>
-          <p class="mt-4 text-sm font-semibold text-foreground" data-testid="offer-vs-pv">
-            {t("offer.vsPv", { p: result.offerVsPresentValuePct })}
-          </p>
-          <ul class="mt-3 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
-            {result.notes.map((n) => (
-              <li key={n} lang={lang === "hi" ? "en" : undefined}>
-                {n}
-              </li>
-            ))}
-            <li>{t("offer.caveat")}</li>
-          </ul>
+              <ul class="mt-3 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
+                {result.notes.map((n) => (
+                  <li key={n} lang={lang === "hi" ? "en" : undefined}>
+                    {n}
+                  </li>
+                ))}
+                <li>{t("offer.caveat")}</li>
+              </ul>
+            </>
+          )}
         </div>
       )}
     </Card>

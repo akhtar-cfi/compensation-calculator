@@ -2,6 +2,7 @@ import { ChevronDown } from "lucide-preact";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import { useT } from "../i18n";
 import { MODES, modeHref, type Mode } from "../mode";
+import type { SituationId } from "../situations";
 import { ModeDrawing } from "./drawings";
 import { wrap } from "./ui";
 
@@ -86,6 +87,30 @@ export function ModeBar(props: { mode: Mode; ready: readonly Mode[]; onChoose: (
             ))}
           </ul>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Under the mode bar while the answers are a worked example's: whose they are, and "Start my own case", so an
+ * example's amount is never read as the family's own.
+ */
+export function ExampleBar(props: { id: SituationId; onOwn: () => void }) {
+  const t = useT();
+  return (
+    <div class="no-print border-b border-border bg-marigold-tint" data-testid="example-notice">
+      <div class={`${wrap} flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2.5`}>
+        <p class="min-w-0 text-sm font-medium text-marigold-ink">
+          {t("ex.notice", { who: t(`sit.${props.id}.who`) })}
+        </p>
+        <button
+          type="button"
+          onClick={props.onOwn}
+          class="inline-flex min-h-11 items-center rounded-full border border-input bg-background px-4 text-sm font-medium text-foreground shadow-sm hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        >
+          {t("ex.own")}
+        </button>
       </div>
     </div>
   );

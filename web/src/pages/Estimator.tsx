@@ -1,6 +1,6 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { ArrowDown, ArrowUp, Check, ChevronDown, RotateCcw, SlidersHorizontal } from "lucide-preact";
+import { ArrowDown, ArrowUp, Check, ChevronDown, SlidersHorizontal } from "lucide-preact";
 import type { EstimateInput, EstimateOutput } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { setAnswer } from "../answers";
@@ -25,9 +25,10 @@ import type { ModeProps } from "../intent";
 import { usePageFocus, useResultModule } from "../lazy";
 import { situation } from "../situations";
 import type { FieldName } from "../validate";
-import { accidentLabel, parentsAssumed } from "../estimate-extras";
+import { accidentLabel, parentsAssumed, unsureChecks } from "../estimate-extras";
 import { ResultSummary, StopNotice } from "./ResultSummary";
-import { ChangeLine } from "../components/result";
+import { ChangeLine, useChange } from "../components/result";
+import { Restart } from "../components/restart";
 
 /** Errors that only say "not answered yet" are shown in the list of answers left, not under each field. */
 const EMPTY = new Set(["err.required", "err.count"]);
@@ -107,22 +108,13 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
     focusField(id);
   };
 
-  const [confirming, setConfirming] = useState(false);
-  const restart = () => {
+  const answered = JSON.stringify(f) !== JSON.stringify(EMPTY_FORM);
+  // Every answer cleared (Start again here, or a new case begun elsewhere): their errors go too.
+  useEffect(() => {
+    if (answered) return;
     setTouched(new Set());
     setRevealed(new Set());
-    setConfirming(false);
-    lastGood.current = undefined;
-    previous.current = undefined;
-    setChange(undefined);
-    props.onRestart();
-  };
-  const keep = () => {
-    setConfirming(false);
-    // The confirm buttons go away: keep the keyboard focus on the button that brought them.
-    requestAnimationFrame(() => document.querySelector<HTMLElement>("[data-testid=restart]")?.focus());
-  };
-  const answered = JSON.stringify(f) !== JSON.stringify(EMPTY_FORM);
+  }, [answered]);
   const complete = Boolean(props.computed?.est.eligible && props.computed.est.headline) && !stop;
   const R = useResultModule(complete);
   usePageFocus(props.page && props.arrived);
@@ -154,19 +146,13 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
   // one box does not make the number vanish.
   const lastGood = useRef<{ input: EstimateInput; est: EstimateOutput } | undefined>(undefined);
   if (complete && props.computed) lastGood.current = props.computed;
+  if (!answered) lastGood.current = undefined;
   const onlyWrong = missing.length > 0 && missing.every((m) => m.invalid);
   const stale = !complete && !stop && onlyWrong ? lastGood.current : undefined;
 
   // How the amount moved with the last change ("up ₹50,000 from ₹16,58,186").
   const headline = complete ? props.computed?.est.headline?.amount : undefined;
-  const previous = useRef<number | undefined>(undefined);
-  const [change, setChange] = useState<{ from: number; to: number } | undefined>(undefined);
-  useEffect(() => {
-    if (headline === undefined) return;
-    if (previous.current !== undefined && previous.current !== headline)
-      setChange({ from: previous.current, to: headline });
-    previous.current = headline;
-  }, [headline]);
+  const change = useChange(headline, answered);
 
   // "Not sure" whether the parents depended on the person: say how much that assumption is worth.
   const computed = complete ? props.computed : undefined;
@@ -219,42 +205,12 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
                 {t("nav.how")}
               </a>
             </p>
-            {answered &&
-              (confirming ? (
-                <div
-                  role="group"
-                  aria-label={t("app.clearQ")}
-                  class="no-print flex flex-wrap items-center gap-2 text-sm"
-                >
-                  <span class="font-medium text-foreground">{t("app.clearQ")}</span>
-                  <button
-                    type="button"
-                    data-testid="restart-confirm"
-                    onClick={restart}
-                    class="inline-flex min-h-11 items-center rounded-md border border-danger px-3 font-medium text-foreground hover:bg-danger/5 sm:min-h-9"
-                  >
-                    {t("app.clear")}
-                  </button>
-                  <button
-                    type="button"
-                    autoFocus
-                    onClick={keep}
-                    class="inline-flex min-h-11 items-center rounded-md border border-input px-3 font-medium text-foreground hover:bg-background sm:min-h-9"
-                  >
-                    {t("app.keep")}
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  data-testid="restart"
-                  onClick={() => setConfirming(true)}
-                  class="no-print -mr-2 inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-muted-foreground hover:text-foreground sm:min-h-9"
-                >
-                  <RotateCcw aria-hidden="true" class="h-4 w-4" />
-                  {t("app.restart")}
-                </button>
-              ))}
+            {answered && (
+              <Restart
+                onRestart={props.onRestart}
+                class="-mr-2 inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-muted-foreground hover:text-foreground sm:min-h-9"
+              />
+            )}
           </div>
 
           {/* One column; from a laptop width up, a slim summary stays in view beside it. */}
@@ -342,6 +298,8 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
                   accidentLabel={accident}
                   parentsAssumed={stale ? undefined : assumed}
                   onMissing={goTo}
+                  example={props.example}
+                  unsure={unsureChecks(f)}
                 />
                 <p class="sr-only" aria-live="polite">
                   {announce}

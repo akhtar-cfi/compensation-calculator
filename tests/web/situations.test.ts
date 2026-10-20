@@ -10,6 +10,7 @@ import {
   SITUATION_IDS,
   applyExample,
   applyStart,
+  caseSummary,
   exampleEstimate,
   situation,
 } from "../../web/src/situations.js";
@@ -51,6 +52,16 @@ describe("the 'What happened to your family?' cards", () => {
     expect(applyStart(mine, "earner")).toEqual({ ...mine, kind: "death" });
     expect(applyStart(mine, "hit-and-run")).toEqual({ ...mine, vehicleTraced: "no" });
     expect(applyStart(mine, "offer")).toEqual(mine);
+  });
+
+  it("sums up answers from before in a few words, so a new case is not mixed with an old one", () => {
+    const t = (k: string, v?: Record<string, string | number>) =>
+      v ? `${k}(${Object.values(v).join(",")})` : k;
+    expect(caseSummary({ ...EMPTY_FORM, kind: "death", age: "30", state: "DL" }, t)).toBe(
+      "case.death · case.age(30) · stname.DL",
+    );
+    expect(caseSummary({ ...EMPTY_FORM, kind: "injury" }, t)).toBe("case.injury");
+    expect(caseSummary({ ...EMPTY_FORM, victimRole: "not_driving" }, t)).toBe("case.some");
   });
 
   it("the hit-and-run card leads to the hit-and-run guidance, not to an estimate", () => {

@@ -7,6 +7,9 @@ export class WarningSink {
     if (!this.items.has(code))
       this.items.set(code, vars ? { code, severity, message, vars } : { code, severity, message });
   }
+  has(code: WarningCode): boolean {
+    return this.items.has(code);
+  }
   list(): Warning[] {
     const rank = { stop: 0, caution: 1, info: 2 } as const;
     return [...this.items.values()].sort((a, b) => rank[a.severity] - rank[b.severity]);

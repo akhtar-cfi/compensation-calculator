@@ -161,6 +161,85 @@ test("trying an example over someone's own answers asks first", async ({ page })
   await expect(page.locator("#age")).toHaveValue("34");
 });
 
+/** Some answers given in this tab, as an earlier family's would be. */
+async function answersFromBefore(page: Page) {
+  await page.goto("#/all");
+  await radio(page, "kind", "death");
+  await page.fill("#age", "30");
+  await page.locator("#age").blur();
+}
+
+test("a card's Start over answers from before asks if this is a new case; a new case starts empty", async ({
+  page,
+}) => {
+  await remembered(page, "all");
+  await answersFromBefore(page);
+  await page.goto("#/");
+  const c = card(page, "hurt");
+  await c.getByRole("button", { name: "Start: someone was hurt" }).click();
+  const ask = c.getByTestId("start-confirm");
+  await expect(ask).toContainText("a death · 30 years old");
+  await expect(ask.getByRole("button", { name: /^New case/ })).toBeFocused();
+  await ask.getByRole("button", { name: /^New case/ }).click();
+  await expect(page).toHaveURL(/#\/all$/);
+  await checked(page, "kind", "injury");
+  await expect(page.locator("#age")).toHaveValue("");
+});
+
+test("a card's Start over answers from before can keep them, for the same case", async ({ page }) => {
+  await remembered(page, "all");
+  await answersFromBefore(page);
+  await page.goto("#/");
+  const c = card(page, "hurt");
+  await c.getByRole("button", { name: "Start: someone was hurt" }).click();
+  await c
+    .getByTestId("start-confirm")
+    .getByRole("button", { name: /^Same case/ })
+    .click();
+  await expect(page).toHaveURL(/#\/all$/);
+  await checked(page, "kind", "injury");
+  await expect(page.locator("#age")).toHaveValue("30");
+});
+
+test("a shared link opened over answers from before asks first, on its card", async ({ page }) => {
+  await remembered(page, "all");
+  await answersFromBefore(page);
+  await page.goto("#/start/homemaker");
+  await expect(page).toHaveURL(/#\/$/);
+  const start = card(page, "homemaker").getByTestId("start-confirm");
+  await expect(start.getByRole("button", { name: /^New case/ })).toBeFocused();
+  await page.goto("#/example/earner");
+  await expect(page).toHaveURL(/#\/$/);
+  const example = card(page, "earner").getByTestId("example-confirm");
+  await expect(example.getByRole("button", { name: "Keep my answers" })).toBeFocused();
+  await example.getByRole("button", { name: "Use the example" }).click();
+  await expect(page).toHaveURL(/#\/all$/);
+  await expect(page.locator("#age")).toHaveValue("34");
+});
+
+test("an example's answers are marked as the example's in every way, until the person starts their own", async ({
+  page,
+}) => {
+  await remembered(page, "all");
+  await page.goto("#/");
+  await card(page, "hurt").getByRole("button", { name: "Try this example" }).click();
+  await expect(page).toHaveURL(/#\/all$/);
+  const notice = page.getByTestId("example-notice");
+  await expect(notice).toContainText("Madhur");
+  await expect(page.locator("#result").getByTestId("example-mark")).toContainText("Not your answers");
+  for (const way of ["slow", "chat", "detail"]) {
+    await page.goto(`#/${way}`);
+    await expect(notice).toContainText("Madhur");
+  }
+  await page.reload();
+  await expect(notice).toContainText("Madhur");
+  await notice.getByRole("button", { name: "Start my own case" }).click();
+  await expect(notice).toHaveCount(0);
+  await expect(page).toHaveURL(/#\/detail$/);
+  await expect(page.locator("#age")).toHaveValue("");
+  await expect(page.locator("#page-title")).toBeFocused();
+});
+
 test("the hit-and-run card opens the hit-and-run guidance, with the scheme's amounts", async ({ page }) => {
   await remembered(page, "all");
   await page.goto("#/");
@@ -170,7 +249,10 @@ test("the hit-and-run card opens the hit-and-run guidance, with the scheme's amo
   const stop = page.locator('[data-question="checks"] [data-stop="unidentified"]');
   await expect(stop).toBeVisible();
   await expect(stop).toContainText("₹50,000");
-  await expect(page.locator("#result").getByTestId("no-estimate")).toBeVisible();
+  // Not the end of every claim: told in amber, with what happens if the vehicle is found later.
+  await expect(stop.locator("[data-severity]")).toHaveAttribute("data-severity", "caution");
+  await expect(stop).toContainText("If the vehicle is found later, a full claim can be made");
+  await expect(page.locator("#result").getByTestId("no-estimate")).toHaveText("What you can claim instead");
 });
 
 test("the offer card explains that the offer check follows the estimate", async ({ page }) => {
@@ -187,7 +269,9 @@ test("a card's link can be shared: it opens the way of answering ready", async (
   await expect(page).toHaveURL(/#\/all$/);
   await checked(page, "kind", "death");
   await checked(page, "employment", "homemaker");
+  // A second link over those answers asks first (tested above); using the example opens it.
   await page.goto("#/example/earner");
+  await card(page, "earner").getByRole("button", { name: "Use the example" }).click();
   await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
   await expect(page.locator("#age")).toHaveValue("34");
   await expect(page).toHaveURL(/#\/all$/);

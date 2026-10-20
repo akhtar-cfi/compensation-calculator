@@ -36,6 +36,15 @@ describe("eligibility screen", () => {
     expect(out.eligible).toBe(true);
     expect(out.warnings.map((w) => w.code)).toContain("LIMITATION");
   });
+  it("names the order behind the six-month caution, and lists it with the authorities", () => {
+    const out = estimate(rules, base, { asOf: "2026-10-10" });
+    const w = out.warnings.find((x) => x.code === "LIMITATION")!;
+    expect(w.message).toContain("Bhagirathi Dash v Union of India, W.P.(C) 166/2024");
+    expect(out.citations.map((c) => c.id)).toContain("bhagirathi_dash_2025");
+    // Filed in time (a filing date given): no caution, and the order is not listed.
+    const filed = estimate(rules, { ...base, claimFiledDate: base.accidentDate }, { asOf: "2026-10-10" });
+    expect(filed.citations.map((c) => c.id)).not.toContain("bhagirathi_dash_2025");
+  });
   it("refuses to guess when no minimum wage is on record", () => {
     const out = estimate(rules, { ...base, state: "ZZ" }, { asOf: "2026-10-10" });
     expect(out.headline).toBeUndefined();
