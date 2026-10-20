@@ -150,6 +150,15 @@ describe("validation", () => {
     expect(validate(s, TODAY).errors.itrAnnualIncome).toBe("err.required");
   });
 
+  it("asks for the amount as soon as the proof is given, not only once everything else is answered", () => {
+    // One question at a time, the screen about work must not move on without it (and come back to it at the end).
+    const early: FormState = { ...EMPTY_FORM, kind: "death", employment: "permanent", proof: "salary_slip" };
+    expect(validate(early, TODAY).errors.monthlySalary).toBe("err.required");
+    const itr: FormState = { ...EMPTY_FORM, kind: "injury", employment: "self_employed", proof: "itr" };
+    expect(validate(itr, TODAY).errors.itrAnnualIncome).toBe("err.required");
+    expect(validate({ ...early, proof: "none" }, TODAY).errors.monthlySalary).toBeUndefined();
+  });
+
   it("ignores stale answers from a branch the person left", () => {
     // Answered as an injury with an invalid certificate, then switched to death: nothing blocks.
     const v = validate({ ...ok, certificatePct: "999", monthsOffWork: "x", studentCourse: "school" }, TODAY);

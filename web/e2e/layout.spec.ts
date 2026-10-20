@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { examples, expect, fillForm, openGroup, radio, test } from "./helpers";
+import { examples, expect, fillForm, fillSlow, openGroup, radio, test } from "./helpers";
 
 const WIDTHS = [320, 360, 390, 768, 1280];
 const SHOTS = process.env.SCREENSHOTS === "1";
@@ -86,4 +86,35 @@ test("the estimate prints without the navigation or buttons", async ({ page }) =
     mkdirSync("web/test-results/screens", { recursive: true });
     writeFileSync("web/test-results/screens/estimate-print.pdf", pdf);
   }
+});
+
+for (const width of WIDTHS) {
+  test(`'Take it slow' layout at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("#/slow");
+    await shot(page, "slow-01-language", width);
+    await page.locator("[data-slow=lang] button[data-value=en]").click();
+    await shot(page, "slow-02-first", width);
+    const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+    await fillSlow(page, input, { details: false });
+    await shot(page, "slow-03-amount", width);
+    await page.locator("[data-chip=employment]").click();
+    await shot(page, "slow-04-work", width);
+    await page.locator("a[href='#/slow/review']").first().click();
+    await shot(page, "slow-05-answers", width);
+  });
+}
+
+test("'Take it slow' with text at 200% on a phone does not scroll sideways", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
+  await fillSlow(page, input, { details: false });
+  // Like a phone's own text-size setting (set through the DOM: the page's security policy refuses inline CSS).
+  await page.evaluate(() => (document.documentElement.style.fontSize = "200%"));
+  await checkLayout(page, "amount at 200%");
+  await page.locator("[data-chip=employment]").click();
+  await checkLayout(page, "work at 200%");
+  await page.goto("#/slow/family");
+  await expect(page.locator("[data-field=children]")).toBeVisible();
+  await checkLayout(page, "family at 200%");
 });

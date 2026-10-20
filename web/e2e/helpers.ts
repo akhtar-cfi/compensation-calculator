@@ -5,6 +5,10 @@ import { parse } from "yaml";
 import { estimate } from "../../src/engine/index.js";
 import { EstimateInputSchema, type EstimateInput } from "../../src/engine/types.js";
 import { REPO_ROOT, loadRules } from "../../src/rules/load.js";
+import { chosen, QUESTION, rawAnswer, type ChoiceField, type QuestionId } from "../src/answers.js";
+import { refineFields, REFINES } from "../src/flow.js";
+import type { FormState } from "../src/form-to-input.js";
+import { formFromInput } from "./answers";
 
 export const rules = loadRules();
 
@@ -232,4 +236,95 @@ export function guardRequests(page: Page, baseURL: string): string[] {
     if (!u.startsWith(origin) && !u.startsWith("data:") && !u.startsWith("blob:")) outside.push(u);
   });
   return outside;
+}
+
+/* ------------------------------------------- "Take it slow" -------------------------------------------- */
+
+/** Waits for the page to finish reacting to an answer: the new address, then the new screen drawn. */
+export const settle = (page: Page) =>
+  page.evaluate(
+    () => new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r()))),
+  );
+
+/** Where "Take it slow" is: "lang", "screen:<id>", "refine:<id>", "amount", "stop" or "review". */
+export const slowAt = async (page: Page) =>
+  (await page.locator("section[data-slow]").getAttribute("data-slow")) ?? "";
+
+/** Gives one answer on a "Take it slow" screen as a person would: a tap, typing, or a pick from a list. */
+export async function giveSlow(page: Page, k: QuestionId, want: FormState) {
+  const field = page.locator(`[data-field="${k}"]`);
+  switch (QUESTION[k].control.type) {
+    case "choice": {
+      const value = chosen(k as ChoiceField, want);
+      await field.locator(`[data-value="${value}"]`).click();
+      if (k === "children" && value === "more") await page.fill("#childrenMore", want.children);
+      return;
+    }
+    case "flag":
+      return field.locator(`[data-value="${want.permanentAttendant ? "yes" : "no"}"]`).click();
+    case "number":
+    case "money":
+      return page.fill(`#${k}`, rawAnswer(want, k));
+    case "monthYear": {
+      const [y = "", m = ""] = want.accidentDate.split("-");
+      await page.selectOption("#accidentDate-month", m);
+      return page.selectOption("#accidentDate-year", y);
+    }
+    case "date":
+      return fillDate(page, "claimFiledDate", want.claimFiledDate);
+    case "occupation":
+      return page.selectOption("#occupationCode", want.occupationCode);
+    case "zone":
+      return page.selectOption("#zone", want.zone);
+    case "certificate":
+      if (want.noCertificate) return field.locator('[data-value="none"]').click();
+      return page.fill("#certificatePct", want.certificatePct);
+  }
+}
+
+/**
+ * Answers "Take it slow" from an engine input, as a person would: the language, then each screen's questions as they
+ * come up (a tap moves on by itself; a typed answer needs Continue), then the details the input has, offered one at a
+ * time after the amount (the others skipped; none with `details: false`). Returns where it ended: the amount, or a
+ * stop. `onScreen` sees each place on the way (to check the steps left).
+ */
+export async function fillSlow(
+  page: Page,
+  input: EstimateInput,
+  opts: { lang?: "en" | "hi"; onScreen?: (at: string) => Promise<void>; details?: boolean } = {},
+): Promise<"result" | "stop"> {
+  const want = formFromInput(input);
+  const details =
+    opts.details !== false &&
+    REFINES.some((r) => refineFields(r, want).some((k) => rawAnswer(want, k) !== ""));
+  let walked = false;
+  // From a clean slate: whatever an earlier step answered in this tab is forgotten.
+  await page.goto("#/slow");
+  await page.evaluate(() => sessionStorage.clear());
+  await page.reload();
+  for (let step = 0; step < 80; step++) {
+    await settle(page);
+    const at = await slowAt(page);
+    await opts.onScreen?.(at);
+    if (at === "lang") await page.locator(`[data-slow=lang] button[data-value=${opts.lang ?? "en"}]`).click();
+    else if (at === "stop") return "stop";
+    else if (at === "amount") {
+      if (!details || walked) return "result";
+      walked = true;
+      await page.locator("[data-action=refine]").click();
+    } else if (at.startsWith("screen:") || at.startsWith("refine:")) {
+      const shown = await page
+        .locator("[data-field]")
+        .evaluateAll((els) =>
+          els.map((e) => [e.getAttribute("data-field")!, e.getAttribute("data-answered")]),
+        );
+      const next = shown.find(([k, a]) => a === "false" && rawAnswer(want, k as QuestionId) !== "");
+      if (next) await giveSlow(page, next[0] as QuestionId, want);
+      else if (at.startsWith("refine:")) {
+        const gave = shown.some(([k]) => rawAnswer(want, k as QuestionId) !== "");
+        await page.locator(`[data-action=${gave ? "continue" : "skip"}]`).click();
+      } else await page.locator("[data-action=continue]").click();
+    } else throw new Error(`unexpected place "${at}"`);
+  }
+  throw new Error("'Take it slow' did not reach the amount or a stop");
 }

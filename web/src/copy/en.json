@@ -635,5 +635,20 @@
   "ask.accidentDay": "Which day of the month was it?",
   "ask.claimFiled": "Has a claim been filed at the tribunal (MACT)?",
   "ask.claimFiledDate": "When was the claim filed?",
-  "unit.pct": "%"
+  "unit.pct": "%",
+  "slow.family": "Their family",
+  "slow.injury": "The injury",
+  "slow.left": "{n} more steps to your estimate",
+  "slow.left.one": "1 more step to your estimate",
+  "slow.ready": "Your estimate is ready",
+  "slow.skip": "Skip this question",
+  "slow.answers": "Your answers",
+  "slow.seeAll": "See all",
+  "slow.more": "Make it more accurate ({n} left)",
+  "slow.yourAmount": "Your estimate so far:",
+  "slow.optional": "Optional",
+  "check.children.none": "No children",
+  "check.children.one": "1 child",
+  "check.parents.none": "No parents claiming",
+  "check.parents.one": "1 parent"
 }

@@ -2,10 +2,10 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { REPO_ROOT } from "../../src/rules/load.js";
-import { CHOICE_FIELDS, choices, LABEL, setAnswer } from "../../web/src/answers.js";
+import { answerText, CHOICE_FIELDS, choices, LABEL, setAnswer } from "../../web/src/answers.js";
 import { EMPTY_FORM, type FormState } from "../../web/src/form-to-input.js";
 import { applyExample } from "../../web/src/situations.js";
-import type { Dict } from "../../web/src/translate.js";
+import { translate, type Dict } from "../../web/src/translate.js";
 import { validate, type FieldName } from "../../web/src/validate.js";
 
 const TODAY = "2026-10-16";
@@ -118,5 +118,36 @@ describe("the choices offered", () => {
       expect(en[key], `${k}: ${key}`).toBeTruthy();
       expect(hi[key], `${k}: ${key}`).toBeTruthy();
     }
+  });
+});
+
+describe("an answer in words (the answers strip and the chat)", () => {
+  const occupations = [{ code: "driver", en: "Driver", hi: "ड्राइवर" }];
+  const say = (f: FormState, id: Parameters<typeof answerText>[1], lang: "en" | "hi" = "en") =>
+    answerText(f, id, (k, vars) => translate({ en, hi }, lang, k, vars), { lang, occupations });
+
+  it("counts children and parents in plain words", () => {
+    const f = (children: string, parents: string) => ({ ...death, children, parents });
+    expect(say(f("0", "0"), "children")).toBe("No children");
+    expect(say(f("1", "1"), "children")).toBe("1 child");
+    expect(say(f("3", "2"), "children")).toBe("3 children");
+    expect(say(f("0", "0"), "parents")).toBe("No parents claiming");
+    expect(say(f("0", "1"), "parents")).toBe("1 parent");
+    expect(say(f("0", "2"), "parents")).toBe("2 parents");
+    expect(say(f("1", "1"), "children", "hi")).toBe("1 बच्चा");
+  });
+
+  it("writes amounts, months and certificates the way the page shows them", () => {
+    expect(say({ ...death, monthlySalary: "25000" }, "monthlySalary")).toBe("₹25,000 a month");
+    expect(say({ ...death, accidentDate: "2025-6-" }, "accidentDate")).toBe("June 2025");
+    expect(say({ ...injury, noCertificate: true, certificatePct: "" }, "certificatePct")).toBe(
+      "No certificate yet",
+    );
+    expect(say({ ...injury, occupationCode: "driver" }, "occupationCode", "hi")).toBe("ड्राइवर");
+  });
+
+  it("says 'No' for an attendant not needed, and nothing for a question not answered", () => {
+    expect(say({ ...injury, permanentAttendant: false }, "permanentAttendant")).toBe("No");
+    expect(say(EMPTY_FORM, "age")).toBe("");
   });
 });

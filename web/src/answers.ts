@@ -350,8 +350,16 @@ export function answerText(
   if (raw === "") return id === "permanentAttendant" ? t("f.no") : "";
   switch (c.type) {
     case "choice": {
-      if (id === "children") return t("check.children", { n: f.children });
-      if (id === "parents") return t("check.parents", { n: f.parents });
+      if (id === "children") {
+        const n = f.children;
+        return t(n === "0" ? "check.children.none" : n === "1" ? "check.children.one" : "check.children", {
+          n,
+        });
+      }
+      if (id === "parents") {
+        const n = f.parents;
+        return t(n === "0" ? "check.parents.none" : n === "1" ? "check.parents.one" : "check.parents", { n });
+      }
       const o = choices(id as ChoiceField, f).find((x) => x.value === chosen(id as ChoiceField, f));
       return o ? t(o.label) : raw;
     }

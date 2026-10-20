@@ -39,4 +39,8 @@ export interface ModeProps {
   arrived: boolean;
   /** This way of answering is the whole page (not part of the start page): its title is the page's h1. */
   page: boolean;
+  /** "Take it slow": the place in the address after "#/slow/" (undefined: wherever the person is). */
+  place?: string | undefined;
+  /** Moves to an address in this app (`replace`: without a new history entry, for a redirect). */
+  go: (href: string, replace?: boolean) => void;
 }

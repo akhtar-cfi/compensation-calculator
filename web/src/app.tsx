@@ -33,7 +33,7 @@ function load(): Partial<Saved> {
 }
 
 /** The ways of answering built so far (each is added as it is finished). */
-export const READY_MODES: readonly Mode[] = ["all"];
+export const READY_MODES: readonly Mode[] = ["slow", "all"];
 
 /** A language the person chose on this tab wins over a shared "?lang=hi" link. */
 const initialLang = (saved?: Lang): Lang =>
@@ -46,7 +46,7 @@ const currentRoute = (fallback: Route): Route => parseRoute(location.hash) ?? fa
 
 /** Each way of answering is its own file, fetched when it is opened. */
 const LOADERS: Record<Mode, () => Promise<ComponentType<ModeProps>>> = {
-  slow: () => import("./pages/Estimator").then((m) => m.Estimator),
+  slow: () => import("./modes/slow/Slow").then((m) => m.Slow),
   chat: () => import("./pages/Estimator").then((m) => m.Estimator),
   all: () => import("./pages/Estimator").then((m) => m.Estimator),
   detail: () => import("./pages/Estimator").then((m) => m.Estimator),
@@ -216,6 +216,14 @@ export function App() {
     if (hasResult) countView("result");
   }, [hasResult]);
 
+  /** Moves to an address in the app; a redirect replaces the history entry, so the back gesture never loops. */
+  const go = (href: string, replace = false) => {
+    if (replace) {
+      history.replaceState(null, "", `${location.pathname}${location.search}${href}`);
+      setRoute(currentRoute({ name: "home" }));
+    } else location.hash = href;
+  };
+
   const restart = () => {
     setForm(EMPTY_FORM);
     setSeen([]);
@@ -246,6 +254,7 @@ export function App() {
     chatRefine,
     setChatRefine,
     arrived: navigated,
+    go,
   };
 
   let page;
@@ -260,7 +269,7 @@ export function App() {
       page = (
         <>
           <ModeBar mode={route.mode} ready={READY_MODES} onChoose={remember} />
-          <ModePage mode={route.mode} props={{ ...modeProps, page: true }} />
+          <ModePage mode={route.mode} props={{ ...modeProps, page: true, place: route.place }} />
         </>
       );
       break;

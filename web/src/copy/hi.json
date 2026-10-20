@@ -635,5 +635,20 @@
   "ask.accidentDay": "महीने की कौन-सी तारीख़ थी?",
   "ask.claimFiled": "क्या ट्रिब्यूनल (MACT) में दावा दायर हो चुका है?",
   "ask.claimFiledDate": "दावा कब दायर हुआ?",
-  "unit.pct": "%"
+  "unit.pct": "%",
+  "slow.family": "उनका परिवार",
+  "slow.injury": "चोट के बारे में",
+  "slow.left": "{n} कदम और, फिर आपका अनुमान",
+  "slow.left.one": "बस 1 कदम और, फिर आपका अनुमान",
+  "slow.ready": "आपका अनुमान तैयार है",
+  "slow.skip": "यह सवाल छोड़ें",
+  "slow.answers": "आपके उत्तर",
+  "slow.seeAll": "सभी देखें",
+  "slow.more": "अनुमान को और सटीक बनाएँ ({n} बाकी)",
+  "slow.yourAmount": "अब तक आपका अनुमान:",
+  "slow.optional": "वैकल्पिक",
+  "check.children.none": "कोई बच्चा नहीं",
+  "check.children.one": "1 बच्चा",
+  "check.parents.none": "माता-पिता दावा नहीं कर रहे",
+  "check.parents.one": "माता या पिता में से 1"
 }

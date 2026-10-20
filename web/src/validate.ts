@@ -95,6 +95,12 @@ export function validate(form: FormState, today: string): Validation {
   if (f.kind === "death" && f.married === "yes" && !f.spouse) set("spouse", "err.required");
   const fields = incomeFields(f.employment);
   if ((fields.includes("salary") || fields.includes("itr")) && !f.proof) set("proof", "err.required");
+  // The amount the proof shows is needed as soon as the proof is given (asked one at a time, the question about
+  // work must not move on without it).
+  if (fields.includes("salary") && f.proof === "salary_slip" && f.monthlySalary.trim() === "")
+    set("monthlySalary", "err.required");
+  if (fields.includes("itr") && f.proof === "itr" && f.itrAnnualIncome.trim() === "")
+    set("itrAnnualIncome", "err.required");
   // An injury's amount turns on these, so the estimate waits for them (0, or "No certificate yet", is an answer).
   if (f.kind === "injury") {
     if (!f.noCertificate && f.certificatePct.trim() === "") set("certificatePct", "err.required");

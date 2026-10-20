@@ -75,6 +75,9 @@ export function ResultSummary(props: {
   /** How much the estimate rises by assuming the parents depended on the person ("Not sure" was answered). */
   parentsAssumed?: number | undefined;
   onMissing: (id: FieldName) => void;
+  /** Where "Make it more accurate" leads (the details on the one page; the first detail question elsewhere; null:
+   * no details left to ask). */
+  moreHref?: string | null | undefined;
 }) {
   const t = useT();
   const lang = useLang();
@@ -301,9 +304,14 @@ export function ResultSummary(props: {
       </div>
 
       <div class={`no-print mt-5 grid gap-2 border-t border-border pt-4 ${props.stale ? "hidden" : ""}`}>
-        <a href="#more" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
-          {t("res.narrow")}
-        </a>
+        {props.moreHref !== null && (
+          <a
+            href={props.moreHref ?? "#more"}
+            class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}
+          >
+            {t("res.narrow")}
+          </a>
+        )}
         <a href="#offer-amount" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
           {t("res.offer")}
         </a>

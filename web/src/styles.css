@@ -93,6 +93,19 @@
   display: none;
 }
 
+/* A new question or screen fades up into place (150 ms), only for people who have not asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter 150ms ease-out;
+  }
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+}
+
 body {
   @apply bg-background text-foreground font-sans antialiased;
   /* With very large text on a phone, a long word ("compensation") is wider than the screen: break it rather than

@@ -1,12 +1,10 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { estimate } from "../../../src/engine/index.js";
 import { ArrowDown, ArrowUp, Check, ChevronDown, RotateCcw, SlidersHorizontal } from "lucide-preact";
 import type { EstimateInput, EstimateOutput } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { setAnswer } from "../answers";
 import { focusField, focusTarget } from "../focus";
-import { rules } from "../data";
 import { Card, Notice, linkCls, wrap } from "../components/ui";
 import { BlockFields, fieldLabels, type FieldError, type SetField } from "../fields";
 import { EMPTY_FORM, incomeFields, type FormState } from "../form-to-input";
@@ -27,6 +25,7 @@ import type { ModeProps } from "../intent";
 import { usePageFocus, useResultModule } from "../lazy";
 import { situation } from "../situations";
 import type { FieldName } from "../validate";
+import { accidentLabel, parentsAssumed } from "../estimate-extras";
 import { ResultSummary, StopNotice } from "./ResultSummary";
 import { ChangeLine } from "../components/result";
 
@@ -159,27 +158,12 @@ export function Estimator(props: ModeProps) {
     previous.current = headline;
   }, [headline]);
 
-  // "Not sure" whether the parents depended on the person: the estimate assumes they did (the engine's default);
-  // say how much that assumption is worth.
+  // "Not sure" whether the parents depended on the person: say how much that assumption is worth.
   const computed = complete ? props.computed : undefined;
-  const parentsAssumed = useMemo(() => {
-    const fam = computed?.input.family;
-    if (!computed || computed.input.kind !== "death" || !fam?.parents || fam.dependentParents !== undefined)
-      return undefined;
-    const alt = estimate(
-      rules,
-      { ...computed.input, family: { ...fam, dependentParents: 0 } },
-      { asOf: props.today },
-    );
-    const d = (computed.est.headline?.amount ?? 0) - (alt.headline?.amount ?? 0);
-    return d > 0 ? d : undefined;
-  }, [computed, props.today]);
+  const assumed = useMemo(() => parentsAssumed(computed, props.today), [computed, props.today]);
 
   // The facts the estimate rests on, printed with it and named in the shared summary.
-  const [ay = "", am = "", ad = ""] = f.accidentDate.split("-");
-  const accidentLabel = am
-    ? `${ad ? `${Number(ad)} ` : ""}${t(`month.${Number(am)}`)} ${ay}${ad ? "" : ` ${t("date.noDay")}`}`
-    : "";
+  const accident = accidentLabel(f, t);
   const amount =
     complete && props.computed?.est.headline ? approx(props.computed.est.headline.approx) : undefined;
   const announce = useSettled(amount ? t("res.ready", { x: amount }) : "", 1200);
@@ -343,8 +327,8 @@ export function Estimator(props: ModeProps) {
                   state={f.state}
                   canProve={canProve}
                   change={complete ? change : undefined}
-                  accidentLabel={accidentLabel}
-                  parentsAssumed={stale ? undefined : parentsAssumed}
+                  accidentLabel={accident}
+                  parentsAssumed={stale ? undefined : assumed}
                   onMissing={goTo}
                 />
                 <p class="sr-only" aria-live="polite">
