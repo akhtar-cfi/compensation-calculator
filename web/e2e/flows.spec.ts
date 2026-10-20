@@ -222,17 +222,17 @@ test("in Hindi, the cautions are in Hindi too", async ({ page }) => {
   await expect(note.locator('[lang="en"]')).toHaveCount(0);
 });
 
-test("older addresses open the calculator at the matching place", async ({ page }) => {
+test("older addresses open the one-page calculator at the matching place", async ({ page }) => {
   await page.goto("#/q/age");
-  await expect(page).toHaveURL(/#\/$/);
+  await expect(page).toHaveURL(/#\/all$/);
   await expect(page.locator("#age")).toBeFocused();
   await page.goto("#/stop/owner_driver");
-  await expect(page).toHaveURL(/#\/$/);
+  await expect(page).toHaveURL(/#\/all$/);
   await expect(page.locator('input[name="victimRole"]').first()).toBeFocused();
   for (const old of ["#/estimate", "#/check", "#/result", "#/offer"]) {
     await page.goto(old);
-    await expect(page).toHaveURL(/#\/$/);
-    await expect(h1(page)).toHaveText(H1_EN);
+    await expect(page).toHaveURL(/#\/all$/);
+    await expect(page.locator('[data-question="kind"]')).toBeVisible();
   }
 });
 

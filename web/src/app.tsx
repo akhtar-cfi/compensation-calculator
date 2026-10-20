@@ -1,19 +1,22 @@
 import type { ComponentType } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { estimate } from "../../src/engine/index.js";
+import type { ScenarioMix } from "../../src/engine/types.js";
 import { DraftBanner, Footer, Header, HelpBand } from "./components/chrome";
-import { focusField } from "./components/form";
+import { ModeBar } from "./components/modebar";
 import { rules } from "./data";
+import { pageTitle } from "./focus";
 import { EMPTY_FORM, type FormState } from "./form-to-input";
 import { LangProvider } from "./i18n";
+import type { Intent, ModeProps } from "./intent";
+import { useModule } from "./lazy";
+import { MODE_KEY, type Mode } from "./mode";
 import { Doc } from "./pages/Doc";
-import { Estimator } from "./pages/Estimator";
 import { Facts, Hero, ReadMore, Situations, Tells } from "./pages/Home";
 import { countView } from "./analytics";
-import { STEPS, STOP_FIELD, stopsOf } from "./questions";
 import { isLegacy, parseRoute, routeKey, type Route } from "./route";
-import { applyExample, applyStart, situation, type SituationId } from "./situations";
 import { parseSaved, type Saved } from "./saved";
+import { applyExample, applyStart, situation, type SituationId } from "./situations";
 import { todayISO, type Lang } from "./translate";
 import { validate } from "./validate";
 
@@ -29,6 +32,9 @@ function load(): Partial<Saved> {
   }
 }
 
+/** The ways of answering built so far (each is added as it is finished). */
+export const READY_MODES: readonly Mode[] = ["all"];
+
 /** A language the person chose on this tab wins over a shared "?lang=hi" link. */
 const initialLang = (saved?: Lang): Lang =>
   saved ?? (new URLSearchParams(location.search).get("lang") === "hi" ? "hi" : "en");
@@ -38,13 +44,26 @@ export const startLang = (): Lang => initialLang(load().lang);
 
 const currentRoute = (fallback: Route): Route => parseRoute(location.hash) ?? fallback;
 
+/** Each way of answering is its own file, fetched when it is opened. */
+const LOADERS: Record<Mode, () => Promise<ComponentType<ModeProps>>> = {
+  slow: () => import("./pages/Estimator").then((m) => m.Estimator),
+  chat: () => import("./pages/Estimator").then((m) => m.Estimator),
+  all: () => import("./pages/Estimator").then((m) => m.Estimator),
+  detail: () => import("./pages/Estimator").then((m) => m.Estimator),
+};
+
 export function App() {
   const saved = useMemo(load, []);
-  const [route, setRoute] = useState<Route>(() => currentRoute({ name: "calc" }));
+  const [route, setRoute] = useState<Route>(() => currentRoute({ name: "home" }));
   const [lang, setLangState] = useState<Lang>(() => initialLang(saved.lang));
+  // A language counts as chosen once picked here, or when a shared link names one.
+  const [langPicked, setLangPicked] = useState<boolean>(
+    () => saved.langPicked ?? new URLSearchParams(location.search).has("lang"),
+  );
   // Choosing a language drops "?lang=" from the address, so a reload keeps the choice.
   const setLang = (l: Lang) => {
     setLangState(l);
+    setLangPicked(true);
     const q = new URLSearchParams(location.search);
     if (q.has("lang")) {
       q.delete("lang");
@@ -57,35 +76,29 @@ export function App() {
     }
   };
   const [form, setForm] = useState<FormState>(saved.form ?? EMPTY_FORM);
+  const [seen, setSeen] = useState<readonly string[]>(saved.seen ?? []);
+  const [mix, setMix] = useState<ScenarioMix>(saved.mix ?? {});
+  const [chatRefine, setChatRefine] = useState<"yes" | "no" | undefined>(saved.chatRefine);
   // Came in through "Got an offer?": the calculator says where the offer check is.
   const [intent, setIntent] = useState<"offer" | undefined>(undefined);
+  // Something the page should do once it has drawn the new answers: go to the next question, the estimate, or a
+  // place an older address named.
+  const [pending, setPending] = useState<Intent | undefined>(undefined);
   const today = todayISO();
 
-  /**
-   * Starting from a situation card: its answers are given, every other answer is kept, and the keyboard focus moves
-   * to the first question still to answer (or to the guidance, for a situation that ends the claim).
-   */
+  const remember = (m: Mode) => {
+    try {
+      localStorage.setItem(MODE_KEY, m);
+    } catch {
+      // Storage can be unavailable (private mode): the choice is then asked again next time.
+    }
+  };
+
+  /** Starting from a situation card: its answers are given, every other answer is kept. */
   const start = (id: SituationId) => {
-    const next = applyStart(form, id);
-    setForm(next);
+    setForm(applyStart(form, id));
     setIntent(situation(id).intent);
-    requestAnimationFrame(() => {
-      if (situation(id).intent === "offer") {
-        const hint = document.getElementById("offer-hint");
-        hint?.focus({ preventScroll: true });
-        hint?.scrollIntoView({ block: "start" });
-        return;
-      }
-      const stop = stopsOf(next)[0];
-      if (stop) {
-        focusField(STOP_FIELD[stop]);
-        document.querySelector(`[data-stop-for="${STOP_FIELD[stop]}"]`)?.scrollIntoView({ block: "center" });
-        return;
-      }
-      const errors = validate(next, today).errors;
-      const first = STEPS.flatMap((s) => s.fields(next)).find((k) => errors[k]);
-      if (first) focusField(first);
-    });
+    setPending({ kind: "start", id });
   };
   /** A situation's worked example: every answer filled in, then the estimate it gives. */
   const example = (id: SituationId) => {
@@ -93,32 +106,27 @@ export function App() {
     if (!ex) return;
     setForm(ex);
     setIntent(undefined);
-    requestAnimationFrame(() => {
-      const r = document.getElementById("result");
-      if (!r) return;
-      r.setAttribute("tabindex", "-1");
-      r.focus({ preventScroll: true });
-      r.scrollIntoView({ block: "start" });
-    });
+    setPending({ kind: "example", id });
   };
 
   // Listen for route changes from the first render on (a layout effect runs with the render; a plain effect waits
   // for the next paint, and a click in that gap was lost), then catch up on any change made before this ran.
-  // Where the calculator was last scrolled to, to come back to the same place from a document. Kept while the
-  // address is the calculator's (the browser itself scrolls to the top as a link to a document is followed).
-  const calcScroll = useRef(0);
-  useEffect(() => {
-    const onScroll = () => {
-      if (parseRoute(location.hash)?.name === "calc") calcScroll.current = window.scrollY;
-    };
-    addEventListener("scroll", onScroll, { passive: true });
-    return () => removeEventListener("scroll", onScroll);
-  }, []);
   useLayoutEffect(() => {
     const on = () => setRoute((r) => currentRoute(r));
     addEventListener("hashchange", on);
     on();
     return () => removeEventListener("hashchange", on);
+  }, []);
+
+  // Where each page was last scrolled to, to come back to the same place from a document.
+  const scrolls = useRef(new Map<string, number>());
+  useEffect(() => {
+    const onScroll = () => {
+      const r = parseRoute(location.hash);
+      if (r) scrolls.current.set(routeKey(r), window.scrollY);
+    };
+    addEventListener("scroll", onScroll, { passive: true });
+    return () => removeEventListener("scroll", onScroll);
   }, []);
 
   // In-page links (#main, #offer, a heading in the documents) must not be read as a change of page.
@@ -147,44 +155,50 @@ export function App() {
   // discards the tab) must not be lost.
   useLayoutEffect(() => {
     try {
-      sessionStorage.setItem(STORE, JSON.stringify({ form, lang } satisfies Saved));
+      const s: Saved = { form, lang, langPicked, seen: [...seen], mix: { ...mix } };
+      if (chatRefine) s.chatRefine = chatRefine;
+      sessionStorage.setItem(STORE, JSON.stringify(s));
     } catch {
       // Storage can be unavailable (private mode, full): the page still works, answers just are not kept.
     }
-  }, [form, lang]);
+  }, [form, lang, langPicked, seen, mix, chatRefine]);
 
   const key = routeKey(route);
   const firstRender = useRef(true);
+  // Set once the person has moved from the first page they opened: from then on a page may take the focus.
+  const [navigated, setNavigated] = useState(false);
+  const pendingRef = useRef(pending);
+  pendingRef.current = pending;
   useLayoutEffect(() => {
-    // Each page change starts at the top (the calculator where it was left), with focus on the page's title for
-    // keyboard and screen-reader users (not on first load, where focus belongs to the browser). Done with the
-    // render, not after the next paint.
-    window.scrollTo(0, route.name === "calc" ? calcScroll.current : 0);
+    // Each page change starts where that page was left (the top for a new one), with focus on the page's title for
+    // keyboard and screen-reader users (not on first load, where focus belongs to the browser). A page that is
+    // about to act on something (the next question, the estimate) moves the focus itself.
+    window.scrollTo(0, scrolls.current.get(key) ?? 0);
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
-    const el = document.getElementById("page-title") ?? document.getElementById("main");
-    el?.focus({ preventScroll: true });
+    setNavigated(true);
+    if (pendingRef.current) return;
+    (pageTitle() ?? document.getElementById("main"))?.focus({ preventScroll: true });
   }, [key]);
 
   // A situation card's link ("#/start/homemaker", "#/example/hurt"), as sent to a family: the calculator opens with
-  // that situation's answers, and the address becomes the calculator's own.
+  // that situation's answers, and the address becomes the start page's own.
   useLayoutEffect(() => {
-    if (route.name !== "calc" || !(route.start || route.example)) return;
+    if (route.name !== "home" || !(route.start || route.example)) return;
     history.replaceState(null, "", `${location.pathname}${location.search}#/`);
     if (route.start) start(route.start);
     else if (route.example) example(route.example);
+    setRoute({ name: "home" });
   }, [route]);
 
-  // Older addresses (a question page, Check, a stop page, the result, the offer page) open the calculator at the
-  // matching place, and the address becomes the calculator's own.
+  // Older addresses (a question page, Check, a stop page, the result, the offer page) open the one-page calculator
+  // at the matching place, and the address becomes its own.
   useLayoutEffect(() => {
-    if (route.name !== "calc" || !isLegacy(location.hash)) return;
-    const target = route.target;
-    history.replaceState(null, "", `${location.pathname}${location.search}#/`);
-    if (target)
-      requestAnimationFrame(() => (document.getElementById(target) ? scrollToTarget(target) : undefined));
+    if (route.name !== "mode" || !isLegacy(location.hash)) return;
+    history.replaceState(null, "", `${location.pathname}${location.search}#/all`);
+    if (route.target) setPending({ kind: "target", id: route.target });
   }, [route]);
 
   const v = useMemo(() => validate(form, today), [form, today]);
@@ -204,14 +218,34 @@ export function App() {
 
   const restart = () => {
     setForm(EMPTY_FORM);
+    setSeen([]);
+    setMix({});
+    setChatRefine(undefined);
     setIntent(undefined);
-    try {
-      sessionStorage.removeItem(STORE);
-    } catch {
-      // ignore
-    }
+    setPending(undefined);
     window.scrollTo(0, 0);
-    document.getElementById("page-title")?.focus({ preventScroll: true });
+    pageTitle()?.focus({ preventScroll: true });
+  };
+
+  const modeProps: Omit<ModeProps, "page"> = {
+    form,
+    setForm,
+    v,
+    computed,
+    today,
+    intent,
+    pending,
+    onPendingDone: () => setPending(undefined),
+    onRestart: restart,
+    langPicked,
+    pickLang: setLang,
+    seen,
+    setSeen,
+    mix,
+    setMix,
+    chatRefine,
+    setChatRefine,
+    arrived: navigated,
   };
 
   let page;
@@ -221,6 +255,14 @@ export function App() {
       break;
     case "design":
       page = <Lazy load={() => import("./pages/Design").then((m) => m.Design)} />;
+      break;
+    case "mode":
+      page = (
+        <>
+          <ModeBar mode={route.mode} ready={READY_MODES} onChoose={remember} />
+          <ModePage mode={route.mode} props={{ ...modeProps, page: true }} />
+        </>
+      );
       break;
     default:
       page = (
@@ -238,15 +280,7 @@ export function App() {
             />
             <Tells class="border-t border-border md:order-2 md:border-t-0" />
           </div>
-          <Estimator
-            form={form}
-            setForm={setForm}
-            v={v}
-            computed={computed}
-            today={today}
-            onRestart={restart}
-            intent={intent}
-          />
+          <ModePage mode="all" props={{ ...modeProps, page: false }} />
           <Facts />
           <ReadMore />
         </>
@@ -261,17 +295,15 @@ export function App() {
         {page}
       </main>
       <HelpBand />
-      <Footer spaceForBar={route.name === "calc"} />
+      <Footer spaceForBar={route.name === "home" || (route.name === "mode" && route.mode === "all")} />
     </LangProvider>
   );
 }
 
-/** Scrolls to a place on the calculator: a question's answer gets focus, a section is brought into view. */
-function scrollToTarget(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (el.matches("input,select,fieldset")) focusField(id);
-  else el.scrollIntoView({ block: "start" });
+/** A way of answering, drawn once its file has arrived. */
+function ModePage(props: { mode: Mode; props: ModeProps }) {
+  const C = useModule(LOADERS[props.mode], props.mode);
+  return C ? <C {...props.props} /> : null;
 }
 
 /** A page loaded only when opened (kept out of the first download). */

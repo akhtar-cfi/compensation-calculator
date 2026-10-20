@@ -5,7 +5,7 @@ import { ArrowDown, ArrowUp, Check, ChevronDown, RotateCcw, SlidersHorizontal } 
 import type { EstimateInput, EstimateOutput } from "../../../src/engine/types.js";
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { setAnswer } from "../answers";
-import { focusField } from "../components/form";
+import { focusField, focusTarget } from "../focus";
 import { rules } from "../data";
 import { Card, Notice, linkCls, wrap } from "../components/ui";
 import { BlockFields, fieldLabels, type FieldError, type SetField } from "../fields";
@@ -23,31 +23,12 @@ import {
   type GroupId,
   type StepId,
 } from "../questions";
-import type { FieldName, Validation } from "../validate";
+import type { ModeProps } from "../intent";
+import { usePageFocus, useResultModule } from "../lazy";
+import { situation } from "../situations";
+import type { FieldName } from "../validate";
 import { ResultSummary, StopNotice } from "./ResultSummary";
 import { ChangeLine } from "../components/result";
-
-/**
- * Everything below the estimate (cases like it, how it is built, the offer check) is a separate file, fetched when
- * the browser is idle after the first screen, or at once when an estimate appears: the first download stays small.
- */
-type ResultModule = typeof import("./Result");
-let resultP: Promise<ResultModule> | undefined;
-const loadResult = () => (resultP ??= import("./Result"));
-function useResultModule(needed: boolean): ResultModule | undefined {
-  const [m, setM] = useState<ResultModule | undefined>(undefined);
-  useEffect(() => {
-    let live = true;
-    const get = () => void loadResult().then((x) => live && setM(() => x));
-    if (needed) get();
-    else if ("requestIdleCallback" in window) requestIdleCallback(get, { timeout: 4000 });
-    else setTimeout(get, 2000);
-    return () => {
-      live = false;
-    };
-  }, [needed]);
-  return m;
-}
 
 /** Errors that only say "not answered yet" are shown in the list of answers left, not under each field. */
 const EMPTY = new Set(["err.required", "err.count"]);
@@ -70,16 +51,7 @@ const STEP_TITLE: Record<StepId, string> = {
  * 3. "make it more accurate": optional details that narrow it;
  * 4. how it is built, what to prove, the offer check and the rest.
  */
-export function Estimator(props: {
-  form: FormState;
-  setForm: (f: FormState) => void;
-  v: Validation;
-  computed?: { input: EstimateInput; est: EstimateOutput } | undefined;
-  today: string;
-  onRestart: () => void;
-  /** Came from "Got an offer?": say where the offer check is. */
-  intent?: "offer" | undefined;
-}) {
+export function Estimator(props: ModeProps) {
   const t = useT();
   const { form: f, v } = props;
   const [touched, setTouched] = useState<ReadonlySet<FieldName>>(new Set());
@@ -144,6 +116,30 @@ export function Estimator(props: {
   const answered = JSON.stringify(f) !== JSON.stringify(EMPTY_FORM);
   const complete = Boolean(props.computed?.est.eligible && props.computed.est.headline) && !stop;
   const R = useResultModule(complete);
+  usePageFocus(props.page && props.arrived);
+
+  // Once the answers just given are drawn: go on to the next question (a situation card), show the estimate (a worked
+  // example), or open at the place an older address named.
+  useLayoutEffect(() => {
+    const p = props.pending;
+    if (!p) return;
+    if (p.kind === "start" && situation(p.id).intent === "offer") {
+      const hint = document.getElementById("offer-hint");
+      hint?.focus({ preventScroll: true });
+      hint?.scrollIntoView({ block: "start" });
+    } else if (p.kind === "start") {
+      const s = stopsOf(f)[0];
+      if (s) {
+        focusField(STOP_FIELD[s]);
+        document.querySelector(`[data-stop-for="${STOP_FIELD[s]}"]`)?.scrollIntoView({ block: "center" });
+      } else {
+        const first = STEPS.flatMap((x) => x.fields(f)).find((k) => v.errors[k]);
+        if (first) focusField(first);
+      }
+    } else if (p.kind === "example") focusTarget("result");
+    else focusTarget(p.id);
+    props.onPendingDone();
+  }, [props.pending]);
 
   // The last estimate shown, kept on screen (marked out of date) while an answer is being corrected, so a slip in
   // one box does not make the number vanish.
@@ -188,6 +184,8 @@ export function Estimator(props: {
     complete && props.computed?.est.headline ? approx(props.computed.est.headline.approx) : undefined;
   const announce = useSettled(amount ? t("res.ready", { x: amount }) : "", 1200);
   const canProve = ["salary", "itr"].some((x) => incomeFields(f.employment).includes(x as "salary"));
+  // On its own page the calculator's title is the page's title; on the start page it is a section of it.
+  const Title = props.page ? "h1" : "h2";
 
   return (
     <section
@@ -270,12 +268,12 @@ export function Estimator(props: {
               <Card class="no-print overflow-hidden">
                 <div class="bg-brand px-4 py-3.5 text-brand-foreground sm:px-6">
                   <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                    <h2 id="calc-h" class="font-heading text-lg font-bold">
+                    <Title id="calc-h" class="font-heading text-lg font-bold">
                       {t("calc.h2")}{" "}
                       <span class="font-sans text-sm font-normal text-brand-foreground/85">
                         {t("calc.time")}
                       </span>
-                    </h2>
+                    </Title>
                     <p class="text-sm text-brand-foreground/85" data-testid="progress">
                       {stop ? t("quick.stopped") : t("quick.progress", { done, total })}
                     </p>

@@ -17,7 +17,24 @@ const styles = css.reduce((s, f) => s + kb(join("assets", f)), 0);
 console.log(
   `first download (gzip): JS ${js.toFixed(1)} kB of ${BUDGET_KB.js}, CSS ${styles.toFixed(1)} kB of ${BUDGET_KB.css}`,
 );
+// Every other file, fetched only when needed (each way of answering, the result sections, documents, cases, Hindi).
+const later = readdirSync(join(dist, "assets"))
+  .filter((f) => f.endsWith(".js") && join("assets", f) !== entry)
+  .map((f) => ({ f, size: kb(join("assets", f)) }))
+  .sort((a, b) => b.size - a.size);
+console.log(
+  `later (gzip): ${later.map((x) => `${x.f.replace(/-[\w-]+\.js$/, "")} ${x.size.toFixed(1)}`).join(", ")}`,
+);
 if (js > BUDGET_KB.js || styles > BUDGET_KB.css) {
   console.error("over budget: lazy-load what the first page does not need");
+  process.exit(1);
+}
+// The ways of answering must stay out of the first download: their marks must not be in the entry file.
+const code = readFileSync(join(dist, entry), "utf8");
+const leaked = ["data-question", "data-slow", "data-chat-current", "data-param"].filter((m) =>
+  code.includes(m),
+);
+if (leaked.length) {
+  console.error(`the first download carries a way of answering (${leaked.join(", ")}): import it lazily`);
   process.exit(1);
 }

@@ -591,5 +591,14 @@
   "num.3": "3",
   "num.4": "4",
   "help.aid": "Free legal help for road crash claims: the District Legal Services Authority (DLSA) in your district, or the national legal aid helpline 15100.",
-  "help.call": "Call 15100"
+  "help.call": "Call 15100",
+  "mode.change": "Change how I answer",
+  "mode.slow": "Take it slow",
+  "mode.slow.hint": "One question at a time",
+  "mode.chat": "Talk it through",
+  "mode.chat.hint": "Like a WhatsApp chat",
+  "mode.all": "See it all",
+  "mode.all.hint": "Every question on one page",
+  "mode.detail": "Full detail",
+  "mode.detail.hint": "For lawyers and helpers"
 }

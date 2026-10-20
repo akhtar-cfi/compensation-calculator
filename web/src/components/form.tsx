@@ -567,17 +567,4 @@ export function Reveal(props: { children: ComponentChildren }) {
   return <div class="border-l-2 border-border pl-4">{props.children}</div>;
 }
 
-/** Focuses a question's first input (a group's first radio or date box), scrolling it into view. */
-export function focusField(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  // An answer inside a closed group of details: open the group first.
-  const group = el.closest("details");
-  if (group && !group.open) group.open = true;
-  const target =
-    el instanceof HTMLInputElement || el instanceof HTMLSelectElement
-      ? el
-      : (el.querySelector<HTMLElement>("[data-autofocus]") ?? el.querySelector<HTMLElement>("input,select"));
-  (target ?? el).focus({ preventScroll: true });
-  (target ?? el).scrollIntoView({ block: "center" });
-}
+export { focusField } from "../focus";
