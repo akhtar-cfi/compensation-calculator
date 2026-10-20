@@ -176,6 +176,27 @@ test("the state question says, before a state is picked, where there is no wage 
   await expect(page.locator('[data-field=state] [data-value="DL"]')).not.toContainText("No wage data yet");
 });
 
+test("each screen opens at its top, even when the browser reports the last scroll after the tap", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await fillSlowTo(page, "family");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await settle(page);
+  await page.goto("#/slow/work");
+  await expect(title(page)).toBeFocused();
+  // On a long screen the person scrolls down to Continue and taps it. The browser can report that scroll after the
+  // tap has changed the address; here it does so every time.
+  await page.evaluate(() => {
+    window.scrollTo(0, document.documentElement.scrollHeight);
+    location.hash = "#/slow/family";
+    window.dispatchEvent(new Event("scroll"));
+  });
+  await expect(page).toHaveURL(/#\/slow\/family$/);
+  await expect(title(page)).toBeFocused();
+  await expect(title(page)).toBeInViewport();
+});
+
 test("the phone's back gesture steps back one question, keeping the answer", async ({ page }) => {
   await begin(page);
   await page.locator('[data-field=kind] [data-value="injury"]').click();

@@ -154,12 +154,14 @@ export function App() {
     return () => removeEventListener("hashchange", on);
   }, []);
 
-  // Where each page was last scrolled to, to come back to the same place from a document.
+  // Where each page was last scrolled to, to come back to the same place from a document. Kept for the page on
+  // screen: the browser can report a scroll (to the button just tapped) after the tap has changed the address, and
+  // filed under the address it would make the next page open scrolled down, its question out of view.
   const scrolls = useRef(new Map<string, number>());
+  const shown = useRef<string | undefined>(undefined);
   useEffect(() => {
     const onScroll = () => {
-      const r = parseRoute(location.hash);
-      if (r) scrolls.current.set(routeKey(r), window.scrollY);
+      if (shown.current !== undefined) scrolls.current.set(shown.current, window.scrollY);
     };
     addEventListener("scroll", onScroll, { passive: true });
     return () => removeEventListener("scroll", onScroll);
@@ -211,6 +213,7 @@ export function App() {
     // keyboard and screen-reader users (not on first load, where focus belongs to the browser). A page that is
     // about to act on something (the next question, the estimate) moves the focus itself.
     window.scrollTo(0, scrolls.current.get(key) ?? 0);
+    shown.current = key;
     if (firstRender.current) {
       firstRender.current = false;
       return;
