@@ -203,6 +203,18 @@ export interface SensitivityCard {
   readonly delta: number;
 }
 
+/** A position on each contested point of law, chosen one by one (points not named stay at the standard reading). */
+export type ScenarioMix = Readonly<Partial<Record<string, Scenario>>>;
+
+/** The estimate for a chosen mix of positions ("your choices"), worked out only when asked for. */
+export interface MixResult {
+  /** The position used on every point this case consulted ("standard" where none was chosen). */
+  readonly picks: Readonly<Record<string, Scenario>>;
+  /** The contested points this case turns on, in the order the engine meets them. */
+  readonly parameters: readonly { readonly id: string; readonly description: string }[];
+  readonly result: Omit<ScenarioResult, "scenario">;
+}
+
 export interface EstimateOutput {
   readonly engineVersion: string;
   readonly rulesVersion: string;
@@ -236,4 +248,6 @@ export interface EstimateOutput {
   readonly warnings: readonly Warning[];
   readonly assumptions: readonly string[];
   readonly citations: readonly { id: string; title: string; citation?: string; url?: string }[];
+  /** "Your choices": present only when a mix was asked for and there is an estimate. */
+  readonly mix?: MixResult;
 }

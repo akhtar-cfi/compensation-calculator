@@ -20,6 +20,8 @@ import {
   type Adjustment,
   type EstimateInput,
   type EstimateOutput,
+  type MixResult,
+  type ScenarioMix,
   type Intermediate,
   type PayableHead,
   type Scenario,
@@ -29,7 +31,7 @@ import {
 } from "./types.js";
 import { WarningSink } from "./warnings.js";
 
-export const ENGINE_VERSION = "0.1.0";
+export const ENGINE_VERSION = "0.2.0";
 const RANGE_RATIO_LIMIT = { death: 1.75, injury: 2.5 } as const;
 
 interface RunResult {
@@ -328,7 +330,11 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
 }
 
 /** Estimate MACT compensation for one case. Pure: all dates and rules are passed in. */
-export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: ISODate }): EstimateOutput {
+export function estimate(
+  rules: RulesBundle,
+  rawInput: unknown,
+  opts: { asOf: ISODate; mix?: ScenarioMix },
+): EstimateOutput {
   const input = EstimateInputSchema.parse(rawInput);
   const asOf = opts.asOf;
   const warn = new WarningSink();
@@ -488,6 +494,9 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
       ...(s.url ? { url: s.url } : {}),
     }));
 
+  // "Your choices": one run with each contested point at the position asked for (standard where none is).
+  const mix = opts.mix && mixResult(rules, input, asOf, opts.mix, std.used);
+
   return {
     ...base,
     eligible: true,
@@ -507,5 +516,31 @@ export function estimate(rules: RulesBundle, rawInput: unknown, opts: { asOf: IS
     warnings: warn.list(),
     assumptions: [...new Set([...std.income.assumptions, ...runs.conservative.income.assumptions])],
     citations,
+    ...(mix ? { mix } : {}),
+  };
+}
+
+const isScenario = (x: unknown): x is Scenario => SCENARIOS.includes(x as Scenario);
+
+function mixResult(
+  rules: RulesBundle,
+  input: EstimateInput,
+  asOf: ISODate,
+  mix: ScenarioMix,
+  stdUsed: ReadonlyMap<string, string>,
+): MixResult | undefined {
+  const pick = (id: string): Scenario => {
+    const s = mix[id];
+    return isScenario(s) ? s : "standard";
+  };
+  const r = runScenario(rules, input, asOf, pick, "standard", new WarningSink());
+  if (!r) return undefined;
+  // The points the standard run met, then any the chosen positions led to (one answer can open another).
+  const used = new Map([...stdUsed, ...r.used]);
+  const { intermediates, heads, gross, adjustments, net } = r.result;
+  return {
+    picks: Object.fromEntries([...used.keys()].map((id) => [id, pick(id)])),
+    parameters: [...used].map(([id, description]) => ({ id, description })),
+    result: { intermediates, heads, gross, adjustments, net },
   };
 }

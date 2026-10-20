@@ -22,6 +22,7 @@ date of filing, is shown separately and never added to the headline.
 
 - **Scenarios are consistent.** Conservative = every contested point resolved against the claimant; claimant-max = every point in the claimant's favour.
 - **Swing factors** vary one point at a time from the standard scenario. They show which disputes matter, in rupees.
+- **Your choices** (the page's _Full detail_ option): each contested point can also be set on its own, as a lawyer would argue it. The engine then works out one more result with exactly those positions (standard wherever none is chosen). It never changes the three scenarios, and it always lies between conservative and claimant-max; a property test enforces both.
 - **Hidden range bar.** If claimant-max ÷ conservative is above 1.75 (death) or 2.5 (injury), the range bar is hidden and the scenarios are shown as cards.
 - **Invariant:** conservative ≤ standard ≤ claimant-max. A property test enforces it.
 
