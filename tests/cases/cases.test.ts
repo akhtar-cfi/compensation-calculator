@@ -5,9 +5,10 @@ import { parse } from "yaml";
 import { archetypeCoverage, renderCoverage } from "../../src/cases/coverage.js";
 import { loadCases } from "../../src/cases/load.js";
 import { Archetype } from "../../src/cases/schema.js";
-import { matchCases, summariseJourney, yearsBetween } from "../../src/cases/match.js";
+import { countSimilar, matchCases, summariseJourney, yearsBetween } from "../../src/cases/match.js";
 import { renderCases } from "../../src/cli/render.js";
 import { EstimateInputSchema, type EstimateInput } from "../../src/engine/index.js";
+import { Employment } from "../../src/engine/types.js";
 import { REPO_ROOT } from "../../src/rules/load.js";
 
 const cases = loadCases();
@@ -62,6 +63,35 @@ describe("case library data", () => {
       expect(step("mact")?.amount, c.id).toBe(g.expected.lower_forums?.mact);
       expect(step("high_court")?.amount, c.id).toBe(g.expected.lower_forums?.high_court);
     }
+  });
+});
+
+describe("countSimilar (before the amount: only the type of claim and the work are known)", () => {
+  it("counts only cases the estimate's own list could show, whatever the person's age or state", () => {
+    for (const kind of ["death", "injury"] as const)
+      for (const employment of Employment.options) {
+        const n = countSimilar({ kind, employment }, cases);
+        for (const ageYears of [8, 30, 65])
+          for (const state of ["DL", "UP"]) {
+            const shown = matchCases(input({ kind, state, victim: { ageYears, employment } }), cases, 1000);
+            // Every case counted shares the claim and the work, which alone makes it a match.
+            expect(shown.length, `${kind} ${employment}`).toBeGreaterThanOrEqual(n);
+          }
+      }
+  });
+
+  it("counts the same claim and kind of work, never the other claim", () => {
+    const salariedDeaths = cases.filter(
+      (c) => c.kind === "death" && ["permanent", "fixed_salary"].includes(c.facts.employment ?? ""),
+    ).length;
+    expect(salariedDeaths).toBeGreaterThan(0);
+    expect(countSimilar({ kind: "death", employment: "permanent" }, cases)).toBe(salariedDeaths);
+    expect(countSimilar({ kind: "death", employment: "fixed_salary" }, cases)).toBe(salariedDeaths);
+    const homemakerDeaths = countSimilar({ kind: "death", employment: "homemaker" }, cases);
+    const homemakerInjuries = countSimilar({ kind: "injury", employment: "homemaker" }, cases);
+    expect(homemakerDeaths + homemakerInjuries).toBe(
+      cases.filter((c) => c.facts.employment === "homemaker").length,
+    );
   });
 });
 

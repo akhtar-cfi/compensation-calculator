@@ -70,6 +70,20 @@ export function summariseJourney(c: Case): JourneySummary {
   };
 }
 
+/**
+ * How many cases share the type of claim and the kind of work, before the rest is known: each of them is a match
+ * for the full answers (the work alone scores enough), so the estimate's own list can show the closest of them.
+ */
+export function countSimilar(
+  facts: { kind: EstimateInput["kind"]; employment: Employment },
+  cases: readonly Case[],
+): number {
+  const group = employmentGroup(facts.employment);
+  return cases.filter(
+    (c) => c.kind === facts.kind && c.facts.employment && employmentGroup(c.facts.employment) === group,
+  ).length;
+}
+
 /** Below this a "match" shares little more than the claim type, and showing it would mislead. */
 export const MIN_MATCH_SCORE = 3;
 

@@ -1,6 +1,9 @@
+import { checkOffer } from "../../src/engine/index.js";
+import { countSimilar } from "../../src/cases/match.js";
+import { loadCases } from "../../src/cases/load.js";
 import { onPath } from "../src/flow.js";
 import { formFromInput } from "./answers";
-import { examples, expect, expected, fillSlow, settle, slowAt, test } from "./helpers";
+import { examples, expect, expected, fillSlow, rules, settle, slowAt, test } from "./helpers";
 
 /**
  * "Take it slow": one question at a time, for someone doing this once, on a phone, perhaps in a hospital corridor.
@@ -210,6 +213,34 @@ test("five or more children: the count is asked before moving on", async ({ page
   await page.locator('[data-field=parents] [data-value="0"]').click();
   await expect(page).toHaveURL(/#\/slow\/when$/);
   await expect(page.locator("[data-chip=children]")).toHaveText(/6 children/);
+});
+
+test("once the claim and the work are known, it says how many real cases are like this, without amounts", async ({
+  page,
+}) => {
+  const n = countSimilar({ kind: "death", employment: "permanent" }, loadCases());
+  expect(n).toBeGreaterThan(1);
+  await fillSlowTo(page, "work");
+  await expect(page.getByTestId("cases-preview")).toHaveCount(0);
+  await fillSlowTo(page, "family");
+  await expect(page.getByTestId("cases-preview")).toHaveText(
+    `${n} real court cases are like this one. You will see the closest with your estimate.`,
+  );
+  await expect(page.getByTestId("cases-preview")).not.toContainText("₹");
+});
+
+test("the offer check works from the amount", async ({ page }) => {
+  await fillSlow(page, salaried, { details: false });
+  await page.getByRole("link", { name: "Check an insurance offer against this estimate" }).click();
+  await page.fill("#offer-amount", "10,00,000");
+  await page.getByRole("button", { name: "Check the offer" }).click();
+  const c = checkOffer(expected(salaried), 1_000_000, {
+    yearsToAward: rules.statutory.pendency.tribunal_years,
+    awardInterestPct: 7.5,
+    discountPct: 7,
+    lawyerFeePct: 0,
+  });
+  await expect(page.getByTestId("offer-pct-std")).toHaveText(`${c.offerPctOfStandard}%`);
 });
 
 /** Answers the salaried example up to (not including) a screen. */

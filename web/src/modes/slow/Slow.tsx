@@ -1,10 +1,11 @@
-import { ArrowLeft, ArrowRight, ListChecks, RotateCcw, SlidersHorizontal } from "lucide-preact";
+import { ArrowLeft, ArrowRight, ListChecks, RotateCcw, Scale, SlidersHorizontal } from "lucide-preact";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { countSimilar } from "../../../../src/cases/match.js";
 import { formatApprox } from "../../../../src/engine/money.js";
 import { answerText, askKey, QUESTION, rawAnswer, type QuestionId } from "../../answers";
 import { ChangeLine } from "../../components/result";
 import { pillOutline, pillPrimary, wrap } from "../../components/ui";
-import { rules } from "../../data";
+import { loadCases, rules, useLoaded } from "../../data";
 import { accidentLabel, parentsAssumed } from "../../estimate-extras";
 import {
   afterRefine,
@@ -213,6 +214,14 @@ export function Slow(props: ModeProps) {
     );
   };
 
+  // Before the amount, once the type of claim and the work are known: how many real cases are like this one (a
+  // count only, so no figure comes before the person's own).
+  const workKnown = f.kind !== "" && f.employment !== "" && screenComplete("work", f, v, today);
+  const cases = useLoaded(loadCases, workKnown);
+  const similar =
+    workKnown && cases && f.kind !== "" && f.employment !== ""
+      ? countSimilar({ kind: f.kind, employment: f.employment }, cases)
+      : 0;
   const total = onPath(f).length + (f.kind === "" ? 1 : 0);
   const left = remaining(f, v, today);
   const queue = refineQueue(f, seen);
@@ -530,6 +539,17 @@ export function Slow(props: ModeProps) {
           >
             {body}
           </div>
+          {place.type === "screen" &&
+            similar > 0 &&
+            onPath(f).indexOf(place.id) > onPath(f).indexOf("work") && (
+              <p
+                class="mt-4 flex items-start gap-2 px-1 text-sm text-muted-foreground"
+                data-testid="cases-preview"
+              >
+                <Scale aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-brand" />
+                {t(similar === 1 ? "slow.cases.one" : "slow.cases", { n: similar })}
+              </p>
+            )}
         </div>
       </div>
     </section>

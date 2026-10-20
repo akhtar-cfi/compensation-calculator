@@ -15,9 +15,12 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 | Use three boxes for dates; avoid sliders; mark optional questions '(optional)'; show errors after the person leaves a field, not while typing. | GOV.UK Design System (date input, error messages); Baymard Institute form usability research | The accident is asked as a month and a year (what families know); a full date, where one is needed, is day / month / year boxes. Errors appear when focus leaves an answer. |
 | Four story-card hero options were compared on a design canvas; the CFI team chose a simple hero that says what the tool does, followed by 'What happened to your family?' cards that scroll sideways and carry example stories. The page is to be hosted on crashfreeindia.org. | CFI review of the round 4 canvas, 16 Oct 2026 | A short hero, situation cards that start the calculator in the right place (three with a worked example, labelled as made up), and the website's own header, footer and 'Need help?' band around the calculator. |
 | The live website's tokens are purple #5D2DF7 (its logo art is #4736FE), light band #F6F7FF, text #020618, hairlines #E2E8F0; header 68 px (64 px on a phone) with the logo 32 px (28 px) tall; 48 px pill buttons; cards with 18 px corners; a 12-column footer. | Measurements of crashfreeindia.org (Crash Claim Compensation page and the calculator page) at 1366 and 390 px, 16 Oct 2026 | Those values, so the calculator reads as part of the website. |
+| Most families meet this tool once, on a phone, soon after a crash; paralegals and lawyers use it again and again. One question per page suits someone doing an unfamiliar task once on a small screen; it is slower for people who know the questions and want to compare answers. | GOV.UK Service Manual, 'Structuring forms' (start with one thing per page); Nielsen Norman Group on wizards (good for novices and infrequent tasks, poor for experts) | Four ways of answering, picked at the start and switchable at any time with every answer kept: Take it slow (one question at a time), Talk it through (a chat), See it all (one page), Full detail (helpers and lawyers). |
 
 ## Principles
 
+- **Pick your pace.** The same questions and the same engine, answered four ways: one question at a time, as a chat, all on one page, or with every legal choice open. The phone remembers only which way was picked (never an answer), and 'Change how I answer' at the top of each keeps every answer given.
+- **One question at a time, without the old drawbacks.** In 'Take it slow' a tap on a choice moves on by itself (typed answers need Continue); a follow-up appears on the same screen; a meter says how many steps are left and only goes down; the amount comes straight after the last required answer, and optional details follow one at a time, each saying how it moved the amount. Every answer stays in reach as a chip at the top, and the phone's back gesture steps back one question.
 - **Start from your situation.** The first screen says what the tool does in one line and five short points, then asks 'What happened to your family?' with one card per situation. A card answers what it settles (an injury, a death, a homemaker, a vehicle never found) and moves the focus to the next question; its link can be sent to a family and opens the calculator the same way.
 - **Examples are labelled, and worked out live.** An example story is always marked 'Example · not a real person'. Its amount is not typed into the page: the engine works it out from the example's answers on the day it is shown, so a card can never quote a stale figure. Real cases are shown separately, from public judgments, with names left out.
 - **Quick estimate first.** Only the answers a number needs come first, as up to eight numbered steps in one column: what happened, three checks on whether a claim can be made, age, work, family, the injury, the month and year, and the state. Every other fact is an optional detail in a closed group below the estimate.
@@ -31,6 +34,40 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 - **Plain, empirical words.** Short sentences, numbers first, no emoji, no 'victim' (people affected). Hindi is offered on every page and labelled as a draft until reviewed by a native legal-language reviewer.
 
 ## Components
+
+### Change how I answer
+
+- **Use for:** A slim bar at the top of every way of answering: which way this is, and a disclosure listing the ways of answering, the current one marked.
+- **Not for:** Hiding it in a menu only, or switching ways in a way that loses answers.
+- A button that opens a list of links (aria-expanded; the current way is aria-current); Escape and a tap outside close it, focus returns to the button.
+- Each way has its own address (#/slow, #/chat, #/all, #/detail); choosing one is remembered on the phone, nothing else is.
+- _Code:_ `web/src/components/modebar.tsx`
+
+### Language first
+
+- **Use for:** The first question of 'Take it slow' and 'Talk it through': हिंदी or English, asked in both languages, as two big buttons.
+- **Not for:** Asking again once a language has been chosen in this tab (or named by a shared link).
+- Each button is labelled in its own language (lang attribute), 64 px tall.
+- _Code:_ `web/src/modes/LangPick.tsx`
+
+### Choice tiles
+
+- **Use for:** A question asked on its own ('Take it slow', the chat): its answers as big buttons that answer on a tap, with an icon and a hint where they help.
+- **Not for:** The one-page form (radio chips there: arrow keys must not move the page on, WCAG 3.2.2).
+- Buttons with aria-pressed, at least 56 px tall; the chosen one has a blue edge and a check mark, never colour alone.
+- A tap moves on only when the screen has nothing left to answer; '5 or more' children opens a count and waits.
+- 'No certificate yet' is a tile beside the certificate's percentage.
+- _Code:_ `web/src/modes/controls.tsx`
+
+### Step-by-step frame
+
+- **Use for:** Around each 'Take it slow' screen: Back, the steps-left meter, the answers given so far as chips, then one card holding the question.
+- **Not for:** More than one topic per card, or a meter that can go up.
+- Each screen has its own address (#/slow/work), so the back gesture steps back one question; an address that skips ahead leads to where the person actually is.
+- A chip opens its question and, once answered, returns to where the person was; 'See all' lists every answer with Change links.
+- Once the type of claim and the work are known, a line says how many real cases are like this one: a count only, so no figure comes before the person's own.
+- A new screen fades up in 150 ms, only for people who have not asked for less motion.
+- _Code:_ `web/src/modes/slow/Slow.tsx`
 
 ### Phase banner (DRAFT)
 

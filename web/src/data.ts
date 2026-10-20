@@ -22,15 +22,16 @@ export const loadDocs = () =>
 export const loadCases = () =>
   (casesP ??= import("./generated/cases.json").then((m) => m.default as unknown as Case[]));
 
-/** The value of a loader once it has arrived (undefined until then). */
-export function useLoaded<T>(load: () => Promise<T>): T | undefined {
+/** The value of a loader once it has arrived (undefined until then); fetched only once `when` holds. */
+export function useLoaded<T>(load: () => Promise<T>, when = true): T | undefined {
   const [v, setV] = useState<T | undefined>(undefined);
   useEffect(() => {
+    if (!when) return;
     let live = true;
     load().then((x) => live && setV(() => x));
     return () => {
       live = false;
     };
-  }, [load]);
+  }, [load, when]);
   return v;
 }

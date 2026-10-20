@@ -69,9 +69,25 @@ export const EVIDENCE: { finding: string; source: string; consequence: string }[
       "Measurements of crashfreeindia.org (Crash Claim Compensation page and the calculator page) at 1366 and 390 px, 16 Oct 2026",
     consequence: "Those values, so the calculator reads as part of the website.",
   },
+  {
+    finding:
+      "Most families meet this tool once, on a phone, soon after a crash; paralegals and lawyers use it again and again. One question per page suits someone doing an unfamiliar task once on a small screen; it is slower for people who know the questions and want to compare answers.",
+    source:
+      "GOV.UK Service Manual, 'Structuring forms' (start with one thing per page); Nielsen Norman Group on wizards (good for novices and infrequent tasks, poor for experts)",
+    consequence:
+      "Four ways of answering, picked at the start and switchable at any time with every answer kept: Take it slow (one question at a time), Talk it through (a chat), See it all (one page), Full detail (helpers and lawyers).",
+  },
 ];
 
 export const PRINCIPLES: Principle[] = [
+  {
+    title: "Pick your pace",
+    body: "The same questions and the same engine, answered four ways: one question at a time, as a chat, all on one page, or with every legal choice open. The phone remembers only which way was picked (never an answer), and 'Change how I answer' at the top of each keeps every answer given.",
+  },
+  {
+    title: "One question at a time, without the old drawbacks",
+    body: "In 'Take it slow' a tap on a choice moves on by itself (typed answers need Continue); a follow-up appears on the same screen; a meter says how many steps are left and only goes down; the amount comes straight after the last required answer, and optional details follow one at a time, each saying how it moved the amount. Every answer stays in reach as a chip at the top, and the phone's back gesture steps back one question.",
+  },
   {
     title: "Start from your situation",
     body: "The first screen says what the tool does in one line and five short points, then asks 'What happened to your family?' with one card per situation. A card answers what it settles (an injury, a death, a homemaker, a vehicle never found) and moves the focus to the next question; its link can be sent to a family and opens the calculator the same way.",
@@ -150,6 +166,46 @@ export const DEVIATIONS: { what: string; why: string }[] = [
 ];
 
 export const COMPONENTS: ComponentSpec[] = [
+  {
+    name: "Change how I answer",
+    file: "components/modebar.tsx",
+    use: "A slim bar at the top of every way of answering: which way this is, and a disclosure listing the ways of answering, the current one marked.",
+    avoid: "Hiding it in a menu only, or switching ways in a way that loses answers.",
+    rules: [
+      "A button that opens a list of links (aria-expanded; the current way is aria-current); Escape and a tap outside close it, focus returns to the button.",
+      "Each way has its own address (#/slow, #/chat, #/all, #/detail); choosing one is remembered on the phone, nothing else is.",
+    ],
+  },
+  {
+    name: "Language first",
+    file: "modes/LangPick.tsx",
+    use: "The first question of 'Take it slow' and 'Talk it through': हिंदी or English, asked in both languages, as two big buttons.",
+    avoid: "Asking again once a language has been chosen in this tab (or named by a shared link).",
+    rules: ["Each button is labelled in its own language (lang attribute), 64 px tall."],
+  },
+  {
+    name: "Choice tiles",
+    file: "modes/controls.tsx",
+    use: "A question asked on its own ('Take it slow', the chat): its answers as big buttons that answer on a tap, with an icon and a hint where they help.",
+    avoid: "The one-page form (radio chips there: arrow keys must not move the page on, WCAG 3.2.2).",
+    rules: [
+      "Buttons with aria-pressed, at least 56 px tall; the chosen one has a blue edge and a check mark, never colour alone.",
+      "A tap moves on only when the screen has nothing left to answer; '5 or more' children opens a count and waits.",
+      "'No certificate yet' is a tile beside the certificate's percentage.",
+    ],
+  },
+  {
+    name: "Step-by-step frame",
+    file: "modes/slow/Slow.tsx",
+    use: "Around each 'Take it slow' screen: Back, the steps-left meter, the answers given so far as chips, then one card holding the question.",
+    avoid: "More than one topic per card, or a meter that can go up.",
+    rules: [
+      "Each screen has its own address (#/slow/work), so the back gesture steps back one question; an address that skips ahead leads to where the person actually is.",
+      "A chip opens its question and, once answered, returns to where the person was; 'See all' lists every answer with Change links.",
+      "Once the type of claim and the work are known, a line says how many real cases are like this one: a count only, so no figure comes before the person's own.",
+      "A new screen fades up in 150 ms, only for people who have not asked for less motion.",
+    ],
+  },
   {
     name: "Phase banner (DRAFT)",
     file: "components/chrome.tsx",

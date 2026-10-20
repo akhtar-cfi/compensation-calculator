@@ -650,5 +650,7 @@
   "check.children.none": "No children",
   "check.children.one": "1 child",
   "check.parents.none": "No parents claiming",
-  "check.parents.one": "1 parent"
+  "check.parents.one": "1 parent",
+  "slow.cases": "{n} real court cases are like this one. You will see the closest with your estimate.",
+  "slow.cases.one": "1 real court case is like this one. You will see it with your estimate."
 }
