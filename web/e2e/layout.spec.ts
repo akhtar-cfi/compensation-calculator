@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { examples, expect, fillChat, fillForm, fillSlow, openGroup, radio, test } from "./helpers";
+import { examples, expect, fillChat, fillForm, fillSlow, openGroup, radio, settle, test } from "./helpers";
 
 const WIDTHS = [320, 360, 390, 768, 1280];
 const SHOTS = process.env.SCREENSHOTS === "1";
@@ -10,6 +10,12 @@ const SHOTS = process.env.SCREENSHOTS === "1";
  * exempt.
  */
 async function checkLayout(page: Page, where: string) {
+  // Measured as people tap it: once the screen has settled. While a screen slides in, its controls sit at fractional
+  // positions, and Chromium reports their size only to float precision (near 2,048 px down, 44 px reads 43.9999).
+  await settle(page);
+  await page.evaluate(() =>
+    Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))),
+  );
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow, `${where}: page scrolls sideways`).toBeLessThanOrEqual(0);
   const small = await page.evaluate(() => {
@@ -32,11 +38,6 @@ async function checkLayout(page: Page, where: string) {
 
 async function shot(page: Page, name: string, width: number) {
   await checkLayout(page, `${name} @${width}`);
-  // A screen that has just come in is still fading up: picture it once settled.
-  if (SHOTS)
-    await page.evaluate(() =>
-      Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))),
-    );
   if (SHOTS) await page.screenshot({ path: `web/test-results/screens/${name}-${width}.png`, fullPage: true });
 }
 
@@ -100,14 +101,21 @@ for (const width of WIDTHS) {
     await page.setViewportSize({ width, height: 800 });
     await page.goto("#/slow");
     await shot(page, "slow-01-language", width);
+    // Each screen is measured once it is the one showing (a tap moves on only after the next render).
+    const at = (where: string) =>
+      expect(page.locator("section[data-slow]")).toHaveAttribute("data-slow", where);
     await page.locator("[data-slow=lang] button[data-value=en]").click();
+    await at("screen:kind");
     await shot(page, "slow-02-first", width);
     const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
     await fillSlow(page, input, { details: false });
+    await at("amount");
     await shot(page, "slow-03-amount", width);
     await page.locator("[data-chip=employment]").click();
+    await at("screen:work");
     await shot(page, "slow-04-work", width);
     await page.locator("a[href='#/slow/review']").first().click();
+    await at("review");
     await shot(page, "slow-05-answers", width);
   });
 }
