@@ -44,6 +44,8 @@ for (const width of WIDTHS) {
   test(`layout at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto("#/");
+    await shot(page, "00-start", width);
+    await page.goto("#/all");
     await shot(page, "01-empty", width);
     await page.locator("#result [data-missing]").first().click();
     await shot(page, "02-errors", width);
@@ -65,7 +67,7 @@ for (const width of WIDTHS) {
     await page.goto("#/design");
     await expect(page.locator("[data-component]").first()).toBeVisible();
     await shot(page, "07-design", width);
-    await page.goto("#/");
+    await page.goto("#/all");
     await page.getByRole("button", { name: "हिंदी" }).click();
     await shot(page, "08-hindi", width);
   });
@@ -80,7 +82,7 @@ test("the estimate prints without the navigation or buttons", async ({ page }) =
   await expect(page.locator("[data-head]").first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Print or save as PDF" })).toBeHidden();
   await expect(page.getByTestId("bottom-bar")).toBeHidden();
-  await expect(page.locator('form[aria-labelledby="calc-h"]')).toBeHidden(); // the estimate, not the form
+  await expect(page.locator('form[aria-labelledby="page-title"]')).toBeHidden(); // the estimate, not the form
   await expect(page.locator("#offer")).toBeHidden();
   await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
   await expect(page.getByText("DRAFT", { exact: true })).toBeVisible();

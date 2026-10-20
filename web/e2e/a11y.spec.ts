@@ -23,13 +23,15 @@ for (const lang of ["en", "hi"] as const) {
   test(`no serious accessibility violations (${lang})`, async ({ page }) => {
     test.setTimeout(60_000); // about ten full-page scans
     await page.goto(lang === "hi" ? "?lang=hi#/" : "#/");
+    await noSeriousViolations(page, "start page");
+    await page.goto("#/all");
     await noSeriousViolations(page, "empty form");
     for (const route of ["how", "rules", "offer-study", "design"]) {
       await page.goto(`#/${route}`);
       if (route === "design") await expect(page.locator("[data-component]").first()).toBeVisible();
       await noSeriousViolations(page, route);
     }
-    await page.goto("#/");
+    await page.goto("#/all");
     await page.locator("#result [data-missing]").first().click(); // every unanswered question now says so
     await expect(page.locator("[id$=-error]").first()).toBeVisible();
     await noSeriousViolations(page, "form with errors");

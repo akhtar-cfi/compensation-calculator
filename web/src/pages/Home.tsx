@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import {
-  ArrowDown,
   ArrowRight,
   ChevronLeft,
   ChevronRight,
@@ -16,12 +15,14 @@ import { formatINR } from "../../../src/engine/money.js";
 import { rules } from "../data";
 import { useApprox, useT } from "../i18n";
 import { SITUATIONS, exampleEstimate, type Situation, type SituationId } from "../situations";
-import { pillOutline, pillPrimary, wrap } from "../components/ui";
+import { wrap } from "../components/ui";
 import { SITE } from "../components/chrome";
+import { ModeDrawing } from "../components/drawings";
+import { MODES, modeHref, type Mode } from "../mode";
 
 /**
- * The first screen and the sections around the calculator: a short hero that says what the tool does, the
- * "What happened to your family?" cards, and (after the calculator) why it matters and what to read next.
+ * The start page: what the tool does, the ways to answer, the "What happened to your family?" cards, why it matters
+ * and what to read next. The calculator itself is one of the ways of answering, each on its own address.
  */
 
 const TELLS = [
@@ -32,87 +33,142 @@ const TELLS = [
   { n: 5, Icon: LifeBuoy },
 ] as const;
 
-export function Hero() {
+/**
+ * The first screen. Left: what the tool does, the four ways to answer (picked once, remembered on this phone), and
+ * what you can find out. Right: "What happened to your family?" cards that move only when touched. On a phone the
+ * same order top to bottom: the ways to answer come straight after the headline, inside the first screen.
+ */
+export function Home(props: {
+  /** The way of answering picked last time on this phone. */
+  last: Mode | undefined;
+  onChoose: (m: Mode) => void;
+  /** True when the person has answered anything (trying an example then asks first). */
+  answered: boolean;
+  today: string;
+  onStart: (id: SituationId) => void;
+  onExample: (id: SituationId) => void;
+}) {
   const t = useT();
   return (
-    <section
-      aria-labelledby="page-title"
-      data-testid="hero"
-      class="no-print bg-background bg-[radial-gradient(circle_at_15%_10%,rgba(93,45,247,0.12),transparent_55%)]"
-    >
-      <div class={`${wrap} py-10 md:py-16`}>
-        <p class="inline-flex items-center gap-2 rounded-full border border-brand-line bg-brand-tint px-4 py-1.5 text-xs font-medium tracking-wide text-brand">
-          <Scale aria-hidden="true" class="h-3.5 w-3.5" />
-          {t("hero.chip")}
-        </p>
-        <h1
-          id="page-title"
-          tabIndex={-1}
-          class="mt-5 max-w-4xl font-heading text-[2rem] leading-[1.1] font-bold tracking-tight text-foreground outline-none sm:text-5xl lg:text-[3.5rem]"
+    <>
+      <section aria-labelledby="page-title" data-testid="hero" class="no-print bg-background">
+        <div
+          class={`${wrap} grid gap-x-12 gap-y-7 pt-5 pb-10 md:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]`}
         >
-          {t("hero.h1a")} <span class="block text-brand">{t("hero.h1b")}</span>
-        </h1>
-        <p class="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          {t("hero.lead")}
-        </p>
-        <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-          <a href="#calc" class={pillPrimary}>
-            {t("hero.cta")}
-            <ArrowDown aria-hidden="true" class="h-4 w-4" />
-          </a>
-          <a href="#/start/offer" class={pillOutline}>
-            {t("hero.offer")}
-          </a>
+          <div class="lg:col-start-1 lg:row-start-1">
+            <p class="hidden items-center gap-2 rounded-full border border-brand-line bg-brand-tint px-4 py-1.5 text-xs font-medium tracking-wide text-brand sm:inline-flex">
+              <Scale aria-hidden="true" class="h-3.5 w-3.5" />
+              {t("hero.chip")}
+            </p>
+            <h1
+              id="page-title"
+              tabIndex={-1}
+              class="font-heading text-[1.75rem] leading-[1.12] font-bold tracking-tight text-foreground outline-none sm:mt-5 sm:text-4xl"
+            >
+              {t("hero.h1a")} <span class="block text-brand">{t("hero.h1b")}</span>
+            </h1>
+            <p class="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">{t("hero.lead")}</p>
+          </div>
+          <Chooser class="lg:col-start-1 lg:row-start-2" last={props.last} onChoose={props.onChoose} />
+          <Situations
+            class="min-w-0 lg:col-start-2 lg:row-span-3 lg:row-start-1"
+            answered={props.answered}
+            today={props.today}
+            onStart={props.onStart}
+            onExample={props.onExample}
+          />
+          <Tells class="lg:col-start-1 lg:row-start-3" />
         </div>
-      </div>
+      </section>
+      <Facts />
+      <ReadMore />
+    </>
+  );
+}
+
+/**
+ * "How would you like to do this?": the four ways of answering, each with a small drawing of its screen, the one
+ * picked last time marked, and "Not sure? Start the easy way" for anyone who would rather not choose.
+ */
+function Chooser(props: { class?: string; last: Mode | undefined; onChoose: (m: Mode) => void }) {
+  const t = useT();
+  return (
+    <section aria-labelledby="choose-h" data-testid="chooser" id="choose" class={props.class}>
+      <h2 id="choose-h" tabIndex={-1} class="font-heading text-lg font-bold text-foreground outline-none">
+        {t("choose.title")}
+      </h2>
+      <ul class="mt-3 grid grid-cols-2 gap-2.5">
+        {MODES.map((m) => (
+          <li key={m}>
+            <a
+              href={modeHref(m)}
+              data-mode={m}
+              onClick={() => props.onChoose(m)}
+              class={`relative flex h-full flex-col gap-1.5 rounded-2xl border bg-card p-3 shadow-sm transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                props.last === m ? "border-brand" : "border-border"
+              }`}
+            >
+              <ModeDrawing mode={m} class="h-9 w-7 text-brand" />
+              <span class="text-sm leading-tight font-semibold text-foreground">{t(`mode.${m}`)}</span>
+              <span class="text-xs leading-snug text-muted-foreground">{t(`mode.${m}.hint`)}</span>
+              {props.last === m && (
+                <span class="absolute top-2.5 right-2.5 rounded-full bg-brand px-2 py-0.5 text-[0.6875rem] font-semibold text-brand-foreground">
+                  {t("choose.last")}
+                </span>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a
+        href={modeHref("slow")}
+        onClick={() => props.onChoose("slow")}
+        class="mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand underline underline-offset-4 hover:no-underline"
+      >
+        {t("choose.easy")}
+        <ArrowRight aria-hidden="true" class="h-4 w-4" />
+      </a>
     </section>
   );
 }
 
 /**
- * What the tool tells you, in five short lines. From a tablet up it sits in the hero; on a phone it follows the
- * situation cards (the page orders the sections), so the cards are the second thing a family sees, not the sixth.
- * A plain list on a phone, cards from the small breakpoint up.
+ * What you can find out, in five short lines; how cases like yours went is picked out (people can follow cases
+ * like their own here, not only their amount).
  */
 export function Tells(props: { class?: string }) {
   const t = useT();
   return (
-    <section aria-labelledby="tells-h" class={`no-print bg-background ${props.class ?? ""}`}>
-      <div class={`${wrap} py-8 md:pt-0 md:pb-14`}>
-        <h2 id="tells-h" class="font-heading text-lg font-bold text-foreground">
-          {t("tell.title")}
-        </h2>
-        <ul
-          data-testid="tells"
-          class="mt-2 grid grid-cols-1 divide-y divide-border sm:mt-4 sm:grid-cols-2 sm:gap-3 sm:divide-y-0 md:grid-cols-3 lg:grid-cols-5"
-        >
-          {TELLS.map(({ n, Icon }) => (
-            <li
-              key={n}
-              class={`flex gap-3 py-3 sm:rounded-2xl sm:border sm:p-4 lg:flex-col ${
-                n === 2 ? "sm:border-marigold/40 sm:bg-marigold-tint/40" : "sm:border-border sm:bg-card"
+    <section aria-labelledby="tells-h" class={props.class}>
+      <h2 id="tells-h" class="font-heading text-lg font-bold text-foreground">
+        {t("tell.title")}
+      </h2>
+      <ul data-testid="tells" class="mt-2 grid gap-1">
+        {TELLS.map(({ n, Icon }) => (
+          <li
+            key={n}
+            data-highlight={n === 2 ? "" : undefined}
+            class={`flex gap-3 rounded-xl py-2 ${n === 2 ? "bg-marigold-tint/60 px-3" : ""}`}
+          >
+            <span
+              aria-hidden="true"
+              class={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+                n === 2
+                  ? "bg-marigold-tint text-marigold-ink"
+                  : n === 5
+                    ? "bg-teal-tint text-teal-ink"
+                    : "bg-brand-tint text-brand"
               }`}
             >
-              <span
-                aria-hidden="true"
-                class={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                  n === 2
-                    ? "bg-marigold-tint text-marigold-ink"
-                    : n === 5
-                      ? "bg-teal-tint text-teal-ink"
-                      : "bg-brand-tint text-brand"
-                }`}
-              >
-                <Icon class="h-5 w-5" />
-              </span>
-              <span class="grid gap-0.5 sm:gap-1">
-                <span class="font-semibold text-foreground">{t(`tell.${n}.t`)}</span>
-                <span class="text-sm leading-relaxed text-muted-foreground">{t(`tell.${n}.d`)}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+              <Icon class="h-[1.125rem] w-[1.125rem]" />
+            </span>
+            <span class="text-sm leading-snug">
+              <span class="font-semibold text-foreground">{t(`tell.${n}.t`)}</span>
+              <span class="text-muted-foreground"> · {t(`tell.${n}.d`)}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
@@ -180,17 +236,13 @@ export function Situations(props: {
   const arrow =
     "inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-40";
   return (
-    <section
-      aria-labelledby="sit-h"
-      data-testid="situations"
-      class={`no-print border-t border-border bg-brand-lite py-10 md:py-14 ${props.class ?? ""}`}
-    >
-      <div class={`${wrap} flex items-end justify-between gap-6`}>
+    <section aria-labelledby="sit-h" data-testid="situations" class={props.class}>
+      <div class="flex items-end justify-between gap-6">
         <div>
-          <h2 id="sit-h" class="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <h2 id="sit-h" class="font-heading text-lg font-bold text-foreground">
             {t("sit.title")}
           </h2>
-          <p class="mt-2 max-w-2xl text-base leading-relaxed text-muted-foreground">{t("sit.lead")}</p>
+          <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t("sit.lead")}</p>
         </div>
         <div class="hidden shrink-0 gap-2 md:flex">
           <button
@@ -216,7 +268,7 @@ export function Situations(props: {
       <ul
         ref={track}
         data-testid="situations-track"
-        class={`${wrap} no-scrollbar mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 scroll-px-4 min-[375px]:scroll-px-6 md:scroll-px-10 lg:scroll-px-16 xl:scroll-px-24`}
+        class="no-scrollbar relative mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3"
       >
         {SITUATIONS.map((s) => (
           <SituationCard

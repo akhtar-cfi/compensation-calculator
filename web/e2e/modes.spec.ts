@@ -22,7 +22,7 @@ test("the one-page calculator has its own address, with a way to change how to a
 test("answers given in one place are there in the other, and after a reload", async ({ page }) => {
   await page.goto("#/all");
   await page.fill("#age", "40");
-  await page.goto("#/");
+  await page.goto("#/all");
   await expect(page.locator("#age")).toHaveValue("40");
   await page.reload();
   await expect(page.locator("#age")).toHaveValue("40");

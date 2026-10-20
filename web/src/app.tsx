@@ -10,9 +10,9 @@ import { EMPTY_FORM, type FormState } from "./form-to-input";
 import { LangProvider } from "./i18n";
 import type { Intent, ModeProps } from "./intent";
 import { useModule } from "./lazy";
-import { MODE_KEY, type Mode } from "./mode";
+import { MODE_KEY, modeHref, parseStoredMode, type Mode } from "./mode";
 import { Doc } from "./pages/Doc";
-import { Facts, Hero, ReadMore, Situations, Tells } from "./pages/Home";
+import { Home } from "./pages/Home";
 import { countView } from "./analytics";
 import { isLegacy, parseRoute, routeKey, type Route } from "./route";
 import { parseSaved, type Saved } from "./saved";
@@ -86,7 +86,16 @@ export function App() {
   const [pending, setPending] = useState<Intent | undefined>(undefined);
   const today = todayISO();
 
+  // The way of answering picked last time on this phone (only its name is kept, never an answer).
+  const [remembered, setRemembered] = useState<Mode | undefined>(() => {
+    try {
+      return parseStoredMode(localStorage.getItem(MODE_KEY));
+    } catch {
+      return undefined;
+    }
+  });
   const remember = (m: Mode) => {
+    setRemembered(m);
     try {
       localStorage.setItem(MODE_KEY, m);
     } catch {
@@ -94,11 +103,16 @@ export function App() {
     }
   };
 
+  /** A situation card opens the way of answering picked last time, or "Take it slow" on a first visit. */
+  const openMode = () => {
+    location.hash = modeHref(remembered ?? "slow");
+  };
   /** Starting from a situation card: its answers are given, every other answer is kept. */
   const start = (id: SituationId) => {
     setForm(applyStart(form, id));
     setIntent(situation(id).intent);
     setPending({ kind: "start", id });
+    openMode();
   };
   /** A situation's worked example: every answer filled in, then the estimate it gives. */
   const example = (id: SituationId) => {
@@ -107,6 +121,7 @@ export function App() {
     setForm(ex);
     setIntent(undefined);
     setPending({ kind: "example", id });
+    openMode();
   };
 
   // Listen for route changes from the first render on (a layout effect runs with the render; a plain effect waits
@@ -183,8 +198,8 @@ export function App() {
     (pageTitle() ?? document.getElementById("main"))?.focus({ preventScroll: true });
   }, [key]);
 
-  // A situation card's link ("#/start/homemaker", "#/example/hurt"), as sent to a family: the calculator opens with
-  // that situation's answers, and the address becomes the start page's own.
+  // A situation card's link ("#/start/homemaker", "#/example/hurt"), as sent to a family: the way of answering picked
+  // last time (or "Take it slow") opens with that situation's answers.
   useLayoutEffect(() => {
     if (route.name !== "home" || !(route.start || route.example)) return;
     history.replaceState(null, "", `${location.pathname}${location.search}#/`);
@@ -207,14 +222,23 @@ export function App() {
     [v, today],
   );
 
-  // Visit counts: page names only (see analytics.ts), never answers. "result" once per estimate shown.
+  // Visit counts: which way of answering is open, and whether it shows an estimate (see analytics.ts); never answers.
+  const counted = route.name === "doc" ? "docs" : route.name === "mode" ? route.mode : "start";
   useEffect(() => {
-    countView(route.name === "doc" ? "docs" : "start");
-  }, [key]);
+    countView(counted === "docs" || counted === "start" ? counted : `mode-${counted}`);
+  }, [counted]);
   const hasResult = Boolean(computed?.est.eligible);
   useEffect(() => {
-    if (hasResult) countView("result");
-  }, [hasResult]);
+    if (hasResult && route.name === "mode") countView(`result-${route.mode}`);
+  }, [hasResult, counted]);
+
+  // "#/choose" (from "Change how I answer" elsewhere, or a shared link): the ways of answering, in view and focused.
+  useLayoutEffect(() => {
+    if (route.name !== "home" || !route.choose) return;
+    const h = document.getElementById("choose-h");
+    h?.focus({ preventScroll: true });
+    h?.scrollIntoView({ block: "start" });
+  }, [route]);
 
   /** Moves to an address in the app; a redirect replaces the history entry, so the back gesture never loops. */
   const go = (href: string, replace = false) => {
@@ -275,24 +299,14 @@ export function App() {
       break;
     default:
       page = (
-        <>
-          {/* Phone order (the cards straight after the hero) is the reading order; from a tablet up, what the tool
-              tells you moves up into the hero. */}
-          <div class="flex flex-col">
-            <Hero />
-            <Situations
-              class="md:order-3"
-              answered={JSON.stringify(form) !== JSON.stringify(EMPTY_FORM)}
-              today={today}
-              onStart={start}
-              onExample={example}
-            />
-            <Tells class="border-t border-border md:order-2 md:border-t-0" />
-          </div>
-          <ModePage mode="all" props={{ ...modeProps, page: false }} />
-          <Facts />
-          <ReadMore />
-        </>
+        <Home
+          last={remembered}
+          onChoose={remember}
+          answered={JSON.stringify(form) !== JSON.stringify(EMPTY_FORM)}
+          today={today}
+          onStart={start}
+          onExample={example}
+        />
       );
   }
 
@@ -304,7 +318,7 @@ export function App() {
         {page}
       </main>
       <HelpBand />
-      <Footer spaceForBar={route.name === "home" || (route.name === "mode" && route.mode === "all")} />
+      <Footer spaceForBar={route.name === "mode" && (route.mode === "all" || route.mode === "detail")} />
     </LangProvider>
   );
 }

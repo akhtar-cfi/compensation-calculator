@@ -116,11 +116,19 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 
 ### Hero
 
-- **Use for:** The first screen: one headline, one line on what the law sets, the main action ('See what you're owed') and 'Got an offer? Check it'; then what the tool tells you, in five short points.
-- **Not for:** Statistics and long explanations (facts come after the calculator).
+- **Use for:** The first screen. Left: one headline, one line on what the tool shows, the four ways to answer, and what you can find out (five short lines, 'How cases like yours went' picked out). Right: the situation cards.
+- **Not for:** Statistics and long explanations (facts come further down).
 - The headline is the page's only h1.
-- Pill buttons 48 px tall, full width on a phone.
-- On a phone the five points follow the situation cards, so the cards are the second thing a family sees.
+- The four ways to answer are on the first screen at 360 × 740 and at 1280 × 720, in English and in Hindi (tested).
+- On a phone the order is headline, ways to answer, cards, then what you can find out.
+- _Code:_ `web/src/pages/Home.tsx`
+
+### Ways to answer
+
+- **Use for:** 'How would you like to do this?': four tiles, each a small drawing of its screen, its name and a few words, plus 'Not sure? Start the easy way' (Take it slow).
+- **Not for:** Pre-choosing for the person, or remembering anything but which way was picked.
+- Each tile is a link to that way's own address; picking one is remembered on this phone and marked 'Last time' on the next visit.
+- #/choose brings the tiles into view with the focus on their heading.
 - _Code:_ `web/src/pages/Home.tsx`
 
 ### Situation cards
@@ -129,7 +137,8 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 - **Not for:** Moving by themselves, or an example without its 'not a real person' label.
 - A row that scrolls sideways with snap points; the next card always peeks in. Arrows from a tablet up, swipe on a phone.
 - The photo is decorative (alt text empty): the title says what the card is.
-- 'Start' answers what the card settles and keeps every other answer; 'Try this example' asks first when there are answers to replace.
+- 'Start' answers what the card settles, keeps every other answer, and opens the way of answering picked last time (Take it slow on a first visit); 'Try this example' asks first when there are answers to replace.
+- Nothing moves by itself: the row moves only when swiped or when its arrows are pressed.
 - Each card has a link that can be shared (#/start/… and #/example/…).
 - _Code:_ `web/src/pages/Home.tsx`
 

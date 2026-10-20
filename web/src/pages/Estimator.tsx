@@ -179,13 +179,15 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
   const announce = useSettled(amount ? t("res.ready", { x: amount }) : "", 1200);
   const canProve = ["salary", "itr"].some((x) => incomeFields(f.employment).includes(x as "salary"));
   // On its own page the calculator's title is the page's title; on the start page it is a section of it.
+  // The page's own title when this is the whole page (focus moves to it on arrival), else a section heading.
   const Title = props.page ? "h1" : "h2";
+  const titleId = props.page ? "page-title" : "calc-h";
 
   return (
     <section
       id="calc"
       tabIndex={-1}
-      aria-labelledby="calc-h"
+      aria-labelledby={titleId}
       class="border-t border-border bg-subtle outline-none"
     >
       <div class={`${wrap} py-8 md:py-12`}>
@@ -262,7 +264,7 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
               <Card class="no-print overflow-hidden">
                 <div class="bg-brand px-4 py-3.5 text-brand-foreground sm:px-6">
                   <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                    <Title id="calc-h" class="font-heading text-lg font-bold">
+                    <Title id={titleId} tabIndex={-1} class="font-heading text-lg font-bold outline-none">
                       {t("calc.h2")}{" "}
                       <span class="font-sans text-sm font-normal text-brand-foreground/85">
                         {t("calc.time")}
@@ -282,7 +284,7 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
                     />
                   </div>
                 </div>
-                <form noValidate onSubmit={(e) => e.preventDefault()} aria-labelledby="calc-h">
+                <form noValidate onSubmit={(e) => e.preventDefault()} aria-labelledby={titleId}>
                   <ol class="divide-y divide-border">
                     {steps.map((s, i) => {
                       if (stop && i > 1) return null;

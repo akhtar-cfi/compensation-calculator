@@ -2,8 +2,8 @@ import type { Page } from "@playwright/test";
 import { examples, expect, fillDate, fillForm, openGroup, pickMonth, radio, test } from "./helpers";
 
 const h1 = (page: Page) => page.getByRole("heading", { level: 1 });
-const H1_EN = "Know what you’re owed before you accept any offer.";
-const H1_HI = "जानिए आपका हक़ कितना है कोई भी ऑफ़र मानने से पहले।";
+const H1_EN = "Find your amount · about 2 minutes";
+const H1_HI = "अपनी रक़म जानिए · लगभग 2 मिनट";
 const block = (page: Page, id: string) => page.locator(`[data-question="${id}"]`);
 /** Moves focus out of a question, as a person does when they go on to the next one. */
 const leave = (page: Page) => page.locator("#page-title").focus();
@@ -11,7 +11,7 @@ const leave = (page: Page) => page.locator("#page-title").focus();
 test("the form starts empty: nothing pre-selected, and the estimate says what is needed", async ({
   page,
 }) => {
-  await page.goto("#/");
+  await page.goto("#/all");
   await expect(h1(page)).toHaveText(H1_EN);
   await expect(page.locator("input[type=radio]:checked")).toHaveCount(0);
   await expect(page.locator("#accidentDate-year")).toHaveValue("");
@@ -25,7 +25,7 @@ test("the form starts empty: nothing pre-selected, and the estimate says what is
 });
 
 test("an answer that ends the claim says why under it, and the rest is not asked", async ({ page }) => {
-  await page.goto("#/");
+  await page.goto("#/all");
   await radio(page, "victimRole", "owner_driver_single_vehicle");
   await expect(block(page, "checks").locator("[data-stop=owner_driver]")).toBeVisible();
   await expect(page.locator("#result").getByTestId("no-estimate")).toBeVisible();
@@ -44,7 +44,7 @@ test("an answer that ends the claim says why under it, and the rest is not asked
 test("a wrong answer is reported when leaving it; the list of answers left jumps to each", async ({
   page,
 }) => {
-  await page.goto("#/");
+  await page.goto("#/all");
   await page.fill("#age", "130");
   await expect(page.locator("#age-error")).toHaveCount(0); // not while typing
   await leave(page);
@@ -77,7 +77,7 @@ test("the list of answers left also reaches an answer inside a closed group of d
 });
 
 test("follow-up questions appear in place, only when they apply", async ({ page }) => {
-  await page.goto("#/");
+  await page.goto("#/all");
   await radio(page, "kind", "death");
   await radio(page, "employment", "student");
   await expect(page.locator('input[name="proof"]')).toHaveCount(0);
@@ -158,7 +158,7 @@ test("answers survive a reload (kept in this tab only), and Start again clears t
   // the next paint).
   const cdp = await page.context().newCDPSession(page);
   await cdp.send("Emulation.setCPUThrottlingRate", { rate: 6 });
-  await page.goto("#/");
+  await page.goto("#/all");
   await radio(page, "kind", "death");
   await pickMonth(page, "2025-06-01");
   await radio(page, "state", "DL");
@@ -181,7 +181,7 @@ test("answers survive a reload (kept in this tab only), and Start again clears t
 });
 
 test("switching to Hindi keeps every answer", async ({ page }) => {
-  await page.goto("#/");
+  await page.goto("#/all");
   await radio(page, "kind", "injury");
   await pickMonth(page, "2025-06-01");
   await page.getByRole("button", { name: "हिंदी" }).click();
@@ -194,7 +194,7 @@ test("switching to Hindi keeps every answer", async ({ page }) => {
 });
 
 test("?lang=hi opens the page in Hindi, until the person chooses otherwise", async ({ page }) => {
-  await page.goto("?lang=hi#/");
+  await page.goto("?lang=hi#/all");
   await expect(page.locator("html")).toHaveAttribute("lang", "hi");
   await expect(h1(page)).toHaveText(H1_HI);
   await page.getByRole("button", { name: "English" }).click();
@@ -279,7 +279,7 @@ test("the public documents are on the page, and coming back keeps your place", a
 });
 
 test("the whole form can be answered with the keyboard alone", async ({ page }) => {
-  await page.goto("#/");
+  await page.goto("#/all");
   const tabTo = async (selector: string) => {
     for (let i = 0; i < 80; i++) {
       if (await page.locator(selector).evaluate((el) => el === document.activeElement)) return;
@@ -332,12 +332,12 @@ test("a route change right after the first render is not missed", async ({ page 
       }
     }).observe(document, { childList: true, subtree: true });
   });
-  await page.goto("#/");
+  await page.goto("#/all");
   await expect(page.locator("article.doc h1").first()).toBeVisible({ timeout: 2000 });
 });
 
 test("a date typed as day, month and year still works where one is asked", async ({ page }) => {
-  await page.goto("#/");
+  await page.goto("#/all");
   await radio(page, "kind", "death");
   await openGroup(page, "dates");
   await radio(page, "claimFiled", "yes");

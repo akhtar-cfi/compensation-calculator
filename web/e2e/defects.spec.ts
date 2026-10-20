@@ -45,7 +45,7 @@ for (const pct of [150, 175, 200])
   }) => {
     // Before: fixed-width date boxes pushed the page to 450-548 px wide.
     await page.setViewportSize({ width: 360, height: 800 });
-    await page.goto("#/");
+    await page.goto("#/all");
     // Like a phone's own text-size setting (set through the DOM: the page's security policy refuses inline CSS).
     await page.evaluate((p) => (document.documentElement.style.fontSize = `${p}%`), pct);
     await radio(page, "kind", "death");
@@ -123,7 +123,7 @@ test("6. on a phone, an answer with keyboard focus is never under the bottom bar
 
 test("7. the keyboard focus stays on the page when a button disables or goes away", async ({ page }) => {
   // Before: focus dropped to the page body.
-  await page.goto("#/");
+  await page.goto("#/all");
   await radio(page, "kind", "death");
   await radio(page, "children", "more");
   await page.fill("#childrenMore", "6");
@@ -138,7 +138,7 @@ test("7. the keyboard focus stays on the page when a button disables or goes awa
 
 test("8. two answers that end the claim: both stay changeable", async ({ page }) => {
   // Before: the second was dimmed and locked until the first was changed.
-  await page.goto("#/");
+  await page.goto("#/all");
   await radio(page, "victimRole", "owner_driver_single_vehicle");
   await radio(page, "s164", "accepted_via_insurer");
   const checks = page.locator('[data-question="checks"]');
@@ -152,7 +152,7 @@ test("8. two answers that end the claim: both stay changeable", async ({ page })
 
 test("9. a shared ?lang=hi link does not override the language chosen", async ({ page }) => {
   // Before: switching to English and reloading brought Hindi back.
-  await page.goto("?lang=hi#/");
+  await page.goto("?lang=hi#/all");
   await page.getByRole("button", { name: "English" }).click();
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
@@ -160,7 +160,7 @@ test("9. a shared ?lang=hi link does not override the language chosen", async ({
 
 test("10. a count typed above the limit is refused", async ({ page }) => {
   // Before: 25 children were accepted (+ stops at 20), and − then jumped from 25 to 20.
-  await page.goto("#/");
+  await page.goto("#/all");
   await radio(page, "kind", "death");
   await radio(page, "children", "more");
   await page.fill("#childrenMore", "25");
@@ -250,7 +250,7 @@ test("the offer check gives a plain answer and follows changed assumptions", asy
 });
 
 test("the two salaried kinds of work say how they differ", async ({ page }) => {
-  await page.goto("#/");
+  await page.goto("#/all");
   await expect(page.locator("#employment-permanent-hint")).toContainText("yearly pay rises");
   await expect(page.locator("#employment-fixed_salary-hint")).toContainText("no regular pay rises");
 });
