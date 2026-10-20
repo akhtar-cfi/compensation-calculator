@@ -3,7 +3,7 @@ import { countSimilar } from "../../src/cases/match.js";
 import { loadCases } from "../../src/cases/load.js";
 import { onPath } from "../src/flow.js";
 import { formFromInput } from "./answers";
-import { examples, expect, expected, fillSlow, rules, settle, slowAt, test } from "./helpers";
+import { examples, expect, expected, fillSlow, rules, settle, slowAt, tabTo, test } from "./helpers";
 
 /**
  * "Take it slow": one question at a time, for someone doing this once, on a phone, perhaps in a hospital corridor.
@@ -247,6 +247,44 @@ test("the offer check works from the amount", async ({ page }) => {
     lawyerFeePct: 0,
   });
   await expect(page.getByTestId("offer-pct-std")).toHaveText(`${c.offerPctOfStandard}%`);
+});
+
+test("can be answered with the keyboard alone, to the amount", async ({ page }) => {
+  const press = async (selector: string) => {
+    await tabTo(page, selector);
+    await page.keyboard.press("Enter");
+  };
+  const type = async (selector: string, text: string) => {
+    await tabTo(page, selector);
+    await page.keyboard.type(text);
+  };
+  await page.goto("#/slow");
+  await press("[data-slow=lang] button[data-value=en]");
+  await press('[data-field=kind] [data-value="death"]');
+  await expect(page).toHaveURL(/#\/slow\/role$/);
+  await press('[data-field=victimRole] [data-value="not_driving"]');
+  await press('[data-field=vehicleTraced] [data-value="yes"]');
+  await press('[data-field=s164] [data-value="none"]');
+  await type("#age", "30");
+  await press("[data-action=continue]");
+  await press('[data-field=employment] [data-value="permanent"]');
+  await press('[data-field=proof] [data-value="salary_slip"]');
+  await type("#monthlySalary", "25000");
+  await press("[data-action=continue]");
+  await press('[data-field=married] [data-value="yes"]');
+  await press('[data-field=spouse] [data-value="yes"]');
+  await press('[data-field=children] [data-value="2"]');
+  await press('[data-field=parents] [data-value="0"]');
+  // The phone's own lists answer to typing.
+  await type("#accidentDate-month", "June");
+  await type("#accidentDate-year", "2025");
+  await press("[data-action=continue]");
+  await press('[data-field=state] [data-value="DL"]');
+  await expect(page).toHaveURL(/#\/slow\/amount$/);
+  await expect(page.locator("[data-testid=headline] [data-amount]")).toHaveAttribute(
+    "data-amount",
+    String(expected(salaried).headline!.amount),
+  );
 });
 
 /** Answers the salaried example up to (not including) a screen. */

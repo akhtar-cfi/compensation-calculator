@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { chatAt, examples, expect, expected, fillChat, guardRequests, settle, test } from "./helpers";
+import { chatAt, examples, expect, expected, fillChat, guardRequests, settle, tabTo, test } from "./helpers";
 
 /**
  * "Talk it through": the questions as a chat, answered with pictures and few words. No free text and no AI: every
@@ -156,4 +156,37 @@ test("in Hindi, every bubble is in Hindi", async ({ page }) => {
   const english = bubbles.filter((b) => /[A-Za-z]/.test(b.replace(/MACT/g, "")));
   expect(english).toEqual([]);
   expect(await chatAt(page)).toBe("done");
+});
+
+test("can be answered with the keyboard alone, each new question taking the focus", async ({ page }) => {
+  const press = async (selector: string) => {
+    await tabTo(page, selector);
+    await page.keyboard.press("Enter");
+  };
+  const type = async (selector: string, text: string) => {
+    await tabTo(page, selector);
+    await page.keyboard.type(text);
+  };
+  await page.goto("#/chat");
+  await press("[data-chat-step] button[data-value=en]");
+  for (const v of ["death", "not_driving", "yes", "none"]) {
+    await press(`[data-chat-step] [data-value="${v}"]`);
+    await expect(q(page)).toBeFocused();
+  }
+  await type("#age", "30");
+  await press("[data-chat-step] [data-action=send]");
+  await press('[data-chat-step] [data-value="permanent"]');
+  await press('[data-chat-step] [data-value="salary_slip"]');
+  await type("#monthlySalary", "25000");
+  await press("[data-chat-step] [data-action=send]");
+  for (const v of ["yes", "yes", "2", "0"]) await press(`[data-chat-step] [data-value="${v}"]`);
+  await type("#accidentDate-month", "June");
+  await type("#accidentDate-year", "2025");
+  await press("[data-chat-step] [data-action=send]");
+  await press('[data-chat-step] [data-value="DL"]');
+  await expect(ask(page)).toHaveAttribute("data-chat-step", "offerRefine");
+  await expect(page.locator("[data-testid=headline] [data-amount]")).toHaveAttribute(
+    "data-amount",
+    String(expected(salaried).headline!.amount),
+  );
 });

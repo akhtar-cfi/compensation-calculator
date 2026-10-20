@@ -413,3 +413,12 @@ export async function fillChat(
   }
   throw new Error("the chat did not reach the amount or a stop");
 }
+
+/** Presses Tab until the element is focused, as a keyboard user moves through a page. */
+export async function tabTo(page: Page, selector: string) {
+  for (let i = 0; i < 80; i++) {
+    if (await page.locator(selector).evaluate((el) => el === document.activeElement)) return;
+    await page.keyboard.press("Tab");
+  }
+  throw new Error(`could not reach ${selector} with Tab`);
+}
