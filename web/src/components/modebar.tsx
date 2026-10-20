@@ -1,5 +1,5 @@
 import { ChevronDown } from "lucide-preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import { useT } from "../i18n";
 import { MODES, modeHref, type Mode } from "../mode";
 import { ModeDrawing } from "./drawings";
@@ -19,7 +19,9 @@ export function ModeBar(props: { mode: Mode; ready: readonly Mode[]; onChoose: (
     setOpen(false);
     if (refocus) button.current?.focus();
   };
-  useEffect(() => {
+  // Listened for from the render that opens it (a layout effect: a plain effect waits for the next paint, and an
+  // Escape pressed in that gap was lost).
+  useLayoutEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close(true);
     const onDown = (e: PointerEvent) => {

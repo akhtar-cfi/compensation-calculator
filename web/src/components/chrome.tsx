@@ -1,5 +1,5 @@
 import type { ComponentChildren } from "preact";
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { Languages, Mail, Menu, Phone } from "lucide-preact";
 import { ENGINE_VERSION } from "../../../src/engine/index.js";
 import { rules } from "../data";
@@ -58,8 +58,10 @@ export function Header() {
     setOpen(false);
     if (refocus) button.current?.focus();
   };
-  // Escape closes it (focus goes back to the button); so does a click on one of its links or outside it.
-  useEffect(() => {
+  // Escape closes it (focus goes back to the button); so does a click on one of its links or outside it. Listened for
+  // from the render that opens it (a layout effect; a plain effect waits for the next paint, and an Escape pressed in
+  // that gap was lost).
+  useLayoutEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close(true);

@@ -239,6 +239,25 @@ export function guardRequests(page: Page, baseURL: string): string[] {
   return outside;
 }
 
+/**
+ * Presses Escape the moment a menu shows as open (its button's aria-expanded turns "true"), before the page has
+ * painted, as a quick keyboard user on a slow phone could: a listener added only after the paint misses it. Each
+ * Escape sent is counted on <html data-escaped>.
+ */
+export async function escapeOnOpen(page: Page) {
+  await page.addInitScript(() => {
+    new MutationObserver((records) => {
+      for (const r of records) {
+        const el = r.target as Element;
+        if (el.getAttribute("aria-expanded") !== "true") continue;
+        const html = document.documentElement;
+        html.dataset.escaped = String(Number(html.dataset.escaped ?? 0) + 1);
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      }
+    }).observe(document, { attributes: true, attributeFilter: ["aria-expanded"], subtree: true });
+  });
+}
+
 /* ------------------------------------------- "Take it slow" -------------------------------------------- */
 
 /** Waits for the page to finish reacting to an answer: the new address, then the new screen drawn. */

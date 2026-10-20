@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, radio, test } from "./helpers";
+import { escapeOnOpen, expect, radio, test } from "./helpers";
 
 /**
  * The first screen: what the tool does, four ways to answer (picked once, remembered on the phone), what you can
@@ -208,6 +208,17 @@ test("on a phone the site menu opens in place and closes with Escape", async ({ 
     "https://crashfreeindia.org/donate",
   );
   await page.keyboard.press("Escape");
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(menu).toBeFocused();
+});
+
+test("on a phone, Escape closes the site menu from the moment it opens", async ({ page }) => {
+  await escapeOnOpen(page);
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto("#/");
+  const menu = page.getByRole("button", { name: "Menu" });
+  await menu.click();
+  await expect(page.locator("html")).toHaveAttribute("data-escaped", "1");
   await expect(menu).toHaveAttribute("aria-expanded", "false");
   await expect(menu).toBeFocused();
 });

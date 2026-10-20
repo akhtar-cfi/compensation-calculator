@@ -1,4 +1,4 @@
-import { expect, test } from "./helpers";
+import { escapeOnOpen, expect, test } from "./helpers";
 
 /**
  * Four ways of answering share one set of answers. Each has its own address and a visible way to change how to
@@ -15,6 +15,16 @@ test("the one-page calculator has its own address, with a way to change how to a
   await expect(change).toHaveAttribute("aria-expanded", "true");
   await expect(page.getByRole("link", { name: /See it all/ })).toHaveAttribute("aria-current", "page");
   await page.keyboard.press("Escape");
+  await expect(change).toHaveAttribute("aria-expanded", "false");
+  await expect(change).toBeFocused();
+});
+
+test("Escape closes the list of ways from the moment it opens", async ({ page }) => {
+  await escapeOnOpen(page);
+  await page.goto("#/all");
+  const change = page.getByRole("button", { name: "Change how I answer" });
+  await change.click();
+  await expect(page.locator("html")).toHaveAttribute("data-escaped", "1");
   await expect(change).toHaveAttribute("aria-expanded", "false");
   await expect(change).toBeFocused();
 });

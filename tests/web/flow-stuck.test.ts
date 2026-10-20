@@ -93,8 +93,14 @@ function validValue(k: QuestionId, f: FormState): string {
   }
 }
 
+/**
+ * Each property walks 1,500 random sets of answers: about 1 s on a 4-core machine, over 5 s (vitest's default
+ * limit) on a shared CI runner.
+ */
+const LONG = { timeout: 60_000 };
+
 describe("nobody gets stuck, one question at a time", () => {
-  it("every problem sits on a screen or a detail that the person is shown", () => {
+  it("every problem sits on a screen or a detail that the person is shown", LONG, () => {
     fc.assert(
       fc.property(anyForm, (f) => {
         const v = validate(f, TODAY);
@@ -110,7 +116,7 @@ describe("nobody gets stuck, one question at a time", () => {
     );
   });
 
-  it("'Take it slow' always reaches the amount or a stop", () => {
+  it("'Take it slow' always reaches the amount or a stop", LONG, () => {
     fc.assert(
       fc.property(anyForm, (start) => {
         let f = start;
@@ -153,7 +159,7 @@ describe("nobody gets stuck, one question at a time", () => {
     );
   });
 
-  it("the chat always reaches the amount or a stop, never asking what is already answered", () => {
+  it("the chat always reaches the amount or a stop, never asking what is already answered", LONG, () => {
     fc.assert(
       fc.property(anyForm, (start) => {
         let f = start;
