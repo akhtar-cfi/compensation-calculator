@@ -360,7 +360,7 @@ function Cases(props: { matches: CaseMatch[] }) {
               <p class="mt-3 text-sm leading-relaxed text-muted-foreground" lang={enOnly}>
                 {c.summary}
               </p>
-              <CaseTimeline c={c} summary={j} />
+              <CaseTimeline c={c} />
               {facts.length > 0 && <p class="mt-3 text-sm text-foreground">{facts.join(" · ")}</p>}
               <p class="mt-4 text-sm font-semibold">{t("res.cases.mattered")}</p>
               <ul class="mt-1 list-disc space-y-1 pl-5 text-sm text-muted-foreground" lang={enOnly}>

@@ -334,10 +334,8 @@ export function App() {
           last={remembered}
           onChoose={remember}
           form={form}
-          answered={answered}
           ask={ask}
           onAsked={() => setAsk(undefined)}
-          today={today}
           onStart={start}
           onExample={tryExample}
         />

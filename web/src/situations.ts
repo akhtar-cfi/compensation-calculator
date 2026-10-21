@@ -5,10 +5,10 @@ import { EMPTY_FORM, type FormState } from "./form-to-input.js";
 import { validate } from "./validate.js";
 
 /**
- * The "What happened to your family?" cards on the first screen. Each is a door into the calculator: starting from
- * one answers the questions it already settles. Three carry a worked example (a made-up person, labelled as such)
- * whose amount is worked out by the engine on the day it is shown, so a card can never quote a stale figure. Nothing
- * here touches the DOM, so it is unit-tested alone.
+ * The situations a shared link can start from ("#/start/homemaker", "#/example/hurt"). Starting from one answers the
+ * questions it already settles. Three carry a worked example (a made-up person, labelled as such) whose amount is
+ * worked out by the engine on the day it is shown, so it can never be a stale figure. Nothing here touches the DOM,
+ * so it is unit-tested alone.
  */
 export const SITUATION_IDS = ["hurt", "earner", "homemaker", "offer", "hit-and-run"] as const;
 export type SituationId = (typeof SITUATION_IDS)[number];
@@ -24,8 +24,6 @@ export interface Example {
 
 export interface Situation {
   id: SituationId;
-  /** The photo, under web/public (decorative: the card's title says what it shows). */
-  img: string;
   /** The answers this situation already gives. */
   start: Partial<FormState>;
   /** The offer card asks the calculator to explain how to check an offer once the amount is known. */
@@ -45,7 +43,6 @@ const common: Partial<FormState> = {
 export const SITUATIONS: readonly Situation[] = [
   {
     id: "hurt",
-    img: "img/situations/hurt.webp",
     start: { kind: "injury" },
     example: {
       name: "Madhur",
@@ -70,7 +67,6 @@ export const SITUATIONS: readonly Situation[] = [
   },
   {
     id: "earner",
-    img: "img/situations/earner.webp",
     start: { kind: "death" },
     example: {
       name: "Ravi",
@@ -90,7 +86,6 @@ export const SITUATIONS: readonly Situation[] = [
   },
   {
     id: "homemaker",
-    img: "img/situations/homemaker.webp",
     start: { kind: "death", employment: "homemaker" },
     example: {
       name: "Sunita",
@@ -107,8 +102,8 @@ export const SITUATIONS: readonly Situation[] = [
       },
     },
   },
-  { id: "offer", img: "img/situations/offer.webp", start: {}, intent: "offer" },
-  { id: "hit-and-run", img: "img/situations/hit-and-run.webp", start: { vehicleTraced: "no" } },
+  { id: "offer", start: {}, intent: "offer" },
+  { id: "hit-and-run", start: { vehicleTraced: "no" } },
 ];
 
 /** A question the start page asks on a card before acting on it: a new case or the same one, or the example. */

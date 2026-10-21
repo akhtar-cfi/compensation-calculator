@@ -1,27 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import type { ComponentChildren } from "preact";
+import { useEffect, useRef, useState } from "preact/hooks";
 import {
+  ArrowDown,
   ArrowRight,
-  ChevronLeft,
-  ChevronRight,
   ClipboardList,
   ExternalLink,
   HandCoins,
   IndianRupee,
   LifeBuoy,
-  Scale,
   Users,
 } from "lucide-preact";
-import { formatINR } from "../../../src/engine/money.js";
-import { rules } from "../data";
-import { useApprox, useT } from "../i18n";
-import {
-  SITUATIONS,
-  caseSummary,
-  exampleEstimate,
-  type Ask,
-  type Situation,
-  type SituationId,
-} from "../situations";
+import { useLang, useT } from "../i18n";
+import { useModule } from "../lazy";
+import { caseSummary, type Ask, type SituationId } from "../situations";
 import type { FormState } from "../form-to-input";
 import { wrap } from "../components/ui";
 import { SITE } from "../components/chrome";
@@ -29,8 +20,9 @@ import { ModeDrawing } from "../components/drawings";
 import { MODES, modeHref, type Mode } from "../mode";
 
 /**
- * The start page: what the tool does, the ways to answer, the "What happened to your family?" cards, why it matters
- * and what to read next. The calculator itself is one of the ways of answering, each on its own address.
+ * The start page. First a welcome page over the whole screen (a soft photo behind a translucent layer): what the
+ * tool does, what you can find out, and the four ways to answer as buttons, each with one line on what it is like.
+ * Below it, real cases from start to finish, why this matters and what to read next.
  */
 
 const TELLS = [
@@ -41,61 +33,22 @@ const TELLS = [
   { n: 5, Icon: LifeBuoy },
 ] as const;
 
-/**
- * The first screen. Left: what the tool does, the four ways to answer (picked once, remembered on this phone), and
- * what you can find out. Right: "What happened to your family?" cards that move only when touched. On a phone the
- * same order top to bottom: the ways to answer come straight after the headline, inside the first screen.
- */
 export function Home(props: {
   /** The way of answering picked last time on this phone. */
   last: Mode | undefined;
   onChoose: (m: Mode) => void;
-  /** The answers so far (summed up when a card asks whether this is a new case). */
+  /** The answers so far (summed up when a shared link asks whether this is a new case). */
   form: FormState;
-  /** True when the person has answered anything (a card's Start or example then asks first). */
-  answered: boolean;
-  /** A card's shared link opened over answers from before: ask on that card. */
+  /** A shared link (a new case, or a worked example) opened over answers from before: ask first. */
   ask?: Ask | undefined;
   onAsked: () => void;
-  today: string;
   onStart: (id: SituationId, fresh: boolean) => void;
   onExample: (id: SituationId) => void;
 }) {
-  const t = useT();
   return (
     <>
-      <section aria-labelledby="page-title" data-testid="hero" class="no-print bg-background">
-        <div
-          class={`${wrap} grid gap-x-12 gap-y-7 pt-5 pb-10 md:pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]`}
-        >
-          <div class="lg:col-start-1 lg:row-start-1">
-            <p class="hidden items-center gap-2 rounded-full border border-brand-line bg-brand-tint px-4 py-1.5 text-xs font-medium tracking-wide text-brand sm:inline-flex">
-              <Scale aria-hidden="true" class="h-3.5 w-3.5" />
-              {t("hero.chip")}
-            </p>
-            <h1
-              id="page-title"
-              tabIndex={-1}
-              class="font-heading text-[1.75rem] leading-[1.12] font-bold tracking-tight text-foreground outline-none sm:mt-5 sm:text-4xl"
-            >
-              {t("hero.h1a")} <span class="block text-brand">{t("hero.h1b")}</span>
-            </h1>
-            <p class="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">{t("hero.lead")}</p>
-          </div>
-          <Chooser class="lg:col-start-1 lg:row-start-2" last={props.last} onChoose={props.onChoose} />
-          <Situations
-            class="min-w-0 lg:col-start-2 lg:row-span-3 lg:row-start-1"
-            form={props.form}
-            answered={props.answered}
-            ask={props.ask}
-            onAsked={props.onAsked}
-            today={props.today}
-            onStart={props.onStart}
-            onExample={props.onExample}
-          />
-          <Tells class="lg:col-start-1 lg:row-start-3" />
-        </div>
-      </section>
+      <Welcome {...props} />
+      <Stories />
       <Facts />
       <ReadMore />
     </>
@@ -103,72 +56,250 @@ export function Home(props: {
 }
 
 /**
- * "How would you like to do this?": the four ways of answering, each with a small drawing of its screen, the one
- * picked last time marked, and "Not sure? Start the easy way" for anyone who would rather not choose.
+ * The welcome page: a translucent sheet over a photo of claim papers, covering the whole first screen (on a laptop the
+ * photo shows round its edges), and on it what the tool does, what you can find out and the four ways to answer.
  */
-function Chooser(props: { class?: string; last: Mode | undefined; onChoose: (m: Mode) => void }) {
+function Welcome(props: Parameters<typeof Home>[0]) {
+  const t = useT();
+  // A shared link opened over answers from before asks first (kept until answered, after the address has moved on).
+  const [asking, setAsking] = useState<Ask | undefined>(undefined);
+  useEffect(() => {
+    if (!props.ask) return;
+    setAsking(props.ask);
+    props.onAsked();
+  }, [props.ask]);
+  const done = () => {
+    setAsking(undefined);
+    requestAnimationFrame(() => document.getElementById("page-title")?.focus());
+  };
+  return (
+    <section aria-labelledby="page-title" data-testid="hero" class="no-print relative isolate">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 -z-10 bg-[url(/img/welcome.webp)] bg-cover bg-center blur-[3px] md:blur-[1px]"
+      />
+      <div class="flex min-h-[calc(100svh-65px)] md:min-h-[calc(100svh-69px)] md:p-5 lg:p-4">
+        <div
+          data-testid="welcome"
+          class="flex w-full flex-col justify-center bg-background/90 md:rounded-3xl md:border md:border-white/60 md:bg-background/[0.86] md:shadow-2xl md:backdrop-blur-md"
+        >
+          <div class="mx-auto w-full max-w-5xl px-4 py-6 min-[375px]:px-6 sm:py-8 md:px-10 lg:py-6">
+            {asking && (
+              <AskNotice
+                ask={asking}
+                summary={caseSummary(props.form, t)}
+                onNew={() => {
+                  setAsking(undefined);
+                  props.onStart(asking.id, true);
+                }}
+                onSame={() => {
+                  setAsking(undefined);
+                  props.onStart(asking.id, false);
+                }}
+                onUse={() => {
+                  setAsking(undefined);
+                  props.onExample(asking.id);
+                }}
+                onKeep={done}
+              />
+            )}
+            <h1
+              id="page-title"
+              tabIndex={-1}
+              class="font-heading text-[1.75rem] leading-[1.12] font-bold tracking-tight text-foreground outline-none sm:text-4xl lg:text-[2.5rem]"
+            >
+              {t("hero.h1a")} <span class="block text-brand">{t("hero.h1b")}</span>
+            </h1>
+            <p class="mt-2.5 max-w-4xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              {t("hero.lead")}
+            </p>
+            <Tells class="mt-5 lg:mt-6" />
+            <Chooser class="mt-6 lg:mt-7" last={props.last} onChoose={props.onChoose}>
+              <a
+                href="#stories"
+                class="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-brand"
+              >
+                <ArrowDown aria-hidden="true" class="h-4 w-4" />
+                {t("story.jump")}
+              </a>
+            </Chooser>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * A shared link ("#/start/homemaker", "#/example/hurt") opened over answers from before: is this a new case, or
+ * should the example replace them? The first answer takes the focus, so it is heard at once.
+ */
+function AskNotice(props: {
+  ask: Ask;
+  summary: string;
+  onNew: () => void;
+  onSame: () => void;
+  onUse: () => void;
+  onKeep: () => void;
+}) {
+  const t = useT();
+  const first = useRef<HTMLButtonElement>(null);
+  useEffect(() => first.current?.focus(), [props.ask]);
+  const btn =
+    "inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+  const { id, kind } = props.ask;
+  const question = kind === "start" ? t("sit.newQ", { summary: props.summary }) : t("sit.replace");
+  return (
+    <div
+      role="group"
+      aria-label={question}
+      data-testid={kind === "start" ? "start-confirm" : "example-confirm"}
+      data-situation={id}
+      class="mb-6 grid gap-3 rounded-2xl border border-brand-line bg-card p-4 shadow-sm sm:p-5"
+    >
+      <p class="text-sm font-semibold text-foreground">
+        {kind === "start" ? t(`sit.${id}.title`) : `${t("sit.example")}: ${t(`sit.${id}.who`)}`}
+      </p>
+      <p class="text-sm text-foreground">{question}</p>
+      <div class="flex flex-wrap gap-2">
+        {kind === "start" ? (
+          <>
+            <button
+              ref={first}
+              type="button"
+              onClick={props.onNew}
+              class={`${btn} bg-brand text-brand-foreground shadow-sm hover:bg-brand/90`}
+            >
+              {t("sit.newYes")}
+            </button>
+            <button
+              type="button"
+              onClick={props.onSame}
+              class={`${btn} border border-input bg-background text-foreground hover:bg-muted`}
+            >
+              {t("sit.same")}
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={props.onUse}
+              class={`${btn} border border-brand text-brand hover:bg-brand-lite`}
+            >
+              {t("sit.replaceYes")}
+            </button>
+            <button
+              ref={first}
+              type="button"
+              onClick={props.onKeep}
+              class={`${btn} border border-input bg-background text-foreground hover:bg-muted`}
+            >
+              {t("app.keep")}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * "How would you like to do this?": the four ways of answering as buttons, each with a small drawing of its screen
+ * and one line on what it is like; the one picked last time is marked. "Not sure? Start the easy way" is for anyone
+ * who would rather not choose.
+ */
+function Chooser(props: {
+  class?: string;
+  last: Mode | undefined;
+  onChoose: (m: Mode) => void;
+  /** Shown beside "Not sure? Start the easy way". */
+  children?: ComponentChildren;
+}) {
   const t = useT();
   return (
     <section aria-labelledby="choose-h" data-testid="chooser" id="choose" class={props.class}>
-      <h2 id="choose-h" tabIndex={-1} class="font-heading text-lg font-bold text-foreground outline-none">
+      <h2
+        id="choose-h"
+        tabIndex={-1}
+        class="font-heading text-lg font-bold text-foreground outline-none sm:text-xl"
+      >
         {t("choose.title")}
       </h2>
-      <ul class="mt-3 grid grid-cols-2 gap-2.5">
+      <ul class="mt-3 grid gap-2.5 sm:grid-cols-2">
         {MODES.map((m) => (
           <li key={m}>
             <a
               href={modeHref(m)}
               data-mode={m}
               onClick={() => props.onChoose(m)}
-              class={`relative flex h-full flex-col gap-1.5 rounded-2xl border bg-card p-3 shadow-sm transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+              class={`group flex h-full min-h-16 items-center gap-3 rounded-2xl border-2 bg-card px-4 py-2.5 shadow-sm transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
                 props.last === m ? "border-brand" : "border-border"
               }`}
             >
-              <ModeDrawing mode={m} class="h-9 w-7 text-brand" />
-              <span class="text-sm leading-tight font-semibold text-foreground">{t(`mode.${m}`)}</span>
-              <span class="text-xs leading-snug text-muted-foreground">{t(`mode.${m}.hint`)}</span>
-              {props.last === m && (
-                <span class="absolute top-2.5 right-2.5 rounded-full bg-brand px-2 py-0.5 text-[0.6875rem] font-semibold text-brand-foreground">
-                  {t("choose.last")}
+              <ModeDrawing mode={m} class="h-10 w-8 shrink-0 text-brand" />
+              <span class="min-w-0 flex-1">
+                <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span class="font-heading text-base leading-tight font-bold text-foreground">
+                    {t(`mode.${m}`)}
+                  </span>
+                  {props.last === m && (
+                    <span class="rounded-full bg-brand px-2 py-0.5 text-[0.6875rem] font-semibold text-brand-foreground">
+                      {t("choose.last")}
+                    </span>
+                  )}
                 </span>
-              )}
+                <span class="mt-0.5 block text-sm leading-snug text-muted-foreground">
+                  {t(`mode.${m}.line`)}
+                </span>
+              </span>
+              <ArrowRight
+                aria-hidden="true"
+                class="h-5 w-5 shrink-0 text-brand transition-transform group-hover:translate-x-0.5"
+              />
             </a>
           </li>
         ))}
       </ul>
-      <a
-        href={modeHref("slow")}
-        onClick={() => props.onChoose("slow")}
-        class="mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand underline underline-offset-4 hover:no-underline"
-      >
-        {t("choose.easy")}
-        <ArrowRight aria-hidden="true" class="h-4 w-4" />
-      </a>
+      <div class="mt-2 flex flex-wrap items-center gap-x-8">
+        <a
+          href={modeHref("slow")}
+          onClick={() => props.onChoose("slow")}
+          class="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand underline underline-offset-4 hover:no-underline"
+        >
+          {t("choose.easy")}
+          <ArrowRight aria-hidden="true" class="h-4 w-4" />
+        </a>
+        {props.children}
+      </div>
     </section>
   );
 }
 
 /**
- * What you can find out, in five short lines; how cases like yours went is picked out (people can follow cases
- * like their own here, not only their amount).
+ * What you can find out, in five short lines; how cases like yours went is picked out. On a phone only the five
+ * names show, two to a row (one when the phone's text is set large), so the four ways to answer stay near the top.
  */
 export function Tells(props: { class?: string }) {
   const t = useT();
   return (
     <section aria-labelledby="tells-h" class={props.class}>
-      <h2 id="tells-h" class="font-heading text-lg font-bold text-foreground">
+      <h2 id="tells-h" class="text-xs font-semibold tracking-[0.2em] text-brand uppercase">
         {t("tell.title")}
       </h2>
-      <ul data-testid="tells" class="mt-2 grid gap-1">
+      <ul
+        data-testid="tells"
+        class="mt-2 grid grid-cols-[repeat(auto-fit,minmax(9.5rem,1fr))] gap-x-4 gap-y-1 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3"
+      >
         {TELLS.map(({ n, Icon }) => (
           <li
             key={n}
             data-highlight={n === 2 ? "" : undefined}
-            class={`flex gap-3 rounded-xl py-2 ${n === 2 ? "bg-marigold-tint/60 px-3" : ""}`}
+            class={`flex min-w-0 items-start gap-3 rounded-xl py-1.5 ${n === 2 ? "bg-marigold-tint/70 px-2.5" : ""}`}
           >
             <span
               aria-hidden="true"
-              class={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+              class={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
                 n === 2
                   ? "bg-marigold-tint text-marigold-ink"
                   : n === 5
@@ -176,11 +307,11 @@ export function Tells(props: { class?: string }) {
                     : "bg-brand-tint text-brand"
               }`}
             >
-              <Icon class="h-[1.125rem] w-[1.125rem]" />
+              <Icon class="h-4 w-4" />
             </span>
             <span class="text-sm leading-snug">
-              <span class="font-semibold text-foreground">{t(`tell.${n}.t`)}</span>
-              <span class="text-muted-foreground"> · {t(`tell.${n}.d`)}</span>
+              <span class="block font-semibold text-foreground sm:inline">{t(`tell.${n}.t`)}</span>
+              <span class="hidden text-muted-foreground sm:inline"> · {t(`tell.${n}.d`)}</span>
             </span>
           </li>
         ))}
@@ -190,276 +321,44 @@ export function Tells(props: { class?: string }) {
 }
 
 /**
- * "What happened to your family?": one card per situation in a row that scrolls sideways (swipe on a phone, arrows
- * from a tablet up; nothing moves by itself). Each card starts the calculator with what it settles; three carry an
- * example worked out by the engine today, labelled as made up.
+ * Real cases from start to finish: what happened, the amount at each step (an insurer's offer, the tribunal, the
+ * High Court, the Supreme Court), and the years it took. The cards and their data arrive as their own small file
+ * (see StoryList), after the welcome page.
  */
-export function Situations(props: {
-  class?: string;
-  form: FormState;
-  /** True when the person has answered anything (a card's Start or example then asks first). */
-  answered: boolean;
-  /** A card's shared link opened over answers from before: ask on that card. */
-  ask?: Ask | undefined;
-  onAsked: () => void;
-  today: string;
-  onStart: (id: SituationId, fresh: boolean) => void;
-  onExample: (id: SituationId) => void;
-}) {
+function Stories() {
   const t = useT();
-  const track = useRef<HTMLUListElement>(null);
-  const [edge, setEdge] = useState({ start: true, end: false });
-  // Over answers from before, a card asks first: is this a new case (Start), or replace them (an example)?
-  const [asking, setAsking] = useState<Ask | undefined>(undefined);
-  useEffect(() => {
-    if (!props.ask) return;
-    setAsking(props.ask);
-    props.onAsked();
-  }, [props.ask]);
-  const examples = useMemo(
-    () => new Map(SITUATIONS.map((s) => [s.id, exampleEstimate(s, rules, props.today)])),
-    [props.today],
-  );
-
-  useEffect(() => {
-    const el = track.current;
-    if (!el) return;
-    const where = () =>
-      setEdge({ start: el.scrollLeft <= 2, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 2 });
-    where();
-    el.addEventListener("scroll", where, { passive: true });
-    addEventListener("resize", where);
-    return () => {
-      el.removeEventListener("scroll", where);
-      removeEventListener("resize", where);
-    };
-  }, []);
-
-  /** One card along (its width and the gap), smoothly unless the person asked for less motion. */
-  const move = (dir: 1 | -1) => {
-    const el = track.current;
-    const first = el?.querySelector("li");
-    if (!el || !first) return;
-    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
-    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    el.scrollBy({
-      left: dir * (first.getBoundingClientRect().width + gap),
-      behavior: still ? "auto" : "smooth",
-    });
-  };
-
-  const start = (id: SituationId) => {
-    if (props.answered) setAsking({ id, kind: "start" });
-    else props.onStart(id, true);
-  };
-  const tryExample = (id: SituationId) => {
-    if (props.answered) setAsking({ id, kind: "example" });
-    else props.onExample(id);
-  };
-  const keep = (id: SituationId) => {
-    setAsking(undefined);
-    requestAnimationFrame(() =>
-      document.querySelector<HTMLElement>(`[data-situation="${id}"] [data-action=example]`)?.focus(),
-    );
-  };
-  const summary = props.answered ? caseSummary(props.form, t) : "";
-
-  const arrow =
-    "inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-40";
+  const lang = useLang();
+  const list = useModule(() => import("./StoryList"), "stories");
   return (
-    <section aria-labelledby="sit-h" data-testid="situations" class={props.class}>
-      <div class="flex items-end justify-between gap-6">
-        <div>
-          <h2 id="sit-h" class="font-heading text-lg font-bold text-foreground">
-            {t("sit.title")}
-          </h2>
-          <p class="mt-1 text-sm leading-relaxed text-muted-foreground">{t("sit.lead")}</p>
-        </div>
-        <div class="hidden shrink-0 gap-2 md:flex">
-          <button
-            type="button"
-            aria-label={t("sit.prev")}
-            disabled={edge.start}
-            onClick={() => move(-1)}
-            class={`${arrow} border border-border bg-background text-foreground hover:bg-muted`}
-          >
-            <ChevronLeft aria-hidden="true" class="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            aria-label={t("sit.next")}
-            disabled={edge.end}
-            onClick={() => move(1)}
-            class={`${arrow} bg-brand text-brand-foreground hover:bg-brand/90`}
-          >
-            <ChevronRight aria-hidden="true" class="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-      <ul
-        ref={track}
-        data-testid="situations-track"
-        class="no-scrollbar relative mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3"
-      >
-        {SITUATIONS.map((s) => (
-          <SituationCard
-            key={s.id}
-            s={s}
-            amount={examples.get(s.id)?.headline}
-            asking={asking?.id === s.id ? asking.kind : undefined}
-            summary={summary}
-            onStart={() => start(s.id)}
-            onNew={() => props.onStart(s.id, true)}
-            onSame={() => props.onStart(s.id, false)}
-            onTry={() => tryExample(s.id)}
-            onUse={() => {
-              setAsking(undefined);
-              props.onExample(s.id);
-            }}
-            onKeep={() => keep(s.id)}
-          />
-        ))}
-      </ul>
-    </section>
-  );
-}
-
-function SituationCard(props: {
-  s: Situation;
-  amount?: { amount: number; approx: string } | undefined;
-  /** Asking first, over answers from before: whether this is a new case, or whether the example replaces them. */
-  asking?: "start" | "example" | undefined;
-  /** The answers from before, in a few words. */
-  summary: string;
-  onStart: () => void;
-  onNew: () => void;
-  onSame: () => void;
-  onTry: () => void;
-  onUse: () => void;
-  onKeep: () => void;
-}) {
-  const t = useT();
-  // The question's first answer takes the focus, so a keyboard or screen-reader user hears it at once.
-  const first = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    if (props.asking) first.current?.focus();
-  }, [props.asking]);
-  const approx = useApprox();
-  const { s } = props;
-  const hnr = rules.statutory.hit_and_run_s161;
-  const line = t(`sit.${s.id}.line`, { death: formatINR(hnr.death), hurt: formatINR(hnr.grievous_hurt) });
-  const small =
-    "inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
-  return (
-    <li
-      data-situation={s.id}
-      class="flex w-[84%] max-w-[22rem] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm min-[480px]:w-80"
+    <section
+      id="stories"
+      aria-labelledby="stories-h"
+      data-testid="stories"
+      class="no-print scroll-mt-20 border-t border-border bg-background"
     >
-      <img
-        src={s.img}
-        alt=""
-        width={640}
-        height={480}
-        loading="lazy"
-        decoding="async"
-        class="aspect-[4/3] w-full bg-muted object-cover"
-      />
-      <div class="flex flex-1 flex-col gap-3 p-5">
-        <h3 class="font-heading text-lg leading-snug font-bold text-foreground">{t(`sit.${s.id}.title`)}</h3>
-        <p class="text-sm leading-relaxed text-muted-foreground">{line}</p>
-        {s.example && props.amount && (
-          <div class="rounded-xl bg-brand-lite p-3.5">
-            <p class="inline-flex rounded-full bg-marigold-tint px-2.5 py-0.5 text-xs font-semibold text-marigold-ink">
-              {t("sit.example")}
-            </p>
-            <p class="mt-2 text-sm leading-relaxed text-foreground">
-              {t(`sit.${s.id}.story`, { offer: formatINR(s.example.offer ?? 0) })}
-            </p>
-            <p
-              class="mt-2 font-heading text-base font-bold text-brand"
-              data-example-amount
-              data-amount={props.amount.amount}
-            >
-              {t("sit.amount", { x: approx(props.amount.approx) })}
-            </p>
-          </div>
+      <div class={`${wrap} py-12 md:py-16`}>
+        <h2 id="stories-h" class="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          {t("story.title")}
+        </h2>
+        <p class="mt-2 max-w-3xl text-base leading-relaxed text-muted-foreground">{t("story.lead")}</p>
+        {lang === "hi" && (
+          <p class="mt-1 text-sm text-muted-foreground" data-testid="stories-in-english">
+            {t("res.cases.inEnglish")}
+          </p>
         )}
-        <div class="mt-auto grid gap-2 pt-1">
-          {props.asking === "start" ? (
-            <div
-              role="group"
-              aria-label={t("sit.newQ", { summary: props.summary })}
-              data-testid="start-confirm"
-              class="grid gap-2 rounded-xl border border-brand-line bg-brand-tint p-3"
-            >
-              <p class="text-sm text-foreground">{t("sit.newQ", { summary: props.summary })}</p>
-              <button
-                ref={first}
-                type="button"
-                onClick={props.onNew}
-                class={`${small} bg-brand text-brand-foreground shadow-sm hover:bg-brand/90`}
-              >
-                {t("sit.newYes")}
-              </button>
-              <button
-                type="button"
-                onClick={props.onSame}
-                class={`${small} border border-input bg-background text-foreground hover:bg-muted`}
-              >
-                {t("sit.same")}
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              data-action="start"
-              onClick={props.onStart}
-              class={`${small} gap-2 bg-brand text-brand-foreground shadow-sm hover:bg-brand/90`}
-            >
-              {t(`sit.${s.id}.cta`)}
-              <ArrowRight aria-hidden="true" class="h-4 w-4" />
-            </button>
-          )}
-          {s.example &&
-            (props.asking === "example" ? (
-              <div
-                role="group"
-                aria-label={t("sit.replace")}
-                data-testid="example-confirm"
-                class="grid gap-2 rounded-xl border border-border p-3"
-              >
-                <p class="text-sm text-foreground">{t("sit.replace")}</p>
-                <div class="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={props.onUse}
-                    class={`${small} border border-brand text-brand hover:bg-brand-lite`}
-                  >
-                    {t("sit.replaceYes")}
-                  </button>
-                  <button
-                    ref={first}
-                    type="button"
-                    onClick={props.onKeep}
-                    class={`${small} border border-input text-foreground hover:bg-muted`}
-                  >
-                    {t("app.keep")}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                data-action="example"
-                onClick={props.onTry}
-                class={`${small} text-brand underline underline-offset-4 hover:no-underline`}
-              >
-                {t("sit.try")}
-              </button>
-            ))}
-        </div>
+        {list && <list.StoryList />}
+        <a
+          href="#/choose"
+          class="mt-4 flex min-h-11 w-fit items-center gap-1.5 text-sm font-medium text-brand underline underline-offset-4 hover:no-underline"
+        >
+          {t("story.own")}
+          <ArrowRight aria-hidden="true" class="h-4 w-4" />
+        </a>
+        <p class="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
+          {t("res.cases.disclaimer")}
+        </p>
       </div>
-    </li>
+    </section>
   );
 }
 

@@ -6,7 +6,7 @@ import {
   financialYear,
   wholeMonthsBetween,
 } from "../../src/engine/dates.js";
-import { formatApprox, formatINR, parseFraction } from "../../src/engine/money.js";
+import { formatApprox, formatINR, formatLakh, parseFraction } from "../../src/engine/money.js";
 
 describe("dates", () => {
   it("counts days from the epoch", () => {
@@ -41,6 +41,13 @@ describe("money", () => {
   it("formats approximate lakh / crore", () => {
     expect(formatApprox(5281500)).toBe("₹53 lakh");
     expect(formatApprox(12500000)).toBe("₹1.3 crore");
+  });
+  it("formats an award in lakh / crore to the paisa-free figure judgments quote (two decimals)", () => {
+    expect(formatLakh(6277900)).toBe("₹62.78 lakh");
+    expect(formatLakh(5809930)).toBe("₹58.1 lakh");
+    expect(formatLakh(10229241)).toBe("₹1.02 crore");
+    expect(formatLakh(100000)).toBe("₹1 lakh");
+    expect(formatLakh(63302)).toBe("₹63,302");
   });
   it("parses fractions", () => {
     expect(parseFraction("1/3")).toBeCloseTo(0.3333, 4);

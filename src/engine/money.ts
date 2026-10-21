@@ -41,6 +41,18 @@ export function formatApprox(n: number): string {
   return formatINR(round2(n));
 }
 
+/**
+ * An award as judgments and news reports quote it, to two decimals in lakh/crore: 6277900 -> "₹62.78 lakh";
+ * under a lakh the exact amount (an offer of ₹63,302 stays ₹63,302).
+ */
+export function formatLakh(n: number): string {
+  const abs = Math.abs(n);
+  const two = (x: number) => String(Number(x.toFixed(2)));
+  if (abs >= 1e7) return `₹${two(n / 1e7)} crore`;
+  if (abs >= 1e5) return `₹${two(n / 1e5)} lakh`;
+  return formatINR(n);
+}
+
 /** A factor in a worked calculation: 1.5, 1.15 (no trailing zeros). */
 export function formatFactor(x: number): string {
   return String(Number(x.toFixed(4)));

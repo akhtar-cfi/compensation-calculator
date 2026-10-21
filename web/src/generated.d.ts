@@ -11,3 +11,7 @@ declare module "*/generated/docs.json" {
   const v: unknown;
   export default v;
 }
+declare module "*/generated/stories.json" {
+  const v: unknown;
+  export default v;
+}

@@ -1,28 +1,41 @@
 import type { Page } from "@playwright/test";
-import { escapeOnOpen, expect, radio, test } from "./helpers";
+import { summariseJourney } from "../../src/cases/match.js";
+import { loadCases } from "../../src/cases/load.js";
+import { formatLakh } from "../../src/engine/money.js";
+import { exampleEstimate, situation } from "../src/situations.js";
+import { pickStories } from "../src/stories.js";
+import { escapeOnOpen, expect, radio, rules, test, today } from "./helpers";
 
 /**
- * The first screen: what the tool does, four ways to answer (picked once, remembered on the phone), what you can
- * find out, and "What happened to your family?" cards that move only when touched. Each card opens the way of
- * answering the person picked last (or "Take it slow") with what it settles; three carry a worked example whose
- * amount comes from the engine. The page sits in the crashfreeindia.org frame (header, footer).
+ * The start page: a welcome page over the whole first screen (what the tool does, what you can find out, and the four
+ * ways to answer as buttons, each with one line on what it is like), then real cases from the crash to the final
+ * amount. A way to answer is picked once and remembered on the phone; a shared link ("#/start/…", "#/example/…")
+ * opens the remembered way (or "Take it slow") ready. The page sits in the crashfreeindia.org frame.
  */
 
-const card = (page: Page, id: string) => page.locator(`[data-situation="${id}"]`);
-const track = (page: Page) => page.getByTestId("situations-track");
 const tiles = (page: Page) => page.getByTestId("chooser").locator("[data-mode]");
+const stories = (page: Page) => page.getByTestId("stories").locator("[data-story]");
 const checked = (page: Page, name: string, value: string) =>
   expect(page.locator(`input[name="${name}"][value="${value}"]`)).toBeChecked();
 /** As if this phone had picked a way of answering before. */
 const remembered = (page: Page, mode: string) =>
   page.addInitScript((m) => localStorage.setItem("mact-calculator.mode", m), mode);
+const sideways = (page: Page) =>
+  page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
 
-for (const [w, h] of [
-  [360, 740],
-  [1280, 720],
-] as const)
-  for (const lang of ["en", "hi"] as const)
-    test(`the first screen says what the tool does and shows the four ways to answer (${w}×${h}, ${lang})`, async ({
+const LINES = {
+  slow: "One question at a time. Easiest on a phone.",
+  chat: "Like a WhatsApp chat: tap pictures, type little.",
+  all: "All the questions on one page, at once.",
+  detail: "Every rule and ruling, for lawyers and helpers.",
+};
+
+for (const lang of ["en", "hi"] as const) {
+  for (const [w, h] of [
+    [1280, 720],
+    [1366, 768],
+  ] as const)
+    test(`on a laptop the welcome covers the first screen, details first and the four ways below, all in view (${w}×${h}, ${lang})`, async ({
       page,
     }) => {
       await page.setViewportSize({ width: w, height: h });
@@ -32,15 +45,44 @@ for (const [w, h] of [
           ? "सड़क दुर्घटना का मुआवज़ा, कुछ ही मिनटों में।"
           : "Road crash compensation, worked out in minutes.",
       );
+      const hero = (await page.getByTestId("hero").boundingBox())!;
+      expect(hero.y + hero.height, "the welcome reaches the bottom of the screen").toBeGreaterThanOrEqual(h);
+      const tells = (await page.getByTestId("tells").boundingBox())!;
       await expect(tiles(page)).toHaveCount(4);
       for (const tile of await tiles(page).all()) {
         const box = (await tile.boundingBox())!;
-        expect(box.y + box.height, "the tile is on the first screen").toBeLessThanOrEqual(h);
+        expect(box.y, "the ways to answer come after what you can find out").toBeGreaterThan(
+          tells.y + tells.height,
+        );
+        expect(box.y + box.height, "the button is on the first screen").toBeLessThanOrEqual(h);
       }
-      expect(
-        await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth),
-      ).toBeLessThanOrEqual(0);
+      expect(await sideways(page)).toBeLessThanOrEqual(0);
     });
+
+  test(`on a phone the welcome fills the first screen, with the first way to answer in view (360×740, ${lang})`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto(lang === "hi" ? "?lang=hi#/" : "#/");
+    const hero = (await page.getByTestId("hero").boundingBox())!;
+    expect(hero.y + hero.height).toBeGreaterThanOrEqual(740);
+    await expect(page.locator("h1#page-title")).toBeInViewport();
+    const first = (await tiles(page).first().boundingBox())!;
+    expect(first.y + first.height, "'Take it slow' is on the first screen").toBeLessThanOrEqual(740);
+    expect(await sideways(page)).toBeLessThanOrEqual(0);
+  });
+}
+
+test("each way to answer is a button with one line on what it is like", async ({ page }) => {
+  await page.goto("#/");
+  for (const [m, line] of Object.entries(LINES)) {
+    const tile = page.locator(`[data-testid=chooser] [data-mode="${m}"]`);
+    await expect(tile).toContainText(line);
+    await expect(tile).toHaveAttribute("href", `#/${m}`);
+  }
+  // Nothing on the page says "draft" (the rules' version name in the footer's small print aside).
+  await expect(page.locator("main").getByText(/draft/i)).toHaveCount(0);
+});
 
 test("what you can find out includes how cases like yours went", async ({ page }) => {
   await page.goto("#/");
@@ -71,44 +113,79 @@ test("#/choose brings the four ways into view and focus", async ({ page }) => {
   await expect(page.getByTestId("chooser")).toBeInViewport();
 });
 
-test("the situation cards scroll sideways on a phone, and the page itself does not", async ({ page }) => {
+test("real cases are told whole: the story, each step's amount and year, the years it took, and the judgment", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 360, height: 780 });
   await page.goto("#/");
-  await expect(card(page, "hurt")).toBeVisible();
-  const m = await track(page).evaluate((el) => ({
-    scroll: el.scrollWidth,
-    client: el.clientWidth,
-    snap: getComputedStyle(el).scrollSnapType,
-    first: el.querySelector("li")!.getBoundingClientRect().width,
-  }));
-  expect(m.scroll).toBeGreaterThan(m.client);
-  expect(m.snap).toContain("x");
-  // The next card peeks in, so it is clear there is more to see.
-  expect(m.first).toBeLessThan(360 * 0.9);
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth),
-  ).toBeLessThanOrEqual(0);
-  await expect(page.locator("[data-situation] img").first()).toHaveAttribute("loading", "lazy");
+  const picked = pickStories(loadCases());
+  await expect(stories(page)).toHaveCount(3);
+  for (const [i, c] of picked.slice(0, 3).entries()) {
+    const story = stories(page).nth(i);
+    await expect(story).toHaveAttribute("data-story", c.id);
+    await expect(story).toContainText(c.summary.slice(-40).replace(/\bRs\.?\s?/g, "₹"));
+    const steps = story.locator("[data-timeline] li");
+    await expect(steps).toHaveCount(c.journey.length + 1);
+    await expect(steps.first()).toContainText(`Accident (${c.facts.accident_date!.slice(0, 4)})`);
+    for (const [k, s] of c.journey.entries()) {
+      const amount = steps.nth(k + 1).locator("[data-amount]");
+      await expect(amount).toHaveAttribute("data-amount", String(s.amount));
+      await expect(amount).toHaveText(formatLakh(s.amount));
+    }
+    await expect(story.locator("[data-outcome]")).toContainText(
+      `${summariseJourney(c).years} years from accident to final amount`,
+    );
+    await expect(story.getByRole("link", { name: "Read the judgment" })).toHaveAttribute(
+      "href",
+      c.source_url,
+    );
+    // Nothing is cut off: the card fits the screen, and the page does not scroll sideways.
+    const box = (await story.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(360);
+  }
+  expect(await sideways(page)).toBeLessThanOrEqual(0);
+  // What made the difference opens on a tap.
+  const first = stories(page).first();
+  await expect(first.locator("details li").first()).toBeHidden();
+  await first.getByText("What made the difference").click();
+  await expect(first.locator("details li").first()).toBeVisible();
 });
 
-test("on a laptop the cards move only when touched: arrows move them one at a time", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
+test("more real cases show on request, and the focus moves to the first new one", async ({ page }) => {
   await page.goto("#/");
-  await page.waitForTimeout(2500);
-  expect(await track(page).evaluate((el) => el.scrollLeft)).toBe(0);
-  const prev = page.getByRole("button", { name: "Previous card" });
-  const next = page.getByRole("button", { name: "Next card" });
-  await expect(prev).toBeDisabled();
-  await next.click();
-  await expect.poll(() => track(page).evaluate((el) => el.scrollLeft)).toBeGreaterThan(100);
-  await expect(prev).toBeEnabled();
-  await prev.click();
-  await expect.poll(() => track(page).evaluate((el) => el.scrollLeft)).toBeLessThan(10);
+  await page.getByRole("button", { name: "Show 3 more cases" }).click();
+  await expect(stories(page)).toHaveCount(6);
+  await expect(stories(page).nth(3).locator("h3")).toBeFocused();
+  await expect(page.getByRole("button", { name: "Show 3 more cases" })).toHaveCount(0);
 });
 
-test("a card opens 'Take it slow' on a first visit, with what the card settles", async ({ page }) => {
+test("the welcome page links down to the real cases, and they lead back to the ways to answer", async ({
+  page,
+}) => {
   await page.goto("#/");
-  await card(page, "homemaker").getByRole("button", { name: "Start: a homemaker died" }).click();
+  await page.getByRole("link", { name: "Real cases: what families got, and how long it took" }).click();
+  await expect(page).toHaveURL(/#\/$/);
+  await expect(page.locator("#stories")).toBeFocused();
+  await expect(page.locator("#stories-h")).toBeInViewport();
+  await page.getByRole("link", { name: "Work out your own amount" }).click();
+  await expect(page.locator("#choose-h")).toBeFocused();
+});
+
+test("in Hindi the real cases say they are told in English, and the steps are named in Hindi", async ({
+  page,
+}) => {
+  await page.goto("?lang=hi#/");
+  await expect(page.getByTestId("stories-in-english")).toBeVisible();
+  const first = stories(page).first();
+  await expect(first).toContainText("मृत्यु");
+  await expect(first.locator("[data-timeline] li").first()).toContainText("दुर्घटना");
+  await expect(first.locator("[data-timeline]")).toContainText("सुप्रीम कोर्ट");
+  await expect(first.locator("p[lang=en]")).toHaveCount(1);
+});
+
+test("a shared link opens 'Take it slow' on a first visit, with what it settles", async ({ page }) => {
+  await page.goto("#/start/homemaker");
   await expect(page).toHaveURL(/#\/slow\/lang$/);
   await page.locator("[data-slow=lang] button[data-value=en]").click();
   await expect(page).toHaveURL(/#\/slow\/role$/);
@@ -116,49 +193,27 @@ test("a card opens 'Take it slow' on a first visit, with what the card settles",
   await expect(page.locator("[data-chip=employment]")).toHaveCount(0); // asked on a later screen
 });
 
-test("a card opens the way of answering picked last time", async ({ page }) => {
+test("a shared link opens the way of answering picked last time, ready", async ({ page }) => {
   await remembered(page, "all");
-  await page.goto("#/");
-  await card(page, "homemaker").getByRole("button", { name: "Start: a homemaker died" }).click();
+  await page.goto("#/start/homemaker");
   await expect(page).toHaveURL(/#\/all$/);
   await checked(page, "kind", "death");
   await checked(page, "employment", "homemaker");
   await expect(page.locator('[data-question="checks"] input').first()).toBeFocused();
 });
 
-test("each example card shows the engine's amount, and trying it opens that amount", async ({ page }) => {
+test("an example's link opens the engine's own amount for that example", async ({ page }) => {
   await remembered(page, "all");
-  await page.goto("#/");
-  for (const id of ["hurt", "earner", "homemaker"])
-    await expect(card(page, id).getByText("Example · not a real person")).toBeVisible();
-  const amount = await card(page, "hurt").locator("[data-example-amount]").getAttribute("data-amount");
-  expect(Number(amount)).toBeGreaterThan(800_000); // more than the ₹8 lakh offer in Madhur's story
-  await expect(card(page, "hurt")).toContainText("₹8,00,000");
-  await card(page, "hurt").getByRole("button", { name: "Try this example" }).click();
+  await page.goto("#/example/hurt");
   await expect(page).toHaveURL(/#\/all$/);
+  const est = exampleEstimate(situation("hurt"), rules, today())!;
   await expect(page.locator("#result [data-testid=headline] [data-amount]")).toHaveAttribute(
     "data-amount",
-    amount!,
+    String(est.headline!.amount),
   );
+  expect(est.headline!.amount).toBeGreaterThan(800_000); // more than the ₹8 lakh offer in Madhur's story
   await expect(page.locator("#age")).toHaveValue("21");
   await expect(page.locator("#result")).toBeInViewport();
-});
-
-test("trying an example over someone's own answers asks first", async ({ page }) => {
-  await page.goto("#/all");
-  await page.fill("#age", "40");
-  await page.goto("#/");
-  const c = card(page, "earner");
-  await c.getByRole("button", { name: "Try this example" }).click();
-  await expect(c.getByTestId("example-confirm")).toBeVisible();
-  await c.getByRole("button", { name: "Keep my answers" }).click();
-  await expect(c.getByTestId("example-confirm")).toHaveCount(0);
-  await expect(c.getByRole("button", { name: "Try this example" })).toBeFocused();
-  await c.getByRole("button", { name: "Try this example" }).click();
-  await c.getByRole("button", { name: "Use the example" }).click();
-  await expect(page).toHaveURL(/#\/slow\//);
-  await page.goto("#/all");
-  await expect(page.locator("#age")).toHaveValue("34");
 });
 
 /** Some answers given in this tab, as an earlier family's would be. */
@@ -169,15 +224,15 @@ async function answersFromBefore(page: Page) {
   await page.locator("#age").blur();
 }
 
-test("a card's Start over answers from before asks if this is a new case; a new case starts empty", async ({
+test("a shared link over answers from before asks if this is a new case; a new case starts empty", async ({
   page,
 }) => {
   await remembered(page, "all");
   await answersFromBefore(page);
-  await page.goto("#/");
-  const c = card(page, "hurt");
-  await c.getByRole("button", { name: "Start: someone was hurt" }).click();
-  const ask = c.getByTestId("start-confirm");
+  await page.goto("#/start/hurt");
+  await expect(page).toHaveURL(/#\/$/);
+  const ask = page.getByTestId("start-confirm");
+  await expect(ask).toContainText("Hurt, and can’t work like before");
   await expect(ask).toContainText("a death · 30 years old");
   await expect(ask.getByRole("button", { name: /^New case/ })).toBeFocused();
   await ask.getByRole("button", { name: /^New case/ }).click();
@@ -186,13 +241,11 @@ test("a card's Start over answers from before asks if this is a new case; a new 
   await expect(page.locator("#age")).toHaveValue("");
 });
 
-test("a card's Start over answers from before can keep them, for the same case", async ({ page }) => {
+test("a shared link over answers from before can keep them, for the same case", async ({ page }) => {
   await remembered(page, "all");
   await answersFromBefore(page);
-  await page.goto("#/");
-  const c = card(page, "hurt");
-  await c.getByRole("button", { name: "Start: someone was hurt" }).click();
-  await c
+  await page.goto("#/start/hurt");
+  await page
     .getByTestId("start-confirm")
     .getByRole("button", { name: /^Same case/ })
     .click();
@@ -201,18 +254,23 @@ test("a card's Start over answers from before can keep them, for the same case",
   await expect(page.locator("#age")).toHaveValue("30");
 });
 
-test("a shared link opened over answers from before asks first, on its card", async ({ page }) => {
+test("an example's link over answers from before asks first; keeping them changes nothing", async ({
+  page,
+}) => {
   await remembered(page, "all");
   await answersFromBefore(page);
-  await page.goto("#/start/homemaker");
-  await expect(page).toHaveURL(/#\/$/);
-  const start = card(page, "homemaker").getByTestId("start-confirm");
-  await expect(start.getByRole("button", { name: /^New case/ })).toBeFocused();
   await page.goto("#/example/earner");
   await expect(page).toHaveURL(/#\/$/);
-  const example = card(page, "earner").getByTestId("example-confirm");
-  await expect(example.getByRole("button", { name: "Keep my answers" })).toBeFocused();
-  await example.getByRole("button", { name: "Use the example" }).click();
+  const ask = page.getByTestId("example-confirm");
+  await expect(ask).toContainText("Ravi, 34");
+  await expect(ask.getByRole("button", { name: "Keep my answers" })).toBeFocused();
+  await ask.getByRole("button", { name: "Keep my answers" }).click();
+  await expect(ask).toHaveCount(0);
+  await expect(page.locator("#page-title")).toBeFocused();
+  await page.goto("#/all");
+  await expect(page.locator("#age")).toHaveValue("30");
+  await page.goto("#/example/earner");
+  await page.getByTestId("example-confirm").getByRole("button", { name: "Use the example" }).click();
   await expect(page).toHaveURL(/#\/all$/);
   await expect(page.locator("#age")).toHaveValue("34");
 });
@@ -221,8 +279,7 @@ test("an example's answers are marked as the example's in every way, until the p
   page,
 }) => {
   await remembered(page, "all");
-  await page.goto("#/");
-  await card(page, "hurt").getByRole("button", { name: "Try this example" }).click();
+  await page.goto("#/example/hurt");
   await expect(page).toHaveURL(/#\/all$/);
   const notice = page.getByTestId("example-notice");
   await expect(notice).toContainText("Madhur");
@@ -240,41 +297,25 @@ test("an example's answers are marked as the example's in every way, until the p
   await expect(page.locator("#page-title")).toBeFocused();
 });
 
-test("the hit-and-run card opens the hit-and-run guidance, with the scheme's amounts", async ({ page }) => {
+test("the hit-and-run link opens the hit-and-run guidance, with the scheme's amounts", async ({ page }) => {
   await remembered(page, "all");
-  await page.goto("#/");
-  await expect(card(page, "hit-and-run")).toContainText("₹2,00,000");
-  await card(page, "hit-and-run").getByRole("button", { name: "See what to do" }).click();
+  await page.goto("#/start/hit-and-run");
   await checked(page, "vehicleTraced", "no");
   const stop = page.locator('[data-question="checks"] [data-stop="unidentified"]');
   await expect(stop).toBeVisible();
   await expect(stop).toContainText("₹50,000");
+  await expect(stop).toContainText("₹2,00,000");
   // Not the end of every claim: told in amber, with what happens if the vehicle is found later.
   await expect(stop.locator("[data-severity]")).toHaveAttribute("data-severity", "caution");
   await expect(stop).toContainText("If the vehicle is found later, a full claim can be made");
   await expect(page.locator("#result").getByTestId("no-estimate")).toHaveText("What you can claim instead");
 });
 
-test("the offer card explains that the offer check follows the estimate", async ({ page }) => {
+test("the offer link explains that the offer check follows the estimate", async ({ page }) => {
   await remembered(page, "all");
-  await page.goto("#/");
-  await card(page, "offer").getByRole("button", { name: "Check an offer" }).click();
+  await page.goto("#/start/offer");
   await expect(page.getByTestId("offer-hint")).toBeVisible();
   await expect(page.getByTestId("offer-hint")).toBeInViewport();
-});
-
-test("a card's link can be shared: it opens the way of answering ready", async ({ page }) => {
-  await remembered(page, "all");
-  await page.goto("#/start/homemaker");
-  await expect(page).toHaveURL(/#\/all$/);
-  await checked(page, "kind", "death");
-  await checked(page, "employment", "homemaker");
-  // A second link over those answers asks first (tested above); using the example opens it.
-  await page.goto("#/example/earner");
-  await card(page, "earner").getByRole("button", { name: "Use the example" }).click();
-  await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
-  await expect(page.locator("#age")).toHaveValue("34");
-  await expect(page).toHaveURL(/#\/all$/);
 });
 
 test("on a phone the site menu opens in place and closes with Escape", async ({ page }) => {
@@ -375,11 +416,8 @@ test("in Hindi, the cases card says in Hindi why each case is like this one, and
   await expect(cases.locator("[data-why]").first()).toContainText(/also homemaker|same state|similar age/);
 });
 
-test("in Hindi the cards still work", async ({ page }) => {
+test("in Hindi a shared link still works", async ({ page }) => {
   await remembered(page, "all");
-  await page.goto("?lang=hi#/");
-  await expect(card(page, "homemaker")).toContainText("उदाहरण · असली व्यक्ति नहीं");
-  await card(page, "hurt").getByRole("button", { name: "शुरू करें: कोई घायल हुआ" }).click();
-  await radio(page, "kind", "injury");
+  await page.goto("?lang=hi#/start/hurt");
   await checked(page, "kind", "injury");
 });

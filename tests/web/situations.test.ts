@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { estimate } from "../../src/engine/index.js";
@@ -21,27 +21,22 @@ const TODAY = "2026-10-16";
 const copy = (lang: string): Record<string, string> =>
   JSON.parse(readFileSync(join(REPO_ROOT, "web/src/copy", `${lang}.json`), "utf8"));
 
-describe("the 'What happened to your family?' cards", () => {
-  it("are five situations, in this order, each with a photo that ships with the page", () => {
+describe("the situations a shared link can start from", () => {
+  it("are five, in this order", () => {
     expect(SITUATIONS.map((s) => s.id)).toEqual(["hurt", "earner", "homemaker", "offer", "hit-and-run"]);
     expect([...SITUATION_IDS]).toEqual(SITUATIONS.map((s) => s.id));
-    for (const s of SITUATIONS) {
-      expect(s.img, s.id).toMatch(/^img\/situations\/[a-z-]+\.webp$/);
-      expect(existsSync(join(REPO_ROOT, "web/public", s.img)), s.img).toBe(true);
-    }
   });
 
-  it("are worded in English and Hindi", () => {
+  it("are named in English and Hindi, and so is each example's made-up person", () => {
     const en = copy("en");
     const hi = copy("hi");
-    for (const s of SITUATIONS)
-      for (const part of ["title", "line", "cta"]) {
-        expect(en[`sit.${s.id}.${part}`], `${s.id}.${part}`).toBeTruthy();
-        expect(hi[`sit.${s.id}.${part}`], `${s.id}.${part}`).toBeTruthy();
-      }
+    for (const s of SITUATIONS) {
+      expect(en[`sit.${s.id}.title`], s.id).toBeTruthy();
+      expect(hi[`sit.${s.id}.title`], s.id).toBeTruthy();
+    }
     for (const s of SITUATIONS.filter((x) => x.example)) {
-      expect(en[`sit.${s.id}.story`], s.id).toBeTruthy();
-      expect(hi[`sit.${s.id}.story`], s.id).toBeTruthy();
+      expect(en[`sit.${s.id}.who`], s.id).toBeTruthy();
+      expect(hi[`sit.${s.id}.who`], s.id).toBeTruthy();
     }
   });
 

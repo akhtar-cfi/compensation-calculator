@@ -6,13 +6,17 @@ import { marked } from "marked";
 import { loadCases } from "../../src/cases/load.js";
 import { REPO_ROOT, loadRules } from "../../src/rules/load.js";
 import { renderRulesReference } from "../../src/rules/reference.js";
+import { pickStories } from "../src/stories.js";
 
 const out = join(REPO_ROOT, "web", "src", "generated");
 mkdirSync(out, { recursive: true });
 
 const rules = loadRules();
 writeFileSync(join(out, "rules.json"), JSON.stringify(rules));
-writeFileSync(join(out, "cases.json"), JSON.stringify(loadCases()));
+const cases = loadCases();
+writeFileSync(join(out, "cases.json"), JSON.stringify(cases));
+// The start page's real stories on their own: a few kilobytes, not the whole library, on a family's first visit.
+writeFileSync(join(out, "stories.json"), JSON.stringify(pickStories(cases)));
 
 // Links between the docs become in-page routes; links out open in a new tab.
 const ROUTES: Record<string, string> = {

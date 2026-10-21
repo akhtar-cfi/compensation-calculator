@@ -43,7 +43,9 @@ for (const [mode, fill] of Object.entries(FILL))
         await expect(page.locator(`[data-head=${h.id}]`)).toHaveAttribute("data-amount", String(h.amount));
         if (h.worked) await expect(page.locator(`[data-head=${h.id}] [data-worked]`)).toHaveText(h.worked);
       }
-      for (const w of est.warnings) await expect(page.locator(`[data-code=${w.code}]`)).toHaveCount(1);
+      // Every caution is shown, except the rules' review status (kept for the command line, not the page).
+      for (const w of est.warnings)
+        await expect(page.locator(`[data-code=${w.code}]`)).toHaveCount(w.code === "RULE_UNVERIFIED" ? 0 : 1);
       if (est.practiceSpread)
         await expect(page.getByTestId("spread")).toContainText(`${est.practiceSpread.n}`);
       expect(outside, "requests outside the page's own origin").toEqual([]);

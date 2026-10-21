@@ -1,10 +1,9 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { ChevronDown, Copy, Printer, Share2, Square } from "lucide-preact";
-import type { JourneySummary } from "../../../src/cases/match.js";
 import type { Case } from "../../../src/cases/schema.js";
-import { formatINR } from "../../../src/engine/money.js";
-import { useT } from "../i18n";
+import { formatINR, formatLakh } from "../../../src/engine/money.js";
+import { useApprox, useT } from "../i18n";
 import { btnOutline } from "./ui";
 
 /** The one headline figure: lakh/crore first (how families talk about money), the exact amount below. */
@@ -96,24 +95,55 @@ export function Checklist(props: { items: string[]; testId?: string }) {
   );
 }
 
-/** A real case's journey as a vertical timeline: each step, its year and amount. */
-export function CaseTimeline(props: { c: Case; summary: JourneySummary }) {
+/**
+ * A real case's journey as a vertical timeline: the year of the accident, then each step with its year and amount
+ * in lakh/crore, as judgments quote them. The step where it ended stands out.
+ */
+export function CaseTimeline(props: { c: Case }) {
   const t = useT();
+  const approx = useApprox();
   const steps = props.c.journey;
+  const year = props.c.facts.accident_date?.slice(0, 4);
+  const rows = [
+    ...(year ? [{ label: t("story.accident"), year, amount: undefined, end: false }] : []),
+    ...steps.map((s, i) => ({
+      label: t(`forum.${s.forum}`),
+      year: s.date?.slice(0, 4),
+      amount: s.amount,
+      end: i === steps.length - 1,
+    })),
+  ];
   return (
-    <ol class="mt-4 grid gap-0" aria-label={t("res.cases.step")}>
-      {steps.map((s, i) => (
-        <li key={i} class="relative flex gap-3 pb-3 last:pb-0">
+    <ol class="mt-4 grid gap-0" aria-label={t("story.journey")} data-timeline="">
+      {rows.map((r, i) => (
+        <li
+          key={i}
+          class="relative flex gap-3 pb-3 last:pb-0"
+          data-step={r.amount === undefined ? "accident" : ""}
+        >
           <span aria-hidden="true" class="relative flex w-3 justify-center">
-            <span class="mt-1.5 h-2.5 w-2.5 rounded-full bg-brand" />
-            {i < steps.length - 1 && <span class="absolute top-4 bottom-0 w-px bg-border" />}
+            <span
+              class={`mt-1.5 h-2.5 w-2.5 rounded-full ${
+                r.amount === undefined ? "border-2 border-muted-foreground bg-card" : "bg-brand"
+              }`}
+            />
+            {i < rows.length - 1 && <span class="absolute top-4 bottom-0 w-px bg-border" />}
           </span>
           <span class="flex flex-1 flex-wrap items-baseline justify-between gap-x-3 text-sm">
             <span class="text-muted-foreground">
-              {t(`forum.${s.forum}`)}
-              {s.date ? ` (${s.date.slice(0, 4)})` : ""}
+              {r.label}
+              {r.year ? ` (${r.year})` : ""}
             </span>
-            <span class="font-semibold text-foreground">{formatINR(s.amount)}</span>
+            {r.amount !== undefined && (
+              <span
+                class={
+                  r.end ? "font-heading text-base font-bold text-brand" : "font-semibold text-foreground"
+                }
+                data-amount={r.amount}
+              >
+                {approx(formatLakh(r.amount))}
+              </span>
+            )}
           </span>
         </li>
       ))}
