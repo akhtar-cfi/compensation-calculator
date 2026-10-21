@@ -283,7 +283,7 @@ test("once the claim and the work are known, it says how many real cases are lik
 
 test("the offer check works from the amount", async ({ page }) => {
   await fillSlow(page, salaried, { details: false });
-  await page.getByRole("link", { name: "Check an insurance offer against this estimate" }).click();
+  await page.getByRole("link", { name: "Check an insurer's offer" }).click();
   await page.fill("#offer-amount", "10,00,000");
   await page.getByRole("button", { name: "Check the offer" }).click();
   const c = checkOffer(expected(salaried), 1_000_000, {

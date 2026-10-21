@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ListChecks, Scale, SlidersHorizontal } from "lucide-preact";
+import { ArrowLeft, ArrowRight, ListChecks, Scale } from "lucide-preact";
 import { useLayoutEffect, useMemo, useState } from "preact/hooks";
 import { countSimilar } from "../../../../src/cases/match.js";
 import { formatApprox } from "../../../../src/engine/money.js";
@@ -239,6 +239,52 @@ export function Slow(props: ModeProps) {
   const left = remaining(f, v, today);
   const queue = refineQueue(f, seen);
 
+  /* --------------------------------------------- the answers so far -------------------------------------------- */
+
+  // Each answer given so far as a chip: tap one to change it, then come back here. Under the question (or the
+  // amount), so the question itself comes first.
+  const chips =
+    place.type === "screen" || place.type === "refine" || place.type === "amount"
+      ? onPath(f)
+          .filter((s) => place.type !== "screen" || onPath(f).indexOf(s) < onPath(f).indexOf(place.id))
+          .flatMap((s) => screenFields(s, f))
+          .filter((k) => rawAnswer(f, k) !== "" && answered(f, v, k, ctx))
+      : [];
+  const strip = chips.length > 0 && (
+    <nav aria-label={t("slow.answers")} class="no-print mt-5">
+      <p class="mb-1.5 flex items-center justify-between text-xs font-medium text-muted-foreground">
+        {t("slow.answers")}
+        <a
+          href="#/slow/review"
+          class="inline-flex min-h-11 items-center px-1 text-brand underline underline-offset-4"
+        >
+          {t("slow.seeAll")}
+        </a>
+      </p>
+      <ul class="no-scrollbar relative -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+        {chips.map((k) => (
+          <li key={k} class="shrink-0">
+            <a
+              href={placeHref({ type: "screen", id: SCREEN_OF[k]! })}
+              data-chip={k}
+              onClick={() => setTimeout(() => setReturnTo(place))}
+              class="inline-flex min-h-11 max-w-56 items-center rounded-full border border-brand-line bg-background px-3.5 text-sm font-medium text-foreground hover:border-brand"
+            >
+              <span class="truncate">
+                {STRIP[k] && `${t(STRIP[k])}: `}
+                {answerText(f, k, t, { lang, occupations: rules.occupations.occupations })}
+              </span>
+              <span class="sr-only">
+                {" "}
+                · {t("check.change")} {t(askKey(k, f))}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+
   /* ------------------------------------------------ the screens ----------------------------------------------- */
 
   let body;
@@ -422,23 +468,21 @@ export function Slow(props: ModeProps) {
           parentsAssumed={parentsAssumed(computed, today)}
           onMissing={() => undefined}
           moreHref={queue[0] ? placeHref({ type: "refine", id: queue[0] }) : null}
+          moreLabel={t("slow.more", { n: queue.length })}
           example={props.example}
           unsure={unsureChecks(f)}
           form={f}
         />
-        <div class="mt-5 grid gap-3 sm:grid-cols-2">
-          {queue.length > 0 && (
-            <a href={placeHref({ type: "refine", id: queue[0]! })} data-action="refine" class={pillPrimary}>
-              <SlidersHorizontal aria-hidden="true" class="h-4 w-4" />
-              {t("slow.more", { n: queue.length })}
-            </a>
-          )}
-          <a href="#/slow/review" data-action="review" class={pillOutline}>
+        {strip}
+        <div class="no-print mt-3 flex flex-wrap items-center gap-x-4">
+          <a
+            href="#/slow/review"
+            data-action="review"
+            class="inline-flex min-h-11 items-center gap-1.5 px-2 text-sm font-medium text-brand underline underline-offset-4 hover:no-underline"
+          >
             <ListChecks aria-hidden="true" class="h-4 w-4" />
             {t("check.title")}
           </a>
-        </div>
-        <div class="mt-3">
           <Restart class={quietBtn} onRestart={startAgain} />
         </div>
         {computed && R && (
@@ -454,13 +498,6 @@ export function Slow(props: ModeProps) {
   /* ------------------------------------------------- the frame ------------------------------------------------ */
 
   const back = previous(f, place);
-  const chips =
-    place.type === "screen" || place.type === "refine" || place.type === "amount"
-      ? onPath(f)
-          .filter((s) => place.type !== "screen" || onPath(f).indexOf(s) < onPath(f).indexOf(place.id))
-          .flatMap((s) => screenFields(s, f))
-          .filter((k) => rawAnswer(f, k) !== "" && answered(f, v, k, ctx))
-      : [];
   const kind =
     place.type === "screen"
       ? `screen:${place.id}`
@@ -507,40 +544,6 @@ export function Slow(props: ModeProps) {
               )}
             </div>
           )}
-          {chips.length > 0 && (
-            <nav aria-label={t("slow.answers")} class="no-print mb-4">
-              <p class="mb-1.5 flex items-center justify-between text-xs font-medium text-muted-foreground">
-                {t("slow.answers")}
-                <a
-                  href="#/slow/review"
-                  class="inline-flex min-h-11 items-center px-1 text-brand underline underline-offset-4"
-                >
-                  {t("slow.seeAll")}
-                </a>
-              </p>
-              <ul class="no-scrollbar relative -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
-                {chips.map((k) => (
-                  <li key={k} class="shrink-0">
-                    <a
-                      href={placeHref({ type: "screen", id: SCREEN_OF[k]! })}
-                      data-chip={k}
-                      onClick={() => setTimeout(() => setReturnTo(place))}
-                      class="inline-flex min-h-11 max-w-56 items-center rounded-full border border-brand-line bg-background px-3.5 text-sm font-medium text-foreground hover:border-brand"
-                    >
-                      <span class="truncate">
-                        {STRIP[k] && `${t(STRIP[k])}: `}
-                        {answerText(f, k, t, { lang, occupations: rules.occupations.occupations })}
-                      </span>
-                      <span class="sr-only">
-                        {" "}
-                        · {t("check.change")} {t(askKey(k, f))}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )}
           {/* The amount is already a card of its own (with the case journeys and details after it): no frame. */}
           <div
             key={href}
@@ -552,6 +555,7 @@ export function Slow(props: ModeProps) {
           >
             {body}
           </div>
+          {place.type !== "amount" && strip}
           {place.type === "screen" &&
             similar > 0 &&
             onPath(f).indexOf(place.id) > onPath(f).indexOf("work") && (

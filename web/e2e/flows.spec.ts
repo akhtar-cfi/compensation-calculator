@@ -175,7 +175,7 @@ test("the amount says when some of its usual positions are not Supreme Court rul
   const rider = examples().find((e) => e.name === "injury-delivery-rider.yaml")!.input;
   await fillForm(page, rider);
   await expect(page.locator("#result").getByTestId("basis")).toContainText("not Supreme Court rulings");
-  await expect(page.locator("#result [data-scenario=standard] dt")).toHaveText("Standard");
+  await expect(page.locator("[data-disclosure=sure] [data-scenario=standard] dt")).toHaveText("Standard");
   await expect(page.locator("[data-disclosure=swing] [data-basis=functional_pct]")).toContainText(
     "Delhi tribunal practice",
   );
@@ -295,6 +295,26 @@ test("in Hindi, the cautions are in Hindi too", async ({ page }) => {
   const note = page.locator("#warn-INJURY_EXPERIMENTAL");
   await expect(note).toContainText("प्रायोगिक");
   await expect(note.locator('[lang="en"]')).toHaveCount(0);
+});
+
+test("a caution named under the amount opens in full, and so does how sure the amount is", async ({
+  page,
+}) => {
+  const { input } = examples().find((e) => e.name === "injury-delivery-rider.yaml")!;
+  await fillForm(page, input);
+  const link = page.locator('#result a[href^="#warn-"]').first();
+  const id = (await link.getAttribute("href"))!.slice(1);
+  const caution = page.locator(`[id="${id}"]`);
+  await expect(caution).toBeHidden(); // folded away under "Cautions, in full"
+  await link.click();
+  await expect(caution).toBeVisible();
+  await expect(caution).toBeFocused();
+  await expect(page.locator("[data-disclosure=warnings] h3 button")).toHaveAttribute("aria-expanded", "true");
+  await page.locator("#result").getByRole("link", { name: "How sure is this?" }).click();
+  const sure = page.locator("[data-disclosure=sure] h3 button");
+  await expect(sure).toHaveAttribute("aria-expanded", "true");
+  await expect(sure).toBeFocused();
+  await expect(page.getByTestId("range")).toBeVisible();
 });
 
 test("older addresses open the one-page calculator at the matching place", async ({ page }) => {

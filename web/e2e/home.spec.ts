@@ -386,18 +386,24 @@ test("facts carry their sources, and help is one tap away", async ({ page }) => 
   await expect(footer).toContainText("not legal advice");
 });
 
-test("with an estimate on the one page, cases like yours come right after it", async ({ page }) => {
+test("with an estimate on the one page, everything after it comes in one order", async ({ page }) => {
   await remembered(page, "all");
   await page.goto("#/example/homemaker");
   const cases = page.getByTestId("cases-card");
   await expect(cases.getByRole("heading", { name: "Cases like yours" })).toBeVisible();
   await expect(cases.locator("[data-case]").first()).toBeVisible();
-  // Directly under the estimate, before the optional details.
+  // The estimate, the details that narrow it, cases like it, the offer check, then the rest.
   const order = await page.evaluate(() =>
-    ["result", "cases", "more"].map((id) => document.getElementById(id)!.getBoundingClientRect().top),
+    ["result", "more", "cases", "offer", "details"].map(
+      (id) => document.getElementById(id)!.getBoundingClientRect().top,
+    ),
   );
-  expect(order[0]).toBeLessThan(order[1]!);
-  expect(order[1]).toBeLessThan(order[2]!);
+  for (let i = 1; i < order.length; i++) expect(order[i - 1]).toBeLessThan(order[i]!);
+  // Two cases first, the rest on request.
+  await expect(cases.locator("[data-case]")).toHaveCount(2);
+  await cases.getByRole("button", { name: /^Show \d more$/ }).click();
+  await expect(cases.locator("[data-case]")).toHaveCount(3);
+  await expect(cases.locator("[data-case] h3").nth(2)).toBeFocused();
 });
 
 test("in Hindi, the cases card says in Hindi why each case is like this one, and that the stories are in English", async ({

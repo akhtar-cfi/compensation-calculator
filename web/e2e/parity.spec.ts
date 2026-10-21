@@ -55,7 +55,7 @@ for (const [mode, fill] of Object.entries(FILL))
 test("offer check matches checkOffer()", async ({ page }) => {
   const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
   await fillForm(page, input);
-  await page.getByRole("link", { name: "Check an insurance offer against this estimate" }).click();
+  await page.getByRole("link", { name: "Check an insurer's offer" }).click();
   await page.fill("#offer-amount", "10,00,000");
   await page.getByRole("button", { name: "Check the offer" }).click();
   const c = checkOffer(expected(input), 1_000_000, {

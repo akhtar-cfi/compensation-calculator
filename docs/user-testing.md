@@ -26,7 +26,7 @@ they find, then test again with five new people.
 
 ## Setup
 
-- The page link (it is a draft: the banner says so).
+- The page link. Tell each person that its rules are not yet signed off by the legal reviewers (the page no longer carries a draft banner).
 - The person's own phone if possible; otherwise an Android phone about 360 px wide. Clear the browser tab between
   people (or tap "Start again").
 - A stopwatch, the score sheet, and the scenario cards printed on separate slips, in English and Hindi.

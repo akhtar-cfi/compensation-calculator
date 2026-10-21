@@ -223,22 +223,26 @@ test("the estimate says how the last change moved it", async ({ page }) => {
   await expect(page.locator("#result").getByTestId("change")).toContainText("Up ₹");
 });
 
-test("on a laptop, a short summary of the estimate stays in view beside the questions", async ({ page }) => {
+test("on a laptop there is one column, and the bar at the bottom shows the estimate while it is out of view", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await fillForm(page, salaried());
-  // At the top of the questions, and below the website's header (which stays at the top from a tablet up).
+  // Nothing beside the questions: the estimate comes under them, in the same column.
+  const form = (await page.locator("#calc form").first().boundingBox())!;
+  const result = (await page.locator("#result").boundingBox())!;
+  expect(Math.abs(result.x - form.x)).toBeLessThanOrEqual(2); // the same left edge, give or take a border
+  expect(result.y).toBeGreaterThan(form.y + form.height);
   await page.evaluate(() => document.getElementById("calc")!.scrollIntoView());
-  const rail = page.getByTestId("rail");
-  await expect(rail).toBeInViewport();
-  await expect(rail).toContainText("₹");
-  const box = (await rail.boundingBox())!;
-  expect(box.height).toBeLessThan(700);
-  await expect(page.getByTestId("bottom-bar")).toBeHidden();
+  const bar = page.getByTestId("bottom-bar");
+  await expect(bar).toContainText("₹");
+  await bar.getByRole("button").click();
+  await expect(page.locator("#result [data-testid=headline]")).toBeInViewport();
 });
 
 test("the offer check gives a plain answer and follows changed assumptions", async ({ page }) => {
   await fillForm(page, salaried());
-  await page.getByRole("link", { name: "Check an insurance offer against this estimate" }).click();
+  await page.getByRole("link", { name: "Check an insurer's offer" }).click();
   await expect(page.locator("#offer-amount")).toBeFocused();
   await page.keyboard.type("10,00,000");
   await page.getByRole("button", { name: "Check the offer" }).click();

@@ -2,7 +2,6 @@ import type { ComponentChildren } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ArrowDown, ArrowUp, Check, ChevronDown, SlidersHorizontal } from "lucide-preact";
 import type { EstimateInput, EstimateOutput } from "../../../src/engine/types.js";
-import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { setAnswer } from "../answers";
 import { focusField, focusTarget } from "../focus";
 import { Card, Notice, linkCls, wrap } from "../components/ui";
@@ -178,7 +177,7 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
       class="border-t border-border bg-subtle outline-none"
     >
       <div class={`${wrap} py-8 md:py-12`}>
-        <div class="mx-auto w-full max-w-3xl lg:max-w-6xl">
+        <div class="mx-auto w-full max-w-3xl">
           <p class="hidden font-heading text-xl font-bold text-foreground print:block">{t("app.name")}</p>
           {complete && (
             <p class="mt-2 hidden text-sm text-muted-foreground print:block">{t("calc.printNote")}</p>
@@ -214,8 +213,9 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
             )}
           </div>
 
-          {/* One column; from a laptop width up, a slim summary stays in view beside it. */}
-          <div class="mt-4 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start lg:gap-8">
+          {/* One column at every width, in one order: the questions, the estimate, the details that narrow it, cases
+              like it, then the offer check and the rest. A bar at the bottom shows the amount while it is out of view. */}
+          <div class="mt-4">
             <div class="grid min-w-0 grid-cols-1 gap-6">
               {/* 1. The quick estimate */}
               <Card class="no-print overflow-hidden">
@@ -302,6 +302,7 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
                   example={props.example}
                   unsure={unsureChecks(f)}
                   form={f}
+                  moreHref={!stop && groups.length > 0 ? "#more" : null}
                 />
                 <p class="sr-only" aria-live="polite">
                   {announce}
@@ -310,9 +311,6 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
 
               {/* 2a. Full detail: the points courts differ on, and the amount with your own choices */}
               {props.detail && complete && props.computed && props.detail(props.computed)}
-
-              {/* 2b. Real cases like this one */}
-              {complete && props.computed && R && <R.CasesCard input={props.computed.input} />}
 
               {/* 3. Make it more accurate */}
               {!stop && groups.length > 0 && (
@@ -357,7 +355,10 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
                 </Card>
               )}
 
-              {/* 4. The details */}
+              {/* 4. Real cases like this one */}
+              {complete && props.computed && R && <R.CasesCard input={props.computed.input} />}
+
+              {/* 5. The offer check, then the details */}
               {complete && props.computed && R && (
                 <R.ResultDetails
                   input={props.computed.input}
@@ -366,16 +367,6 @@ export function Estimator(props: ModeProps & { detail?: (c: Computed) => Compone
                 />
               )}
             </div>
-            <aside aria-label={t("sum.rail")} class="no-print hidden lg:sticky lg:top-24 lg:block">
-              <SummaryRail
-                est={complete ? props.computed?.est : undefined}
-                stop={stop}
-                progress={{ done, total }}
-                missing={missing}
-                change={complete ? change : undefined}
-                onMissing={goTo}
-              />
-            </aside>
           </div>
         </div>
       </div>
@@ -469,96 +460,8 @@ function useSettled(value: string, ms: number): string {
 }
 
 /**
- * From a laptop width up: a slim summary beside the questions, so the number stays in view while answers change.
- * Short by design (never taller than a 720 px screen): the full estimate is in the column.
- */
-function SummaryRail(props: {
-  est?: EstimateOutput | undefined;
-  stop?: string | undefined;
-  progress: { done: number; total: number };
-  missing: { id: FieldName; label: string; invalid: boolean }[];
-  change?: { from: number; to: number } | undefined;
-  onMissing: (id: FieldName) => void;
-}) {
-  const t = useT();
-  const approx = useApprox();
-  const { est } = props;
-  const link = "text-sm font-medium text-brand underline underline-offset-4 hover:no-underline";
-  return (
-    <div class="rounded-xl border border-border bg-card p-5 shadow-sm" data-testid="rail">
-      <p class="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{t("sum.title")}</p>
-      {props.stop ? (
-        <>
-          <p class="mt-2 font-heading text-lg font-bold text-foreground">{t("res.none")}</p>
-          <a href="#result" class={`mt-3 inline-block ${link}`}>
-            {t("bar.why")}
-          </a>
-        </>
-      ) : est?.headline && est.range ? (
-        <>
-          <p class="mt-2 font-heading text-3xl font-bold tracking-tight text-brand">
-            {approx(est.headline.approx)}
-          </p>
-          <p class="text-sm font-semibold text-foreground">{formatINR(est.headline.amount)}</p>
-          {props.change && <ChangeLine change={props.change} class="mt-1" />}
-          <p class="mt-3 text-xs text-muted-foreground">
-            {t("rail.range", {
-              lo: approx(formatApprox(est.range.conservative)),
-              hi: approx(formatApprox(est.range.claimantMax)),
-            })}
-          </p>
-          <div class="mt-4 grid gap-2 border-t border-border pt-4">
-            <a href="#result" class={link}>
-              {t("rail.read")}
-            </a>
-            <a href="#details" class={link}>
-              {t("rail.how")}
-            </a>
-            <a href="#offer-amount" class={link}>
-              {t("rail.offer")}
-            </a>
-          </div>
-        </>
-      ) : (
-        <>
-          <p class="mt-2 text-sm font-semibold text-foreground">
-            {t("quick.progress", { done: props.progress.done, total: props.progress.total })}
-          </p>
-          <div aria-hidden="true" class="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-            <div
-              class="h-full rounded-full bg-brand transition-[width] duration-300 motion-reduce:transition-none"
-              style={{
-                width: `${Math.round((props.progress.done / Math.max(1, props.progress.total)) * 100)}%`,
-              }}
-            />
-          </div>
-          {props.missing.length > 0 && (
-            <ul class="mt-3 grid gap-1">
-              {props.missing.slice(0, 3).map((m) => (
-                <li key={m.id}>
-                  <a
-                    href={`#${m.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      props.onMissing(m.id);
-                    }}
-                    class={link}
-                  >
-                    {m.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
-/**
- * On a phone or tablet, once there is an estimate (or a stop), a slim bar at the bottom shows it while the estimate
- * itself is out of view. It hides while a box or list has focus (the keyboard or picker is open), not for choices:
+ * Once there is an estimate (or a stop), a slim bar at the bottom shows it while the estimate itself is out of view,
+ * at every width. It hides while a box or list has focus (the keyboard or picker is open), not for choices:
  * the page keeps room under a focused answer for it, so it never covers one.
  */
 function BottomBar(props: {
@@ -621,7 +524,7 @@ function BottomBar(props: {
     document.getElementById("result")?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
     <div
-      class={`no-print fixed inset-x-0 bottom-0 z-10 ${settled ? "" : "pointer-events-none"} border-t border-border bg-background/95 px-4 py-2 shadow-[0_-4px_12px_rgba(2,6,23,0.06)] backdrop-blur lg:hidden`}
+      class={`no-print fixed inset-x-0 bottom-0 z-10 ${settled ? "" : "pointer-events-none"} border-t border-border bg-background/95 px-4 py-2 shadow-[0_-4px_12px_rgba(2,6,23,0.06)] backdrop-blur`}
       data-testid="bottom-bar"
     >
       <div class="mx-auto flex max-w-3xl items-center justify-between gap-3">

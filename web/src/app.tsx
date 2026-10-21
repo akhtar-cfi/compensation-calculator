@@ -167,19 +167,31 @@ export function App() {
     return () => removeEventListener("scroll", onScroll);
   }, []);
 
-  // In-page links (#main, #offer, a heading in the documents) must not be read as a change of page.
+  // In-page links (#main, #offer, a heading in the documents) must not be read as a change of page. A link to a
+  // folded section ("#sure"), or to something inside one (a caution, "#warn-…"), opens it first.
   useLayoutEffect(() => {
     const onClick = (e: MouseEvent) => {
       const a = (e.target as Element | null)?.closest?.("a");
       const h = a?.getAttribute("href");
       if (!a || !h || !h.startsWith("#") || h.startsWith("#/") || e.defaultPrevented) return;
       e.preventDefault();
-      const el = document.getElementById(decodeURIComponent(h.slice(1)));
-      if (el) {
-        if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+      const id = decodeURIComponent(h.slice(1));
+      const section = document.querySelector<HTMLElement>(`[data-disclosure="${CSS.escape(id)}"]`);
+      const el = document.getElementById(id) ?? section?.querySelector<HTMLElement>("button");
+      if (!el) return;
+      const toggle = el
+        .closest("[data-disclosure]")
+        ?.querySelector<HTMLButtonElement>("h3 > button[aria-expanded=false]");
+      toggle?.click();
+      const go = () => {
+        if (!el.hasAttribute("tabindex") && !el.matches("button, a, input, select, textarea"))
+          el.setAttribute("tabindex", "-1");
         el.focus({ preventScroll: true });
         el.scrollIntoView({ block: "start" });
-      }
+      };
+      // An opened section shows its contents on the next frames.
+      if (toggle) requestAnimationFrame(() => requestAnimationFrame(go));
+      else go();
     };
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);

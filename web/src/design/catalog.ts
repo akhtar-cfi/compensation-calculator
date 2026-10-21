@@ -60,7 +60,14 @@ export const EVIDENCE: { finding: string; source: string; consequence: string }[
       "Four story-card hero options were compared on a design canvas; the CFI team chose a simple hero that says what the tool does, followed by 'What happened to your family?' cards that scroll sideways and carry example stories. The page is to be hosted on crashfreeindia.org.",
     source: "CFI review of the round 4 canvas, 16 Oct 2026",
     consequence:
-      "A short hero, situation cards that start the calculator in the right place (three with a worked example, labelled as made up), and the website's own header, footer and 'Need help?' band around the calculator.",
+      "A short hero, situation cards that start the calculator in the right place (three with a worked example, labelled as made up), and the website's own header, footer and 'Need help?' band around the calculator. (Replaced after the review of 21 Oct, below.)",
+  },
+  {
+    finding:
+      "On the preview, the CFI team asked for the first screen to be one slightly translucent page covering the whole screen, with the details and, below them, the four ways to answer as buttons with a line each; no draft notices; real cases with the claim amounts and the timeline instead of made-up stories, which were also cut off at the edge of the screen; and simpler placement on the calculator screens.",
+    source: "CFI review of the team preview, 21 Oct 2026",
+    consequence:
+      "A full-screen welcome page; six real cases told whole in a grid; one order after every estimate in all four ways, with the details folded; no panel beside the questions on a laptop.",
   },
   {
     finding:
@@ -86,15 +93,15 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "One question at a time, without the old drawbacks",
-    body: "In 'Take it slow' a tap on a choice moves on by itself (typed answers need Continue); a follow-up appears on the same screen; a meter says how many steps are left and only goes down; the amount comes straight after the last required answer, and optional details follow one at a time, each saying how it moved the amount. Every answer stays in reach as a chip at the top, and the phone's back gesture steps back one question.",
+    body: "In 'Take it slow' a tap on a choice moves on by itself (typed answers need Continue); a follow-up appears on the same screen; a meter says how many steps are left and only goes down; the amount comes straight after the last required answer, and optional details follow one at a time, each saying how it moved the amount. Every answer stays in reach as a chip under the question, and the phone's back gesture steps back one question.",
   },
   {
-    title: "Start from your situation",
-    body: "The first screen says what the tool does in one line and five short points, then asks 'What happened to your family?' with one card per situation. A card answers what it settles (an injury, a death, a homemaker, a vehicle never found) and moves the focus to the next question; its link can be sent to a family and opens the calculator the same way.",
+    title: "A welcome page, then real cases",
+    body: "The first screen is one translucent page covering the whole screen: what the tool does, what you can find out, then the four ways to answer as buttons, each with one line on what it is like. Below it, real cases from public judgments (names left out) are told whole: the story, the amount at each step, and the years it took.",
   },
   {
     title: "Examples are labelled, and worked out live",
-    body: "An example story is always marked 'Example · not a real person'. Its amount is not typed into the page: the engine works it out from the example's answers on the day it is shown, so a card can never quote a stale figure. Real cases are shown separately, from public judgments, with names left out.",
+    body: "A link for a family can open a worked example (#/example/…); it is always marked as the example's, never the family's own, and its amount is worked out by the engine from the example's answers on the day it is opened. Real cases are never made up: they come from the case library, with a link to each judgment.",
   },
   {
     title: "Quick estimate first",
@@ -102,11 +109,11 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "One column, one path",
-    body: "Steps, then the estimate, then the details, top to bottom on every screen size. An answer shows or hides only what depends on it, in place. Nothing sits beside the form, and nothing scrolls inside its own box.",
+    body: "Steps, then the estimate, then the details, top to bottom on every screen size. An answer shows or hides only what depends on it, in place. Nothing sits beside the form, and nothing scrolls inside its own box. After every estimate, in all four ways, the same order: the estimate card, the details that narrow it (on the one page), cases like it, the offer check, 'More about this estimate' (folded sections), and what to do next.",
   },
   {
     title: "The estimate updates as you go",
-    body: "As soon as the quick steps are answered, the amount, its range and how far real awards land appear under them and change with every answer. Until then the estimate card says how many answers are left and links to the first three.",
+    body: "As soon as the quick steps are answered, the amount and its range appear under them and change with every answer. Until then the estimate card says how many answers are left and links to the first three.",
   },
   {
     title: "The right control for each answer",
@@ -255,37 +262,37 @@ export const COMPONENTS: ComponentSpec[] = [
     ],
   },
   {
-    name: "Hero",
+    name: "Welcome page",
     file: "pages/Home.tsx",
-    use: "The first screen. Left: one headline, one line on what the tool shows, the four ways to answer, and what you can find out (five short lines, 'How cases like yours went' picked out). Right: the situation cards.",
-    avoid: "Statistics and long explanations (facts come further down).",
+    use: "The first screen: one translucent sheet over a photo of claim papers, covering the whole screen, with the headline, one line on what the tool shows, what you can find out (five short lines, 'How cases like yours went' picked out), then the four ways to answer.",
+    avoid: "Statistics and long explanations (facts come further down); a pop-up the person has to close.",
     rules: [
       "The headline is the page's only h1.",
-      "The four ways to answer are on the first screen at 360 × 740 and at 1280 × 720, in English and in Hindi (tested).",
-      "On a phone the order is headline, ways to answer, cards, then what you can find out.",
+      "The ways to answer come after the details. At 1280 × 720 and 1366 × 768 all four are on the first screen, in English and in Hindi; on a 360 × 740 phone the first one is (tested).",
+      "On a phone, what you can find out shows its five names only, two to a row (one when the phone's text is set large).",
+      "A link under the buttons leads down to the real cases.",
+      "A family's link opened over earlier answers asks here first: a new case, or the same one (or, for an example, whether to replace them).",
     ],
   },
   {
     name: "Ways to answer",
     file: "pages/Home.tsx",
-    use: "'How would you like to do this?': four tiles, each a small drawing of its screen, its name and a few words, plus 'Not sure? Start the easy way' (Take it slow).",
+    use: "'How would you like to do this?': four buttons, each a small drawing of its screen, its name and one line on what it is like, plus 'Not sure? Start the easy way' (Take it slow).",
     avoid: "Pre-choosing for the person, or remembering anything but which way was picked.",
     rules: [
-      "Each tile is a link to that way's own address; picking one is remembered on this phone and marked 'Last time' on the next visit.",
-      "#/choose brings the tiles into view with the focus on their heading.",
+      "Each button is a link to that way's own address; picking one is remembered on this phone and marked 'Last time' on the next visit.",
+      "#/choose brings the buttons into view with the focus on their heading.",
     ],
   },
   {
-    name: "Situation cards",
-    file: "pages/Home.tsx",
-    use: "'What happened to your family?': one card per situation, each a door into the calculator; three carry a worked example with the engine's amount.",
-    avoid: "Moving by themselves, or an example without its 'not a real person' label.",
+    name: "Real cases",
+    file: "pages/StoryList.tsx",
+    use: "Below the welcome page: six real cases from the case library (picked in stories.ts), each told whole as a case card.",
+    avoid: "Made-up stories; text cut off; a row that scrolls sideways.",
     rules: [
-      "A row that scrolls sideways with snap points; the next card always peeks in. Arrows from a tablet up, swipe on a phone.",
-      "The photo is decorative (alt text empty): the title says what the card is.",
-      "'Start' answers what the card settles, keeps every other answer, and opens the way of answering picked last time (Take it slow on a first visit); 'Try this example' asks first when there are answers to replace.",
-      "Nothing moves by itself: the row moves only when swiped or when its arrows are pressed.",
-      "Each card has a link that can be shared (#/start/… and #/example/…).",
+      "A grid: one column on a phone, two on a tablet, three on a wide screen. Three show first; 'Show 3 more cases' adds the rest and moves the focus to the first new one.",
+      "Picked for range (a death and an injury, an offer refused, a child, work with and without proof of income, several states), and checked by a test: each has the accident date, at least two steps and a dated last step.",
+      "Their own small file, fetched after the welcome page.",
     ],
   },
   {
@@ -416,9 +423,10 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Estimate card",
     file: "pages/ResultSummary.tsx",
-    use: "The live summary, right under the quick steps: answers left, or the amount, range, how far real awards land and links to the details and the offer check.",
-    avoid: "Long explanations (they are in the details below).",
+    use: "The live summary, right under the quick steps: answers left, or the amount, one line on its range (with 'How sure is this?'), what decides whether it applies, the cautions to read, and two buttons (make it more accurate; check an insurer's offer), then share and print.",
+    avoid: "Long explanations and tables (they are under 'More about this estimate').",
     rules: [
+      "The same card in all four ways of answering.",
       "In the page's single column on every screen size; never a panel with its own scroll.",
       "Lakh / crore first in the CFI blue, the exact amount below, one line on what it means.",
       "Announced once to screen readers when ready ('Estimate ready: ₹53 lakh'), without moving the focus.",
@@ -427,7 +435,7 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Bottom bar",
     file: "pages/Estimator.tsx",
-    use: "Once there is an estimate (or a stop), a slim bar showing it while the estimate card is out of view, with a button to it.",
+    use: "Once there is an estimate (or a stop), a slim bar showing it while the estimate card is out of view, with a button to it, at every width (it replaces the panel that sat beside the questions on a laptop).",
     avoid: "Before there is anything to show.",
     rules: [
       "Hidden while any answer has focus and while the estimate card is on screen; the page keeps room under a focused answer for it.",
@@ -440,13 +448,13 @@ export const COMPONENTS: ComponentSpec[] = [
     avoid: "Form errors.",
     rules: [
       "Tinted box, coloured edge and icon, and a text label; red only for a stop.",
-      "Stops and cautions shown; notes collapsed.",
+      "Stops, and what decides whether the amount applies, are shown in the estimate card; cautions are named there and given in full under 'More about this estimate'.",
     ],
   },
   {
     name: "Range",
-    file: "pages/ResultSummary.tsx",
-    use: "Conservative, standard and claimant's best as three rows, with a bar when the range is narrow enough to read as one.",
+    file: "pages/Result.tsx",
+    use: "Under 'How sure is this?': conservative, standard and claimant's best as three rows, with a bar when the range is narrow enough to read as one, then how far real awards land. The estimate card gives the range in one line.",
     avoid: "A bar when the range is too wide (the three amounts and what could move it say more).",
     rules: ["Values always given as text; the bar is decorative."],
   },
@@ -460,9 +468,13 @@ export const COMPONENTS: ComponentSpec[] = [
   {
     name: "Accordion",
     file: "components/result.tsx",
-    use: "Secondary details below the estimate (how it is built, what could move it, what to prove, interest, cases, sources).",
-    avoid: "The amount, the range, stops and cautions.",
-    rules: ["A button with aria-expanded and a panel.", "Panels always print expanded."],
+    use: "'More about this estimate': how sure it is, the cautions in full, how it is built, what could move it, what to prove, interest, other notes, sources.",
+    avoid: "The amount, stops, and what decides whether the amount applies.",
+    rules: [
+      "A button with aria-expanded and a panel.",
+      "A link to a section, or to something in it (a caution named in the estimate card), opens it first.",
+      "Panels always print expanded.",
+    ],
   },
   {
     name: "Offer check",
@@ -470,7 +482,7 @@ export const COMPONENTS: ComponentSpec[] = [
     use: "'Got an offer from the insurer?': the offer as a share of the estimate, the award with interest, and the value of waiting today after fees.",
     avoid: "Advice to accept or refuse.",
     rules: [
-      "On the same page, below the estimate.",
+      "On the same page, after cases like the estimate; the estimate card's 'Check an insurer's offer' goes straight to it.",
       "Assumptions (years, interest, discount, fee) visible and editable.",
     ],
   },
@@ -483,12 +495,13 @@ export const COMPONENTS: ComponentSpec[] = [
   },
   {
     name: "Case card",
-    file: "pages/Result.tsx",
-    use: "'Cases like yours', in its own card right after the estimate: real public cases with similar facts, each with a summary, its journey as a timeline, what mattered, and how it is similar and different.",
+    file: "components/story.tsx",
+    use: "One real case, the same way wherever it appears (the start page's real cases; 'Cases like yours' under an estimate): death or injury and the year of the accident, the story, each step's amount and year on a timeline, the years it took and the final amount as a multiple, what made the difference (on a tap), and the judgment.",
     avoid: "Implying the person will get the same amount.",
     rules: [
-      "English case text is marked lang='en' on Hindi pages.",
-      "Links to the judgment.",
+      "Amounts in lakh and crore to two decimals, as judgments quote them (₹62.78 lakh); under a lakh, the exact amount.",
+      "Under an estimate, each also says how it is similar and different; two show first, the rest on request.",
+      "English case text is marked lang='en' on Hindi pages, which say the stories are in English.",
       "The case library is fetched when an estimate first appears.",
     ],
   },

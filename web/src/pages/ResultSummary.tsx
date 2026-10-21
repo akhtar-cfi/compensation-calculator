@@ -1,4 +1,4 @@
-import { CircleAlert, ListChecks } from "lucide-preact";
+import { CircleAlert, HandCoins, ListChecks, SlidersHorizontal } from "lucide-preact";
 import { Fragment } from "preact";
 import { answerText, askKey } from "../answers";
 import { answeredOnPath } from "../flow";
@@ -10,8 +10,8 @@ import type { EstimateInput, EstimateOutput, Warning } from "../../../src/engine
 import { formatApprox, formatINR } from "../../../src/engine/money.js";
 import { rules } from "../data";
 import { hasKey, useApprox, useLang, useT, useWarnText } from "../i18n";
-import { AnswerPanel, ChangeLine, RangeBar, ShareActions } from "../components/result";
-import { Card, Notice, Tel, linkCls } from "../components/ui";
+import { AnswerPanel, ChangeLine, ShareActions } from "../components/result";
+import { Card, Notice, Tel, btnOutline, btnPrimary, linkCls } from "../components/ui";
 import type { StopCode } from "../questions";
 import type { FieldName } from "../validate";
 import { factLines, shareText } from "../share";
@@ -108,6 +108,8 @@ export function ResultSummary(props: {
   /** Where "Make it more accurate" leads (the details on the one page; the first detail question elsewhere; null:
    * no details left to ask). */
   moreHref?: string | null | undefined;
+  /** Its words, when they say more than the default (how many details are left). */
+  moreLabel?: string | undefined;
   /** The answers are this worked example's: said next to the amount, so it is never read as the family's own. */
   example?: SituationId | undefined;
   /** Checks answered "Not sure": the amount assumes the claim can be made, and says so right under it. */
@@ -237,8 +239,6 @@ export function ResultSummary(props: {
   }
 
   const r = est.range;
-  const ps = est.practiceSpread;
-  const rel = (x: number) => t(x < 1 ? "res.below" : "res.above", { p: Math.round(Math.abs(x - 1) * 100) });
   const cautions = [...est.warnings]
     .filter((w) => w.severity !== "info")
     .sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
@@ -305,41 +305,15 @@ export function ResultSummary(props: {
           </div>
         )}
 
-        <h3 class="mt-5 text-sm font-semibold text-foreground">{t("res.range")}</h3>
-        <dl class="mt-2 grid gap-1.5 text-sm" data-testid="range">
-          {(["conservative", "standard", "claimantMax"] as const).map((s) => (
-            <div
-              key={s}
-              data-scenario={s}
-              data-amount={r[s]}
-              class={`flex flex-wrap items-baseline justify-between gap-x-3 ${s === "standard" ? "font-semibold text-foreground" : "text-muted-foreground"}`}
-            >
-              <dt>{t(`res.${s}`)}</dt>
-              <dd class="tabular-nums">{formatINR(r[s])}</dd>
-            </div>
-          ))}
-        </dl>
-        {!r.showBar ? (
-          <p class="mt-2 text-xs text-muted-foreground">{t("res.rangeWide")}</p>
-        ) : (r.claimantMax - r.conservative) / r.standard >= 0.05 ? (
-          // A narrow range is clearer as the three figures alone: a bar would make a 1% spread look wide.
-          <RangeBar conservative={r.conservative} standard={r.standard} claimantMax={r.claimantMax} />
-        ) : null}
-
-        {ps && (
-          <p
-            class="mt-4 rounded-lg bg-subtle p-3 text-xs leading-relaxed text-foreground"
-            data-testid="spread"
-          >
-            {t("res.spread", {
-              n: ps.n,
-              kind: t(`res.kind.${est.kind}`),
-              label: hasKey(lang, `spread.${ps.label}`) ? t(`spread.${ps.label}`) : ps.label,
-              lo: rel(ps.p25),
-              hi: rel(ps.p75),
-              a: approx(formatApprox(r.standard * ps.p25)),
-              b: approx(formatApprox(r.standard * ps.p75)),
-            })}
+        {r.conservative !== r.claimantMax && (
+          <p class="mt-3 text-sm text-muted-foreground" data-testid="range-line">
+            {t("rail.range", {
+              lo: approx(formatApprox(r.conservative)),
+              hi: approx(formatApprox(r.claimantMax)),
+            })}{" "}
+            <a href="#sure" class={linkCls}>
+              {t("det.sure")}
+            </a>
           </p>
         )}
 
@@ -400,22 +374,20 @@ export function ResultSummary(props: {
           </dl>
         </div>
       )}
-      <div class={`no-print mt-5 grid gap-2 border-t border-border pt-4 ${props.stale ? "hidden" : ""}`}>
-        {props.moreHref !== null && (
-          <a
-            href={props.moreHref ?? "#more"}
-            class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}
-          >
-            {t("res.narrow")}
+      <div class={`no-print mt-5 border-t border-border pt-4 ${props.stale ? "hidden" : ""}`}>
+        <div class="grid gap-2 sm:grid-cols-2">
+          {props.moreHref !== null && (
+            <a href={props.moreHref ?? "#more"} data-action="refine" class={btnPrimary}>
+              <SlidersHorizontal aria-hidden="true" class="h-4 w-4" />
+              {props.moreLabel ?? t("res.narrow")}
+            </a>
+          )}
+          <a href="#offer-amount" data-action="offer" class={btnOutline}>
+            <HandCoins aria-hidden="true" class="h-4 w-4" />
+            {t("res.offerBtn")}
           </a>
-        )}
-        <a href="#offer-amount" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
-          {t("res.offer")}
-        </a>
-        <a href="#details" class={`inline-flex min-h-11 items-center text-sm sm:min-h-0 ${linkCls}`}>
-          {t("sum.details")}
-        </a>
-        <div class="mt-2">
+        </div>
+        <div class="mt-3">
           <ShareActions
             text={shareText(est, props.input, t, siteUrl(), props.accidentLabel)}
             title={t("app.name")}
