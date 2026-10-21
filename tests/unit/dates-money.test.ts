@@ -48,6 +48,8 @@ describe("money", () => {
     expect(formatLakh(10229241)).toBe("₹1.02 crore");
     expect(formatLakh(100000)).toBe("₹1 lakh");
     expect(formatLakh(63302)).toBe("₹63,302");
+    expect(formatLakh(354500)).toBe("₹3.55 lakh"); // half up, as the judgment's own summary rounds it
+    expect(formatLakh(590750)).toBe("₹5.91 lakh");
   });
   it("parses fractions", () => {
     expect(parseFraction("1/3")).toBeCloseTo(0.3333, 4);

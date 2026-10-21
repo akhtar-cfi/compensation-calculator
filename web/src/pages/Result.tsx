@@ -349,7 +349,7 @@ export function CasesCard(props: { input: EstimateInput }) {
   const matches = cases ? matchCases(props.input, cases) : undefined;
   return (
     <Card class="p-5 sm:p-6" id="cases">
-      <section aria-labelledby="cases-h" data-testid="cases-card">
+      <section aria-labelledby="cases-h" data-testid="cases-card" class="@container">
         <H2 id="cases-h">{t("cases.title")}</H2>
         <div class="mt-3">{matches && <Cases matches={matches} />}</div>
       </section>
@@ -400,7 +400,7 @@ function Cases(props: { matches: CaseMatch[] }) {
           {t("res.cases.inEnglish")}
         </p>
       )}
-      <ul ref={list} class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2" data-testid="cases">
+      <ul ref={list} class="mt-4 grid grid-cols-1 gap-4 @2xl:grid-cols-2" data-testid="cases">
         {shown.map((m) => (
           <CaseStory key={m.case.id} c={m.case} role="case">
             <dl class="mt-3 grid gap-1 text-sm">

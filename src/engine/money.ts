@@ -47,9 +47,10 @@ export function formatApprox(n: number): string {
  */
 export function formatLakh(n: number): string {
   const abs = Math.abs(n);
-  const two = (x: number) => String(Number(x.toFixed(2)));
-  if (abs >= 1e7) return `₹${two(n / 1e7)} crore`;
-  if (abs >= 1e5) return `₹${two(n / 1e5)} lakh`;
+  // Half up on whole rupees (₹3,54,500 is ₹3.55 lakh), not on the float n / 1e5 (3.5449999…).
+  const two = (unit: number) => `${n < 0 ? "-" : ""}${Math.round(abs / (unit / 100)) / 100}`;
+  if (abs >= 1e7) return `₹${two(1e7)} crore`;
+  if (abs >= 1e5) return `₹${two(1e5)} lakh`;
   return formatINR(n);
 }
 
