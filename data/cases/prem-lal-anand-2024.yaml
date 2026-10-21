@@ -1,0 +1,34 @@
+id: prem-lal-anand-2024
+title: Small business owner, about 45, Uttar Pradesh (death)
+citation: Prem Lal Anand & Ors. v. Narendra Kumar & Ors., 2024 INSC 585, Civil Appeal Nos. ___ of 2024 (arising
+  out of SLP(C) Nos. 30188-30189/2018)
+court: SC
+source_url: https://api.sci.gov.in/supremecourt/2018/38647/38647_2018_12_1502_54520_Judgement_07-Aug-2024.pdf
+kind: death
+archetypes:
+- death_self_employed
+- contributory_negligence
+state: UP
+facts:
+  age: 45
+  employment: self_employed
+  occupation: ran a fabrics business jointly with her husband
+  family: husband (appellant No.1, himself injured in the same accident) and other legal heirs (not described)
+journey:
+- forum: mact
+  date: '1997-01-08'
+  amount: 101250
+- forum: supreme_court
+  date: '2024-08-07'
+  amount: 1125000
+interest_pct: 8
+what_mattered:
+- 'Overtaking a slow-moving tractor is an everyday act, not negligence: the 50% cut was set aside.'
+- 25% future prospects were added for a self-employed person aged 40-50, with multiplier 15.
+- Interest was reduced from 12% to 8%.
+summary: A woman of about 45 who ran a fabrics business with her husband died in a crash involving a tractor in
+  Uttar Pradesh. In 1997 the tribunal awarded Rs 1.01 lakh after a 50% cut for contributory negligence. In 2024,
+  more than 27 years after that award, the Supreme Court set the cut aside and awarded Rs 11.25 lakh.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

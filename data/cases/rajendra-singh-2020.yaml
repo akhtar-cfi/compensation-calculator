@@ -1,0 +1,37 @@
+id: rajendra-singh-2020
+title: Homemaker, about 30 (death)
+citation: Rajendra Singh and Others v. National Insurance Company Limited and Others, Civil Appeal No. 2624 of 2020
+  (arising out of SLP (Civil) No. 13964 of 2018), with Civil Appeal No. 2625 of 2020 (arising out of SLP (Civil)
+  No. 16261 of 2018)
+court: SC
+source_url: https://api.sci.gov.in/supremecourt/2018/14265/14265_2018_34_1502_22630_Judgement_18-Jun-2020.pdf
+kind: death
+archetypes:
+- death_homemaker
+- contributory_negligence
+facts:
+  accident_date: '2012-12-25'
+  age: 30
+  employment: homemaker
+  occupation: housewife (a claimed dairy income of Rs.5,000 a month was not proved)
+  family: husband and three minor children
+journey:
+- forum: mact
+  amount: 354500
+- forum: high_court
+  amount: 354500
+  note: the High Court dismissed the appeal and stated no figure; the tribunal's amount stood
+- forum: supreme_court
+  date: '2020-06-18'
+  amount: 1196000
+what_mattered:
+- 'Passengers in a horse cart cannot be blamed just because the cart was in the middle of the road: the 50% cut
+  was set aside.'
+- A homemaker's services have real money value; notional income was raised to Rs 5,000 a month.
+- A homemaker gets 40% future prospects.
+summary: A homemaker of about 30 died when the horse cart she was travelling in was hit in 2012, leaving her husband
+  and three young children. The tribunal awarded Rs 3.55 lakh after a 50% cut for contributory negligence, and the
+  High Court did not interfere. In 2020 the Supreme Court awarded Rs 11.96 lakh.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

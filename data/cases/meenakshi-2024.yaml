@@ -1,0 +1,28 @@
+id: meenakshi-2024
+title: Service consultant, 26, unmarried, Karnataka (death)
+citation: "Meenakshi v The Oriental Insurance Co. Ltd, 2024 INSC 573"
+court: SC
+source_url: "https://api.sci.gov.in/supremecourt/2018/39746/39746_2018_9_16_53935_Judgement_23-Jul-2024.pdf"
+golden_id: meenakshi-2024
+kind: death
+archetypes: [death_salaried, death_bachelor]
+state: KA
+facts:
+  accident_date: 2013-08-29
+  age: 26
+  employment: permanent
+  occupation: service consultant, private company
+  family: parent
+journey:
+  - {forum: mact, amount: 10401000}
+  - {forum: high_court, amount: 4957035, note: "the High Court cut the award by more than half"}
+  - {forum: supreme_court, date: 2024-07-23, amount: 9366272}
+what_mattered:
+  - "House rent allowance, flexible benefits and the employer's provident-fund contribution counted as income."
+  - "Income tax and professional tax were deducted from salary."
+  - "Awards can also be cut on appeal: the Supreme Court restored most of what the High Court had removed."
+summary: >-
+  A 26-year-old unmarried salaried employee died in 2013. The tribunal awarded Rs 1.04 crore; the High Court cut
+  it to Rs 49.57 lakh. In 2024 the Supreme Court restored it to Rs 93.66 lakh, about 11 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

@@ -1,0 +1,30 @@
+id: kavita-devi-2025
+title: Agency-employed operator, 35, Haryana (death)
+citation: "Kavita Devi & Ors. v Sunil Kumar & Anr., 2025 INSC 938"
+court: SC
+source_url: "https://api.sci.gov.in/supremecourt/2018/47285/47285_2018_7_1501_63035_Judgement_06-Aug-2025.pdf"
+golden_id: kavita-devi-2025
+kind: death
+archetypes: [death_salaried]
+state: HR
+facts:
+  accident_date: 2009-02-16
+  age: 35
+  employment: fixed_salary
+  occupation: operator employed through a manpower agency
+  family: wife and two children
+journey:
+  - {forum: mact, amount: 254720}
+  - {forum: high_court, amount: 723680}
+  - {forum: supreme_court, date: 2025-08-06, amount: 1429500}
+interest_pct: 7
+what_mattered:
+  - "House rent and other allowances counted as income: Rs 6,500 a month, not the basic pay of Rs 3,665 used below."
+  - "Consortium was paid to each claimant (wife and both children), Rs 48,400 each."
+  - "The Court added 50% future prospects."
+summary: >-
+  A 35-year-old operator died in 2009, leaving a wife and two children. The tribunal awarded Rs 2.55 lakh and
+  the High Court Rs 7.24 lakh. In 2025 the Supreme Court awarded Rs 14.30 lakh, more than 16 years after the
+  accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

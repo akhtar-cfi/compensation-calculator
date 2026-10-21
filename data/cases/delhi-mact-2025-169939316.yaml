@@ -1,0 +1,32 @@
+id: delhi-mact-2025-169939316
+title: National-level handball player, 22, Delhi (death)
+citation: Seema Yadav Vs. Alok Kumar & Ors., MACT No 121/2019 (DLND010129542019)
+court: MACT
+source_url: https://indiankanoon.org/doc/169939316/
+kind: death
+archetypes:
+- death_bachelor
+state: DL
+facts:
+  accident_date: '2018-12-04'
+  claim_filed: '2019-07-24'
+  age: 22
+  employment: unemployed
+  occupation: graduate and national-level handball player with no proven earnings
+  family: mother and father of the unmarried deceased
+journey:
+- forum: mact
+  date: '2025-10-10'
+  amount: 3864700
+  note: Loss of dependency Rs.37,80,000 plus conventional heads; insurer had filed a legal offer (amount not stated)
+interest_pct: 9
+what_mattered:
+- No income proof, but Sports Authority of India letter and championship certificates led the tribunal to notionally
+  fix income at Rs.25,000/month (following HC/SC sportsperson and student precedents) instead of minimum wage
+- 'Bachelor: 50% personal-expense deduction; 40% future prospects; multiplier 18 by the deceased''s age (22)'
+- 'Conventional heads enhanced from Pranay Sethi figures: consortium Rs.48,400, estate Rs.18,150, funeral Rs.18,150'
+- Chargesheet against the tractor driver and his failure to testify established negligence
+summary: A 22-year-old national-level handball player died in an accident in Delhi in 2018. The tribunal awarded
+  Rs 38.65 lakh in 2025, 6.9 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

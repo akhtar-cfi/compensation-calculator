@@ -1,0 +1,38 @@
+id: delhi-mact-2025-120095903
+title: Self-employed welder, 45, Delhi (injury)
+citation: Riyazuddin vs. Shravan Kumar Mishra & Ors., MACT Case No. 624/2022 (CNR No.DLWT010055342022)
+court: MACT
+source_url: https://indiankanoon.org/doc/120095903/
+kind: injury
+archetypes:
+- injury_no_permanent_disability
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2021-12-19'
+  claim_filed: '2022-06-07'
+  age: 45
+  employment: self_employed
+  occupation: welder doing job work at houses; files income-tax returns
+  disability_pct: 0
+  family: injured man himself
+journey:
+- forum: insurer_offer
+  amount: 113192
+  note: Legal offer filed; no settlement; insurer later withdrew the offer (allowed 08.10.2024)
+- forum: mact
+  date: '2025-12-01'
+  amount: 682710
+  note: Leg fracture (tibia/fibula) with implant; no permanent disability assessed
+interest_pct: 9
+what_mattered:
+- 'Income taken from the ITRs that the insurer itself put to the claimant: Rs.4,90,355/year after tax = Rs.40,863/month
+  (claimed Rs.50,000-70,000)'
+- Original medical bills of Rs.1,57,532 reimbursed in full; nominal Rs.50,000 for future implant removal though
+  no estimate was filed
+- No disability certificate, so no loss of future earning capacity; only 6 months' loss of income during treatment
+- Insurer's legal offer of Rs.1,13,192 was not accepted and later withdrawn; award was about six times the offer
+summary: A 45-year-old self-employed welder was injured in Delhi in 2021, with no permanent disability. The insurer
+  offered Rs 1.13 lakh, which was not accepted. The tribunal awarded Rs 6.83 lakh in 2025, 4 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

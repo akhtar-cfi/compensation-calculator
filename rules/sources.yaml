@@ -1,0 +1,141 @@
+# Citation registry. Every rule row references sources by id.
+# `verified: false` until the legal reviewers sign off (see docs/methodology.md).
+# Fields we could not confirm (exact dates / reporter citations) are left out rather than guessed.
+- id: mv_act_1988
+  title: Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)
+  kind: statute
+  url: https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf
+- id: sarla_verma_2009
+  title: Sarla Verma v Delhi Transport Corporation
+  citation: (2009) 6 SCC 121
+  court: SC
+  url: https://indiankanoon.org/doc/837924/
+- id: pranay_sethi_2017
+  title: National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)
+  citation: (2017) 16 SCC 680
+  court: SC
+  date: 2017-10-31
+  url: https://indiankanoon.org/doc/139996215/
+- id: raj_kumar_2011
+  title: Raj Kumar v Ajay Kumar
+  citation: (2011) 1 SCC 343
+  court: SC
+  url: https://indiankanoon.org/doc/153578069/
+- id: magma_2018
+  title: Magma General Insurance Co. Ltd. v Nanu Ram
+  citation: (2018) 18 SCC 130
+  court: SC
+  url: https://indiankanoon.org/doc/175246407/
+- id: satinder_kaur_2020
+  title: United India Insurance Co. Ltd. v Satinder Kaur
+  court: SC
+  url: https://indiankanoon.org/doc/142302016/
+- id: kirti_2021
+  title: Kirti v Oriental Insurance Co. Ltd.
+  court: SC
+  url: https://indiankanoon.org/doc/106405133/
+- id: kajal_2020
+  title: Kajal v Jagdish Chand
+  citation: (2020) 4 SCC 413
+  court: SC
+  url: https://indiankanoon.org/doc/180443810/
+- id: kurvan_ansari_2021
+  title: Kurvan Ansari v Shyam Kishore Murmu
+  court: SC
+  url: https://indiankanoon.org/doc/117494438/
+- id: meenakshi_2024
+  title: Meenakshi v Oriental Insurance Co. Ltd.
+  citation: 2024 INSC 573
+  court: SC
+  url: https://indiankanoon.org/doc/72618714/
+- id: sidram_2022
+  title: Sidram v Divisional Manager, United India Insurance Co. Ltd.
+  court: SC
+  date: 2022-11-16
+  url: https://indiankanoon.org/doc/77644422/
+- id: hitesh_patel_2025
+  title: Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari
+  citation: 2025 INSC 1070
+  court: SC
+  url: https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf
+- id: preetha_krishnan_2025
+  title: Preetha Krishnan v United India Insurance Co. Ltd.
+  citation: 2025 INSC 1293
+  court: SC
+  date: 2025-11-06
+  url: https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf
+- id: baiju_2025
+  title: Baiju v (final order of 28 Nov 2025)
+  court: SC
+  date: 2025-11-28
+  url: https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf
+- id: hasina_yasmin_2025
+  title: Hasina Yasmin (reference to a larger bench on escalation of conventional heads)
+  court: SC
+  date: 2025-12-17
+  url: https://indiankanoon.org/doc/41904479/
+- id: bhagirathi_dash_2025
+  title: Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)
+  court: SC
+  date: 2025-11-04
+  url: https://indiankanoon.org/doc/54856662/
+- id: sushila_2026
+  title: Sushila v Sudhakar
+  court: SC
+  date: 2026-03-10
+  url: https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf
+- id: mohinder_kaur_2026
+  title: Mohinder Kaur v Brij Lal Arora
+  citation: 2026 INSC 477
+  court: SC
+  url: https://indiankanoon.org/doc/14044956/
+- id: hansraj_2026
+  title: Hansraj v Mukesh Nath
+  court: SC
+  date: 2026-05-06
+  url: https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf
+- id: dolly_satish_gandhi_2026
+  title: New India Assurance Co. Ltd. v Dolly Satish Gandhi
+  citation: 2026 INSC 498
+  court: SC
+  url: https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf
+- id: sarla_devi_2026
+  title: Sarla Devi v Reliance General Insurance (three-judge bench, ex-gratia deduction)
+  court: SC
+  date: 2026-05-26
+  url: https://indiankanoon.org/doc/57068626/
+- id: shishu_pal_2026
+  title: Shishu Pal v Surjeet
+  citation: 2026 INSC 634
+  court: SC
+  date: 2026-06-11
+  url: https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/
+- id: rashmirekha_2026
+  title: Rashmirekha Tripathy (income assessment from ITRs)
+  citation: 2026 INSC 661
+  court: SC
+  date: 2026-07-01
+  url: https://indiankanoon.org/doc/164414205/
+- id: vimal_kanwar_2013
+  title: Vimal Kanwar v Kishore Dan
+  citation: (2013) 7 SCC 476
+  court: SC
+  url: https://indiankanoon.org/doc/119587841/
+- id: helen_rebello_1998
+  title: Helen C. Rebello v Maharashtra SRTC
+  court: SC
+  url: https://indiankanoon.org/doc/1340758/
+- id: khenyei_2015
+  title: Khenyei v New India Assurance Co. Ltd.
+  citation: (2015) 9 SCC 273
+  court: SC
+  url: https://indiankanoon.org/doc/79441201/
+- id: karan_singh_bisht_2026
+  title: Karan Singh Bisht v Ravi Singh (MACT-01, Patiala House Courts, New Delhi; DAR 350/2020)
+  court: MACT Delhi
+  date: 2026-08-17
+  url: https://indiankanoon.org/doc/105820332/
+- id: delhi_awards_backtest_2026
+  title: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
+  kind: dataset
+  date: 2026-10-10

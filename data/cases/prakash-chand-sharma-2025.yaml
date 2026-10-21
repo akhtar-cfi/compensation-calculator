@@ -1,0 +1,39 @@
+id: prakash-chand-sharma-2025
+title: Tax-paying earner, under 50, Rajasthan, in a coma (injury)
+citation: Prakash Chand Sharma v. Rambabu Saini & Anr., 2025 INSC 180, Civil Appeal No. ___ of 2025 (arising out
+  of SLP(C) No. 3066 of 2024)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/302420242025-02-10-586175.pdf
+kind: injury
+archetypes:
+- injury_severe_100
+- injury_head
+state: RJ
+facts:
+  accident_date: '2014-03-23'
+  occupation: not stated; income taken from income-tax returns
+  disability_pct: 100
+  family: injured claimant himself (in a comatose state)
+journey:
+- forum: mact
+  date: '2017-01-18'
+  amount: 1629465
+- forum: high_court
+  date: '2023-04-19'
+  amount: 1939418
+- forum: supreme_court
+  date: '2025-02-10'
+  amount: 4870000
+  note: computed as Rs 48,69,180 and rounded to Rs 48,70,000
+interest_pct: 7
+what_mattered:
+- A medical board's disability assessment cannot be replaced by the tribunal's own view; if doubted, a fresh assessment
+  should be ordered.
+- Attendant charges, refused below, were awarded following Kajal.
+- Pain and suffering was compensated separately from mental and physical agony.
+summary: A man under 50 was left in a coma after an accident in Rajasthan in 2014. The tribunal and the High Court
+  took his disability as 50% and awarded Rs 16.29 lakh and Rs 19.39 lakh. In 2025 the Supreme Court accepted the
+  medical board's 100% and awarded Rs 48.7 lakh, about 11 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

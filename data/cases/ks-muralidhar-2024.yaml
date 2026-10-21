@@ -1,0 +1,40 @@
+id: ks-muralidhar-2024
+title: Factory employee, 37, Karnataka, spinal injury (injury)
+citation: K.S. Muralidhar v. R. Subbulakshmi & Anr., 2024 INSC 886 (Civil Appeal arising out of SLP(C) No. 18337/2021)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/ks-muralidhar-judgment-572746.pdf
+kind: injury
+archetypes:
+- injury_severe_100
+- injury_paraplegia
+state: KA
+facts:
+  accident_date: '2008-08-22'
+  age: 37
+  employment: permanent
+  occupation: workman (Assistant Team Leader) at a glass-fibre company, travelling in the company vehicle; also
+    an LIC agent
+  disability_pct: 100
+  family: the injured claimant himself
+journey:
+- forum: mact
+  date: '2015-04-17'
+  amount: 5809930
+- forum: high_court
+  date: '2020-11-12'
+  amount: 7816390
+- forum: supreme_court
+  date: '2024-11-22'
+  amount: 10229241
+  note: the judgment's intermediate arithmetic does not fully reconcile; the final figure is as stated
+interest_pct: 6
+what_mattered:
+- As a permanent employee under 40 he was entitled to 50% future prospects, not the 40% the High Court used.
+- Pain and suffering was set at Rs 15 lakh for lifelong total disability.
+- Money paid by his employer was not deducted from the compensation.
+summary: A 37-year-old factory employee was left wheelchair-bound by a spinal injury in Karnataka in 2008. The tribunal
+  awarded Rs 58.1 lakh and the High Court Rs 78.16 lakh. In 2024 the Supreme Court awarded Rs 1.02 crore, about
+  16 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

@@ -1,0 +1,43 @@
+id: baby-sakshi-greola-2024
+title: Girl, 7, Delhi, head injury (injury)
+citation: Baby Sakshi Greola v. Manzoor Ahmad Simon and Another, 2024 INSC 963 (Civil Appeal arising out of SLP(C)
+  No. 10996 of 2018)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/baby-sakshi-greola-v-manzoor-ahmad-simon-and-another-575985.pdf
+kind: injury
+archetypes:
+- injury_child_severe
+- injury_head
+- injury_severe_100
+state: DL
+facts:
+  accident_date: '2009-06-02'
+  claim_filed: '2009-09-03'
+  age: 7
+  employment: minor
+  occupation: 7-year-old child, hit by a car while crossing the road on a zebra crossing
+  disability_pct: 100
+  family: the injured child, claim filed through her father
+journey:
+- forum: mact
+  date: '2011-06-13'
+  amount: 590750
+- forum: high_court
+  date: '2017-11-07'
+  amount: 1151000
+  note: printed as Rs 11,51,000; its heads add up to Rs 11,50,750
+- forum: supreme_court
+  date: '2024-12-11'
+  amount: 5087000
+interest_pct: 9
+what_mattered:
+- A 75% disability certificate was treated as 100% because, in practice, she could not lead an independent life.
+- A child's lost earnings were based on the skilled-worker minimum wage plus 40% future prospects (following Kajal),
+  not a token Rs 15,000 a year.
+- A full-time skilled attendant for life was allowed, and pain and suffering raised to Rs 15 lakh.
+summary: A 7-year-old girl was hit by a car on a zebra crossing in Delhi in 2009 and suffered a serious head injury.
+  The tribunal awarded Rs 5.91 lakh and the High Court Rs 11.51 lakh. In 2024 the Supreme Court awarded Rs 50.87
+  lakh, more than 15 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

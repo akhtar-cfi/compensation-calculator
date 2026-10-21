@@ -1,0 +1,40 @@
+id: delhi-mact-2025-70917225
+title: Whitewash contractor whose income was not proved, 32, Delhi, 17% disability (injury)
+citation: 'Charan Singh vs Mohit and Ors., New No. 450688/16, Unique ID No.: DLNW01-001023-2016, FIR No. 359/14,
+  PS Begumpur'
+court: MACT
+source_url: https://indiankanoon.org/doc/70917225/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2014-04-06'
+  claim_filed: '2015-03-17'
+  age: 32
+  employment: informal
+  occupation: said he was a whitewash contractor (not proved); income taken at unskilled minimum wage
+  disability_pct: 17
+  family: the injured himself
+journey:
+- forum: insurer_offer
+  amount: 46286
+  note: plus medical bills, after deducting 30% for alleged contributory negligence (head-on collision); declined
+    by the petitioner
+- forum: mact
+  date: '2025-07-08'
+  amount: 689591
+  note: Rs.6,89,590.58 rounded off; no contributory negligence found; 7.5% interest from 17.03.2015
+interest_pct: 7.5
+what_mattered:
+- No documents for claimed Rs.45,000-50,000/month income or for work as a whitewash contractor, so unskilled minimum
+  wage (Rs.8,554) used
+- 34% permanent disability of right lower limb halved to 17% functional disability
+- Insurer's 30% contributory-negligence allegation rejected because no evidence of a head-on collision was led
+- Only Rs.65,275 of the Rs.4 lakh claimed medical expenses was supported by original bills
+summary: A 32-year-old whitewash contractor whose income was not proved was injured in Delhi in 2014, and left with
+  17% functional disability. The insurer offered Rs 46,286, which was not accepted. The tribunal awarded Rs 6.90
+  lakh in 2025, 11.3 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

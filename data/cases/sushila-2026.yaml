@@ -1,0 +1,29 @@
+id: sushila-2026
+title: Railway employee, 59, Karnataka (death)
+citation: "Sushila & Ors. v Sudhakar & Anr., 2026 LiveLaw (SC) 343"
+court: SC
+source_url: "https://api.sci.gov.in/supremecourt/2025/30689/30689_2025_14_48_69153_Order_10-Mar-2026.pdf"
+golden_id: sushila-2026
+kind: death
+archetypes: [death_salaried]
+state: KA
+facts:
+  accident_date: 2013-01-06
+  age: 59
+  employment: permanent
+  occupation: railway employee with about six months of service left
+  family: wife and three children
+journey:
+  - {forum: mact, amount: 1137466}
+  - {forum: high_court, amount: 1405942}
+  - {forum: supreme_court, date: 2026-03-10, amount: 2351362}
+interest_pct: 6
+what_mattered:
+  - "No cut for the short service left before retirement."
+  - "15% future prospects are required for a permanent employee aged 50-60 (the High Court had used 10%)."
+  - "Multiplier 9 for age 59."
+summary: >-
+  A 59-year-old railway employee died in 2013, months before retirement. The tribunal awarded Rs 11.37 lakh and
+  the High Court Rs 14.06 lakh. In 2026 the Supreme Court awarded Rs 23.51 lakh, about 13 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

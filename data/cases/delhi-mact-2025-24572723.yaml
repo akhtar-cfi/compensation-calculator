@@ -1,0 +1,43 @@
+id: delhi-mact-2025-24572723
+title: Labourer whose income was not proved, 33, Delhi, 90% disability (injury)
+citation: 'Santosh Vs. Nisar & Ors., MAC Petition No. 467/18 (UID/CNR No. DLNT01-006863-2018)'
+court: MACT
+source_url: https://indiankanoon.org/doc/24572723/
+kind: injury
+archetypes:
+- injury_burns
+- injury_partial_disability_self_employed_or_manual
+- contributory_negligence
+state: DL
+facts:
+  accident_date: '2018-02-20'
+  claim_filed: '2018-07-24'
+  age: 33
+  employment: informal
+  occupation: labourer (no proof of income; Delhi unskilled minimum wage used)
+  disability_pct: 90
+  family: injured man himself (electrocuted while being lifted on a JCB to tie an overhead electric wire)
+journey:
+- forum: mact
+  date: '2025-11-14'
+  amount: 3251500
+  note: Total Rs.65,03,000 (rounded from Rs.65,03,041.28) cut by 50% for contributory negligence; amount includes
+    any interim award; insurer exonerated, so the driver and owner must pay
+interest_pct: 7.5
+what_mattered:
+- No proof of the Rs.15,000/month claimed (in cross-examination he also said he was unemployed), so the Delhi unskilled
+  minimum wage of Rs.13,584/month was used; no medical bills (government hospital), so nothing for medical expenses
+- A 15% TBSA electric burn left a post-burn contracture of the right arm, certified as 90% permanent disability of
+  that limb; the tribunal said a labourer loses 100% of earning capacity, but its formula applied 90% (Rs.13,584 x
+  90/100 x 12 x 16 x 140/100 = Rs.32,86,241.28)
+- The doctor who proved the disability certificate said he will need an attendant for life, so lifetime attendant
+  charges were awarded by the multiplier method (Rs.13,584 x 12 x 16 = Rs.26,08,128)
+- 50% contributory negligence because he sat on the head of the JCB, a place not meant for sitting, and the machine
+  was not meant for working at height
+- Insurer exonerated because using the JCB to lift a person breached the policy terms; driver and owner held jointly
+  and severally liable
+summary: A 33-year-old labourer whose income was not proved suffered electric burns in Delhi in 2018, and was left
+  with 90% permanent disability of his right arm. The tribunal assessed Rs 65.03 lakh but cut it by 50% for his own
+  negligence, awarding Rs 32.52 lakh in 2025, 7.7 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

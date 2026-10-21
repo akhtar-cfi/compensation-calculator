@@ -1,0 +1,30 @@
+id: preetha-krishnan-2025
+title: Government engineer, 51, Kerala (death)
+citation: "Preetha Krishnan & Ors. v The United India Insurance Co. Ltd. & Ors., 2025 INSC 1293"
+court: SC
+source_url: "https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf"
+golden_id: preetha-krishnan-2025
+kind: death
+archetypes: [death_salaried]
+state: KL
+facts:
+  accident_date: 2012-08-03
+  age: 51
+  employment: permanent
+  occupation: assistant engineer, state public works department
+  family: wife and three children
+journey:
+  - {forum: mact, amount: 4404912}
+  - {forum: high_court, amount: 3510144, note: "loss of dependency only; the High Court's full total is not stated in the judgment"}
+  - {forum: supreme_court, date: 2025-11-06, amount: 4776794}
+interest_pct: 7.5
+what_mattered:
+  - "A 'split multiplier' (a lower multiplier after retirement age) is not allowed; the full multiplier of 11 applied."
+  - "15% future prospects for a permanent employee aged 50-60."
+  - "Conventional heads must be raised by 10% every three years."
+summary: >-
+  A 51-year-old government engineer died in 2012, leaving a wife and three children. The tribunal awarded
+  Rs 44.05 lakh; the High Court put the loss of dependency lower, at Rs 35.10 lakh. In 2025 the Supreme Court
+  ruled out a 'split multiplier' and awarded Rs 47.77 lakh, about 13 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

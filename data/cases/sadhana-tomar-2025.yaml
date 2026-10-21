@@ -1,0 +1,41 @@
+id: sadhana-tomar-2025
+title: Fruit trader without income proof, 24, Madhya Pradesh (death)
+citation: Sadhana Tomar & Ors. v. Ashok Kushwaha & Ors., Civil Appeal No. 3763 of 2025 (arising out of SLP(C) No.
+  6986 of 2023)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/860820232025-01-24-590595.pdf
+kind: death
+archetypes:
+- death_informal_no_proof
+- death_self_employed
+state: MP
+facts:
+  accident_date: '2016-09-25'
+  age: 24
+  employment: self_employed
+  occupation: wholesale fruit business (income not proved)
+  family: five claimants including the father and younger sister of the deceased; relationship of the other three
+    not stated
+journey:
+- forum: mact
+  date: '2018-10-09'
+  amount: 977200
+- forum: high_court
+  date: '2022-09-19'
+  amount: 977200
+- forum: supreme_court
+  date: '2025-01-24'
+  amount: 1752500
+interest_pct: 7
+what_mattered:
+- Where income is not proved, the state's minimum-wage notification (Rs 6,500 a month for unskilled work in 2016)
+  sets the floor, not a lower notional figure.
+- A father and younger sister who were not financially independent counted as dependants, which reduced the personal
+  deduction to 1/4.
+- Consortium was paid to each of the five claimants.
+summary: A 24-year-old in the wholesale fruit business died in Madhya Pradesh in 2016; his claimed income was not
+  proved. The tribunal awarded Rs 9.77 lakh on a notional Rs 4,500 a month, and the High Court agreed. In 2025 the
+  Supreme Court awarded Rs 17.53 lakh, about 8 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

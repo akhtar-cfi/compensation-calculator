@@ -1,0 +1,77 @@
+id: kavita-devi-2025
+title: "Kavita Devi & Ors. v Sunil Kumar & Anr."
+citation: "2025 INSC 938" # C.A. @ SLP(C) Diary No. 47285 of 2018
+court: SC
+judgment_date: 2025-08-06
+source_url: "https://api.sci.gov.in/supremecourt/2018/47285/47285_2018_7_1501_63035_Judgement_06-Aug-2025.pdf"
+kind: death
+facts:
+  accident_date: 2009-02-16
+  age_at_accident: 35
+  state: Haryana # MACT Gurgaon; P&H High Court
+  occupation: "operator, R.M. Manpower Services, Gurgaon (salaried, Rs.6,500/month incl. allowances)"
+  employment: permanent # Court applied 50% FP without classifying the employment (see notes)
+  claimants: { spouse: 1, children: 2, parents: 0 }
+  disability: null
+judgment_params:
+  monthly_income: 6500 # full salary incl. HRA (1,100) and other allowances (1,735)
+  future_prospects_pct: 50
+  personal_deduction: "1/3"
+  multiplier: 16
+  conventional:
+    { loss_of_estate: 18150, funeral: 18150, consortium_per_claimant: 48400, consortium_claimants: 3 }
+  interest_pct: 7 # from filing of petition till deposit, excluding the 1855 + 75 days of appeal delay
+expected:
+  heads:
+    loss_of_dependency: 1248000
+    spousal_consortium: 48400
+    parental_consortium: 96800
+    loss_of_estate: 18150
+    funeral: 18150
+  total: 1429500
+  lower_forums: { mact: 254720, high_court: 723680 }
+computation_quote: |
+  [para 18] ... we are of the opinion that income which the deceased was earning at the time
+  of the accident was Rs. 6,500/- p.m and same ought to have been taken into consideration.
+  [para 19] Secondly, applying the principles laid down by this Court in Sarla Verma (supra)
+  which was affirmed by the dictum of the Constitution bench in Pranay Sethi, out of
+  Rs. 6,500/-, 1/3rd has to be deducted for the personal expenses of the deceased, thus
+  Rs.6,500/- x 1/3 = 2,167. Therefore, the monthly income of the deceased would be Rs. 4,333.
+  Considering the age of the deceased i.e. 35 years, 50% future prospects must be added to the
+  income of Rs. 4,333 i.e. 4,333 x 50% = Rs. 2,167/-. Thus, the monthly income of the deceased
+  after adding future prospects would be Rs. 4,333 + 2,167 = Rs.6,500/-. Further the
+  appropriate multiplier to be adopted as per the judgment of Sarla Verma (supra) would be 16.
+  Therefore, we award a sum of Rs. 12,48,000/- under the head of loss of dependency
+  (6,500 x 12 x 16).
+  [para 20] Thirdly, the claimants are entitled to a sum of Rs. 18,150/- each under the heads
+  of loss of estate and funeral expenses. Further, we award a sum of Rs. 48,400/- to Appellant
+  No.1 under the head of spousal consortium and Appellant No.2 and 3 would be entitled to a sum
+  of Rs. 48,400/- each under the head of parental consortium as per the law laid down in Magma
+  General Insurance Company Limited v. Nanu Ram Alias Chuhru Ram and Others.
+  [para 21] Therefore, in total the Appellants would be entitled to a sum of Rs. 14,29,500/-
+  under the following heads:
+  Heads                        | Compensation
+  Loss of Dependency           | 12,48,000/-
+  Loss of spousal consortium   | 48,400/-
+  Loss of parental consortium  | 48,400 x 2 = 96, 800/-
+  Loss of Estate               | 18,150/-
+  Funeral Expenses             | 18,150/-
+  TOTAL                        | 14,29,500/-
+  [para 22] ... Respondent No.3 is hereby directed to deposit a sum of Rs. 14,29,500/- with
+  interest @7% p.a. from the date of the filing of the petition till deposit, excluding the
+  period of delay ...
+paragraphs: ["6", "7", "8", "10", "18", "19", "20", "21", "22"]
+notes: >-
+  Arithmetic verified: 6,500 x 12 x 16 = 12,48,000; heads sum to 14,29,500 (matches).
+  Order of operations: Court deducts 1/3 first and then adds 50% FP to the post-deduction figure
+  (6,500 x 2/3 x 1.5 = 6,500) - mathematically identical to Pranay Sethi order. Intermediate
+  rounding (2,167 / 4,333 / 2,167) cancels out exactly. FUTURE PROSPECTS: 50% was applied to a
+  35-year-old operator employed through a private manpower agency; the judgment does not say
+  he was 'permanent'. Under Pranay Sethi a fixed-salary/self-employed person below 40 gets 40%
+  (which would give 6,500 x 2/3 x 1.4 x 12 x 16 = 11,64,800). Fixture records the Court's 50%;
+  'employment: permanent' is the category that reproduces it. Income includes HRA and other
+  allowances (Tribunal and HC had excluded them and used basic 3,665). Consortium: 3 x 48,400
+  (spousal + 2 parental), conventional 18,150 each - two 10% steps over Pranay Sethi base.
+  Interest 7% excludes the delay period (1855 days + 75 days refiling). Disbursement 50:25:25.
+  Wording verbatim; layout normalised.
+verified: false

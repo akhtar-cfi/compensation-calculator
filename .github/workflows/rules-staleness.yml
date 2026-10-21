@@ -1,0 +1,22 @@
+name: Rules staleness
+
+# Weekly reminder: fails if a state's minimum-wage schedule has not been updated for more than 7 months.
+on:
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  staleness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run -s mact -- rules validate --as-of "$(date -u +%F)"

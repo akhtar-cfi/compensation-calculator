@@ -1,0 +1,23 @@
+id: notional_income
+description: Income used when the person did not earn, or earnings cannot be proved.
+confidence: contested
+verified: false
+homemaker_domestic_care:
+  monthly: 30000
+  base_date: 2026-06-11
+  step_years: 3
+  step_pct: 10
+  sources: [shishu_pal_2026]
+  note: >-
+    Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without
+    monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years.
+student_course_precedent:
+  professional:
+    monthly: 12000
+    sources: [mohinder_kaur_2026]
+    note: Engineering student (Mohinder Kaur 2026). Used only if higher than the skilled minimum wage.
+minor_death_conservative:
+  annual: 25000
+  multiplier: 15
+  sources: [kurvan_ansari_2021]
+  note: "Kurvan Ansari (SC, 16 Nov 2021, para 16): notional income Rs 25,000 a year x multiplier 15 = Rs 3,75,000 loss of dependency, with no personal-expenses deduction, for a 7-year-old (the 15 is the s.163A Second Schedule multiplier). Checked against the judgment text, 10 Oct 2026."

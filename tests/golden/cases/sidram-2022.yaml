@@ -1,0 +1,101 @@
+id: sidram-2022
+title: "Sidram v The Divisional Manager, United India Insurance Co. Ltd. & Anr."
+citation: "(2023) 3 SCC 439" # 2022 INSC 1204; C.A. No. 8510 of 2022 (@ SLP(C) No. 19277 of 2018)
+court: SC
+judgment_date: 2022-11-16
+source_url: "https://api.sci.gov.in/supremecourt/2018/26338/26338_2018_1_1502_39777_Judgement_16-Nov-2022.pdf"
+# Also read: https://indiankanoon.org/doc/77644422/
+kind: injury
+facts:
+  accident_date: 2012-07-18
+  age_at_accident: 19
+  state: Karnataka # MACT Belgaum; Karnataka HC (Dharwad Bench)
+  occupation: "itinerant utensil seller (paraplegic after accident)"
+  employment: self_employed_or_fixed
+  claimants: null
+  disability: { certificate_pct: 45, functional_pct: null } # doctor (PW-2): 45% whole body; claimant argued 100% functional - not accepted
+judgment_params:
+  monthly_income: 8000 # notional
+  future_prospects_pct: 0 # NO future prospects added by the SC
+  personal_deduction: null
+  multiplier: 18
+  disability_pct_applied: 45
+  attendant: { attendants: 1, monthly_per_attendant: 2000, multiplier: 18 }
+  future_medical: { monthly: 1000, multiplier: 18 }
+  loss_of_income_during_treatment: { months: 6 }
+  conventional: null
+  interest_pct: 6
+expected:
+  heads:
+    loss_of_earning_capacity: 777600
+    loss_of_income_during_treatment: 48000
+    medical: 155000
+    future_medical: 216000
+    attendant: 432000
+    litigation_expenses: 50000
+    conveyance_special_diet: 50000 # "Loss of conveyance" (paras 89-90: conveyance and special diet)
+    pain_and_suffering: 100000
+    marriage_prospects: 300000
+    loss_of_amenities: 50000
+  total: 2178600
+  lower_forums: { mact: 613000, high_court: 926800 }
+computation_quote: |
+  [para 60] In the overall view of the matter, we are convinced that we should determine the
+  notional income of the appellant herein at Rs. 8,000/- per month. The same would result in
+  the compensation being enhanced as under:
+             8000 x 12 x 18 x 45% = INR 7,77,600/-
+  [para 62] We uphold the payment towards loss of earning for six months as awarded by the
+  High Court and applying the revised income, enhance the same as under:
+             8000 x 6 = INR 48,000/-
+  [para 66] In view of the aforesaid, we grant compensation of Rs. 1,55,000/- towards medical
+  expenses.
+  [para 69] ... considering that the appellant at the time of accident was 19 years old, today
+  his age would be around 29 years, even if a bare minimum of Rs. 1000/- is spent per month,
+  then it comes to:
+                      1000 x 12 x 18 = Rs. 2,16,000/-
+  [para 73] ... According to the claimant, the cost of keeping the attendant would be
+  Rs. 4,500/- per month. We fix it at Rs. 2,000/- per month. As a result, we award the
+  attendant charges as under:
+           2,000 x 12 x 18 = Rs. 4,32,000/-
+  [para 82] In view of the aforesaid, we award an amount of Rs. 50,000/- towards litigation
+  expenses.
+  [para 90] In view of the aforesaid, we may award Rs. 50,000/- towards loss of conveyance and
+  special diet.
+  [para 98] In view of the aforesaid, we award an amount of Rs. 1,00,000/- towards pain and
+  suffering.
+  [para 103] In view of the aforesaid, we award a sum of Rs. 3,00,000/- towards loss of
+  marriage prospects.
+  [para 111] In view of the aforesaid, we award an amount of Rs. 50,000/- for the loss of
+  amenities taking into consideration the fact that the appellant was 19 years old at the time
+  of the accident, and also considering the nature of injuries suffered by him and the extent
+  of his disability.
+  [para 112] The total compensation awarded by us under different heads is as under:
+  S.NO. | COMPENSATION                     | AMOUNT (IN RUPEES)
+  1     | Loss of earning due to disability | 7,77,600/-
+  2.    | Loss of earning for 6 months      | 48,000/-
+  3.    | Medical expenses                  | 1,55,000/-
+  4.    | Future medical expenses           | 2,16,000/-
+  5.    | Attendant Charges                 | 4,32,000/-
+  6.    | Litigation charges                | 50,000/-
+  7.    | Loss of conveyance                | 50,000/-
+  8.    | Pain and suffering                | 1,00,000/-
+  9.    | Marriage prospects                | 3,00,000/-
+  10    | Loss of amenities                 | 50,000/-
+        | TOTAL                             | 21,78,600/-
+  [para 114] ... The rate of interest at the enhanced amount is to be the same i.e., 6% per
+  annum.
+paragraphs:
+  ["54", "55", "60", "62", "66", "69", "72", "73", "76", "82", "89", "90", "98", "103", "111", "112", "114"]
+notes: >-
+  Arithmetic verified: heads sum to 21,78,600 (matches). IMPORTANT for calculators: the SC did
+  NOT add future prospects to the notional income of a 19-year-old self-employed claimant
+  (8,000 x 12 x 18 x 45%); a Pranay-Sethi-style 40% FP would give 10,88,640 instead of 7,77,600.
+  The Court used the 45% certified whole-body disability as the loss-of-earning-capacity % even
+  while describing paraplegia as causing '100% loss of earning capacity' (para 56). Future
+  medical and attendant charges are both monthly x 12 x 18. Litigation expenses is a head
+  outside the usual list. Minor inconsistency in the judgment: para 61 says the Tribunal awarded
+  Rs.40,000 for loss of earning for 6 months, but the Tribunal table (para 5) shows Rs.4,000
+  and only 4,000 makes the MACT total 6,13,000 add up. Lower-forum tables both sum correctly
+  (MACT 6,13,000; HC 9,26,800). Neutral citation not printed on the SCI PDF (2022 INSC 1204 from
+  secondary sources). Wording verbatim; layout normalised.
+verified: false

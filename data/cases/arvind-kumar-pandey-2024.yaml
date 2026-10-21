@@ -1,0 +1,38 @@
+id: arvind-kumar-pandey-2024
+title: Homemaker, about 50, Uttarakhand, uninsured car (death)
+citation: Arvind Kumar Pandey & Ors. v. Girish Pandey & Anr., Civil Appeal No. 2512 of 2024 (Arising out of SLP(C)
+  No. 20918 of 2022)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/3421920192024-02-16-523955.pdf
+kind: death
+archetypes:
+- death_homemaker
+- uninsured_vehicle
+state: UK
+facts:
+  accident_date: '2006-06-26'
+  age: 50
+  employment: homemaker
+  occupation: homemaker (not shown to be employed); travelling as a passenger in the respondents' car
+  family: husband, daughter and son (the children were students at the time)
+journey:
+- forum: mact
+  amount: 250000
+- forum: high_court
+  date: '2017-04-06'
+  amount: 250000
+  note: the High Court dismissed the appeal and stated no figure; the tribunal's amount stood
+- forum: supreme_court
+  date: '2024-02-16'
+  amount: 600000
+what_mattered:
+- With an uninsured vehicle the owners, not an insurer, must pay; the claim was first dismissed on that ground.
+- A homemaker's income cannot be taken below the minimum wage of a daily wager; the Court took at least Rs 4,000
+  a month.
+- The Supreme Court fixed a lump sum instead of a head-wise calculation.
+summary: A homemaker of about 50 died in Uttarakhand in 2006 while travelling in a car that turned out to be uninsured.
+  The tribunal first dismissed the claim; after a remand it awarded Rs 2.5 lakh, and the High Court did not raise
+  it. In 2024 the Supreme Court awarded Rs 6 lakh as a lump sum, more than 17 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

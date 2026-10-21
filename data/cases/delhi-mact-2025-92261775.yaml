@@ -1,0 +1,38 @@
+id: delhi-mact-2025-92261775
+title: Carpenter whose income was not proved, 41, Delhi, 10% disability (injury)
+citation: Qasim v. Akshit Chauhan & Ors., MACT no. 29/2023 (FIR no. 677/2022, PS Welcome)
+court: MACT
+source_url: https://indiankanoon.org/doc/92261775/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2022-10-19'
+  claim_filed: '2023-01-13'
+  age: 41
+  employment: informal
+  occupation: said he was a contract carpenter / wooden-furniture worker (not proved); treated as unskilled worker
+  disability_pct: 10
+  family: the injured himself
+journey:
+- forum: insurer_offer
+  amount: 389224
+  note: full and final settlement offer filed 23.09.2024; not accepted
+- forum: mact
+  date: '2025-08-26'
+  amount: 536216
+  note: 7% interest from filing of DAR (13.01.2023); insurer liable as it filed a legal offer
+interest_pct: 7
+what_mattered:
+- Claimed Rs.30,000/month as a carpenter but admitted no proof of income, occupation or education, so Delhi unskilled
+  minimum wage (Rs.16,792) used
+- 15% permanent disability of the left upper limb assessed as 10% whole-body functional disability for manual work
+- No medical bills, so nil medical expenses; only 2 months' loss of income allowed
+- Insurer's legal offer was treated as deemed acceptance of negligence, so only quantum was tried
+summary: A 41-year-old carpenter whose income was not proved was injured in Delhi in 2022, and left with 10% functional
+  disability. The insurer offered Rs 3.89 lakh, which was not accepted. The tribunal awarded Rs 5.36 lakh in 2025,
+  2.9 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

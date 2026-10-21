@@ -1,0 +1,36 @@
+id: s-vishnu-ganga-2025
+title: Business partner, 57, Tamil Nadu (death)
+citation: S. Vishnu Ganga & Ors. v. M/s Oriental Insurance Company Limited & Ors., 2025 INSC 123 (Civil Appeal Nos.
+  1162-1163 of 2025, arising out of SLP (Civil) Nos. 33049-33050 of 2018)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/2255620182025-01-29-584158.pdf
+kind: death
+archetypes:
+- death_self_employed
+state: TN
+facts:
+  age: 57
+  employment: self_employed
+  occupation: partner in a firm running a mill; income shown through the firm's income tax returns
+  family: four daughters (both parents died in the same accident)
+journey:
+- forum: mact
+  date: '2014-11-25'
+  amount: 5824000
+- forum: high_court
+  date: '2017-12-22'
+  amount: 2668600
+- forum: supreme_court
+  date: '2025-01-29'
+  amount: 5824000
+interest_pct: 7.5
+what_mattered:
+- Income-tax returns are reliable evidence of income; the tribunal's notional Rs 60,000 a month was reasonable.
+- Children taking over the family business does not mean the family lost nothing.
+- The High Court's halving of income and lower multiplier went against settled law.
+summary: A 57-year-old partner in a mill and his wife died together when an uninsured bus hit their car in Tamil
+  Nadu. For the husband's death the tribunal awarded Rs 58.24 lakh; the High Court cut it to Rs 26.69 lakh. In 2025
+  the Supreme Court restored the tribunal's award (and Rs 93.61 lakh for the wife).
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

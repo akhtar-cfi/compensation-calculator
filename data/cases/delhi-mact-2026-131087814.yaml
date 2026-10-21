@@ -1,0 +1,39 @@
+id: delhi-mact-2026-131087814
+title: School lab assistant, 45, Delhi, 25% disability (injury)
+citation: Rakesh Kumar Vs. Balinder Singh & Ors., MACT No. 83/2021 (FIR No. 46/20, PS Sun Light Colony)
+court: MACT
+source_url: https://indiankanoon.org/doc/131087814/
+kind: injury
+archetypes:
+- injury_partial_disability_salaried
+- contributory_negligence
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2020-02-29'
+  claim_filed: '2021-01-29'
+  age: 45
+  employment: fixed_salary
+  occupation: lab attendant/assistant at a private school (later part-time driver and dairy-shop helper)
+  disability_pct: 25
+  family: injured man himself
+journey:
+- forum: mact
+  date: '2026-01-21'
+  amount: 1119546
+  note: Rs.12,43,939 less 10% contributory negligence (Rs.1,24,393); insurer's legal offer (amount not stated, applied
+    50% negligence cut) was not accepted
+interest_pct: 7.5
+what_mattered:
+- 'Salary slip of Rs.20,336 accepted, but the unexplained special allowance excluded: income taken as Rs.16,125
+  (basic+HRA+DA+TA); insurer''s plea to count only basic+HRA rejected'
+- 51% right-lower-limb disability assessed as 25% functional disability because he still earns Rs.10,000-12,000/month
+  in part-time work; 25% future prospects and multiplier 14
+- 'Rear-ending a truck that braked suddenly: insurer sought 50% contributory negligence, tribunal applied only 10%
+  (he admitted a 3-foot gap in heavy traffic)'
+- Loss of income for 4 months only, since bank statement showed salary (reduced) continued after the accident
+summary: A 45-year-old school lab assistant was injured in Delhi in 2020, and left with 25% functional disability.
+  The tribunal awarded Rs 11.20 lakh in 2026 after a 10% cut for the victim's own negligence, 5.9 years after the
+  accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []
