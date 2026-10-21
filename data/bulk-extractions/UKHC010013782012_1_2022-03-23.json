@@ -1,0 +1,94 @@
+{
+  "record_version": 1,
+  "doc_id": "UKHC010013782012_1_2022-03-23",
+  "source": "hc",
+  "court": "High Court of Uttarakhand",
+  "case": "AO 607/2012",
+  "cnr": "UKHC010013782012",
+  "decided": "2022-03-23",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2022/court%3D5_15/bench%3Dukhcucis_pg/UKHC010013782012_1_2022-03-23.pdf",
+  "quote_check": "verified, 21/21 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "UKHC010013782012_1_2022-03-23",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "High Court of Uttarakhand",
+      "court_level": "hc",
+      "state_code": "UK",
+      "accident_date": "2009-02-23",
+      "filing_date": null,
+      "award_date": "2012-09-26",
+      "age": null,
+      "employment": "permanent",
+      "occupation": "regular employee of a public sector undertaking",
+      "proof": "other",
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": 28931,
+      "income_basis": "proved_salary",
+      "future_prospects_pct": 30,
+      "deduction": "1/4",
+      "multiplier": 13,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_dependency": 3932000,
+        "loss_of_estate": 15000,
+        "consortium": 40000,
+        "funeral": 15000
+      },
+      "awarded_formula_head": 3932000,
+      "total_award": 4000000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 2,
+      "parents": 1,
+      "dependent_parents": 1,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2012-09-26",
+        "amount": 2485993,
+        "by": null,
+        "note": "Tribunal held the father was not dependent on the deceased, deducted one-third for personal expenses, and applied multiplier 13 with 30% future prospects."
+      },
+      {
+        "forum": "high_court",
+        "date": "2022-03-23",
+        "amount": 4000000,
+        "by": "claimant",
+        "note": "Claimants' appeal allowed: the 70-year-old father held dependent, so one-fourth deduction; Rs 70,000 conventional heads added; insurer to pay the increase of Rs 15,14,007 with 6% interest from the date of appeal."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, age not stated, public sector employee, Uttarakhand (death)",
+    "family_summary": "A man with a regular job at a public sector company was killed in Uttarakhand in February 2009 when a speeding heavy vehicle hit his scooter. In September 2012 the tribunal awarded Rs 24,85,993, holding that his father was not dependent on him. On the family's appeal, the High Court in March 2022 held that the 70-year-old father was a dependant and raised the award to Rs 40,00,000, with 6% interest on the increase from the date of the appeal. The case took about 13 years from the accident.",
+    "what_mattered": [
+      "The High Court held that the 70-year-old father depended on his son, so with four dependants only one-fourth of income was cut for personal expenses instead of one-third.",
+      "His monthly pay of Rs 28,931 was proved by his employer's accountant with an income certificate; the court added 30% for future prospects and took off 10% for income tax.",
+      "Conventional heads of Rs 70,000 (loss of estate Rs 15,000, consortium Rs 40,000, funeral Rs 15,000) were added following Pranay Sethi."
+    ],
+    "archetypes": [
+      "death_salaried"
+    ],
+    "audience": "both",
+    "review_notes": []
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "record_version": 1,
+  "doc_id": "2020_3_498_513",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2020 INSC 107",
+  "cnr": "ESCR010002242020",
+  "decided": "2020-01-30",
+  "citation": "2020 INSC 107; [2020] 3 S.C.R. 498",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2020/english/2020_3_498_513_EN.pdf",
+  "quote_check": "verified, 18/18 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2020_3_498_513",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "The Supreme Court decided no amount: it allowed the claimants' appeal on a point of procedure and sent their cross-objection back to the Patna High Court to be decided on its merits.",
+      "kind": "death",
+      "outcome": "remanded",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "BR",
+      "accident_date": "2008-05-02",
+      "filing_date": null,
+      "award_date": "2011-01-29",
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 3,
+      "parents": 1,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2011-01-29",
+        "amount": 247500,
+        "by": null,
+        "note": "Tribunal rejected the insurer's plea that the driver and owner broke the policy conditions and ordered the insurer to pay Rs 2,47,500. Heads and interest not stated."
+      },
+      {
+        "forum": "high_court",
+        "date": "2016-01-21",
+        "amount": null,
+        "by": "both",
+        "note": "Insurer appealed on liability and the claimants filed a cross-objection. The insurer did not press its appeal, which was disposed of; the cross-objection was dismissed as not maintainable, so the tribunal award stood."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2020-01-30",
+        "amount": null,
+        "by": "claimant",
+        "note": "Claimants' appeal allowed: the High Court order was set aside and the cross-objection sent back to the High Court to be decided on merits. No amount decided."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "mact_appeal"
+      ],
+      "holding": "Where state rules apply Order XLI CPC to motor accident appeals (as Bihar's Rule 249 does), claimants may file a cross-objection against any part of the tribunal award, even if the insurer's appeal under Section 173 challenges only its liability. The cross-objection must be decided on merits even if the insurer's appeal is withdrawn or dismissed for default.",
+      "para": "24-27",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, travelling in a passenger vehicle, Bihar (death; family's objection sent back to High Court)",
+    "family_summary": "A man in Bihar died after a road accident in May 2008 while travelling in a passenger vehicle; his wife, three children and a parent claimed compensation. In January 2011 the tribunal awarded Rs 2,47,500 and held the insurer liable. The insurer appealed to the Patna High Court, and the family used that appeal to raise its own objections to the award (a 'cross-objection'). The insurer then dropped its appeal, and in January 2016 the High Court refused to hear the family's objections. In January 2020, almost 12 years after the accident, the Supreme Court ruled they must be heard and sent them back to the High Court without fixing any amount.",
+    "what_mattered": [
+      "The High Court thought a family can raise its own objections in the insurer's appeal (a 'cross-objection') only when the insurer disputes the amount, not just whether it has to pay; the Supreme Court said anyone unhappy with any part of the award can appeal or cross-object.",
+      "A family's cross-objection must still be decided even if the insurer withdraws or abandons its own appeal.",
+      "The insurer's appeal had in fact challenged the whole award and made the family parties to it."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": [
+      "fixed: payload.award_date set to 2011-01-29 (tribunal judgment dated 29.1.2011) with an award_date evidence quote.",
+      "fixed: precedent.topics set to [\"mact_appeal\"]; the holding is about cross-objections in High Court appeals under Section 173 (paras 24-27).",
+      "fixed: payload.uncertain[4] rewritten to say the topic is mact_appeal and no narrower topic id fits.",
+      "fixed: family_summary explains 'cross-objection' in plain words and says it was raised in the insurer's Patna High Court appeal (para 8).",
+      "fixed: what_mattered[0] explains 'cross-objection' and replaces 'liability' with 'whether it has to pay' (paras 8, 24-25).",
+      "fixed: what_mattered[2] says the insurer's appeal made the family parties to it instead of 'named as respondents' (para 26).",
+      "fixed: audience set to both; para 27 lets families have their own objections decided even if the insurer drops its appeal, and the summary is written for families."
+    ]
+  }
+}

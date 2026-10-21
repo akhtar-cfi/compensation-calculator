@@ -1,0 +1,123 @@
+{
+  "record_version": 1,
+  "doc_id": "2025_5_169_176",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2025 INSC 511",
+  "cnr": "ESCR010001402025",
+  "decided": "2025-04-07",
+  "citation": "2025 INSC 511; [2025] 5 S.C.R. 169",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2025/english/2025_5_169_176_EN.pdf",
+  "quote_check": "verified, 23/23 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2025_5_169_176",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "KL",
+      "accident_date": "2000-06-02",
+      "filing_date": null,
+      "award_date": "2006-11-23",
+      "age": 32,
+      "employment": null,
+      "occupation": "Junior Public Health Nurse at a primary health centre",
+      "proof": null,
+      "claimed_monthly_income": 5955,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 653000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 2,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2006-11-23",
+        "amount": 653000,
+        "by": null,
+        "note": "Tribunal award to the husband and two minor children; the father did not appeal."
+      },
+      {
+        "forum": "high_court",
+        "date": null,
+        "amount": 653000,
+        "by": "insurer",
+        "note": "Insurer's appeal on pillion-rider cover dismissed by a Division Bench; tribunal award unchanged (date not stated)."
+      },
+      {
+        "forum": "high_court",
+        "date": "2019-03-01",
+        "amount": 1495000,
+        "by": "claimant",
+        "note": "The children's appeal, filed in 2016 about 10 years after the award, was allowed by a single judge: award raised to Rs 14,95,000 with 7% interest."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2025-04-08",
+        "amount": 653000,
+        "by": "insurer",
+        "note": "Insurer's appeal allowed: the High Court judgment was set aside because the children's appeal was grossly delayed and not maintainable, so the tribunal award stands."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "limitation"
+      ],
+      "holding": "Section 6 of the Limitation Act, which gives a minor extra time after turning 18, covers only suits and execution applications, not appeals. Where the father, as natural guardian, brought the claim for his minor children and chose not to appeal, the children's appeal filed ten years later was time-barred, and on these facts Section 5 did not excuse such a long delay.",
+      "para": "9, 12-13",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Woman, 32, public health nurse, Kerala (death)",
+    "family_summary": "A 32-year-old public health nurse in Kerala died in June 2000 after falling from the back of a motorcycle when its rider braked suddenly. In November 2006 the tribunal awarded her husband and their two children, then minors, Rs 6,53,000; her husband did not appeal. Ten years later the children appealed on their own, and in 2019 the Kerala High Court raised the award to Rs 14,95,000 with 7% interest. In April 2025, almost 25 years after the accident, the Supreme Court cancelled that increase because the appeal was far too late, leaving the tribunal's Rs 6,53,000 in place.",
+    "what_mattered": [
+      "The father, as the children's natural guardian, brought the claim for them and chose not to appeal, even when the insurer appealed and the family was represented in that case; because he acted for them, their being minors did not excuse the late appeal.",
+      "The extra time the law gives minors after they turn 18 applies to fresh suits and execution applications, not to appeals, so the 10-year delay could not be excused.",
+      "The children said their father had remarried and they had been abandoned and raised by their grandparents, but this was not proved, and the court said that even with proof the law would not have allowed such a late appeal."
+    ],
+    "archetypes": [
+      "death_salaried"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: Supreme Court step date set to 2025-04-08 as printed in the judgment ('08 April 2025'), not the metadata date 2025-04-07; quote added.",
+      "fixed: award_date set to 2006-11-23 (tribunal award date) with quote; raised by both reviewers.",
+      "fixed: added a High Court step for the insurer's pillion-rider appeal dismissed by a Division Bench (date not stated, award unchanged at Rs 6,53,000); evidence renumbered.",
+      "fixed: precedent holding now ties the Section 5 point to these facts instead of stating a general bar on condonation.",
+      "fixed: what_mattered.2 now says the abandonment account was unproved and that even proof would not have allowed the late appeal under Section 6.",
+      "fixed: what_mattered.0 reworded to the court's reasoning and notes the family was represented in the insurer's appeal without seeking more.",
+      "fixed: family_summary uses 'her husband' consistently and says the children were then minors.",
+      "fixed: employment set to null because the judgment does not say the post was permanent; uncertain note updated."
+    ]
+  }
+}

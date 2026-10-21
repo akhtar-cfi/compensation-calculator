@@ -1,0 +1,122 @@
+{
+  "record_version": 1,
+  "doc_id": "2026_7_494_503",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2026 INSC 661",
+  "cnr": "ESCR010002112026",
+  "decided": "2026-07-01",
+  "citation": "2026 INSC 661; [2026] 7 S.C.R. 494",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/english/2026_7_494_503_EN.pdf",
+  "quote_check": "verified, 35/35 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2026_7_494_503",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "OD",
+      "accident_date": "2018-05-29",
+      "filing_date": "2019-05-07",
+      "award_date": "2023-02-24",
+      "age": 39,
+      "employment": "self_employed",
+      "occupation": "Ran his own construction business",
+      "proof": "itr",
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": "proved_itr",
+      "future_prospects_pct": 40,
+      "deduction": "1/3",
+      "multiplier": 15,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": 3,
+      "heads": {
+        "loss_of_dependency": 19600005,
+        "loss_of_estate": 18150,
+        "funeral": 18150,
+        "consortium": 145200
+      },
+      "awarded_formula_head": 19600005,
+      "total_award": 19781505,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2023-02-24",
+        "amount": 22700064,
+        "by": null,
+        "note": "Tribunal took income of Rs 15,00,000 a year from the last tax return, deducted 1/3 for personal expenses and used a multiplier of 16; 6% interest from filing."
+      },
+      {
+        "forum": "high_court",
+        "date": "2024-04-25",
+        "amount": 18775150,
+        "by": "insurer",
+        "note": "Insurer's appeal allowed: income cut to the average of two tax returns (Rs 13,33,226 a year) and multiplier reduced to 15."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2026-07-01",
+        "amount": 19781505,
+        "by": "claimant",
+        "note": "Family's appeal allowed: income fixed at Rs 14,00,000 a year for a self-employed business owner, with 40% future prospects, 1/3 deduction and multiplier 15."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "income_assessment"
+      ],
+      "holding": "Tax returns are a key reference, not a fixed formula. Salaried: the previous year's return is enough. Self-employed: the average of up to three previous years' returns is the reference point, read with the business's nature, growth and early losses. Returns filed after the death or injury need caution and may count if backed by financial statements.",
+      "para": "17-20",
+      "quote": "",
+      "departs_from_rules": true,
+      "rule_id": "itr_average_less_tax"
+    },
+    "title_anon": "Man, 39, construction business owner, Odisha (death)",
+    "family_summary": "A 39-year-old man who ran his own construction business died after a truck hit his vehicle on a national highway in Odisha in May 2018. In February 2023 the tribunal awarded Rs 2,27,00,064, taking his income from his last tax return. The High Court cut this to Rs 1,87,75,150 in April 2024 by averaging two tax returns and using a lower multiplier (15 instead of 16), and in July 2026 the Supreme Court fixed his income at Rs 14 lakh a year and raised the award to Rs 1,97,81,505, about eight years after the accident.",
+    "what_mattered": [
+      "He was self-employed, so the Supreme Court said his income should rest on the average of his recent tax returns read with the nature of his business, not only the last return.",
+      "His two returns showed Rs 11,59,882 and Rs 15,06,571 a year; the Court fixed Rs 14,00,000, between the High Court's average and the tribunal's figure, adding about Rs 10 lakh to the High Court's award.",
+      "The tribunal used Rs 15,00,000 a year and a multiplier of 16; the Supreme Court used Rs 14,00,000 and 15, so its award stayed below the tribunal's."
+    ],
+    "archetypes": [
+      "death_self_employed"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "Extractor: no TOPIC_PATTERNS id covers income assessment from tax returns, so precedent.topics is left empty.",
+      "Extractor: src/engine/income.ts averages up to three ITRs for any ITR-proved income; this judgment limits averaging to the self-employed (salaried: previous year's ITR). Same result here; departs_from_rules left false for a reviewer to check.",
+      "fixed: precedent.departs_from_rules true, rule_id itr_average_less_tax. Engine averages up to 3 ITRs for every ITR-proved income; this judgment allows that only for the self-employed (salaried: previous year's ITR only, or promotion letter if a promotion is not yet reflected).",
+      "fixed: para 20 (returns filed after death/injury) added as precedent.holding evidence. precedent.quote not extended: paras 18-20 run about 2,100 characters, past the 1,500 limit, and the quote must stay one verbatim span.",
+      "fixed: precedent.topics set to [\"income_assessment\"]; the schema accepts any snake_case id and income assessment from tax returns is the point decided (para 11 quoted as evidence).",
+      "fixed: family_summary now says the High Court also lowered the multiplier from 16 to 15 (para 8), not only averaged two returns.",
+      "fixed: precedent.holding rewritten to add para 17 (no fixed formula; ITR is a reference point) and para 20 (caution on returns filed after death or injury); both paras quoted as evidence.",
+      "not changed: income_monthly_accepted stays null. The judgment states only annual income (Rs 14,00,000); Rs 1,16,667 a month is not written in it, so no verbatim quote can back it. The uncertain note gives the derived figure.",
+      "not changed: claimed_monthly_income stays null for the same reason: only Rs 15,00,000 per annum is written; Rs 1,25,000 a month appears nowhere in the judgment."
+    ]
+  }
+}

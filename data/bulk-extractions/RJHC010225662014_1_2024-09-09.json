@@ -1,0 +1,98 @@
+{
+  "record_version": 1,
+  "doc_id": "RJHC010225662014_1_2024-09-09",
+  "source": "hc",
+  "court": "High Court of Rajasthan",
+  "case": "CMA 264/2014",
+  "cnr": "RJHC010225662014",
+  "decided": "2024-09-09",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/court%3D8_9/bench%3Drhcjodh240618/RJHC010225662014_1_2024-09-09.pdf",
+  "quote_check": "verified, 23/23 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "RJHC010225662014_1_2024-09-09",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "High Court of Rajasthan (Jodhpur)",
+      "court_level": "hc",
+      "state_code": "RJ",
+      "accident_date": "2008-09-16",
+      "filing_date": null,
+      "award_date": "2013-08-03",
+      "age": 25,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": 3000,
+      "income_basis": null,
+      "future_prospects_pct": 40,
+      "deduction": "1/4",
+      "multiplier": 18,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": 5,
+      "heads": {
+        "loss_of_dependency": 680400,
+        "consortium": 240000,
+        "funeral": 18000,
+        "loss_of_estate": 18000
+      },
+      "awarded_formula_head": 680400,
+      "total_award": 956400,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 2,
+      "parents": 2,
+      "dependent_parents": 2,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2013-08-03",
+        "amount": 1728120,
+        "by": null,
+        "note": "Tribunal: income Rs 5,700 a month including Rs 2,700 travelling allowance, 50% future prospects, 1/10 personal deduction, multiplier 18 (Rs 16,62,120); consortium-type heads Rs 60,000, funeral Rs 1,000, estate Rs 5,000; 9% interest from filing."
+      },
+      {
+        "forum": "high_court",
+        "date": "2024-09-09",
+        "amount": 956400,
+        "by": "insurer",
+        "note": "Insurer's appeal partly allowed: income Rs 3,000 (travelling allowance removed), 40% future prospects, 1/4 deduction, multiplier 18 (Rs 6,80,400); consortium Rs 48,000 x 5, funeral and estate Rs 18,000 each; award reduced by Rs 7,71,720; tribunal's interest kept."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Married man, 25, Rajasthan (death)",
+    "family_summary": "A 25-year-old married man riding a motorcycle in Rajasthan was killed in 2008 when a truck coming the other way hit him. His widow, two young sons and parents claimed compensation, and in 2013 the tribunal awarded Rs 17,28,120 with 9% interest. On the insurer's appeal, the High Court in 2024 cut the award to Rs 9,56,400: it left his travelling allowance out of his income, raised the deduction for his own expenses and lowered future prospects, while raising the fixed amounts for consortium, funeral and estate. The case ended 16 years after the accident, about 10 of them in the High Court; any money already paid under the tribunal's award is to be adjusted against the new amount.",
+    "what_mattered": [
+      "The High Court took his travelling allowance out of his income without explaining why (it referred only generally to Sarla Verma), counting Rs 3,000 a month instead of the tribunal's Rs 5,700.",
+      "Because there were five dependants, the court raised the deduction for his own expenses from 1/10 to 1/4; it cut future prospects from 50% to 40% without giving a reason (the insurer had cited his age). With the lower income, this cut loss of dependency from Rs 16,62,120 to Rs 6,80,400.",
+      "Even on the insurer's appeal, the court raised consortium to Rs 48,000 for each of the five family members and funeral and estate to Rs 18,000 each, following the Supreme Court's standard amounts."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": [
+      "fixed: family_summary last sentence now says the case ended 16 years after the accident (about 10 in the High Court) and that money already paid under the tribunal award is to be adjusted (para 10).",
+      "fixed: what_mattered[1] ties only the 1/4 deduction to the number of dependants, says no reason was given for 40% future prospects, and credits the lower income for part of the cut in loss of dependency.",
+      "fixed: archetypes emptied; the judgment never states the deceased's occupation, so death_salaried was a guess from the travelling allowance. uncertain[0] updated to match.",
+      "fixed: uncertain[3] no longer says the court cited Pranay Sethi; claimants' counsel relied on it (para 6) and the court only said the heads deserve to be modified (para 8).",
+      "fixed: what_mattered[0] says the court gave no reason for removing the travelling allowance; kept a note that para 9 refers generally to Sarla Verma for re-working income and deduction."
+    ]
+  }
+}

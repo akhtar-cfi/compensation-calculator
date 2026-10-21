@@ -1,0 +1,111 @@
+{
+  "record_version": 1,
+  "doc_id": "2018_10_871_875",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2018 INSC 776",
+  "cnr": "ESCR010000462018",
+  "decided": "2018-08-31",
+  "citation": "2018 INSC 776; [2018] 10 S.C.R. 871",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2018/english/2018_10_871_875_EN.pdf",
+  "quote_check": "verified, 24/24 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2018_10_871_875",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "TR",
+      "accident_date": "2012-05-20",
+      "filing_date": null,
+      "award_date": null,
+      "age": 43,
+      "employment": "self_employed",
+      "occupation": "businessman (as alleged by the family)",
+      "proof": null,
+      "claimed_monthly_income": 15000,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 200000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 2,
+      "parents": 1,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": 1057800,
+        "by": null,
+        "note": "The tribunal in Tripura awarded Rs 10,57,800 with 8% interest a year from the date of the claim. The award date is not stated."
+      },
+      {
+        "forum": "high_court",
+        "date": "2017-03-15",
+        "amount": 1057800,
+        "by": "insurer",
+        "note": "The insurer appealed, saying the deceased owned and drove the vehicle and was not a third party. The High Court agreed but still ordered the insurer to pay the tribunal's amount, saying its order was not to be treated as a precedent."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2018-08-31",
+        "amount": 200000,
+        "by": "insurer",
+        "note": "Insurer's appeal allowed: the family's Section 166 claim was not maintainable, but they get the personal-accident cover of Rs 2,00,000 with 9% interest from the date of the claim."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "liability"
+      ],
+      "holding": "Where the deceased owned and drove the vehicle and caused the accident by his own rash and negligent driving, with no other vehicle involved, he was not a third party; a claimant cannot claim for his own fault, so his legal representatives could not maintain a Section 166 claim. They could recover only the policy's personal-accident cover for the owner-driver.",
+      "para": "7, 9",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 43, businessman driving his own vehicle, Tripura (death)",
+    "family_summary": "A 43-year-old man, said to be a businessman, died in May 2012 when the vehicle he owned and was driving himself met with an accident in Tripura; no other vehicle was involved. The tribunal awarded his mother, wife and two children Rs 10,57,800 with 8% interest, and in March 2017 the High Court of Tripura kept that amount even though it agreed that, as the owner driving his own vehicle, he was not a 'third party' (someone other than the owner) whom the insurer must cover. In August 2018, more than six years after the accident, the Supreme Court held the family could not claim for his own negligence and cut the award to the policy's personal-accident cover of Rs 2,00,000 with 9% interest.",
+    "what_mattered": [
+      "He owned the vehicle, was driving it himself and caused the accident by his own rash and negligent driving, with no other vehicle involved. As the owner he was not a 'third party', so his family could not make a full compensation claim (Section 166) against the insurer.",
+      "What was left was the personal-accident cover for the owner-driver in the insurance policy, limited to Rs 2,00,000, which the Supreme Court ordered paid with 9% interest from the date of the claim.",
+      "The High Court found that the premium for the owner-driver's personal-accident cover had been paid, so the insurer still had to pay that cover (Rs 2,00,000) even though the main claim failed. Families should check whether the policy includes this cover."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": [
+      "fixed: removed the cited case's claimant name from payload.uncertain[4]; it now refers to an earlier 2007 Supreme Court decision ((2007) 9 SCC 263) quoted in para 8.",
+      "fixed: precedent.topics set to [\"liability\"]; the holding is about whether the insurer is liable at all when the owner-driver alone caused the crash.",
+      "fixed: added a third what_mattered line: the High Court found the owner-driver's personal-accident premium was paid, so that Rs 2,00,000 cover was still payable; families should check the policy.",
+      "fixed: family_summary and what_mattered[0] now explain 'third party' and Section 166 in plain words (as owner driving his own vehicle he was not a third party the insurer must cover).",
+      "fixed: precedent.holding last sentence narrowed to 'They could recover only the policy's personal-accident cover for the owner-driver.' (para 9 ties it to the contract of insurance)."
+    ]
+  }
+}
