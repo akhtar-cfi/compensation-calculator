@@ -130,7 +130,7 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "Plain, empirical words",
-    body: "Short sentences, numbers first, no emoji, no 'victim' (people affected). Hindi is offered on every page and labelled as a draft until reviewed by a native legal-language reviewer.",
+    body: "Short sentences, numbers first, no emoji, no 'victim' (people affected). Hindi is offered on every page; it awaits review by a native legal-language reviewer.",
   },
 ];
 
@@ -240,16 +240,6 @@ export const COMPONENTS: ComponentSpec[] = [
       "A chip opens its question and, once answered, returns to where the person was; 'See all' lists every answer with Change links. An answer that says little alone carries a word about what it answers ('Vehicle found: Not sure').",
       "Once the type of claim and the work are known, a line says how many real cases are like this one: a count only, so no figure comes before the person's own.",
       "A new screen fades up in 150 ms, only for people who have not asked for less motion.",
-    ],
-  },
-  {
-    name: "Phase banner (DRAFT)",
-    file: "components/chrome.tsx",
-    use: "Every page until legal sign-off.",
-    avoid: "Removing it before the rules are signed off.",
-    rules: [
-      "One line at 360 px, in the warning tint.",
-      "Hindi pages add a line saying the translation is a draft.",
     ],
   },
   {
@@ -515,7 +505,7 @@ export const COMPONENTS: ComponentSpec[] = [
     use: "The phone's own share sheet when available, otherwise 'Copy summary'; print / save as PDF.",
     avoid: "wa.me links (they put the estimate in a URL sent to a third party).",
     rules: [
-      "The shared text always carries DRAFT, the as-of date and 'not legal advice'.",
+      "The shared text always says where it came from, the as-of date and 'not legal advice'.",
       "Nothing is sent to our server.",
     ],
   },

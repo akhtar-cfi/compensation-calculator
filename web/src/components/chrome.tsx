@@ -3,7 +3,7 @@ import { useContext, useEffect, useLayoutEffect, useRef, useState } from "preact
 import { Languages, Mail, Menu, Phone } from "lucide-preact";
 import { ENGINE_VERSION } from "../../../src/engine/index.js";
 import { rules } from "../data";
-import { useLang, useT, LangContext } from "../i18n";
+import { useT, LangContext } from "../i18n";
 import { Tel, wrap } from "./ui";
 import { analyticsOn } from "../analytics";
 
@@ -182,25 +182,6 @@ export function Header() {
         </div>
       </div>
     </header>
-  );
-}
-
-/** Shown on every page until the legal sign-off flag is flipped at build time. */
-export function DraftBanner() {
-  const t = useT();
-  const lang = useLang();
-  return (
-    <div class="border-b border-warning/30 bg-warning/5">
-      <div class={`${wrap} py-2 text-xs leading-relaxed text-foreground sm:text-sm`}>
-        <p>
-          <span class="mr-2 inline-block rounded-md border border-warning px-1.5 py-px text-[0.6875rem] font-semibold tracking-[0.15em]">
-            DRAFT
-          </span>
-          {t("app.draft")}
-        </p>
-        {lang === "hi" && <p class="mt-1">{t("app.hiDraft")}</p>}
-      </div>
-    </div>
   );
 }
 

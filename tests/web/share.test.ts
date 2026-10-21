@@ -21,7 +21,9 @@ describe("the shared summary", () => {
   it("names the facts the amount rests on, with the caveats", () => {
     const t = (k: string, v?: Vars) => translate(dicts, "en", k, v);
     const text = shareText(est, input, t, "https://example.org/");
-    expect(text).toContain("DRAFT");
+    expect(text).toContain("Estimate from Crashfree India");
+    expect(text).not.toContain("DRAFT");
+    expect(text).toContain("Not legal advice");
     expect(text).toContain("Facts: death of a 30-year-old");
     expect(text).toContain("Delhi · accident: 2025-06-01");
     expect(text).toContain("Family claiming: husband or wife, 2 children, 0 parents");

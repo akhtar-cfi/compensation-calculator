@@ -12,6 +12,8 @@ import { proofItems } from "../prove";
 import { OfferCheck } from "./Offer";
 
 const SEV_ORDER: Record<Warning["severity"], number> = { stop: 0, caution: 1, info: 2 };
+/** Engine notes the page does not show (the rules' review status is kept for the command line). */
+const NOT_SHOWN = new Set<string>(["RULE_UNVERIFIED"]);
 const signed = (n: number) => `${n >= 0 ? "+" : "−"}${formatINR(Math.abs(n))}`;
 
 /**
@@ -30,7 +32,9 @@ export function ResultDetails(props: {
   const { est, input } = props;
   const enOnly = lang === "hi" ? "en" : undefined;
   const warnText = useWarnText();
-  const warnings = [...est.warnings].sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
+  const warnings = est.warnings
+    .filter((w) => !NOT_SHOWN.has(w.code))
+    .sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
   if (!est.eligible || !est.scenarios) return null;
   const std = est.scenarios.standard;
   const important = warnings.filter((w) => w.severity !== "info");

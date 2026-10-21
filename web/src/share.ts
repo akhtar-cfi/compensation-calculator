@@ -42,7 +42,7 @@ export function shareText(
   /** The accident date as answered ("June 2025 (day not given)"); the ISO date if not given. */
   accidentLabel?: string,
 ): string {
-  const lines = [t("share.draft"), t("share.asof", { d: est.asOf })];
+  const lines = [t("share.head"), t("share.asof", { d: est.asOf })];
   // The facts the amount rests on, so a forwarded estimate is not read as applying to someone else.
   if (input) lines.push(...factLines(input, t, accidentLabel));
   const income = est.scenarios?.standard.intermediates.find((i) => i.id === "monthly_income");

@@ -86,7 +86,7 @@ test("the estimate prints without the navigation or buttons", async ({ page }) =
   await expect(page.locator('form[aria-labelledby="page-title"]')).toBeHidden(); // the estimate, not the form
   await expect(page.locator("#offer")).toBeHidden();
   await expect(page.locator("#result [data-testid=headline]")).toBeVisible();
-  await expect(page.getByText("DRAFT", { exact: true })).toBeVisible();
+  await expect(page.getByText("DRAFT", { exact: true })).toHaveCount(0);
   const pdf = await page.pdf({ format: "A4", printBackground: true });
   expect(pdf.byteLength).toBeGreaterThan(10_000);
   if (SHOTS) {

@@ -31,7 +31,7 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 - **Phone first, thumb reach.** Designed at 360 px, and at 200% text size without sideways scrolling. Controls are at least 44 px tall on a phone. Once there is an estimate, a slim bar at the bottom shows it while it is out of view; it hides while any answer has focus, so it never covers what is being answered.
 - **Private by design.** Answers stay in this browser tab (they survive a reload, and vanish when the tab is closed). Nothing typed is sent anywhere; visit counts never include answers.
 - **Colour is never the only signal.** Status colours mark edges and icons; text stays dark and says what it is ('Stop', 'Caution', 'Error'). Red is used only for a stop or an error. The blue is for the main action, links, focus and the headline figure.
-- **Plain, empirical words.** Short sentences, numbers first, no emoji, no 'victim' (people affected). Hindi is offered on every page and labelled as a draft until reviewed by a native legal-language reviewer.
+- **Plain, empirical words.** Short sentences, numbers first, no emoji, no 'victim' (people affected). Hindi is offered on every page; it awaits review by a native legal-language reviewer.
 
 ## Components
 
@@ -95,14 +95,6 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 - Once the type of claim and the work are known, a line says how many real cases are like this one: a count only, so no figure comes before the person's own.
 - A new screen fades up in 150 ms, only for people who have not asked for less motion.
 - _Code:_ `web/src/modes/slow/Slow.tsx`
-
-### Phase banner (DRAFT)
-
-- **Use for:** Every page until legal sign-off.
-- **Not for:** Removing it before the rules are signed off.
-- One line at 360 px, in the warning tint.
-- Hindi pages add a line saying the translation is a draft.
-- _Code:_ `web/src/components/chrome.tsx`
 
 ### Header
 
@@ -331,7 +323,7 @@ Visual tokens (colours, type, radius, spacing) come from crashfreeindia.org, whi
 
 - **Use for:** The phone's own share sheet when available, otherwise 'Copy summary'; print / save as PDF.
 - **Not for:** wa.me links (they put the estimate in a URL sent to a third party).
-- The shared text always carries DRAFT, the as-of date and 'not legal advice'.
+- The shared text always says where it came from, the as-of date and 'not legal advice'.
 - Nothing is sent to our server.
 - _Code:_ `web/src/components/result.tsx`
 

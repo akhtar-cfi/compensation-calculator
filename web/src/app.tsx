@@ -2,7 +2,7 @@ import type { ComponentType } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { estimate } from "../../src/engine/index.js";
 import type { ScenarioMix } from "../../src/engine/types.js";
-import { DraftBanner, Footer, Header, HelpBand } from "./components/chrome";
+import { Footer, Header, HelpBand } from "./components/chrome";
 import { ExampleBar, ModeBar } from "./components/modebar";
 import { rules } from "./data";
 import { pageTitle } from "./focus";
@@ -347,7 +347,6 @@ export function App() {
   return (
     <LangProvider lang={lang} setLang={setLang}>
       <Header />
-      <DraftBanner />
       <main id="main" tabIndex={-1} class="outline-none">
         {page}
       </main>

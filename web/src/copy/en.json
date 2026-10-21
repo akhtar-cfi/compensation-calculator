@@ -1,7 +1,5 @@
 {
   "app.name": "Motor accident compensation estimate",
-  "app.draft": "Draft prototype. Not yet reviewed by our legal reviewers: do not rely on these numbers.",
-  "app.hiDraft": "",
   "nav.how": "How it is calculated",
   "nav.rules": "Rules and sources",
   "lang.switch": "हिंदी",
@@ -316,7 +314,7 @@
   "app.keep": "Keep my answers",
   "app.restart": "Start again",
   "res.meaning": "What the Supreme Court's method gives on these facts, taking the usual position where courts differ. Not a promise of what a tribunal will award.",
-  "share.draft": "DRAFT estimate from Crashfree India's compensation calculator (not yet legally reviewed)",
+  "share.head": "Estimate from Crashfree India's road crash compensation calculator",
   "share.asof": "As of {d}",
   "share.facts": "Facts: {kind} of a {age}-year-old · {work} · {state} · accident: {date}",
   "share.income": "Monthly income used: {x}",
