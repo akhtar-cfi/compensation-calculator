@@ -1,0 +1,110 @@
+{
+  "record_version": 1,
+  "doc_id": "2020_10_1132_1150",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2020 INSC 535",
+  "cnr": "ESCR010000032020",
+  "decided": "2020-09-07",
+  "citation": "2020 INSC 535; [2020] 10 S.C.R. 1132",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2020/english/2020_10_1132_1150_EN.pdf",
+  "quote_check": "verified, 17/17 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2020_10_1132_1150",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "No final amount is decided or stated: the Supreme Court set aside only the head for loss of love and affection (Rs 4,00,000 in the lead appeal), upheld consortium to each claimant, and directed the tribunals to recompute the amount payable.",
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "UP",
+      "accident_date": "2001-12-06",
+      "filing_date": null,
+      "award_date": "2003-03-22",
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": 7,
+      "heads": {
+        "consortium": 280000
+      },
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 7,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2003-03-22",
+        "amount": 167000,
+        "by": null,
+        "note": "Death claim by the widow and seven minor children (Rs 15,25,000 claimed); the tribunal allowed Rs 1,67,000 with 9% interest."
+      },
+      {
+        "forum": "high_court",
+        "date": "2019-02-25",
+        "amount": 1254000,
+        "by": "claimant",
+        "note": "Family's appeal allowed by the High Court in Uttar Pradesh, about 16 years after the tribunal award. Its award included Rs 50,000 for loss of love and affection to each of the eight claimants (Rs 4,00,000) and Rs 40,000 parental consortium to each of the seven children (Rs 2,80,000)."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2020-09-07",
+        "amount": null,
+        "by": "insurer",
+        "note": "Insurer's appeal partly allowed: consortium to each claimant upheld, the Rs 4,00,000 for loss of love and affection set aside, and the tribunal told to recompute the amount payable. The new total is not stated."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "consortium"
+      ],
+      "holding": "Pranay Sethi does not limit loss of consortium to the wife: following Satinder Kaur, spousal, parental and filial consortium are all payable, and the High Courts rightly awarded consortium to each claimant. Loss of love and affection is part of consortium, so no compensation can be awarded for it as a separate head.",
+      "para": "34-35, 38-40",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, age not stated, left a widow and seven minor children, Uttar Pradesh (death)",
+    "family_summary": "A man died in a road accident in December 2001, leaving his widow and seven young children. The tribunal awarded Rs 1,67,000 in 2003; on the family's appeal the High Court raised this to Rs 12,54,000 in 2019, including Rs 40,000 consortium for each child and Rs 50,000 for love and affection to each of the eight family members. In 2020 the Supreme Court kept the consortium but cut the Rs 4,00,000 for love and affection, and told the tribunal to work out the final amount, almost 19 years after the death.",
+    "what_mattered": [
+      "The Supreme Court held that consortium is not only for a widow: each child (parental consortium) and parents (filial consortium) can get it, so Rs 40,000 for each of the seven children stayed.",
+      "Loss of love and affection counts as part of consortium, so the separate Rs 50,000 to each of the eight family members (Rs 4,00,000) was taken away.",
+      "The family's own appeal to the High Court made the biggest difference, raising the award from Rs 1,67,000 to Rs 12,54,000."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": [
+      "Precedent largely follows the three-judge bench in Satinder Kaur (cited in the judgment); recorded because it rejects the reading of Pranay Sethi that limits consortium to the wife.",
+      "Checked rules/formula/conventional-heads.yaml: Rs 40,000 consortium per claimant (spousal, parental, filial) and no love-and-affection head, so departs_from_rules is false."
+    ]
+  }
+}

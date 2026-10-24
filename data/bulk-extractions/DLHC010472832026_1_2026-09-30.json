@@ -1,0 +1,96 @@
+{
+  "record_version": 1,
+  "doc_id": "DLHC010472832026_1_2026-09-30",
+  "source": "hc",
+  "court": "High Court of Delhi",
+  "case": "MAC.APP. 641/2026",
+  "cnr": "DLHC010472832026",
+  "decided": "2026-09-30",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/court%3D7_26/bench%3Ddhcdb/DLHC010472832026_1_2026-09-30.pdf",
+  "quote_check": "verified, 20/20 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "DLHC010472832026_1_2026-09-30",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_partly_allowed",
+      "court": "High Court of Delhi",
+      "court_level": "hc",
+      "state_code": "DL",
+      "accident_date": "2021-07-22",
+      "filing_date": null,
+      "award_date": "2026-04-24",
+      "age": 27,
+      "employment": null,
+      "occupation": "nursing attendant",
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": 17,
+      "disability_pct": 60,
+      "certificate_pct": 55,
+      "certificate_basis": "limb",
+      "consortium_claimants": null,
+      "heads": {
+        "future_attendant": 3243600
+      },
+      "awarded_formula_head": null,
+      "total_award": 11043616,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2026-04-24",
+        "amount": 11043616,
+        "by": null,
+        "note": "Tribunal awarded Rs 1,10,43,616 with 9% interest: functional disability 60%, lifelong attendant at Rs 15,900 a month (Rs 32,43,600 with multiplier 17), future physiotherapy at Rs 7,500 a month."
+      },
+      {
+        "forum": "high_court",
+        "date": "2026-09-30",
+        "amount": 11043616,
+        "by": "insurer",
+        "note": "Insurer's appeal disposed of: attendant charges and future physiotherapy upheld; interest cut from 9% to 6% a year, the RBI lending rate at the time of the accident."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, 27, nursing attendant, Delhi (injury, 60% functional disability)",
+    "family_summary": "A 27-year-old nursing attendant riding his motorcycle in Delhi was hit from behind by a city bus in July 2021 and left with 55% permanent disability in his right leg. Because of his work, the tribunal treated his loss of working ability as 60%. In April 2026 it awarded Rs 1,10,43,616 (about Rs 1.1 crore) with 9% interest, including a lifelong attendant at Rs 15,900 a month and physiotherapy at Rs 7,500 a month. The insurer appealed, and in September 2026 the Delhi High Court kept the full amount but cut interest to 6% a year, counted from the date the claim was filed. The case took about five years from the accident.",
+    "what_mattered": [
+      "The doctor who told the tribunal he needs an attendant for life was never questioned on this by the insurer's lawyer, so the High Court refused to cut the attendant charges.",
+      "The insurer did not dispute the attendant's minimum wage of Rs 15,900 a month, so that figure stood.",
+      "Interest was reduced from 9% to 6% because RBI lending rates were 6% when the accident happened.",
+      "The insurer said it was not proved he would need physiotherapy for life, but the High Court found Rs 500 a session for 15 days a month (Rs 7,500 a month) reasonable and kept it."
+    ],
+    "archetypes": [
+      "injury_partial_disability_self_employed_or_manual"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: added a what_mattered item on the physiotherapy ruling (Rs 500 a session, 15 days a month, Rs 7,500 a month kept as reasonable); used '15 days' as the order says, not '15 sessions'.",
+      "fixed: what_mattered[0] reworded to drop 'cross-examined' for plain language.",
+      "fixed: family_summary now gives the 60% functional disability, the Rs 15,900 and Rs 7,500 monthly amounts, and that 6% interest runs from the date the claim was filed."
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "record_version": 1,
+  "doc_id": "2018_6_795_804",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2018 INSC 431",
+  "cnr": "ESCR010007002018",
+  "decided": "2018-04-27",
+  "citation": "2018 INSC 431; [2018] 6 S.C.R. 795",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2018/english/2018_6_795_804_EN.pdf",
+  "quote_check": "verified, 25/25 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2018_6_795_804",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "UK",
+      "accident_date": "2010-11-28",
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": "dairy business (as claimed by the family; no court decided her income)",
+      "proof": null,
+      "claimed_monthly_income": 10000,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 50000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 3,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2014-12-10",
+        "amount": 0,
+        "by": null,
+        "note": "Claim dismissed: the tribunal found the car's driver negligent for following the truck too closely, held the truck driver and its insurer not liable, and gave no relief because the car's owner and driver were not made parties."
+      },
+      {
+        "forum": "high_court",
+        "date": "2015-03-05",
+        "amount": 0,
+        "by": "claimant",
+        "note": "Family's appeal summarily dismissed, repeating the tribunal's finding that the car's driver failed to keep a safe distance."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2018-04-27",
+        "amount": 50000,
+        "by": "claimant",
+        "note": "Appeal partly allowed: the negligence claim under section 166 still failed, but Rs 50,000 no-fault compensation under section 140 was granted with 9% interest from the date of the claim petition."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "negligence",
+        "no_fault_liability",
+        "liability"
+      ],
+      "holding": "Regulation 23 of the Rules of the Road Regulations, 1989 requires a following driver to keep a 'sufficient distance'; the thumb rule is at least a two to three second gap in ideal conditions, so a car kept 10-15 feet behind a truck was to blame. Even when a section 166 claim fails for lack of negligence, no-fault compensation under section 140 is payable by the owner of the vehicle involved, regardless of whether it was driven rashly and negligently.",
+      "para": "10, 13",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Woman, car passenger, Uttarakhand (death)",
+    "family_summary": "A woman travelling in a car driven by her husband's cousin died in November 2010 when the car ran into the back of a truck. In December 2014 the tribunal dismissed the family's claim against the truck's side, finding that the car's driver had followed the truck too closely, and in March 2015 the High Court upheld this. In April 2018, about seven and a half years after the accident, the Supreme Court agreed the car's driver was to blame, but said the tribunal should have considered no-fault compensation anyway: it ordered Rs 50,000 under section 140, payable by the truck's driver and one other respondent (not the insurer), with 9% interest from the date the claim was filed.",
+    "what_mattered": [
+      "The car's driver admitted following the truck at only 10-15 feet on a road about 14 feet wide, so every court put the blame on the car, not the truck.",
+      "The family argued the truck driver was partly to blame, but the courts found no fault on the truck's side. The car's driver and owner, who were to blame, were never made parties to the claim (the tribunal noted the car was not insured), so nothing could be ordered against them.",
+      "The Supreme Court still granted Rs 50,000 under section 140, which makes the owner of a vehicle involved in a fatal accident pay a fixed sum without proof of fault."
+    ],
+    "archetypes": [
+      "contributory_negligence"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: precedent.holding, topics, para - added the para 13 holding that section 140 no-fault compensation is payable by the owner of the vehicle involved even when the section 166 claim fails; topics now negligence, no_fault_liability, liability; para 10, 13.",
+      "not changed: precedent.quote was not extended with the para 13 sentence because the quote must be one continuous passage and paras 10 and 13 are not adjacent; that sentence is added to evidence under precedent.holding instead.",
+      "fixed: archetypes - removed uninsured_vehicle; the claim and the award were against the insured truck's side, and only the car, which was never a party, was said (by the tribunal) to be uninsured.",
+      "fixed: archetypes - added contributory_negligence; the family argued the truck driver was partly negligent and para 12 rejected it (contributory_negligence_pct stays 0).",
+      "not changed: did not keep uninsured_vehicle as the privacy+law review suggested, because the vehicle claimed against (the truck) was insured and the uninsured car's status did not decide who paid.",
+      "fixed: what_mattered[1] - the family argued the truck driver was partly to blame, the courts found no fault on the truck's side, the car's driver and owner were never parties; the car being uninsured is now attributed to the tribunal (two reviews merged).",
+      "fixed: children - set to 3 (she was the mother of appellants Nos. 2 to 4); payload.uncertain updated and the quote added to evidence.",
+      "fixed: family_summary - car driven by her husband's cousin (headnote 1.1); Supreme Court said the tribunal should have used section 140; Rs 50,000 payable by respondents 2 and 3 (the truck's driver and one other), not the insurer."
+    ]
+  }
+}

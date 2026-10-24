@@ -1,0 +1,119 @@
+{
+  "record_version": 1,
+  "doc_id": "UPHC010204212004_1_2023-11-02",
+  "source": "hc",
+  "court": "Allahabad High Court",
+  "case": "FAFO 3455/2004",
+  "cnr": "UPHC010204212004",
+  "decided": "2023-11-02",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2023/court%3D9_13/bench%3Dcisdb_16012018/UPHC010204212004_1_2023-11-02.pdf",
+  "quote_check": "verified, 31/31 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "UPHC010204212004_1_2023-11-02",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Allahabad High Court",
+      "court_level": "hc",
+      "state_code": "UP",
+      "accident_date": "2000-07-14",
+      "filing_date": null,
+      "award_date": "2004-08-17",
+      "age": 35,
+      "employment": "homemaker",
+      "occupation": "homemaker who also did embroidery and knitting work at home",
+      "proof": "none",
+      "claimed_monthly_income": 5000,
+      "income_monthly_accepted": 3000,
+      "income_basis": "notional",
+      "future_prospects_pct": 50,
+      "deduction": "1/3",
+      "multiplier": 16,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": 5,
+      "heads": {
+        "loss_of_dependency": 576000,
+        "loss_of_estate": 15000,
+        "funeral": 15000,
+        "consortium": null
+      },
+      "awarded_formula_head": 576000,
+      "total_award": 806000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 7,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 4,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2004-08-17",
+        "amount": null,
+        "by": null,
+        "note": "Tribunal allowed the claim and made the insurer liable; income taken as Rs 2,000 a month, multiplier 16, one-third deduction, no future prospects. Total not stated in the High Court judgment."
+      },
+      {
+        "forum": "high_court",
+        "date": "2023-11-02",
+        "amount": 806000,
+        "by": "insurer",
+        "note": "Insurer's appeal partly allowed: owner, not insurer, to pay (goods vehicle, no pay and recover). Award raised to Rs 8,06,000 with 7% interest: income Rs 3,000 a month, 50% future prospects, multiplier 16, consortium Rs 40,000 x 5."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "state",
+      "state_code": "UP",
+      "topics": [
+        "pay_and_recover"
+      ],
+      "holding": "A goods vehicle's insurer is not liable for people carried in it beyond those the policy and s.147 cover (driver, helper, owner of the goods or his agent), whether or not they paid a fare. Where the tribunal decided after the three-judge bench in New India Assurance v. Asha Rani, (2003) 2 SCC 223, had settled this (and not in the interval Baljit Kaur protected), the insurer cannot be directed to pay and recover from the owner: the Supreme Court's pay-and-recover directions for passengers in goods vehicles, as in Anu Bhanvara, (2020) 20 SCC 632, were made under Article 142, a power other courts do not have. The owner alone pays.",
+      "para": "21-23",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Woman, 35, homemaker and home embroidery worker, passenger in a goods jeep, Uttar Pradesh (death)",
+    "family_summary": "A 35-year-old woman in Uttar Pradesh who ran the home and did embroidery and knitting work was killed in July 2000 when the jeep carrying her family hit a parked truck. In August 2004 the tribunal took her income as Rs 2,000 a month and made the insurer pay; the High Court judgment does not give the tribunal's total. On the insurer's appeal, the Allahabad High Court in November 2023 raised the award for her husband and four children to Rs 8,06,000 with 7% interest, but ordered the jeep's owner, not the insurer, to pay. The appeal took 19 years to decide, and the final order came more than 23 years after the accident.",
+    "what_mattered": [
+      "The jeep was insured only to carry its owner's goods, so the insurance did not cover people riding in it. The court would not make the insurer pay first and recover from the owner, as the law was settled before the tribunal decided. The owner alone must pay, which can be harder to collect.",
+      "Although only the insurer appealed, the High Court used its duty to make a just award: it raised her income from Rs 2,000 to Rs 3,000 a month for her embroidery work and care of the home, and added 50% for likely future rises in income under the Uttar Pradesh rules.",
+      "Her husband and each of the four children got Rs 40,000 for the loss of her love and care (called 'consortium'); the family also got Rs 15,000 for loss of estate and Rs 15,000 for funeral expenses: Rs 2,30,000 on top of the Rs 5,76,000 for lost income."
+    ],
+    "archetypes": [
+      "death_homemaker",
+      "death_informal_no_proof"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: archetypes - removed uninsured_vehicle; the tribunal held the jeep validly insured (para 12) and the insurer escaped only because the policy covered a private goods carrier (paras 17-18); payload.uncertain[4] updated.",
+      "Archetype gap: passenger in an insured goods vehicle, insurer exonerated, owner pays.",
+      "fixed: archetypes - added death_informal_no_proof; her home embroidery and knitting income rested only on her husband's oral evidence, and the court accepted such work lacks formal documents (para 31).",
+      "fixed: precedent caveat added; single judge (J.J. Munir J.) following his own Hari Shanker (para 22). The cited Supreme Court decisions (Asha Rani, (2003) 2 SCC 223; Anu Bhanvara, (2020) 20 SCC 632) are quoted in paras 19-21 of this judgment.",
+      "Single-judge view following the same judge's Hari Shanker (2022:AHC-LKO:29858). A reviewer suggested checking it against later Supreme Court rulings on pay and recover for passengers outside the policy (Manuara Khatun, cited from general knowledge, not in this judgment; citation unverified).",
+      "fixed: precedent.holding - names Asha Rani, (2003) 2 SCC 223, and the Baljit Kaur interval, ties the Article 142 point to Anu Bhanvara-type directions, and lists who a goods-vehicle policy covers (paras 18-22).",
+      "fixed: what_mattered[0] - plain words for pay and recover, why the court refused it (law settled by Asha Rani before the tribunal decided, para 21) and that the owner alone pays.",
+      "fixed: what_mattered[1] - income raised from Rs 2,000 to Rs 3,000 (para 31); future prospects explained in plain words (paras 35-37).",
+      "fixed: what_mattered[2] - consortium explained; Rs 40,000 x 5 plus Rs 15,000 + Rs 15,000 = Rs 2,30,000 tied to the Rs 5,76,000 for lost income (para 41); worded so Rs 15,000 is not read as per person.",
+      "fixed: family_summary - last sentence made grammatical; says she did embroidery and knitting work instead of stating as fact an income the court only estimated.",
+      "fixed: journey[0].note - removed the tribunal's district name, which points to where the family moved (para 4).",
+      "fixed: title_anon - adds that she was a passenger in a goods jeep, the fact that decided who pays."
+    ]
+  }
+}

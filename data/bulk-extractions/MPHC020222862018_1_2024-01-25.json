@@ -1,0 +1,102 @@
+{
+  "record_version": 1,
+  "doc_id": "MPHC020222862018_1_2024-01-25",
+  "source": "hc",
+  "court": "High Court of Madhya Pradesh",
+  "case": "MA 4140/2018",
+  "cnr": "MPHC020222862018",
+  "decided": "2024-01-25",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/court%3D23_23/bench%3Dmphc_db_ind/MPHC020222862018_1_2024-01-25.pdf",
+  "quote_check": "verified, 32/32 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "MPHC020222862018_1_2024-01-25",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "High Court of Madhya Pradesh",
+      "court_level": "hc",
+      "state_code": "MP",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": "2017-09-04",
+      "age": null,
+      "employment": "permanent",
+      "occupation": "government employee",
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": "proved_salary",
+      "future_prospects_pct": 15,
+      "deduction": null,
+      "multiplier": 11,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_dependency": 4390584,
+        "consortium": 120000,
+        "loss_of_estate": 15000,
+        "funeral": 15000
+      },
+      "awarded_formula_head": 4390584,
+      "total_award": 4540584,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 2,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2017-09-04",
+        "amount": 3982902,
+        "by": null,
+        "note": "Tribunal awarded Rs 39,82,902 with interest from the date of filing, including Rs 38,17,902 for loss of dependency with no future prospects; the family's counsel said it gave nothing for parental consortium or loss of estate."
+      },
+      {
+        "forum": "high_court",
+        "date": "2024-01-25",
+        "amount": 4540584,
+        "by": "claimant",
+        "note": "Family's appeal partly allowed: 15% future prospects added (dependency Rs 43,90,584 at multiplier 11), consortium Rs 1,20,000, estate and funeral Rs 15,000 each; increase of Rs 5,57,682 at the tribunal's interest rate."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Married man, government employee, Madhya Pradesh (death)",
+    "family_summary": "A married government employee in Madhya Pradesh died in a road accident, and his widow and two student sons claimed compensation. In September 2017 the tribunal awarded Rs 39,82,902 with interest. On the family's appeal, filed in 2018, the High Court in January 2024 raised the total to Rs 45,40,584, an increase of Rs 5,57,682 carrying the same interest. That decision came more than six years after the tribunal's award.",
+    "what_mattered": [
+      "His salary as a government employee was undisputed, so the High Court added the 15% future prospects the tribunal had left out (the rate a 2017 Supreme Court judgment sets for permanent employees aged 50 to 60); with the same multiplier of 11, dependency rose from Rs 38,17,902 to Rs 43,90,584.",
+      "The High Court set the other heads at Rs 1,50,000: Rs 1,20,000 for loss of consortium (citing a 2021 Supreme Court judgment) and Rs 15,000 each for loss of estate and funeral. This replaced the tribunal's Rs 1,65,000 under other heads, so the whole increase came from future prospects.",
+      "The family had valued the appeal at only Rs 4,00,000, so they had to pay a further court fee of Rs 3,943 on the remaining Rs 1,57,682 within one month before the money was released, and lose interest on the increase if the fee certificate did not reach the insurer within three months."
+    ],
+    "archetypes": [
+      "death_salaried"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: family_summary no longer says the appeal took six years; it was filed in 2018 and decided in January 2024, more than six years after the September 2017 award.",
+      "fixed: what_mattered[1] now says the other heads (Rs 1,50,000) replaced the tribunal's Rs 1,65,000, so the whole increase came from future prospects (table: 45,40,584 - 39,82,902 = 5,57,682).",
+      "fixed: journey[0].note drops 'no consortium'; only the family's counsel said the tribunal gave nothing for parental consortium or loss of estate.",
+      "fixed: what_mattered[0] explains 15% is the rate for permanent employees aged 50 to 60 and gives dependency rising from Rs 38,17,902 to Rs 43,90,584.",
+      "fixed: what_mattered[2] states the extra court fee of Rs 3,943 on Rs 1,57,682 due within one month, then release on the certificate (para 11).",
+      "fixed: uncertain[4] cites (2021) 11 SCC 780 instead of naming the reported case.",
+      "fixed: uncertain[5] cites the table's 'deceased was permanent employee'; added that quote as employment evidence."
+    ]
+  }
+}

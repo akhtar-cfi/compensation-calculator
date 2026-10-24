@@ -1,0 +1,95 @@
+{
+  "record_version": 1,
+  "doc_id": "RJHC010799682017_1_2024-09-06",
+  "source": "hc",
+  "court": "High Court of Rajasthan",
+  "case": "CMA 3245/2017",
+  "cnr": "RJHC010799682017",
+  "decided": "2024-09-06",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/court%3D8_9/bench%3Drhcjodh240618/RJHC010799682017_1_2024-09-06.pdf",
+  "quote_check": "verified, 22/22 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "RJHC010799682017_1_2024-09-06",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_dismissed",
+      "court": "High Court of Rajasthan at Jodhpur",
+      "court_level": "hc",
+      "state_code": "RJ",
+      "accident_date": "2013-05-16",
+      "filing_date": null,
+      "award_date": "2017-09-04",
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": 0,
+      "certificate_pct": 15,
+      "certificate_basis": "unclear",
+      "consortium_claimants": null,
+      "heads": {
+        "pain_suffering": 75000,
+        "other:simple_injuries": 6000,
+        "medical": 6800
+      },
+      "awarded_formula_head": null,
+      "total_award": 87800,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": 6800,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2017-09-04",
+        "amount": 87800,
+        "by": null,
+        "note": "Tribunal awarded Rs 87,800 with 6% interest: Rs 75,000 pain and suffering (Rs 5,000 per percent of 15% disability), Rs 6,000 for four simple injuries, Rs 6,800 medical expenses; owner and insurer jointly liable."
+      },
+      {
+        "forum": "high_court",
+        "date": "2024-09-06",
+        "amount": 87800,
+        "by": "both",
+        "note": "Insurer's appeal (FIR delay, change of driver's name) and the claimant's cross-objection for more compensation both dismissed after condoning the cross-objection's delay; award of Rs 87,800 upheld."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man injured on a motorcycle, Rajasthan (injury, 15% permanent disability)",
+    "family_summary": "A man travelling on a motorcycle in Rajasthan was hit by a jeep in May 2013 and was left with 15% permanent disability. He had claimed Rs 14.76 lakh. In September 2017 the tribunal awarded Rs 87,800 with 6% interest: it found the disability did not reduce his ability to earn, so it paid nothing for lost earnings and gave Rs 75,000 for pain and suffering (Rs 5,000 for each percent of disability), Rs 6,000 for four minor injuries and Rs 6,800 for medical bills. The insurer appealed and the High Court put its payment on hold in January 2018. He asked for more, but in September 2024 the High Court dismissed both and left the award unchanged, about 11 years after the accident.",
+    "what_mattered": [
+      "The insurer's points about an 18-day delay in the police report and the driver's name changing from the owner's son to the owner failed: the court said injured people first seek treatment, a witness said the owner was driving, and the insurer neither proved the son was unlicensed nor summoned him.",
+      "The 15% disability was paid as pain and suffering (Rs 5,000 per percent) rather than lost earnings, because the tribunal found no effect on earning capacity; with no hospital admission or discharge papers on record, the request for more was refused."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": [
+      "fixed: title_anon now says injured on a motorcycle, not motorcyclist; the judgment never says which claimant was riding.",
+      "fixed: family_summary adds the Rs 14.76 lakh claim and the January 2018 stay of payment, and explains the heads in plain words.",
+      "fixed: what_mattered[0] drops eyewitness and no-switch wording; says the name changed from owner's son to owner and the insurer neither proved the son unlicensed nor summoned him.",
+      "fixed: uncertain[0] calls the second claimant a second person injured in the same accident, not a rider."
+    ]
+  }
+}

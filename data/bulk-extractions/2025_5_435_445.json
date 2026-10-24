@@ -1,0 +1,105 @@
+{
+  "record_version": 1,
+  "doc_id": "2025_5_435_445",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2025 INSC 468",
+  "cnr": "ESCR010001702025",
+  "decided": "2025-04-07",
+  "citation": "2025 INSC 468; [2025] 5 S.C.R. 435",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2025/english/2025_5_435_445_EN.pdf",
+  "quote_check": "verified, 20/20 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2025_5_435_445",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "The Supreme Court decided no amount: the owner's appeals challenged only the order that the insurer pay the two death awards and recover them from the owner and driver. The award amounts were not challenged and are not stated in the judgment.",
+      "kind": "death",
+      "outcome": "appeal_dismissed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "PB",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": null,
+        "by": null,
+        "note": "Two separate death awards; the tribunal found rash and negligent driving and told the insurer to pay and recover from the tanker's owner and driver, as the licence lacked the hazardous-goods endorsement. Amounts and date not stated."
+      },
+      {
+        "forum": "high_court",
+        "date": "2019-02-07",
+        "amount": null,
+        "by": "owner",
+        "note": "Punjab and Haryana High Court dismissed the owner's first appeals against pay and recover, refusing a training certificate produced for the first time on appeal; review applications rejected on 14.05.2019. Amounts not stated."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2025-04-07",
+        "amount": null,
+        "by": "owner",
+        "note": "Owner's appeals dismissed: insurer pays the claimants and recovers from the owner. Quantum was never challenged. No amounts stated."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "pay_and_recover"
+      ],
+      "holding": "Driving a goods carriage carrying dangerous or hazardous goods needs a Rule 9 training endorsement on the licence; the training covers driving skill, not only product safety. Lacking it is not a venial or technical breach where the accident was caused by rash and negligent driving, so the insurer may pay the claimants and recover from the owner.",
+      "para": "11-12, 19",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Cyclist and pedestrian killed by an oil tanker, Punjab (death; insurer pays and recovers)",
+    "family_summary": "An oil tanker driven rashly and negligently hit and killed a cyclist and a pedestrian, each a breadwinner for their family. The tribunal awarded compensation in both claims (the amounts are not stated in this judgment) and told the insurer to pay the families and then recover the money from the tanker's owner and driver, because the driver's licence lacked the endorsement needed to drive a vehicle carrying hazardous goods. The Punjab and Haryana High Court upheld this in February 2019 and rejected a review in May 2019. The owner's first appeals were filed in 2015, and the Supreme Court dismissed the owner's appeals in April 2025, about ten years later.",
+    "what_mattered": [
+      "The driver admitted his licence had no endorsement for vehicles carrying hazardous goods and that the tanker was carrying oil; the Supreme Court held this training covers driving skill, so the lapse was not a mere technicality.",
+      "An eyewitness, the FIR and the charge sheet showed rash and negligent driving, outweighing the driver's claim that he swerved to save pedestrians.",
+      "A training certificate produced for the first time on appeal, with no explanation, no serial number and no seal, was not accepted."
+    ],
+    "archetypes": [],
+    "audience": "lawyers",
+    "review_notes": []
+  }
+}

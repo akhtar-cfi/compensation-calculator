@@ -1,0 +1,114 @@
+{
+  "record_version": 1,
+  "doc_id": "UPHC020446552010_1_2023-12-11",
+  "source": "hc",
+  "court": "Allahabad High Court",
+  "case": "FAFO 491/2010",
+  "cnr": "UPHC020446552010",
+  "decided": "2023-12-11",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2023/court%3D9_13/bench%3Dcishclko/UPHC020446552010_1_2023-12-11.pdf",
+  "quote_check": "verified, 21/21 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "UPHC020446552010_1_2023-12-11",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Allahabad High Court (Lucknow Bench)",
+      "court_level": "hc",
+      "state_code": "UP",
+      "accident_date": "2007-02-28",
+      "filing_date": null,
+      "award_date": "2009-11-12",
+      "age": 55,
+      "employment": "self_employed",
+      "occupation": "small trader (selling drinks or grains)",
+      "proof": "none",
+      "claimed_monthly_income": 6000,
+      "income_monthly_accepted": null,
+      "income_basis": "notional",
+      "future_prospects_pct": 10,
+      "deduction": "1/3",
+      "multiplier": 9,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_dependency": 198000,
+        "consortium": 80000,
+        "other:loss_of_estate_and_funeral": 30000
+      },
+      "awarded_formula_head": 198000,
+      "total_award": 308000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 1,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2009-11-12",
+        "amount": 87000,
+        "by": null,
+        "note": "Tribunal awarded Rs 87,000 with 6% interest: notional income Rs 15,000 a year, multiplier 8, one-third deduction, Rs 7,000 for conventional heads."
+      },
+      {
+        "forum": "high_court",
+        "date": "2023-12-11",
+        "amount": 308000,
+        "by": "both",
+        "note": "Insurer's appeal (contributory negligence) dismissed; family's appeal partly allowed: income Rs 30,000 a year, 10% future prospects, multiplier 9, consortium Rs 80,000, estate and funeral Rs 30,000; total Rs 3,08,000 with 6% interest."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "state",
+      "state_code": "UP",
+      "topics": [
+        "contributory_negligence",
+        "composite_negligence",
+        "liability"
+      ],
+      "holding": "If a tribunal, after a contested hearing with evidence, has found one driver solely negligent in a claim from an accident, and the insurer, though a party, did not appeal, that finding is final. The insurer cannot argue contributory negligence in other claims from the same accident without leading evidence, and a site plan alone cannot prove it.",
+      "para": "26-27",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 55, small trader, Uttar Pradesh (death)",
+    "family_summary": "A 55-year-old small trader travelling in a jeep in Uttar Pradesh died in February 2007 when a mini bus hit the jeep. In November 2009 the tribunal awarded his widow and daughter Rs 87,000 with 6% interest. The bus's insurer appealed, saying the jeep driver was also to blame, and the family appealed for more. In December 2023 the Allahabad High Court rejected the insurer's appeal and raised the award to Rs 3,08,000, almost 17 years after the accident.",
+    "what_mattered": [
+      "In a separate claim by the family of the jeep driver, who also died, a tribunal had found the bus driver solely to blame; the bus's insurer was a party but never appealed, so the High Court refused to split the blame.",
+      "The insurer led no evidence and did not call the bus driver; a site plan alone could not prove the jeep driver was also at fault.",
+      "The family could not prove his earnings, but the High Court doubled the assumed income to Rs 30,000 a year, added 10% for likely future rises, multiplied the yearly loss by 9, not 8, and gave the widow and daughter Rs 80,000 for loss of companionship and Rs 30,000 for estate and funeral costs."
+    ],
+    "archetypes": [
+      "death_informal_no_proof",
+      "death_self_employed"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: archetypes - removed contributory_negligence; the deceased was a jeep passenger and his own negligence was never argued; the insurer's plea was to share blame with the jeep driver (composite negligence).",
+      "fixed: precedent.holding - added that the insurer was a party to the earlier claim and did not appeal (para 26); precedent.quote widened to include that sentence.",
+      "fixed: precedent.topics - added composite_negligence and liability; claimants' counsel (para 17) framed the plea as composite negligence between the two vehicles.",
+      "fixed: what_mattered[2] - plain words for future prospects and consortium; added multiplier 8 to 9 and Rs 30,000 for estate and funeral (para 30 table).",
+      "fixed: what_mattered[0] - says the earlier finding came from the jeep driver's family's claim and the insurer was a party but did not appeal (para 26).",
+      "fixed: archetypes - added death_self_employed; the deceased ran his own small business selling drinks/grains (paras 21, 30)."
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "record_version": 1,
+  "doc_id": "UPHC010995602004_1_2023-11-06",
+  "source": "hc",
+  "court": "Allahabad High Court",
+  "case": "FAFO 1659/2004",
+  "cnr": "UPHC010995602004",
+  "decided": "2023-11-06",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2023/court%3D9_13/bench%3Dcisdb_16012018/UPHC010995602004_1_2023-11-06.pdf",
+  "quote_check": "verified, 23/23 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "UPHC010995602004_1_2023-11-06",
+    "source": "hc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "Not a Motor Vehicles Act claim: the injured driver claimed against his employer under the Workmen's Compensation Act, 1923 before the Workmen's Compensation Commissioner, and this is the insurer's appeal under Section 30 of that Act. The award follows that Act's fixed formula, not a MACT assessment.",
+      "kind": "injury",
+      "outcome": "appeal_dismissed",
+      "court": "Allahabad High Court",
+      "court_level": "hc",
+      "state_code": "UP",
+      "accident_date": "2001-07-06",
+      "filing_date": null,
+      "award_date": "2004-04-15",
+      "age": 32,
+      "employment": null,
+      "occupation": "truck driver",
+      "proof": null,
+      "claimed_monthly_income": 4000,
+      "income_monthly_accepted": 2700,
+      "income_basis": "minimum_wage_other",
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": 100,
+      "certificate_pct": 20,
+      "certificate_basis": "limb",
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 330237,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 10,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": 18,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "high_court",
+        "date": "2023-11-06",
+        "amount": 330237,
+        "by": "insurer",
+        "note": "Insurer's appeal against the Workmen's Compensation Commissioner's award of 15.04.2004 (Rs 3,30,237, 100% loss of earning capacity) dismissed with costs; award upheld in full. The Commissioner is not a MACT, so no tribunal step is recorded."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "state",
+      "state_code": "UP",
+      "topics": [
+        "functional_disability"
+      ],
+      "holding": "Under the Employees' Compensation Act, 1923, a workman in a specific trade (driver, carpenter, tailor) whose permanent injury, of any percentage, is shown by medical opinion to stop him doing that job has lost 100% of his earning capacity. The court declined to follow a Karnataka Full Bench requiring proof he can do no other work.",
+      "para": "46",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 32, truck driver, Uttar Pradesh (injury, workmen's compensation)",
+    "family_summary": "A 32-year-old truck driver in Uttar Pradesh broke his right leg in 2001 when the truck he drove for his employer collided head-on with a bus. He claimed under the workmen's compensation law, not before a motor accident claims tribunal. A government doctor put his leg disability at 20% but later certified that he could no longer drive, so in April 2004 the Workmen's Compensation Commissioner treated his earning capacity as fully lost and awarded Rs 3,30,237. The insurer appealed, and in November 2023 the Allahabad High Court dismissed the appeal and upheld the full award, about 19 and a half years after the award and 22 years after the accident.",
+    "what_mattered": [
+      "The Commissioner asked the Chief Medical Officer directly whether the driver could still drive; the second certificate said he could not, which turned a 20% leg disability into a 100% loss of earning capacity.",
+      "A thumb-marked letter said to show he earned only Rs 2,000 a month was not relied on because he denied the thumb impression and the employer never produced its salary register, so the minimum wage for a driver (Rs 2,700 a month) was used instead of the Rs 4,000 he claimed.",
+      "The High Court followed Supreme Court rulings that a driver whose permanent injury stops him from driving has lost all of his earning capacity, and rejected the insurer's argument that he also had to prove he could do no other work."
+    ],
+    "archetypes": [],
+    "audience": "lawyers",
+    "review_notes": [
+      "fixed: hospital_days set to 18 (claimant's account in the High Court's narration of facts), with evidence quote.",
+      "fixed: precedent.holding now states the medical-opinion condition (CMO certificate on an orthopaedic surgeon's report that he cannot drive) that the court relied on and used to distinguish Mohd. Nasir.",
+      "fixed: family_summary now says the 20% leg certificate was later followed by a certificate that he could not drive, so earning capacity (not all ability to earn) was treated as fully lost.",
+      "fixed: what_mattered gains a line on the High Court following Supreme Court driver/carpenter rulings and rejecting the Karnataka Full Bench 'no other work' test.",
+      "fixed: what_mattered[1] now names the thumb-marked letter (Rs 2,000 a month) and says the Rs 2,700 minimum wage was used instead of the Rs 4,000 claimed."
+    ]
+  }
+}

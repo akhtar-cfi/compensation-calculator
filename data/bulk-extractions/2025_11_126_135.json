@@ -1,0 +1,104 @@
+{
+  "record_version": 1,
+  "doc_id": "2025_11_126_135",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2025 INSC 1204",
+  "cnr": "ESCR010005642025",
+  "decided": "2025-10-08",
+  "citation": "2025 INSC 1204; [2025] 11 S.C.R. 126",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2025/english/2025_11_126_135_EN.pdf",
+  "quote_check": "verified, 14/14 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2025_11_126_135",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "The Supreme Court decided no amount: it decided only whether the truck's insurer could recover the compensation from the truck's owner (the High Court's 'pay and recovery' direction was set aside). The award amounts, as fixed by the tribunal and modified by the High Court, are not stated.",
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "DL",
+      "accident_date": "1993-01-26",
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": null,
+        "by": null,
+        "note": "Tribunal found both drivers negligent in the ratio 75:25 and directed the truck's insurer to indemnify the truck's owner despite the fake-licence plea. Amounts and date not stated in this judgment."
+      },
+      {
+        "forum": "high_court",
+        "date": "2016-04-28",
+        "amount": null,
+        "by": "insurer",
+        "note": "[name] High Court, on appeals by the insurer (liability) and the owners (quantum), modified some amounts and let the truck's insurer pay and recover from the owner, finding the licence fake and collusion. Amounts not stated."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2025-10-08",
+        "amount": null,
+        "by": "owner",
+        "note": "Truck owner's appeals allowed: the insurer's right to recover from the owner was set aside; the award amounts as fixed by the tribunal and modified by the High Court stand. No amounts stated."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "pay_and_recover"
+      ],
+      "holding": "Even if the driver's licence is fake, the insurer cannot recover from the owner unless it proves the owner lacked due care in hiring the driver or entrusting the vehicle; an owner need not verify a licence with the issuing authority. Collusion cannot be inferred merely because the owner produced the licence or the driver did not contest the claim.",
+      "para": "16-17",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Nine van passengers killed, two injured in truck collision, [name] claims (insurer cannot recover from owner)",
+    "family_summary": "In January 1993 a truck and a Matador van collided at night at an intersection, killing nine van passengers and injuring two; their families and the injured claimed compensation. The tribunal blamed both drivers (75:25) and the insurers paid; the amounts are not stated in this judgment. In April 2016 the [name] High Court let the truck's insurer recover what it paid from the truck's owner, saying the driver's licence was fake. In October 2025, more than 32 years after the accident, the Supreme Court said the insurer cannot recover from the owner; the award amounts stay as they were.",
+    "what_mattered": [
+      "The insurer never showed that the owner, a company, failed to take care when hiring the driver or handing over the truck; an owner only has to look at the licence shown and need not check it with the licensing office.",
+      "The owner produced the driver's licence and a certificate showing it was later renewed; the Supreme Court said this showed diligence, not collusion, and the licensing office's register relied on by the insurer was full of interpolations."
+    ],
+    "archetypes": [],
+    "audience": "lawyers",
+    "review_notes": []
+  }
+}

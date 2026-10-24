@@ -1,0 +1,102 @@
+{
+  "record_version": 1,
+  "doc_id": "DLHC013386642017_1_2026-09-21",
+  "source": "hc",
+  "court": "High Court of Delhi",
+  "case": "MAC.APP. 1056/2017",
+  "cnr": "DLHC013386642017",
+  "decided": "2026-09-21",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/court%3D7_26/bench%3Ddhcdb/DLHC013386642017_1_2026-09-21.pdf",
+  "quote_check": "verified, 36/36 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "DLHC013386642017_1_2026-09-21",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "injury",
+      "outcome": "appeal_allowed",
+      "court": "High Court of Delhi",
+      "court_level": "hc",
+      "state_code": "DL",
+      "accident_date": "2014-03-09",
+      "filing_date": null,
+      "award_date": "2016-11-17",
+      "age": 34,
+      "employment": "informal",
+      "occupation": "security guard",
+      "proof": "none",
+      "claimed_monthly_income": 15000,
+      "income_monthly_accepted": 8086,
+      "income_basis": "minimum_wage_unskilled",
+      "future_prospects_pct": 40,
+      "deduction": null,
+      "multiplier": 16,
+      "disability_pct": 13,
+      "certificate_pct": 13,
+      "certificate_basis": "unclear",
+      "consortium_claimants": null,
+      "heads": {
+        "medical": 17530,
+        "conveyance_diet": 15000,
+        "attendant": 7000,
+        "loss_of_income_treatment": 24258,
+        "loss_of_earning_capacity": 282547,
+        "pain_suffering": 75000,
+        "loss_of_amenities": 40000,
+        "disfigurement": 40000
+      },
+      "awarded_formula_head": 282547,
+      "total_award": 501335,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 12,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": 17530,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2016-11-17",
+        "amount": 292464,
+        "by": null,
+        "note": "Tribunal (Shahdara, Karkardooma Courts, Delhi) awarded Rs 2,92,464 with 12% interest: income at unskilled minimum wage Rs 8,086, functional disability 7%, no future prospects."
+      },
+      {
+        "forum": "high_court",
+        "date": "2026-09-21",
+        "amount": 501335,
+        "by": "claimant",
+        "note": "Claimant's appeal allowed: functional disability raised to 13%, future prospects of 40% added, pain and suffering raised to Rs 75,000; award enhanced by Rs 2,08,871 with 12% interest."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, 34, security guard, Delhi (injury, leg fractures)",
+    "family_summary": "A 34-year-old security guard and his wife were travelling on a cycle rickshaw in March 2014 when a car hit it, and he suffered fractures of his left thigh bone and shin. In November 2016 a tribunal in Delhi awarded him Rs 2,92,464 with 12% interest. He appealed, and in September 2026 the Delhi High Court raised the award to Rs 5,01,335. The case took about twelve and a half years from the accident, about nine of them in the High Court.",
+    "what_mattered": [
+      "The High Court used the full 13% disability on his certificate, not 7%, to work out his lost earnings. It accepted his lawyer's argument that he would not get a security guard's job again, saying the kind of work a person does is critical in judging how much a disability affects earning.",
+      "Because he was 34, the High Court added 40% to his monthly income (Rs 3,234 on top of Rs 8,086) to allow for the pay rises he would likely have had; the tribunal had added nothing.",
+      "He had no proof of his Rs 15,000 salary, so income stayed at the unskilled minimum wage of Rs 8,086 a month; pain and suffering rose from Rs 40,000 to Rs 75,000 under a 2024 Supreme Court ruling."
+    ],
+    "archetypes": [
+      "injury_partial_disability_self_employed_or_manual"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: family_summary no longer says the accident was in Delhi (order gives only the tribunal's seat) and says the couple were 'travelling on' the rickshaw, as the order does.",
+      "fixed: what_mattered[0] now presents 'would not get a job as a security guard' as his lawyer's argument the court accepted on the vocation principle, and explains functional disability in plain words (shortened to fit 300 chars).",
+      "fixed: what_mattered[1] explains future prospects in plain words (40%, Rs 3,234 on top of Rs 8,086); added the table row with Rs 3,234 as evidence for future_prospects_pct."
+    ]
+  }
+}
