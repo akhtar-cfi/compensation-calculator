@@ -12,6 +12,17 @@ entered. It is **normative, not predictive**. Tribunals can award less or more. 
 proved, apply a different view on an unsettled point, or the claim may settle. Interest, usually 6–9% a year from the
 date of filing, is shown separately and never added to the headline.
 
+### How each step is decided
+
+The [rules reference](rules-reference.md#how-the-estimate-is-decided) lists every step of the calculation with what
+the calculator does now, the judgment and paragraph it rests on, and the legal reviewer's decision on it (Approve,
+Conditional or Hold). Each step is one of five kinds: fixed law, a step that depends on the facts, a point where the
+law is split or open (flagged, with the judgments on each side), an estimate from tribunal awards (never presented as
+law), or a step withheld until its legal basis is settled. When judgments differ, a fixed order decides which one
+governs: the Supreme Court, then the state's own High Court (another High Court only persuades); within a court, the
+larger bench, whatever the dates. Two equal benches that differ are left for a lawyer, never settled by date. The
+same page records, for each judgment, its bench, the holding relied on and how later judgments treated it.
+
 ## 2. Scenarios and the range
 
 | Kind of uncertainty                                                                 | How it is handled                                                                                                                                                   |
@@ -180,6 +191,8 @@ Other findings:
   - the s.166(3) limitation challenge;
   - notification of an interim-relief scheme under s.164A;
   - the next 10% step on 31 Oct 2026.
+- **Revalidation.** A larger-bench ruling, an amendment coming into force, a new notification or a change to the
+  calculation reopens the steps it touches in the rule register (`rules/register.yaml`), which records the change.
 - **Every rules change** is a pull request that cites its source and updates tests.
 
 ## 9. Known limitations (v0.1)

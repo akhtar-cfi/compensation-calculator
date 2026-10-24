@@ -3,16 +3,88 @@ import { z } from "zod";
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "expected YYYY-MM-DD");
 const fraction = z.string().regex(/^\d+\/\d+$/, "expected a fraction like 1/3");
 
+/** What an authority is relied on for (legal review B-13): one holding, with its paragraph and weight. */
+export const PropositionSchema = z.object({
+  holding: z.string(),
+  para: z.string().optional(),
+  /** Binding reasoning (ratio), a remark (obiter), or an amount fixed on its own facts (applied). Left out until
+   * the judgment's role is plain or the advocate has classed it (legal review B-13). */
+  weight: z.enum(["ratio", "obiter", "applied"]).optional(),
+  /** Facts that limit how far it reaches: the claim type, the year, death or injury. */
+  limits: z.string().optional(),
+});
+
 export const SourceSchema = z.object({
   id: z.string(),
   title: z.string(),
   kind: z.string().optional(),
   citation: z.string().optional(),
+  /** "SC", "HC:<state>" (a High Court and the state its tribunals sit in), "MACT:<state>", or free text. */
   court: z.string().optional(),
   date: isoDate.optional(),
   url: z.string().url().optional(),
   /** Cited only in the notes or the case library, not by a rule or by the engine. */
   background: z.boolean().optional(),
+  /** Number of judges. A larger bench binds a smaller one; a newer case never outranks a larger bench. */
+  bench: z.number().int().positive().optional(),
+  /** The statutory claim it decided: an ordinary s.166 claim, the old s.163A schedule, or a statute or scheme. */
+  claim: z.enum(["s166", "s163A", "statute", "scheme", "other"]).optional(),
+  /** How the project checked it: P read in the original, S only a summary or report, U not verified. */
+  grade: z.enum(["P", "S", "U"]).optional(),
+  reportable: z.boolean().optional(),
+  propositions: z.array(PropositionSchema).optional(),
+  /** How later judgments treated it (followed, distinguished, doubted, referred to a larger bench). */
+  treatment: z.string().optional(),
+});
+
+/** Every item of the legal review of "Decisions and checks" (24 Oct 2026). */
+export const REVIEW_IDS: readonly string[] = [
+  ...Array.from({ length: 31 }, (_, i) => `A-${i + 1}`),
+  ...Array.from({ length: 14 }, (_, i) => `B-${i + 1}`),
+  ...Array.from({ length: 8 }, (_, i) => `C-${i + 1}`),
+  ...Array.from({ length: 6 }, (_, i) => `D-${i + 1}`),
+];
+
+const reviewRef = z.object({
+  id: z.string().regex(/^[A-D]-\d{1,2}$/),
+  /** The legal reviewer's decision: the method may be adopted, adopted after a check, or not used until settled;
+   * "not_stated" where the review records a decision but no sign-off. */
+  status: z.enum(["approve", "conditional", "hold", "not_stated"]),
+  /** Whether the calculator already does what the decision says. */
+  done: z.boolean().default(false),
+});
+
+/**
+ * One step of the calculation (legal review F: "every output should identify the statutory provision, governing
+ * judicial rule, legally material inputs and any fallback assumption"). `now` is what the calculator does today;
+ * `decided` is what the legal review decided, while it is not yet built.
+ */
+export const RegisterRowSchema = z.object({
+  id: z.string(),
+  section: z.enum(["income", "formula", "deductions", "injury", "claim", "presentation", "data"]),
+  step: z.string(),
+  kinds: z.array(z.enum(["death", "injury"])).min(1),
+  /** fixed: settled law, one value · fact: depends on evidence, asked or assumed · conflict: the law is split or
+   * open, so a provisional rule and its alternative · practice: an estimate from awards, never law · withheld: not
+   * computed until its legal basis is settled. */
+  type: z.enum(["fixed", "fact", "conflict", "practice", "withheld"]),
+  now: z.string(),
+  decided: z.string().optional(),
+  authorities: z.array(z.object({ source: z.string(), para: z.string().optional() })).default([]),
+  review: z.array(reviewRef).default([]),
+  /** Contested points (rules/range-parameters.yaml ids) this step covers. */
+  points: z.array(z.string()).default([]),
+  /** Points inside this step that no binding rule settles yet. */
+  flagged: z.array(z.object({ review: z.string(), point: z.string() })).default([]),
+  changes: z.array(z.object({ date: isoDate, what: z.string() })).default([]),
+});
+
+export const RegisterSchema = z.object({
+  id: z.literal("register"),
+  description: z.string(),
+  /** The legal review the decisions come from, and the date it was received. */
+  review: z.object({ title: z.string(), received: isoDate }),
+  rows: z.array(RegisterRowSchema),
 });
 
 export const MultiplierRuleSchema = z.object({
@@ -253,6 +325,8 @@ export const SettingsSchema = z.object({
 });
 
 export type Source = z.infer<typeof SourceSchema>;
+export type Register = z.infer<typeof RegisterSchema>;
+export type RegisterRow = z.infer<typeof RegisterRowSchema>;
 export type Settings = z.infer<typeof SettingsSchema>;
 export type PracticeSpread = z.infer<typeof PracticeSpreadSchema>;
 export type InjuryBands = z.infer<typeof InjuryBandsSchema>;
@@ -284,5 +358,6 @@ export interface RulesBundle {
   injuryBands: InjuryBands;
   practiceSpread?: PracticeSpread;
   settings: Settings;
+  register: Register;
   minimumWages: Record<string, MinimumWageState>;
 }

@@ -1,4 +1,4 @@
-import type { RulesBundle } from "./schema.js";
+import { REVIEW_IDS, type RulesBundle } from "./schema.js";
 
 const CATEGORY_ORDER = ["unskilled", "semi_skilled", "skilled", "highly_skilled"] as const;
 
@@ -144,6 +144,49 @@ export function validateRules(
     if (st.last_checked && opts.asOf && st.last_checked > opts.asOf)
       problems.push(`${where}: last_checked ${st.last_checked} is after the as-of date`);
   }
+  problems.push(...validateRegister(rules));
+  return problems;
+}
+
+/**
+ * The rule register: every step cites known sources and known review items, every contested point belongs to one
+ * step, every item of the legal review is tracked somewhere, and a step whose law is split says what is open.
+ */
+export function validateRegister(rules: RulesBundle): string[] {
+  const problems: string[] = [];
+  const sourceIds = new Set(rules.sources.map((s) => s.id));
+  const known = new Set(REVIEW_IDS);
+  const rows = rules.register.rows;
+  const ids = new Set<string>();
+  const pointOwner = new Map<string, string>();
+  const tracked = new Set<string>();
+  for (const r of rows) {
+    const where = `register.${r.id}`;
+    if (ids.has(r.id)) problems.push(`register: duplicate id ${r.id}`);
+    ids.add(r.id);
+    for (const a of r.authorities)
+      if (!sourceIds.has(a.source)) problems.push(`${where}: unknown source id '${a.source}'`);
+    for (const v of r.review) {
+      if (!known.has(v.id)) problems.push(`${where}: unknown review item ${v.id}`);
+      tracked.add(v.id);
+    }
+    for (const f of r.flagged)
+      if (!r.review.some((v) => v.id === f.review))
+        problems.push(`${where}: flagged point names ${f.review}, which this step does not list`);
+    if (r.type === "conflict" && r.flagged.length === 0)
+      problems.push(`${where}: a step whose law is split must say which point is open (flagged)`);
+    for (const p of r.points) {
+      if (!rules.rangeParameters.some((x) => x.id === p))
+        problems.push(`${where}: unknown contested point ${p}`);
+      if (pointOwner.has(p))
+        problems.push(`${where}: contested point ${p} is also under ${pointOwner.get(p)}`);
+      pointOwner.set(p, r.id);
+    }
+  }
+  for (const p of rules.rangeParameters)
+    if (!pointOwner.has(p.id)) problems.push(`register: contested point ${p.id} is not under any step`);
+  for (const id of REVIEW_IDS)
+    if (!tracked.has(id)) problems.push(`register: review item ${id} is not tracked`);
   return problems;
 }
 

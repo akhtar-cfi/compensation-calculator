@@ -366,6 +366,8 @@ test("the public documents are on the page, and coming back keeps your place", a
   await expect(page.locator("article.doc h1").first()).toBeVisible();
   await page.goto("#/rules");
   await expect(page.locator("article.doc")).toContainText("Open checks");
+  await expect(page.locator("article.doc")).toContainText("How the estimate is decided");
+  await expect(page.locator("article.doc")).toContainText("Points with no binding rule");
   await page.goto("#/offer-study");
   await expect(page.locator("article.doc h1").first()).toBeVisible();
   await page.keyboard.press("Tab");

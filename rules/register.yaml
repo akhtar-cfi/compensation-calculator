@@ -1,0 +1,713 @@
+# The rule register: one row per step of the calculation, with what the calculator does now, the authority it rests
+# on, what kind of step it is, and the legal review's decision on it (legal review, safeguards F: "every output
+# should identify the statutory provision, governing judicial rule, legally material inputs and any fallback
+# assumption"). The rules page is generated from this file, so the two cannot drift.
+#
+# type   fixed     settled law: one value, the same everywhere, cited
+#        fact      depends on evidence the family has: asked, or assumed and said so, or left out
+#        conflict  the law is split or open: a provisional rule and its alternative, each cited (flagged below)
+#        practice  an estimate from tribunal awards, never presented as law
+#        withheld  not computed automatically until its legal basis is settled
+# The type is the legal review's classification. `now` is what the code does today; `decided` is what the review
+# decided, where that differs. A review item is `done` once the calculator does what the decision says.
+# Authorities are source ids from rules/sources.yaml, with the paragraph relied on.
+id: register
+description: >-
+  One row per step of the calculation: what the calculator does now, the authority, the kind of step, and the legal
+  review's decision on it. Points where no binding rule exists are flagged.
+review:
+  title: Legal review of "Decisions and checks needed" (draft v2, 16 Oct 2026)
+  received: 2026-10-24
+rows:
+  # ---------------------------------------------------------------- income
+  - id: income_salary
+    section: income
+    step: Income from a salary
+    kinds: [death, injury]
+    type: fact
+    now: >-
+      The monthly salary entered, less income tax: the tax on the slip, or tax worked out from the slabs for the
+      accident's financial year and marked as an estimate.
+    decided: >-
+      Prefer tax returns, Form 16 or payroll records. Estimate tax from the slabs only when enough is known, and say
+      it is an estimate, never tax proved paid (A-30). Rely on Kirti and Meenakshi only for what each actually
+      decided (B-5).
+    authorities:
+      - { source: pranay_sethi_2017, para: "61(iii)-(iv)" }
+      - { source: meenakshi_2024, para: "6-13" }
+      - { source: vimal_kanwar_2013, para: "21-23" }
+    review:
+      - { id: A-30, status: conditional }
+      - { id: B-5, status: conditional }
+    flagged:
+      - review: A-30
+        point: >-
+          Tax when the salary slip shows none: Vimal Kanwar held it wrong to deduct tax without evidence; Meenakshi
+          upheld a deduction on its own facts.
+  - id: income_itr
+    section: income
+    step: Income from tax returns
+    kinds: [death, injury]
+    type: fact
+    now: >-
+      The average of the last three returns filed before the accident, less tax. The low figure and the headline
+      count only returns filed before the accident; the high figure adds later ones if they raise the average. The
+      website asks for one return and not when it was filed.
+    decided: >-
+      Record each return's year, filing date and supporting records. Self-employed: a representative period from
+      the returns; later returns count when supporting records back them. Salaried: no automatic average of three
+      returns (A-5, B-7).
+    authorities:
+      - { source: rashmirekha_2026, para: "18-20" }
+    review:
+      - { id: A-5, status: approve }
+      - { id: B-7, status: approve }
+    points: [itr_post_accident]
+  - id: income_no_proof
+    section: income
+    step: Income with no proof (minimum wage)
+    kinds: [death, injury]
+    type: fact
+    now: >-
+      The minimum wage on the accident date in the state where the claim is filed, at the skill level of the
+      occupation picked from the calculator's list (low figure: unskilled; unknown occupations are unskilled).
+      Graduates get the skilled rate, with a caution. 'Central sphere rates' (the construction schedule, lowest city group if none
+      is given) can be chosen instead of a state, with no caution about the substitution.
+    decided: >-
+      The occupation's wage once the occupation-to-skill list is checked (A-2). Record the accident place, the
+      usual place of work and the filing place separately, and prefer the wage of the established employment
+      (A-18). No generic Central substitute (A-19). The skilled wage for graduates unless a higher category is
+      supported (A-20).
+    authorities:
+      - { source: kirti_2021, para: "10, 12" }
+    review:
+      - { id: A-2, status: conditional }
+      - { id: A-18, status: conditional }
+      - { id: A-19, status: hold }
+      - { id: A-20, status: approve }
+    points: [mw_category]
+    flagged:
+      - review: A-18
+        point: >-
+          Which state's wage for someone who works in one state and claims in another: a claim may be filed where
+          the claimant lives or works, where the accident happened, or where the defendant lives (s.166(2)).
+  - id: income_homemaker
+    section: income
+    step: Income for a homemaker who died
+    kinds: [death]
+    type: fact
+    now: >-
+      ₹30,000 a month for every homemaker's death in the headline and the high figure (revised 10% every three years
+      from 11 Jun 2026); the low figure uses the state's unskilled minimum wage.
+    decided: >-
+      Ask which roles she performed and whether she also earned. Apply Shishu Pal's ₹30,000, revised cumulatively,
+      where its conditions are met, in addition to her own earnings; otherwise an evidence-based value (Kirti). Check
+      the full computation and the revision dates first (A-1).
+    authorities:
+      - { source: shishu_pal_2026, para: "13, 20, 22" }
+      - { source: kirti_2021, para: "26(c)" }
+      - { source: ganga_devi_2026 }
+    review:
+      - { id: A-1, status: conditional }
+    points: [homemaker_income]
+  - id: income_child_death
+    section: income
+    step: Income for a child who died
+    kinds: [death]
+    type: conflict
+    now: >-
+      The skilled minimum wage plus 40% future prospects in the headline. The low figure uses ₹25,000 a year × 15
+      (Kurvan Ansari), so the lost income is always ₹3,75,000.
+    decided: >-
+      Remove the ₹25,000 floor. A notional income justified on the facts, with the accident-period skilled wage as a
+      reference, without claiming a rule that binds every child's death. A short precedent note comes first (A-3).
+      Kurvan Ansari stays in the register for the old s.163A schedule only (B-1).
+    authorities:
+      - { source: hitesh_patel_2025, para: "9, 15" }
+      - { source: kajal_2020, para: "20" }
+      - { source: kurvan_ansari_2021, para: "16" }
+    review:
+      - { id: A-3, status: conditional }
+      - { id: B-1, status: approve }
+    points: [minor_death_income]
+    flagged:
+      - review: A-3
+        point: >-
+          No Supreme Court rule for a child's death in an ordinary claim: Kurvan Ansari's ₹25,000 came from the old
+          s.163A schedule, and Hitesh Patel's skilled wage from an injury case.
+  - id: income_student
+    section: income
+    step: Income for a student
+    kinds: [death, injury]
+    type: fact
+    now: >-
+      The skilled minimum wage. For a professional course the low figure takes the lower of that wage and ₹12,000 a
+      month (Mohinder Kaur); the headline takes the higher.
+    decided: >-
+      No fixed ₹12,000: that judgment is a comparator only (B-8). Value from the course, qualifications, expected
+      occupation and the accident-period wages (A-4).
+    authorities:
+      - { source: mohinder_kaur_2026, para: "26" }
+    review:
+      - { id: A-4, status: approve }
+      - { id: B-8, status: approve }
+    points: [student_income]
+  - id: income_pensioner
+    section: income
+    step: Income for a pensioner
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      The full pension in the headline and the high figure. The low figure takes the family pension off. The same
+      rule is used for an injured pensioner.
+    decided: >-
+      Never deduct family pension, in any figure (A-6, B-6). Value the deceased's own pension as lost income; for an
+      injury, account for a pension that continues.
+    authorities:
+      - { source: vimal_kanwar_2013, para: "19" }
+      - { source: helen_rebello_1998 }
+    review:
+      - { id: A-6, status: approve }
+      - { id: B-6, status: approve }
+    points: [pension_basis]
+  - id: income_retired
+    section: income
+    step: Income for a retired person without a pension
+    kinds: [death, injury]
+    type: fact
+    now: >-
+      The low figure counts no income, so only the fixed amounts are paid. The headline uses the unskilled minimum
+      wage, with no future prospects.
+    decided: >-
+      Ask whether paid work, a business or valuable household work continued, and use proved earnings or a
+      supported notional income. Never zero, or a wage, from 'retired' alone (A-7).
+    review:
+      - { id: A-7, status: conditional }
+    points: [non_earning_elderly]
+  - id: injured_homemaker
+    section: income
+    step: Income for an injured homemaker
+    kinds: [injury]
+    type: conflict
+    now: >-
+      The low figure and the headline use the state's unskilled minimum wage. The high figure uses ₹30,000 a month,
+      by analogy with Shishu Pal.
+    decided: >-
+      An evidence-based notional income; ask which household work the person can no longer do and whether care is
+      needed. No automatic ₹30,000 (A-8).
+    authorities:
+      - { source: kirti_2021 }
+      - { source: shishu_pal_2026, para: "20, 23.4" }
+      - { source: uma_rani_2026 }
+      - { source: ganga_devi_2026 }
+    review:
+      - { id: A-8, status: conditional }
+    points: [injured_homemaker_income]
+    flagged:
+      - review: A-8
+        point: >-
+          No authority for an injured homemaker: Shishu Pal and Kirti are death cases, and the Delhi High Court has
+          gone both ways (₹10,000 a month in Uma Rani; Shishu Pal refused in Ganga Devi).
+  # ---------------------------------------------------------------- formula
+  - id: future_prospects
+    section: formula
+    step: Future prospects
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      50, 30 or 15% for a permanent job and 40, 25 or 10% for others, by age; none from 60. At exactly 50 the lower
+      band. A salaried person without slips is valued at the unskilled minimum wage but keeps the permanent-job
+      rates.
+    decided: >-
+      Ask for the salary proof and for whether the job was permanent as separate questions (A-17). At exactly 50,
+      the higher band provisionally, then one verified boundary rule (A-21).
+    authorities:
+      - { source: pranay_sethi_2017, para: "61(iii)-(iv)" }
+      - { source: kirti_2021, para: "13-14" }
+      - { source: sushila_2026, para: "25" }
+      - { source: sidram_2022, para: "31" }
+    review:
+      - { id: A-17, status: approve }
+      - { id: A-21, status: conditional }
+    flagged:
+      - review: A-21
+        point: Future prospects at exactly 50 years old fall at the boundary of two bands.
+  - id: personal_deduction
+    section: formula
+    step: Personal deduction
+    kinds: [death]
+    type: fixed
+    now: >-
+      A half if unmarried; if married, a third (2-3 dependants), a quarter (4-6) or a fifth (more). With one
+      dependant of any kind (spouse, child or parent), a half in the low figure and a third in the headline. An
+      unmarried person with 3 or more dependants gets a third only in the high figure. A parent answered 'not sure'
+      counts as a dependant.
+    decided: >-
+      A third where the spouse is the only dependant, not extended to a sole parent or child (A-10). A half for the
+      unmarried, a third where a large dependent family is shown, with no fixed number (A-11). Parents count as
+      dependants only where support is shown; consortium is decided separately (A-22).
+    authorities:
+      - { source: sarla_verma_2009, para: "14-15 (SCC 30-32)" }
+      - { source: sushila_2026, para: "24, 27" }
+    review:
+      - { id: A-10, status: conditional }
+      - { id: A-11, status: approve }
+      - { id: A-22, status: approve }
+    points: [spouse_only_deduction, bachelor_large_family]
+    flagged:
+      - review: A-10
+        point: >-
+          One dependant who is not a spouse (one child or one parent): Sarla Verma's scale starts at two or three
+          dependants, and Sushila decided only a sole spouse.
+  - id: multiplier
+    section: formula
+    step: Multiplier
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      From the Sarla Verma table by the age of the person who died or was injured, never split; 5 above 65, with a
+      caution from 71 that the age is outside the table.
+    decided: 5 above 65, with no caution (A-16).
+    authorities:
+      - { source: sarla_verma_2009, para: "21 and its table (SCC 42)" }
+      - { source: preetha_krishnan_2025, para: "16-18" }
+    review:
+      - { id: A-16, status: approve }
+  - id: multiplier_under_15
+    section: formula
+    step: Multiplier for a child under 15
+    kinds: [death, injury]
+    type: conflict
+    now: The low figure uses 15; the headline and the high figure use 18, for deaths and injuries alike.
+    decided: >-
+      15 for a child's death provisionally, following the larger bench. A separate precedent note for an injured
+      child, with 18 shown as the alternative supported by later two-judge decisions (A-9).
+    authorities:
+      - { source: reshma_kumari_2013, para: "40(ii)" }
+      - { source: pranay_sethi_2017, para: "46" }
+      - { source: divya_2022 }
+      - { source: rushi_thapa_2024, para: "8" }
+      - { source: kajal_2020, para: "24" }
+      - { source: hitesh_patel_2025, para: "13" }
+    review:
+      - { id: A-9, status: conditional }
+    points: [under_15_multiplier]
+    flagged:
+      - review: A-9
+        point: >-
+          15 (Reshma Kumari, three judges, approved by the Constitution Bench) or 18 (Kajal, Hitesh Patel, two
+          judges, which did not discuss it); Reshma Kumari tied its 15 to a schedule since removed.
+  - id: fixed_amounts
+    section: formula
+    step: Loss of estate, funeral and consortium amounts
+    kinds: [death]
+    type: conflict
+    now: >-
+      ₹15,000, ₹15,000 and ₹40,000, raised 10% (compounded) for each full three years from 31 Oct 2017 completed by
+      the accident date, in the headline and the low figure: none before 31 Oct 2020, and the base amounts for
+      accidents before 2017. The high figure counts the steps up to the date of decision (three from 31 Oct 2026). A
+      caution gives the decision-date amounts while the point is before a larger bench.
+    decided: >-
+      As now. Check the larger bench's status before each step date; the steps stay cumulative and are never frozen
+      at a fixed number (A-12, B-3).
+    authorities:
+      - { source: pranay_sethi_2017, para: "61(viii)" }
+      - { source: satinder_kaur_2020, para: "8(e)(c)" }
+      - { source: preetha_krishnan_2025, para: "19" }
+      - { source: hasina_yasmin_2025 }
+      - { source: shishu_pal_2026 }
+    review:
+      - { id: A-12, status: conditional, done: true }
+      - { id: B-3, status: conditional, done: true }
+    points: [conventional_escalation_steps]
+    flagged:
+      - review: A-12
+        point: >-
+          Whether the 10% steps run to the accident date or to the date of decision is before a larger bench
+          (Hasina Yasmin, 17 Dec 2025); no decision found as of 24 Oct 2026.
+    changes:
+      - date: 2026-10-24
+        what: The headline counts the steps completed by the accident date, in place of a fixed two steps (A-12).
+  - id: consortium_claimants
+    section: formula
+    step: Who receives consortium
+    kinds: [death]
+    type: conflict
+    now: ₹40,000 plus the same increases for each claiming spouse, child and parent, whatever their age or marriage.
+    decided: >-
+      Consortium for the categories the judgments establish: the spouse, minor children, and the parents of a minor
+      or unmarried child. Not a blanket rule for every claimant; a short note decides the rest (B-2).
+    authorities:
+      - { source: magma_2018, para: "8.7" }
+      - { source: satinder_kaur_2020, para: "8(e)(b), 9.7" }
+      - { source: somwati_2020, para: "38-40" }
+      - { source: sameem_begum_2026 }
+    review:
+      - { id: B-2, status: conditional }
+    flagged:
+      - review: B-2
+        point: >-
+          Adult children who earned or married, and the parents of a married adult: no judgment read decides them
+          (Sameem Begum's adult children were dependants).
+  # ---------------------------------------------------------------- injury
+  - id: functional_disability
+    section: injury
+    step: Lost earning ability
+    kinds: [injury]
+    type: fact
+    now: >-
+      A doctor's functional % if given. Otherwise a whole-body certificate as it is, or a limb certificate (or one
+      whose basis is unknown) × 0.5 in the low figure and × 0.53 in the headline, factors taken from Delhi awards.
+      The high figure uses the full %, or 100% if the person cannot work at all.
+    decided: >-
+      The limb factors are not a legal rule and are held. Ask the occupation, the impairment, whether the earlier
+      work or other suitable work is still possible, and use medical or vocational evidence. Factors may appear only
+      in a labelled illustration (A-13).
+    authorities:
+      - { source: raj_kumar_2011, para: "7-10 (SCC 9-13)" }
+      - { source: m_paramesh_2026 }
+      - { source: priyanka_das_2026, para: "19" }
+      - { source: delhi_awards_backtest_2026 }
+    review:
+      - { id: A-13, status: hold }
+    points: [functional_pct]
+  - id: injury_bands
+    section: injury
+    step: Pain and amenities, travel and diet, marriage prospects
+    kinds: [injury]
+    type: practice
+    now: >-
+      Bands from Delhi awards 2024-26: the lower quarter in the low figure, the middle in the headline, the upper
+      quarter or a higher Supreme Court amount in the high figure; marked experimental. Travel and diet, pain (even
+      without a certificate) and an attendant band when no days are given are added to every injury estimate.
+    decided: >-
+      Correct the source awards (amenities left out of Hitesh Patel and Baiju) and present the bands as estimates of
+      tribunal practice, never as amounts the law requires (A-14). Ask about care, hospital stay, travel and diet
+      before adding them; pain stays without a certificate (A-23).
+    authorities:
+      - { source: raj_kumar_2011, para: "5, 10" }
+      - { source: kajal_2020, para: "27-29" }
+      - { source: hitesh_patel_2025, para: "13" }
+      - { source: baiju_2025 }
+      - { source: delhi_awards_backtest_2026 }
+    review:
+      - { id: A-14, status: conditional }
+      - { id: A-23, status: conditional }
+    points: [non_pecuniary_band]
+  - id: attendant
+    section: injury
+    step: Attendant
+    kinds: [injury]
+    type: fact
+    now: >-
+      For life: minimum wage × 12 × multiplier × number of carers (1 or 2), the unskilled wage in the low figure and
+      the headline, semi-skilled in the high figure. During treatment: days × the unskilled monthly wage ÷ 26, or a
+      band if days are not given.
+    decided: >-
+      Care needs first; the semi-skilled or skilled wage as the care requires; unpaid family care counted;
+      temporary and lifelong care kept apart; ÷ 26 only where the wage structure supports it (A-15).
+    authorities:
+      - { source: kajal_2020, para: "21, 22, 25" }
+      - { source: hansraj_2026, para: "9-10" }
+    review:
+      - { id: A-15, status: conditional }
+    points: [attendant_rate]
+  - id: child_treatment_earnings
+    section: injury
+    step: Earnings lost during treatment by a child
+    kinds: [injury]
+    type: fixed
+    now: >-
+      An injured child (or a student under 18 valued as a child) gets the skilled minimum wage × the months off.
+    decided: None for a child who had no earnings; treatment, care and future loss stay (A-31).
+    authorities:
+      - { source: raj_kumar_2011, para: "5" }
+    review:
+      - { id: A-31, status: approve }
+  # ---------------------------------------------------------------- deductions
+  - id: medical_bills
+    section: deductions
+    step: Medical bills
+    kinds: [death, injury]
+    type: fixed
+    now: Bills less what the cashless treatment scheme paid (s.164B(5)); future medical costs only if entered.
+    authorities:
+      - { source: mv_act_1988, para: "s.164B(5)" }
+      - { source: raj_kumar_2011, para: "5" }
+  - id: fault
+    section: deductions
+    step: The person's own share of fault
+    kinds: [death, injury]
+    type: fact
+    now: >-
+      A percentage entered cuts the whole total, medical bills included, whatever the person's role. The website
+      never asks for one; for the driver of a vehicle involved it shows what 25% and 50% would cost. The written
+      method (docs/law.md) says fault is not imputed to pedestrians or passengers.
+    decided: >-
+      Only the person's own established or expressly assumed fault; never another driver's (A-24). 25% and 50% stay
+      as labelled illustrations outside the standard amount (C-5). Correct the written method (B-9).
+    authorities:
+      - { source: khenyei_2015, para: "4, 13, 14, 18" }
+      - { source: satinder_kaur_2020, para: "9.8" }
+    review:
+      - { id: A-24, status: approve }
+      - { id: B-9, status: approve }
+      - { id: C-5, status: approve }
+  - id: deduction_order
+    section: deductions
+    step: Order of deductions when fault, cashless payments and ex-gratia meet
+    kinds: [death, injury]
+    type: withheld
+    now: >-
+      Cashless payments come off the medical bills before the fault cut; the fault cut then applies to the whole
+      total; ex-gratia comes off after, capped at the income head as it was before the cut. In rare cases this puts
+      the low figure above the headline.
+    decided: >-
+      Record bills, the scheme-paid part and the rest separately and prevent double payment, but no automatic
+      combined cashless and fault adjustment until a reasoned statutory opinion (A-25). Cut for established fault
+      first, then cap any permitted adjustment at the income head, and flag cases where the order changes the
+      result; needs specific legal approval (A-29).
+    authorities:
+      - { source: mv_act_1988, para: "s.164B(5)" }
+      - { source: sarla_devi_2026, para: "19" }
+    review:
+      - { id: A-25, status: hold }
+      - { id: A-29, status: conditional }
+  - id: money_received
+    section: deductions
+    step: Money already received
+    kinds: [death, injury]
+    type: withheld
+    now: >-
+      Ex-gratia equal to pay comes off loss of dependency after a death and off future earning capacity after an
+      injury. A no-fault award made by the tribunal, interim relief and a hit-and-run payment come off the total when
+      an amount is entered. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
+    decided: >-
+      Record payments as facts and deduct only where the law is clear for that benefit. Ex-gratia only in Sarla
+      Devi's situation, salary-equivalent assistance after a death, and a dependant who does not receive it keeps
+      their share (A-26, B-10). No automatic s.164 set-off (A-28). No interim-relief set-off until the scheme's text
+      is read (B-12). Separate categories for life insurance, personal mediclaim, employer reimbursement, cashless
+      treatment and ex-gratia (B-11).
+    authorities:
+      - { source: sarla_devi_2026, para: "13-19, 22-25" }
+      - { source: helen_rebello_1998 }
+      - { source: dolly_satish_gandhi_2026, para: "15" }
+      - { source: mv_act_1988, para: "ss.163, 164" }
+    review:
+      - { id: A-26, status: conditional }
+      - { id: A-28, status: hold }
+      - { id: B-10, status: conditional }
+      - { id: B-11, status: conditional }
+      - { id: B-12, status: hold }
+  # ---------------------------------------------------------------- claim
+  - id: eligibility
+    section: claim
+    step: When no estimate is given
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      No estimate for an owner driving alone with no other vehicle involved; for a vehicle never traced, where the
+      hit-and-run scheme's ₹2,00,000 for a death or ₹50,000 for grievous hurt is shown, whatever the accident date;
+      and where no-fault money was accepted through the insurer's settlement, which ends the claim.
+    decided: >-
+      Show the s.161 amounts subject to eligibility and the scheme's conditions, kept apart from s.166 estimates and
+      from cashless treatment, with no deduction for cashless treatment; check which amounts applied to older
+      accidents (C-8).
+    authorities:
+      - { source: mv_act_1988, para: "ss.161, 166(1)" }
+    review:
+      - { id: C-8, status: approve }
+  - id: limitation
+    section: claim
+    step: Time limit for filing the claim
+    kinds: [death, injury]
+    type: conflict
+    now: >-
+      When no filing date is given and 6 months or more have passed, a caution says s.166(3) sets 6 months but the
+      Supreme Court has directed that claims not be dismissed as time-barred while it decides the challenge.
+    decided: >-
+      Rewrite around the amended s.166(3) (a further 12 months with sufficient cause) and whatever interim
+      directions still stand. Never say a claim after 18 months is maintainable, or that every claim after 6 months
+      is barred. Mandatory before launch (B-4).
+    authorities:
+      - { source: mv_act_1988, para: "s.166(3)" }
+      - { source: jan_vishwas_2026 }
+      - { source: bhagirathi_dash_2025 }
+    review:
+      - { id: B-4, status: conditional }
+    flagged:
+      - review: B-4
+        point: >-
+          Late claims: the amended s.166(3) (its text and commencement not yet read here) and how far the Supreme
+          Court's interim directions still apply.
+  - id: interest
+    section: claim
+    step: Interest and the value of an offer over time
+    kinds: [death, injury]
+    type: practice
+    now: >-
+      Interest is never in the amount; it is shown at 6, 7.5 and 9% a year for a 6-year wait. The offer check
+      assumes 7.5% interest, a 7% discount rate and no lawyer's fee, each changeable.
+    decided: >-
+      Compensation without interest first, interest separately (s.171), and the discount rate, waiting time and
+      legal costs in an optional module with explained, adjustable inputs. The 12-month disposal target in the
+      amended s.168(4) is not a promised date (C-6).
+    authorities:
+      - { source: mv_act_1988, para: "s.171" }
+    review:
+      - { id: C-6, status: conditional }
+  # ---------------------------------------------------------------- presentation
+  - id: result_model
+    section: presentation
+    step: How the result is shown
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      Three figures (low, headline, high). A bar is drawn only when the high figure is at most 1.75 times the low
+      (2.5 for injuries) and the spread is at least 5% of the headline, with a list of what moves the amount.
+    decided: >-
+      One headline, and alternatives only where the law is split, each with its judgment; for missing facts, 'if
+      you can prove…' notes instead. The bar limits are display choices, not law (C-4).
+    review:
+      - { id: C-4, status: conditional }
+  - id: wording
+    section: presentation
+    step: What the amount is called
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      'Legal entitlement' and 'the Supreme Court's method' describe the amount on the result, in the share text,
+      the published method and the command line, in English and Hindi.
+    decided: >-
+      'Estimated compensation under the MACT framework, based on the information provided'; no 'legal entitlement'
+      (C-3).
+    review:
+      - { id: C-3, status: approve }
+  - id: offer_check
+    section: presentation
+    step: Checking an insurer's offer
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      The offer is compared with the headline and labelled: far below (under 25%), well below (under 50%), below
+      (under 80%), a little below (under 95%), close (up to 105%) or above; 'too early to judge' without a
+      disability certificate.
+    decided: >-
+      Show the offer, the estimate and the difference, with no label calling the offer fair or unfair and nothing
+      that tells the family to accept or refuse (C-1).
+    review:
+      - { id: C-1, status: approve }
+  - id: questions
+    section: presentation
+    step: Which questions the website asks
+    kinds: [death, injury]
+    type: fact
+    now: >-
+      Not asked: hospital or attendant days, the number of carers, future medical costs, money already received, a
+      fault percentage, other dependants, or extra or late tax returns.
+    decided: >-
+      Add only legally material questions, shown when they apply: occupation, place of work, salary proof,
+      relationships, financial support, homemaker roles, continuing disability, care needs and money already
+      received. The revised questions go to the legal reviewer (C-2).
+    review:
+      - { id: C-2, status: conditional }
+  - id: practice_spread
+    section: presentation
+    step: How real awards compare
+    kinds: [death, injury]
+    type: practice
+    now: Shown for every state, labelled 'Delhi tribunal awards, 2024-26'.
+    decided: >-
+      Delhi only, with its jurisdiction, period and limits stated; re-measured after any change to the method
+      (D-5).
+    authorities:
+      - { source: delhi_awards_backtest_2026 }
+    review:
+      - { id: D-5, status: approve }
+    changes:
+      - date: 2026-10-24
+        what: Re-measured after A-12 (deaths, middle half of awards 0.70 to 1.17 times the estimate, 112 awards).
+  - id: sign_off
+    section: presentation
+    step: Legal sign-off of the rules
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      Every rules file is marked unverified, and results carry one line: 'Method not yet signed off by a lawyer'.
+      This register records each authority's bench, grade, paragraph, limits and later treatment.
+    decided: >-
+      Sign off the method, the code, the rules files, settings, tax and wage tables and the public text against the
+      same version; keep a change log and re-approve after substantive changes (B-14). Complete the authority
+      register, including the claim type and whether each holding is binding (B-13).
+    review:
+      - { id: B-13, status: conditional }
+      - { id: B-14, status: conditional }
+    changes:
+      - date: 2026-10-24
+        what: "One line on every result: 'Method not yet signed off by a lawyer' (B-14)."
+      - date: 2026-10-24
+        what: This register and the authority register published (B-13).
+  # ---------------------------------------------------------------- data
+  - id: income_tax
+    section: data
+    step: Income-tax tables
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      Tables for FY 2018-19 to FY 2026-27, checked against official sources. For an earlier accident the latest
+      table (FY 2026-27) is used, with a caution.
+    decided: >-
+      The accident year's own rules (A-27): load FY 2012-13 to 2017-18 and confirm FY 2019-20, with cess and rebate
+      per year and a second person's check (D-4). Until then, rely on proved tax or withhold the estimate.
+    review:
+      - { id: A-27, status: approve }
+      - { id: D-4, status: conditional }
+  - id: wages_other_states
+    section: data
+    step: Minimum wages outside Delhi
+    kinds: [death, injury]
+    type: fact
+    now: >-
+      Only Delhi and the Central construction schedule are loaded. Elsewhere, people without proof of income,
+      homemakers, students, children and retired people without a pension get no estimate unless the Central
+      fallback is chosen.
+    decided: >-
+      Add states one at a time from official notifications, each with its effective date, category, grade, zone and
+      source; periods without one stay unavailable (D-1).
+    review:
+      - { id: D-1, status: conditional }
+  - id: delhi_wages
+    section: data
+    step: Delhi minimum wages
+    kinds: [death, injury]
+    type: conflict
+    now: >-
+      Rates from 1 Oct 2011, except 1 Apr 2012 to 31 Mar 2013, where cases without proof of income get no estimate.
+      From 3 Mar 2017 to 31 Oct 2018 the official series is used with a caution. The latest order is of 1 Apr 2025;
+      an order dated 13 Oct 2025 was declared fake by the Labour Department.
+    decided: >-
+      No interpolation: obtain the missing orders from the Labour Department or by RTI (D-2). Keep the official
+      series for 2017-18 with a legal qualification, after a labour-law review (D-3). The last authenticated rate
+      until a later official order is verified, and no compliance-site figures (D-6).
+    review:
+      - { id: D-2, status: hold }
+      - { id: D-3, status: conditional }
+      - { id: D-6, status: not_stated }
+    flagged:
+      - review: D-3
+        point: >-
+          Delhi wages from March 2017 to October 2018: the Delhi High Court quashed the 2017 notification on 4 Aug
+          2018 and the Supreme Court restored its rates from 1 Nov 2018.
+  - id: wage_freshness
+    section: data
+    step: When a wage on file may be out of date
+    kinds: [death, injury]
+    type: fixed
+    now: >-
+      A caution when the wage on file took effect more than 7 months before the accident and the source has not
+      been checked since; it names the effective date, not when the source was last checked.
+    decided: >-
+      Seven months is a trigger to check the data, not a legal expiry: show the order's effective date and the date
+      it was last checked (C-7).
+    review:
+      - { id: C-7, status: approve }

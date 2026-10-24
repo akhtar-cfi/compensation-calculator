@@ -12,7 +12,15 @@ const out = join(REPO_ROOT, "web", "src", "generated");
 mkdirSync(out, { recursive: true });
 
 const rules = loadRules();
-writeFileSync(join(out, "rules.json"), JSON.stringify(rules));
+// The page needs only each source's name, citation and link. The rule register and the authority register (bench,
+// grade, holdings, later treatment) are shown in the rules reference (docs.json, fetched when opened), so they stay
+// out of the first download.
+const forPage: typeof rules = {
+  ...rules,
+  sources: rules.sources.map(({ id, title, kind, citation, url }) => ({ id, title, kind, citation, url })),
+  register: { ...rules.register, rows: [] },
+};
+writeFileSync(join(out, "rules.json"), JSON.stringify(forPage));
 const cases = loadCases();
 writeFileSync(join(out, "cases.json"), JSON.stringify(cases));
 // The start page's real stories on their own: a few kilobytes, not the whole library, on a family's first visit.

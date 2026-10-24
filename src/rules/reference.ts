@@ -1,4 +1,5 @@
 import { formatINR } from "../engine/money.js";
+import { renderAuthorities, renderRegister, standing } from "./register.js";
 import type { RulesBundle } from "./schema.js";
 
 /** Everything not yet confirmed against a primary source, listed so readers can see it (and so it shrinks). */
@@ -72,6 +73,7 @@ export function renderRulesReference(rules: RulesBundle): string {
     "**Status:** draft. No rule has been signed off by the legal reviewers yet; every rule below says so.",
     "",
     ...openChecks(rules),
+    ...renderRegister(rules),
   ];
 
   const m = rules.multiplier;
@@ -303,10 +305,16 @@ export function renderRulesReference(rules: RulesBundle): string {
     L.push("");
   }
 
-  L.push("## Sources", "", "| Id | Source | Citation | Date |", "|---|---|---|---|");
+  L.push(
+    "## Sources",
+    "",
+    "| Id | Source | Citation | Court and bench | Grade | Date |",
+    "|---|---|---|---|---|---|",
+  );
   for (const s of rules.sources)
     L.push(
-      `| ${s.id} | ${s.url ? `[${s.title}](${s.url})` : s.title} | ${s.citation ?? s.court ?? s.kind ?? ""} | ${s.date ?? ""} |`,
+      `| ${s.id} | ${s.url ? `[${s.title}](${s.url})` : s.title} | ${s.citation ?? ""} | ${standing(s)} | ${s.grade ?? ""} | ${s.date ?? ""} |`,
     );
+  L.push("", ...renderAuthorities(rules));
   return L.join("\n") + "\n";
 }

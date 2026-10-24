@@ -9,8 +9,431 @@ a test fails if this page and the rule files disagree. How the rules fit togethe
 
 Not yet confirmed against a primary source:
 
+- Sources without a link to the text yet (2): Jan Vishwas (Amendment of Provisions) Act, 2026 (Act 8 of 2026), amendments to the Motor Vehicles Act; M. Paramesh v VRL Logistics Ltd.
 - Delhi (NCT) minimum wage from 2012-04-01: no official order found (no rate used).
 - Income tax FY 2019-20: Not found in a source for this year: slabs, cess (same values as the checked years either side).
+
+## How the estimate is decided
+
+One row per step of the calculation: what the calculator does now, the authority, the kind of step, and the legal review's decision on it. Points where no binding rule exists are flagged.
+
+Decisions: Legal review of "Decisions and checks needed" (draft v2, 16 Oct 2026), received 2026-10-24. _Approve_ means the method may be adopted,
+_Conditional_ that it may be adopted after the check named, _Hold_ that the calculator must not use the current
+automatic rule until its legal basis is settled. _Built_ says whether the calculator already does what the
+decision says.
+
+Each step is one of five kinds:
+
+- **Fixed law**: settled law: one value, the same everywhere, cited.
+- **Depends on the facts**: depends on evidence the family has: asked, or assumed and said so, or left out.
+- **Law split or open**: the judgments are split or silent: a provisional rule and its alternative, each with its judgment (flagged below).
+- **Estimate from awards**: an estimate from tribunal awards; never presented as law.
+- **Withheld**: not computed automatically until its legal basis is settled.
+
+### Which judgment governs
+
+When judgments on a point differ, this fixed order decides which one the calculator follows:
+
+1. The Supreme Court binds every tribunal. A state's High Court binds the tribunals in that state; another High Court only persuades. A tribunal's award binds no one.
+2. Within the same court, a larger bench binds a smaller one, whatever their dates.
+3. Two judgments of the same court and bench size that differ are a conflict for a lawyer to settle (one may be per incuriam, or distinguishable). The calculator never chooses between them by date.
+
+Tribunal awards are used only to estimate practice, and are labelled so; they never set a rule.
+
+### Points with no binding rule
+
+11 points are not settled by a binding judgment. Each shows a provisional rule and, where the law
+allows two readings, the alternative, until a larger bench, the legislature or the advocate settles it. A
+High Court's ruling on one of them binds the tribunals in its own state.
+
+- **A-30 · Income from a salary.** Tax when the salary slip shows none: Vimal Kanwar held it wrong to deduct tax without evidence; Meenakshi upheld a deduction on its own facts.
+- **A-18 · Income with no proof (minimum wage).** Which state's wage for someone who works in one state and claims in another: a claim may be filed where the claimant lives or works, where the accident happened, or where the defendant lives (s.166(2)).
+- **A-3 · Income for a child who died.** No Supreme Court rule for a child's death in an ordinary claim: Kurvan Ansari's ₹25,000 came from the old s.163A schedule, and Hitesh Patel's skilled wage from an injury case.
+- **A-8 · Income for an injured homemaker.** No authority for an injured homemaker: Shishu Pal and Kirti are death cases, and the Delhi High Court has gone both ways (₹10,000 a month in Uma Rani; Shishu Pal refused in Ganga Devi).
+- **A-21 · Future prospects.** Future prospects at exactly 50 years old fall at the boundary of two bands.
+- **A-10 · Personal deduction.** One dependant who is not a spouse (one child or one parent): Sarla Verma's scale starts at two or three dependants, and Sushila decided only a sole spouse.
+- **A-9 · Multiplier for a child under 15.** 15 (Reshma Kumari, three judges, approved by the Constitution Bench) or 18 (Kajal, Hitesh Patel, two judges, which did not discuss it); Reshma Kumari tied its 15 to a schedule since removed.
+- **A-12 · Loss of estate, funeral and consortium amounts.** Whether the 10% steps run to the accident date or to the date of decision is before a larger bench (Hasina Yasmin, 17 Dec 2025); no decision found as of 24 Oct 2026.
+- **B-2 · Who receives consortium.** Adult children who earned or married, and the parents of a married adult: no judgment read decides them (Sameem Begum's adult children were dependants).
+- **B-4 · Time limit for filing the claim.** Late claims: the amended s.166(3) (its text and commencement not yet read here) and how far the Supreme Court's interim directions still apply.
+- **D-3 · Delhi minimum wages.** Delhi wages from March 2017 to October 2018: the Delhi High Court quashed the 2017 notification on 4 Aug 2018 and the Supreme Court restored its rates from 1 Nov 2018.
+
+### Income
+
+#### Income from a salary
+
+- **Kind:** Depends on the facts
+- **Now:** The monthly salary entered, less income tax: the tax on the slip, or tax worked out from the slabs for the accident's financial year and marked as an estimate.
+- **Decided:** Prefer tax returns, Form 16 or payroll records. Estimate tax from the slabs only when enough is known, and say it is an estimate, never tax proved paid (A-30). Rely on Kirti and Meenakshi only for what each actually decided (B-5).
+- **Legal review:** A-30 Conditional; B-5 Conditional
+- **Authorities:** [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/), paras 61(iii)-(iv); [Meenakshi v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/72618714/), paras 6-13; [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/), paras 21-23
+
+#### Income from tax returns
+
+- **Kind:** Depends on the facts
+- **Now:** The average of the last three returns filed before the accident, less tax. The low figure and the headline count only returns filed before the accident; the high figure adds later ones if they raise the average. The website asks for one return and not when it was filed.
+- **Decided:** Record each return's year, filing date and supporting records. Self-employed: a representative period from the returns; later returns count when supporting records back them. Salaried: no automatic average of three returns (A-5, B-7).
+- **Legal review:** A-5 Approve; B-7 Approve
+- **Authorities:** [Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.](https://indiankanoon.org/doc/164414205/), paras 18-20
+- **Contested points:** `itr_post_accident`
+
+#### Income with no proof (minimum wage)
+
+- **Kind:** Depends on the facts
+- **Now:** The minimum wage on the accident date in the state where the claim is filed, at the skill level of the occupation picked from the calculator's list (low figure: unskilled; unknown occupations are unskilled). Graduates get the skilled rate, with a caution. 'Central sphere rates' (the construction schedule, lowest city group if none is given) can be chosen instead of a state, with no caution about the substitution.
+- **Decided:** The occupation's wage once the occupation-to-skill list is checked (A-2). Record the accident place, the usual place of work and the filing place separately, and prefer the wage of the established employment (A-18). No generic Central substitute (A-19). The skilled wage for graduates unless a higher category is supported (A-20).
+- **Legal review:** A-2 Conditional; A-18 Conditional; A-19 Hold; A-20 Approve
+- **Authorities:** [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/), paras 10, 12
+- **Contested points:** `mw_category`
+
+#### Income for a homemaker who died
+
+- **Kind:** Depends on the facts (death only)
+- **Now:** ₹30,000 a month for every homemaker's death in the headline and the high figure (revised 10% every three years from 11 Jun 2026); the low figure uses the state's unskilled minimum wage.
+- **Decided:** Ask which roles she performed and whether she also earned. Apply Shishu Pal's ₹30,000, revised cumulatively, where its conditions are met, in addition to her own earnings; otherwise an evidence-based value (Kirti). Check the full computation and the revision dates first (A-1).
+- **Legal review:** A-1 Conditional
+- **Authorities:** [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/), paras 13, 20, 22; [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/), para 26(c); [Ganga Devi v Rajesh Kumar (Delhi High Court), MAC.APP. 224/2024](https://indiankanoon.org/doc/33193330/)
+- **Contested points:** `homemaker_income`
+
+#### Income for a child who died
+
+- **Kind:** Law split or open (death only)
+- **Now:** The skilled minimum wage plus 40% future prospects in the headline. The low figure uses ₹25,000 a year × 15 (Kurvan Ansari), so the lost income is always ₹3,75,000.
+- **Decided:** Remove the ₹25,000 floor. A notional income justified on the facts, with the accident-period skilled wage as a reference, without claiming a rule that binds every child's death. A short precedent note comes first (A-3). Kurvan Ansari stays in the register for the old s.163A schedule only (B-1).
+- **Legal review:** A-3 Conditional; B-1 Approve
+- **Authorities:** [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf), paras 9, 15; [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/), para 20; [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/), para 16
+- **Contested points:** `minor_death_income`
+
+#### Income for a student
+
+- **Kind:** Depends on the facts
+- **Now:** The skilled minimum wage. For a professional course the low figure takes the lower of that wage and ₹12,000 a month (Mohinder Kaur); the headline takes the higher.
+- **Decided:** No fixed ₹12,000: that judgment is a comparator only (B-8). Value from the course, qualifications, expected occupation and the accident-period wages (A-4).
+- **Legal review:** A-4 Approve; B-8 Approve
+- **Authorities:** [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/), para 26
+- **Contested points:** `student_income`
+
+#### Income for a pensioner
+
+- **Kind:** Fixed law
+- **Now:** The full pension in the headline and the high figure. The low figure takes the family pension off. The same rule is used for an injured pensioner.
+- **Decided:** Never deduct family pension, in any figure (A-6, B-6). Value the deceased's own pension as lost income; for an injury, account for a pension that continues.
+- **Legal review:** A-6 Approve; B-6 Approve
+- **Authorities:** [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/), para 19; [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/)
+- **Contested points:** `pension_basis`
+
+#### Income for a retired person without a pension
+
+- **Kind:** Depends on the facts
+- **Now:** The low figure counts no income, so only the fixed amounts are paid. The headline uses the unskilled minimum wage, with no future prospects.
+- **Decided:** Ask whether paid work, a business or valuable household work continued, and use proved earnings or a supported notional income. Never zero, or a wage, from 'retired' alone (A-7).
+- **Legal review:** A-7 Conditional
+- **Contested points:** `non_earning_elderly`
+
+#### Income for an injured homemaker
+
+- **Kind:** Law split or open (injury only)
+- **Now:** The low figure and the headline use the state's unskilled minimum wage. The high figure uses ₹30,000 a month, by analogy with Shishu Pal.
+- **Decided:** An evidence-based notional income; ask which household work the person can no longer do and whether care is needed. No automatic ₹30,000 (A-8).
+- **Legal review:** A-8 Conditional
+- **Authorities:** [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/); [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/), paras 20, 23.4; [Uma Rani v Simranjeet Singh (Delhi High Court)](https://indiankanoon.org/doc/173432675/); [Ganga Devi v Rajesh Kumar (Delhi High Court), MAC.APP. 224/2024](https://indiankanoon.org/doc/33193330/)
+- **Contested points:** `injured_homemaker_income`
+
+### The formula
+
+#### Future prospects
+
+- **Kind:** Fixed law
+- **Now:** 50, 30 or 15% for a permanent job and 40, 25 or 10% for others, by age; none from 60. At exactly 50 the lower band. A salaried person without slips is valued at the unskilled minimum wage but keeps the permanent-job rates.
+- **Decided:** Ask for the salary proof and for whether the job was permanent as separate questions (A-17). At exactly 50, the higher band provisionally, then one verified boundary rule (A-21).
+- **Legal review:** A-17 Approve; A-21 Conditional
+- **Authorities:** [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/), paras 61(iii)-(iv); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/), paras 13-14; [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf), para 25; [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/), para 31
+
+#### Personal deduction
+
+- **Kind:** Fixed law (death only)
+- **Now:** A half if unmarried; if married, a third (2-3 dependants), a quarter (4-6) or a fifth (more). With one dependant of any kind (spouse, child or parent), a half in the low figure and a third in the headline. An unmarried person with 3 or more dependants gets a third only in the high figure. A parent answered 'not sure' counts as a dependant.
+- **Decided:** A third where the spouse is the only dependant, not extended to a sole parent or child (A-10). A half for the unmarried, a third where a large dependent family is shown, with no fixed number (A-11). Parents count as dependants only where support is shown; consortium is decided separately (A-22).
+- **Legal review:** A-10 Conditional; A-11 Approve; A-22 Approve
+- **Authorities:** [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/), paras 14-15 (SCC 30-32); [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf), paras 24, 27
+- **Contested points:** `spouse_only_deduction`, `bachelor_large_family`
+
+#### Multiplier
+
+- **Kind:** Fixed law
+- **Now:** From the Sarla Verma table by the age of the person who died or was injured, never split; 5 above 65, with a caution from 71 that the age is outside the table.
+- **Decided:** 5 above 65, with no caution (A-16).
+- **Legal review:** A-16 Approve
+- **Authorities:** [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/), para 21 and its table (SCC 42); [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf), paras 16-18
+
+#### Multiplier for a child under 15
+
+- **Kind:** Law split or open
+- **Now:** The low figure uses 15; the headline and the high figure use 18, for deaths and injuries alike.
+- **Decided:** 15 for a child's death provisionally, following the larger bench. A separate precedent note for an injured child, with 18 shown as the alternative supported by later two-judge decisions (A-9).
+- **Legal review:** A-9 Conditional
+- **Authorities:** [Reshma Kumari v Madan Mohan](https://indiankanoon.org/doc/86908489/), para 40(ii); [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/), para 46; [Divya v National Insurance Co. Ltd.](https://indiankanoon.org/doc/161415879/); [Rushi Thapa v Oriental Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2023/11435/11435_2023_2_1501_56835_Judgement_05-Nov-2024.pdf), para 8; [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/), para 24; [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf), para 13
+- **Contested points:** `under_15_multiplier`
+
+#### Loss of estate, funeral and consortium amounts
+
+- **Kind:** Law split or open (death only)
+- **Now:** ₹15,000, ₹15,000 and ₹40,000, raised 10% (compounded) for each full three years from 31 Oct 2017 completed by the accident date, in the headline and the low figure: none before 31 Oct 2020, and the base amounts for accidents before 2017. The high figure counts the steps up to the date of decision (three from 31 Oct 2026). A caution gives the decision-date amounts while the point is before a larger bench.
+- **Decided:** As now. Check the larger bench's status before each step date; the steps stay cumulative and are never frozen at a fixed number (A-12, B-3).
+- **Legal review:** A-12 Conditional (built); B-3 Conditional (built)
+- **Authorities:** [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/), para 61(viii); [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/), para 8(e)(c); [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf), para 19; [Hasina Yasmin v National Insurance Co. Ltd. (reference to a larger bench on the 10% steps)](https://indiankanoon.org/doc/41904479/); [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/)
+- **Contested points:** `conventional_escalation_steps`
+
+#### Who receives consortium
+
+- **Kind:** Law split or open (death only)
+- **Now:** ₹40,000 plus the same increases for each claiming spouse, child and parent, whatever their age or marriage.
+- **Decided:** Consortium for the categories the judgments establish: the spouse, minor children, and the parents of a minor or unmarried child. Not a blanket rule for every claimant; a short note decides the rest (B-2).
+- **Legal review:** B-2 Conditional
+- **Authorities:** [Magma General Insurance Co. Ltd. v Nanu Ram](https://indiankanoon.org/doc/175246407/), para 8.7; [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/), paras 8(e)(b), 9.7; [New India Assurance Co. Ltd. v Somwati](https://indiankanoon.org/doc/97624839/), paras 38-40; [Sameem Begum v K. Venkat Swamy](https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year=2026/english/2026_9_112_124_EN.pdf)
+
+### Injury
+
+#### Lost earning ability
+
+- **Kind:** Depends on the facts (injury only)
+- **Now:** A doctor's functional % if given. Otherwise a whole-body certificate as it is, or a limb certificate (or one whose basis is unknown) × 0.5 in the low figure and × 0.53 in the headline, factors taken from Delhi awards. The high figure uses the full %, or 100% if the person cannot work at all.
+- **Decided:** The limb factors are not a legal rule and are held. Ask the occupation, the impairment, whether the earlier work or other suitable work is still possible, and use medical or vocational evidence. Factors may appear only in a labelled illustration (A-13).
+- **Legal review:** A-13 Hold
+- **Authorities:** [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/), paras 7-10 (SCC 9-13); M. Paramesh v VRL Logistics Ltd.; [Reliance General Insurance Co. Ltd. v Priyanka Das](https://indiankanoon.org/doc/142169288/), para 19; Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
+- **Contested points:** `functional_pct`
+
+#### Pain and amenities, travel and diet, marriage prospects
+
+- **Kind:** Estimate from awards (injury only)
+- **Now:** Bands from Delhi awards 2024-26: the lower quarter in the low figure, the middle in the headline, the upper quarter or a higher Supreme Court amount in the high figure; marked experimental. Travel and diet, pain (even without a certificate) and an attendant band when no days are given are added to every injury estimate.
+- **Decided:** Correct the source awards (amenities left out of Hitesh Patel and Baiju) and present the bands as estimates of tribunal practice, never as amounts the law requires (A-14). Ask about care, hospital stay, travel and diet before adding them; pain stays without a certificate (A-23).
+- **Legal review:** A-14 Conditional; A-23 Conditional
+- **Authorities:** [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/), paras 5, 10; [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/), paras 27-29; [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf), para 13; [Baiju v The United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
+- **Contested points:** `non_pecuniary_band`
+
+#### Attendant
+
+- **Kind:** Depends on the facts (injury only)
+- **Now:** For life: minimum wage × 12 × multiplier × number of carers (1 or 2), the unskilled wage in the low figure and the headline, semi-skilled in the high figure. During treatment: days × the unskilled monthly wage ÷ 26, or a band if days are not given.
+- **Decided:** Care needs first; the semi-skilled or skilled wage as the care requires; unpaid family care counted; temporary and lifelong care kept apart; ÷ 26 only where the wage structure supports it (A-15).
+- **Legal review:** A-15 Conditional
+- **Authorities:** [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/), paras 21, 22, 25; [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf), paras 9-10
+- **Contested points:** `attendant_rate`
+
+#### Earnings lost during treatment by a child
+
+- **Kind:** Fixed law (injury only)
+- **Now:** An injured child (or a student under 18 valued as a child) gets the skilled minimum wage × the months off.
+- **Decided:** None for a child who had no earnings; treatment, care and future loss stay (A-31).
+- **Legal review:** A-31 Approve
+- **Authorities:** [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/), para 5
+
+### Deductions
+
+#### Medical bills
+
+- **Kind:** Fixed law
+- **Now:** Bills less what the cashless treatment scheme paid (s.164B(5)); future medical costs only if entered.
+- **Authorities:** [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), s.164B(5); [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/), para 5
+
+#### The person's own share of fault
+
+- **Kind:** Depends on the facts
+- **Now:** A percentage entered cuts the whole total, medical bills included, whatever the person's role. The website never asks for one; for the driver of a vehicle involved it shows what 25% and 50% would cost. The written method (docs/law.md) says fault is not imputed to pedestrians or passengers.
+- **Decided:** Only the person's own established or expressly assumed fault; never another driver's (A-24). 25% and 50% stay as labelled illustrations outside the standard amount (C-5). Correct the written method (B-9).
+- **Legal review:** A-24 Approve; B-9 Approve; C-5 Approve
+- **Authorities:** [Khenyei v New India Assurance Co. Ltd.](https://indiankanoon.org/doc/79441201/), paras 4, 13, 14, 18; [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/), para 9.8
+
+#### Order of deductions when fault, cashless payments and ex-gratia meet
+
+- **Kind:** Withheld
+- **Now:** Cashless payments come off the medical bills before the fault cut; the fault cut then applies to the whole total; ex-gratia comes off after, capped at the income head as it was before the cut. In rare cases this puts the low figure above the headline.
+- **Decided:** Record bills, the scheme-paid part and the rest separately and prevent double payment, but no automatic combined cashless and fault adjustment until a reasoned statutory opinion (A-25). Cut for established fault first, then cap any permitted adjustment at the income head, and flag cases where the order changes the result; needs specific legal approval (A-29).
+- **Legal review:** A-25 Hold; A-29 Conditional
+- **Authorities:** [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), s.164B(5); [Sarla Devi v Reliance General Insurance Co. Ltd.](https://indiankanoon.org/doc/57068626/), para 19
+
+#### Money already received
+
+- **Kind:** Withheld
+- **Now:** Ex-gratia equal to pay comes off loss of dependency after a death and off future earning capacity after an injury. A no-fault award made by the tribunal, interim relief and a hit-and-run payment come off the total when an amount is entered. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
+- **Decided:** Record payments as facts and deduct only where the law is clear for that benefit. Ex-gratia only in Sarla Devi's situation, salary-equivalent assistance after a death, and a dependant who does not receive it keeps their share (A-26, B-10). No automatic s.164 set-off (A-28). No interim-relief set-off until the scheme's text is read (B-12). Separate categories for life insurance, personal mediclaim, employer reimbursement, cashless treatment and ex-gratia (B-11).
+- **Legal review:** A-26 Conditional; A-28 Hold; B-10 Conditional; B-11 Conditional; B-12 Hold
+- **Authorities:** [Sarla Devi v Reliance General Insurance Co. Ltd.](https://indiankanoon.org/doc/57068626/), paras 13-19, 22-25; [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/); [New India Assurance Co. Ltd. v Dolly Satish Gandhi](https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf), para 15; [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), ss.163, 164
+
+### The claim
+
+#### When no estimate is given
+
+- **Kind:** Fixed law
+- **Now:** No estimate for an owner driving alone with no other vehicle involved; for a vehicle never traced, where the hit-and-run scheme's ₹2,00,000 for a death or ₹50,000 for grievous hurt is shown, whatever the accident date; and where no-fault money was accepted through the insurer's settlement, which ends the claim.
+- **Decided:** Show the s.161 amounts subject to eligibility and the scheme's conditions, kept apart from s.166 estimates and from cashless treatment, with no deduction for cashless treatment; check which amounts applied to older accidents (C-8).
+- **Legal review:** C-8 Approve
+- **Authorities:** [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), ss.161, 166(1)
+
+#### Time limit for filing the claim
+
+- **Kind:** Law split or open
+- **Now:** When no filing date is given and 6 months or more have passed, a caution says s.166(3) sets 6 months but the Supreme Court has directed that claims not be dismissed as time-barred while it decides the challenge.
+- **Decided:** Rewrite around the amended s.166(3) (a further 12 months with sufficient cause) and whatever interim directions still stand. Never say a claim after 18 months is maintainable, or that every claim after 6 months is barred. Mandatory before launch (B-4).
+- **Legal review:** B-4 Conditional
+- **Authorities:** [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), s.166(3); Jan Vishwas (Amendment of Provisions) Act, 2026 (Act 8 of 2026), amendments to the Motor Vehicles Act; [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/)
+
+#### Interest and the value of an offer over time
+
+- **Kind:** Estimate from awards
+- **Now:** Interest is never in the amount; it is shown at 6, 7.5 and 9% a year for a 6-year wait. The offer check assumes 7.5% interest, a 7% discount rate and no lawyer's fee, each changeable.
+- **Decided:** Compensation without interest first, interest separately (s.171), and the discount rate, waiting time and legal costs in an optional module with explained, adjustable inputs. The 12-month disposal target in the amended s.168(4) is not a promised date (C-6).
+- **Legal review:** C-6 Conditional
+- **Authorities:** [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), s.171
+
+### How the result is shown
+
+#### How the result is shown
+
+- **Kind:** Fixed law
+- **Now:** Three figures (low, headline, high). A bar is drawn only when the high figure is at most 1.75 times the low (2.5 for injuries) and the spread is at least 5% of the headline, with a list of what moves the amount.
+- **Decided:** One headline, and alternatives only where the law is split, each with its judgment; for missing facts, 'if you can prove…' notes instead. The bar limits are display choices, not law (C-4).
+- **Legal review:** C-4 Conditional
+
+#### What the amount is called
+
+- **Kind:** Fixed law
+- **Now:** 'Legal entitlement' and 'the Supreme Court's method' describe the amount on the result, in the share text, the published method and the command line, in English and Hindi.
+- **Decided:** 'Estimated compensation under the MACT framework, based on the information provided'; no 'legal entitlement' (C-3).
+- **Legal review:** C-3 Approve
+
+#### Checking an insurer's offer
+
+- **Kind:** Fixed law
+- **Now:** The offer is compared with the headline and labelled: far below (under 25%), well below (under 50%), below (under 80%), a little below (under 95%), close (up to 105%) or above; 'too early to judge' without a disability certificate.
+- **Decided:** Show the offer, the estimate and the difference, with no label calling the offer fair or unfair and nothing that tells the family to accept or refuse (C-1).
+- **Legal review:** C-1 Approve
+
+#### Which questions the website asks
+
+- **Kind:** Depends on the facts
+- **Now:** Not asked: hospital or attendant days, the number of carers, future medical costs, money already received, a fault percentage, other dependants, or extra or late tax returns.
+- **Decided:** Add only legally material questions, shown when they apply: occupation, place of work, salary proof, relationships, financial support, homemaker roles, continuing disability, care needs and money already received. The revised questions go to the legal reviewer (C-2).
+- **Legal review:** C-2 Conditional
+
+#### How real awards compare
+
+- **Kind:** Estimate from awards
+- **Now:** Shown for every state, labelled 'Delhi tribunal awards, 2024-26'.
+- **Decided:** Delhi only, with its jurisdiction, period and limits stated; re-measured after any change to the method (D-5).
+- **Legal review:** D-5 Approve
+- **Authorities:** Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
+
+#### Legal sign-off of the rules
+
+- **Kind:** Fixed law
+- **Now:** Every rules file is marked unverified, and results carry one line: 'Method not yet signed off by a lawyer'. This register records each authority's bench, grade, paragraph, limits and later treatment.
+- **Decided:** Sign off the method, the code, the rules files, settings, tax and wage tables and the public text against the same version; keep a change log and re-approve after substantive changes (B-14). Complete the authority register, including the claim type and whether each holding is binding (B-13).
+- **Legal review:** B-13 Conditional; B-14 Conditional
+
+### Data
+
+#### Income-tax tables
+
+- **Kind:** Fixed law
+- **Now:** Tables for FY 2018-19 to FY 2026-27, checked against official sources. For an earlier accident the latest table (FY 2026-27) is used, with a caution.
+- **Decided:** The accident year's own rules (A-27): load FY 2012-13 to 2017-18 and confirm FY 2019-20, with cess and rebate per year and a second person's check (D-4). Until then, rely on proved tax or withhold the estimate.
+- **Legal review:** A-27 Approve; D-4 Conditional
+
+#### Minimum wages outside Delhi
+
+- **Kind:** Depends on the facts
+- **Now:** Only Delhi and the Central construction schedule are loaded. Elsewhere, people without proof of income, homemakers, students, children and retired people without a pension get no estimate unless the Central fallback is chosen.
+- **Decided:** Add states one at a time from official notifications, each with its effective date, category, grade, zone and source; periods without one stay unavailable (D-1).
+- **Legal review:** D-1 Conditional
+
+#### Delhi minimum wages
+
+- **Kind:** Law split or open
+- **Now:** Rates from 1 Oct 2011, except 1 Apr 2012 to 31 Mar 2013, where cases without proof of income get no estimate. From 3 Mar 2017 to 31 Oct 2018 the official series is used with a caution. The latest order is of 1 Apr 2025; an order dated 13 Oct 2025 was declared fake by the Labour Department.
+- **Decided:** No interpolation: obtain the missing orders from the Labour Department or by RTI (D-2). Keep the official series for 2017-18 with a legal qualification, after a labour-law review (D-3). The last authenticated rate until a later official order is verified, and no compliance-site figures (D-6).
+- **Legal review:** D-2 Hold; D-3 Conditional; D-6 Not stated
+
+#### When a wage on file may be out of date
+
+- **Kind:** Fixed law
+- **Now:** A caution when the wage on file took effect more than 7 months before the accident and the source has not been checked since; it names the effective date, not when the source was last checked.
+- **Decided:** Seven months is a trigger to check the data, not a legal expiry: show the order's effective date and the date it was last checked (C-7).
+- **Legal review:** C-7 Approve
+
+### Every item of the legal review
+
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 2 of 59.
+
+| Item | Decision | Built | Step |
+|---|---|---|---|
+| A-1 | Conditional | no | Income for a homemaker who died |
+| A-2 | Conditional | no | Income with no proof (minimum wage) |
+| A-3 | Conditional | no | Income for a child who died |
+| A-4 | Approve | no | Income for a student |
+| A-5 | Approve | no | Income from tax returns |
+| A-6 | Approve | no | Income for a pensioner |
+| A-7 | Conditional | no | Income for a retired person without a pension |
+| A-8 | Conditional | no | Income for an injured homemaker |
+| A-9 | Conditional | no | Multiplier for a child under 15 |
+| A-10 | Conditional | no | Personal deduction |
+| A-11 | Approve | no | Personal deduction |
+| A-12 | Conditional | yes | Loss of estate, funeral and consortium amounts |
+| A-13 | Hold | no | Lost earning ability |
+| A-14 | Conditional | no | Pain and amenities, travel and diet, marriage prospects |
+| A-15 | Conditional | no | Attendant |
+| A-16 | Approve | no | Multiplier |
+| A-17 | Approve | no | Future prospects |
+| A-18 | Conditional | no | Income with no proof (minimum wage) |
+| A-19 | Hold | no | Income with no proof (minimum wage) |
+| A-20 | Approve | no | Income with no proof (minimum wage) |
+| A-21 | Conditional | no | Future prospects |
+| A-22 | Approve | no | Personal deduction |
+| A-23 | Conditional | no | Pain and amenities, travel and diet, marriage prospects |
+| A-24 | Approve | no | The person's own share of fault |
+| A-25 | Hold | no | Order of deductions when fault, cashless payments and ex-gratia meet |
+| A-26 | Conditional | no | Money already received |
+| A-27 | Approve | no | Income-tax tables |
+| A-28 | Hold | no | Money already received |
+| A-29 | Conditional | no | Order of deductions when fault, cashless payments and ex-gratia meet |
+| A-30 | Conditional | no | Income from a salary |
+| A-31 | Approve | no | Earnings lost during treatment by a child |
+| B-1 | Approve | no | Income for a child who died |
+| B-2 | Conditional | no | Who receives consortium |
+| B-3 | Conditional | yes | Loss of estate, funeral and consortium amounts |
+| B-4 | Conditional | no | Time limit for filing the claim |
+| B-5 | Conditional | no | Income from a salary |
+| B-6 | Approve | no | Income for a pensioner |
+| B-7 | Approve | no | Income from tax returns |
+| B-8 | Approve | no | Income for a student |
+| B-9 | Approve | no | The person's own share of fault |
+| B-10 | Conditional | no | Money already received |
+| B-11 | Conditional | no | Money already received |
+| B-12 | Hold | no | Money already received |
+| B-13 | Conditional | no | Legal sign-off of the rules |
+| B-14 | Conditional | no | Legal sign-off of the rules |
+| C-1 | Approve | no | Checking an insurer's offer |
+| C-2 | Conditional | no | Which questions the website asks |
+| C-3 | Approve | no | What the amount is called |
+| C-4 | Conditional | no | How the result is shown |
+| C-5 | Approve | no | The person's own share of fault |
+| C-6 | Conditional | no | Interest and the value of an offer over time |
+| C-7 | Approve | no | When a wage on file may be out of date |
+| C-8 | Approve | no | When no estimate is given |
+| D-1 | Conditional | no | Minimum wages outside Delhi |
+| D-2 | Hold | no | Delhi minimum wages |
+| D-3 | Conditional | no | Delhi minimum wages |
+| D-4 | Conditional | no | Income-tax tables |
+| D-5 | Approve | no | How real awards compare |
+| D-6 | Not stated | no | Delhi minimum wages |
+
+### Changes
+
+- 2026-10-24 · Loss of estate, funeral and consortium amounts: The headline counts the steps completed by the accident date, in place of a fixed two steps (A-12).
+- 2026-10-24 · How real awards compare: Re-measured after A-12 (deaths, middle half of awards 0.70 to 1.17 times the estimate, 112 awards).
+- 2026-10-24 · Legal sign-off of the rules: One line on every result: 'Method not yet signed off by a lawyer' (B-14).
+- 2026-10-24 · Legal sign-off of the rules: This register and the authority register published (B-13).
 
 ## Multiplier (death and injury)
 
@@ -64,13 +487,13 @@ Loss of estate, funeral expenses and loss of consortium (per claimant: spousal, 
 
 Base amounts on 2017-10-31: loss of estate ₹15,000, funeral ₹15,000, consortium ₹40,000 per claimant; +10% every 3 years.
 
-Sources: [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Magma General Insurance Co. Ltd. v Nanu Ram](https://indiankanoon.org/doc/175246407/); [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/). Confidence: contested. Signed off: **no — awaiting legal sign-off**.
+Sources: [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Magma General Insurance Co. Ltd. v Nanu Ram](https://indiankanoon.org/doc/175246407/); [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/); [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/); [Hasina Yasmin v National Insurance Co. Ltd. (reference to a larger bench on the 10% steps)](https://indiankanoon.org/doc/41904479/). Confidence: contested. Signed off: **no — awaiting legal sign-off**.
 
 ## Notional incomes
 
 Income used when the person did not earn, or earnings cannot be proved.
 
-- **Homemaker (loss of domestic care):** ₹30,000 a month from 2026-06-11, +10% every 3 years. Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years. Sources: [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/).
+- **Homemaker (loss of domestic care):** ₹30,000 a month from 2026-06-11, +10% every 3 years. Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years. Sources: [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/).
 - **Student, professional course:** ₹12,000 a month. Engineering student (Mohinder Kaur 2026). Used only if higher than the skilled minimum wage. Sources: [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/).
 - **Minor (death), conservative:** ₹25,000 a year × 15. Kurvan Ansari (SC, 16 Nov 2021, para 16): notional income Rs 25,000 a year x multiplier 15 = Rs 3,75,000 loss of dependency, with no personal-expenses deduction, for a 7-year-old (the 15 is the s.163A Second Schedule multiplier). Checked against the judgment text, 10 Oct 2026. Sources: [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/).
 
@@ -85,17 +508,17 @@ describes the code).
 | Point | Conservative | Standard | Claimant-max | Sources | Decided in |
 |---|---|---|---|---|---|
 | Multiplier for a person aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
-| Number of 10% steps applied to the Pranay Sethi conventional heads. (Legal review A-12 (24 Oct 2026): the headline counts the full 3-year steps since 31 Oct 2017 completed by the accident date ("accident": none before 31 Oct 2020; base amounts for accidents before 2017), the reading Hasina Yasmin (2025) preferred when it referred the question to a larger bench. Counting up to the date of decision ("clock": up to the as-of date, three steps from 31 Oct 2026), as Shishu Pal (2026) applied, is the alternative until the larger bench decides. Increases are cumulative.) | accident | accident | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/) | rules file |
+| Number of 10% steps applied to the Pranay Sethi conventional heads. (Legal review A-12 (24 Oct 2026): the headline counts the full 3-year steps since 31 Oct 2017 completed by the accident date ("accident": none before 31 Oct 2020; base amounts for accidents before 2017), the reading Hasina Yasmin (2025) preferred when it referred the question to a larger bench. Counting up to the date of decision ("clock": up to the as-of date, three steps from 31 Oct 2026), as Shishu Pal (2026) applied, is the alternative until the larger bench decides. Increases are cumulative.) | accident | accident | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Hasina Yasmin v National Insurance Co. Ltd. (reference to a larger bench on the 10% steps)](https://indiankanoon.org/doc/41904479/); [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/) | rules file |
 | Personal deduction for a married deceased whose only dependant is the spouse. | 1/2 | 1/3 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | rules file |
-| Monthly income for a deceased homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) | rules file |
+| Monthly income for a deceased homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) | rules file |
 | Income basis for the death of a minor. (The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.) | kurvan_notional | skilled_minimum_wage | skilled_minimum_wage | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
 | Functional disability (loss of earning capacity) when no functional assessment is given. (The limb factors (rules/injury/bands.yaml) are the Delhi 25th percentile and median and also apply to a certificate whose basis is not known. The claimant-max rule is a legal choice not yet reviewed.) | certificate % x the conservative limb factor (whole-body certificate taken as it is) | certificate % x the standard limb factor (whole-body certificate taken as it is) | 100% if the person cannot work at all; otherwise the certificate % | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | code (src/engine/estimate.ts) |
-| Pain and suffering, conveyance and diet, marriage prospects, and attendant during treatment when no attendant days are given. (Mostly the spread of Delhi tribunal awards. The claimant-max pain values from 50% are Supreme Court anchors or unexplained values, and the marriage-prospects band is not calibrated.) | conservative column of rules/injury/bands.yaml | standard column of rules/injury/bands.yaml | claimant-max column of rules/injury/bands.yaml | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); [Baiju v (final order of 28 Nov 2025)](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | code (src/engine/estimate.ts) |
+| Pain and suffering, conveyance and diet, marriage prospects, and attendant during treatment when no attendant days are given. (Mostly the spread of Delhi tribunal awards. The claimant-max pain values from 50% are Supreme Court anchors or unexplained values, and the marriage-prospects band is not calibrated.) | conservative column of rules/injury/bands.yaml | standard column of rules/injury/bands.yaml | claimant-max column of rules/injury/bands.yaml | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); [Baiju v The United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | code (src/engine/estimate.ts) |
 | Wage for a permanent attendant. (The head itself follows Kajal and Hansraj; no authority is recorded for the semi-skilled rate.) | unskilled minimum wage | unskilled minimum wage | semi-skilled minimum wage | none recorded | code (src/engine/estimate.ts) |
-| Income for an injured homemaker. (Shishu Pal decided a death; its use for an injury is by analogy and untested.) | unskilled minimum wage | unskilled minimum wage | Shishu Pal 'loss of domestic care' amount, by analogy | [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/) | code (src/engine/income.ts) |
+| Income for an injured homemaker. (Shishu Pal decided a death; its use for an injury is by analogy and untested.) | unskilled minimum wage | unskilled minimum wage | Shishu Pal 'loss of domestic care' amount, by analogy | [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/); [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/) | code (src/engine/income.ts) |
 | Skill category for the minimum wage when there is no income proof. (No authority is recorded for the occupation-to-category mapping. Unknown occupations are unskilled.) | unskilled | the occupation's category (rules/occupations.yaml) | the occupation's category (rules/occupations.yaml) | none recorded | code (src/engine/income.ts) |
 | Notional income for a student at college or on a professional course, or aged 18 or over. (rules/formula/notional-income.yaml uses the precedent only if it is higher; the conservative choice is a code choice.) | the lower of the skilled minimum wage and the course precedent (professional courses) | the higher of the two | the higher of the two | [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/) | code (src/engine/income.ts) |
-| Whether income-tax returns filed after the accident are counted. (If no return was filed before the accident, the last three of all returns are used in every scenario.) | last three returns filed before the accident | last three returns filed before the accident | also returns filed after the accident, if that raises the average | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Rashmirekha Tripathy (income assessment from ITRs)](https://indiankanoon.org/doc/164414205/) | code (src/engine/income.ts) |
+| Whether income-tax returns filed after the accident are counted. (If no return was filed before the accident, the last three of all returns are used in every scenario.) | last three returns filed before the accident | last three returns filed before the accident | also returns filed after the accident, if that raises the average | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.](https://indiankanoon.org/doc/164414205/) | code (src/engine/income.ts) |
 | Pension lost by a pensioner. (Whether Vimal Kanwar supports deducting the family pension is unconfirmed.) | pension minus family pension | full pension | full pension | [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/) | code (src/engine/income.ts) |
 | Income for a retired person without a pension. (No authority is recorded.) | no income (only the heads that do not depend on income) | unskilled minimum wage | unskilled minimum wage | none recorded | code (src/engine/income.ts) |
 | Personal deduction for an unmarried person supporting a large family (rules/formula/deduction.yaml). | 1/2 | 1/2 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | code (src/engine/estimate.ts) |
@@ -121,7 +544,7 @@ Limb certificate → functional disability factor: 0.5 / 0.53 / 1.
 Attendant during treatment, when days are not given: ₹14,000 / ₹30,000 / ₹50,000.
 Loss of marriage prospects (unmarried, age ≤ 35, functional disability ≥ 50%): ₹1,00,000 / ₹3,00,000 / ₹5,00,000.
 
-Sources: [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); [Baiju v (final order of 28 Nov 2025)](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv. Signed off: **no — awaiting legal sign-off**.
+Sources: [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); [Baiju v The United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv. Signed off: **no — awaiting legal sign-off**.
 
 ## How far real awards land (shown next to an estimate; not part of it)
 
@@ -140,7 +563,7 @@ Sources: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), ba
 - **Hit and run (s.161):** death ₹2,00,000, grievous hurt ₹50,000. Compensation to Victims of Hit and Run Motor Accidents Scheme, 2022 (amounts unchanged by the 2026 amendment). Refundable from any later award (s.163). Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf).
 - **Limitation (s.166(3)):** 6 months. The Supreme Court's interim order (4 Nov 2025) directs that no claim be dismissed as time-barred while the challenge is pending. Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf); [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/).
 - **Interest illustration:** 6 / 7.5 / 9% over 6 years. No fixed rate; recent awards range 6-9% simple interest from the date of filing. Shown separately, never added to the headline.
-- **Typical time to award:** 6 years at tribunals, 8 at High Courts. Sources: [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/).
+- **Typical time to award:** 6 years at tribunals, 8 at High Courts. Sources: [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/).
 
 Signed off: **no — awaiting legal sign-off**.
 
@@ -305,33 +728,292 @@ Gaps:
 
 ## Sources
 
-| Id | Source | Citation | Date |
-|---|---|---|---|
-| mv_act_1988 | [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf) | statute |  |
-| sarla_verma_2009 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | (2009) 6 SCC 121 |  |
-| pranay_sethi_2017 | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/) | (2017) 16 SCC 680 | 2017-10-31 |
-| raj_kumar_2011 | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/) | (2011) 1 SCC 343 |  |
-| magma_2018 | [Magma General Insurance Co. Ltd. v Nanu Ram](https://indiankanoon.org/doc/175246407/) | (2018) 18 SCC 130 |  |
-| satinder_kaur_2020 | [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/) | SC |  |
-| kirti_2021 | [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) | SC |  |
-| kajal_2020 | [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/) | (2020) 4 SCC 413 |  |
-| kurvan_ansari_2021 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/) | SC |  |
-| meenakshi_2024 | [Meenakshi v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/72618714/) | 2024 INSC 573 |  |
-| sidram_2022 | [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/) | SC | 2022-11-16 |
-| hitesh_patel_2025 | [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf) | 2025 INSC 1070 |  |
-| preetha_krishnan_2025 | [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf) | 2025 INSC 1293 | 2025-11-06 |
-| baiju_2025 | [Baiju v (final order of 28 Nov 2025)](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf) | SC | 2025-11-28 |
-| hasina_yasmin_2025 | [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/) | SC | 2025-12-17 |
-| bhagirathi_dash_2025 | [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/) | SC | 2025-11-04 |
-| sushila_2026 | [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf) | SC | 2026-03-10 |
-| mohinder_kaur_2026 | [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/) | 2026 INSC 477 |  |
-| hansraj_2026 | [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | SC | 2026-05-06 |
-| dolly_satish_gandhi_2026 | [New India Assurance Co. Ltd. v Dolly Satish Gandhi](https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf) | 2026 INSC 498 |  |
-| sarla_devi_2026 | [Sarla Devi v Reliance General Insurance (three-judge bench, ex-gratia deduction)](https://indiankanoon.org/doc/57068626/) | SC | 2026-05-26 |
-| shishu_pal_2026 | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/) | 2026 INSC 634 | 2026-06-11 |
-| rashmirekha_2026 | [Rashmirekha Tripathy (income assessment from ITRs)](https://indiankanoon.org/doc/164414205/) | 2026 INSC 661 | 2026-07-01 |
-| vimal_kanwar_2013 | [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/) | (2013) 7 SCC 476 |  |
-| helen_rebello_1998 | [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/) | SC |  |
-| khenyei_2015 | [Khenyei v New India Assurance Co. Ltd.](https://indiankanoon.org/doc/79441201/) | (2015) 9 SCC 273 |  |
-| karan_singh_bisht_2026 | [Karan Singh Bisht v Ravi Singh (MACT-01, Patiala House Courts, New Delhi; DAR 350/2020)](https://indiankanoon.org/doc/105820332/) | MACT Delhi | 2026-08-17 |
-| delhi_awards_backtest_2026 | Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | dataset | 2026-10-10 |
+| Id | Source | Citation | Court and bench | Grade | Date |
+|---|---|---|---|---|---|
+| mv_act_1988 | [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf) |  | statute | P |  |
+| jan_vishwas_2026 | Jan Vishwas (Amendment of Provisions) Act, 2026 (Act 8 of 2026), amendments to the Motor Vehicles Act |  | statute | S |  |
+| sarla_verma_2009 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | (2009) 6 SCC 121; 2009 INSC 506 | Supreme Court, 2 judges | P |  |
+| pranay_sethi_2017 | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/) | (2017) 16 SCC 680; 2017 INSC 1068 | Supreme Court, 5 judges | P | 2017-10-31 |
+| reshma_kumari_2013 | [Reshma Kumari v Madan Mohan](https://indiankanoon.org/doc/86908489/) | (2013) 9 SCC 65; 2013 INSC 200 | Supreme Court, 3 judges | P |  |
+| raj_kumar_2011 | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/) | (2011) 1 SCC 343; 2010 INSC 703 | Supreme Court, 2 judges | P |  |
+| magma_2018 | [Magma General Insurance Co. Ltd. v Nanu Ram](https://indiankanoon.org/doc/175246407/) | (2018) 18 SCC 130; 2018 INSC 828 | Supreme Court, 2 judges | P |  |
+| satinder_kaur_2020 | [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/) | (2021) 11 SCC 780; 2020 INSC 447 | Supreme Court, 3 judges | P |  |
+| somwati_2020 | [New India Assurance Co. Ltd. v Somwati](https://indiankanoon.org/doc/97624839/) | (2020) 9 SCC 644; 2020 INSC 535 | Supreme Court, 2 judges | P |  |
+| kirti_2021 | [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) | (2021) 2 SCC 166; 2021 INSC 6 | Supreme Court, 3 judges | P |  |
+| kajal_2020 | [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/) | (2020) 4 SCC 413; 2020 INSC 135 | Supreme Court, 2 judges | P | 2020-02-05 |
+| kurvan_ansari_2021 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/) | 2021 INSC 734; [2021] 7 SCR 366 | Supreme Court, 2 judges | P |  |
+| divya_2022 | [Divya v National Insurance Co. Ltd.](https://indiankanoon.org/doc/161415879/) | 2022 INSC 1108 | Supreme Court, 2 judges | P |  |
+| rushi_thapa_2024 | [Rushi Thapa v Oriental Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2023/11435/11435_2023_2_1501_56835_Judgement_05-Nov-2024.pdf) | 2024 INSC 837 | Supreme Court, 2 judges | P | 2024-11-05 |
+| meenakshi_2024 | [Meenakshi v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/72618714/) | 2024 INSC 573 | Supreme Court, 2 judges | P | 2024-07-23 |
+| sidram_2022 | [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/) | (2023) 3 SCC 439; 2022 INSC 1204 | Supreme Court, 2 judges | P | 2022-11-16 |
+| hitesh_patel_2025 | [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf) | 2025 INSC 1070 | Supreme Court, 2 judges | P | 2025-08-08 |
+| preetha_krishnan_2025 | [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf) | 2025 INSC 1293 | Supreme Court, 2 judges | P | 2025-11-06 |
+| baiju_2025 | [Baiju v The United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf) | Order of 28 Nov 2025, SLP(C) 29251/2025 as printed on the order | Supreme Court, 2 judges | P | 2025-11-28 |
+| hasina_yasmin_2025 | [Hasina Yasmin v National Insurance Co. Ltd. (reference to a larger bench on the 10% steps)](https://indiankanoon.org/doc/41904479/) | 2025 INSC 1501 | Supreme Court, 2 judges | P | 2025-12-17 |
+| bhagirathi_dash_2025 | [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/) |  | Supreme Court, 2 judges | P | 2025-11-04 |
+| sushila_2026 | [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf) | Order of 10 Mar 2026, SLP(C) 21717/2025 | Supreme Court, 2 judges | P | 2026-03-10 |
+| mohinder_kaur_2026 | [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/) | 2026 INSC 477 | Supreme Court, 2 judges | P |  |
+| hansraj_2026 | [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | 2026 INSC 454 | Supreme Court, 2 judges | P | 2026-05-06 |
+| priyanka_das_2026 | [Reliance General Insurance Co. Ltd. v Priyanka Das](https://indiankanoon.org/doc/142169288/) | 2026 INSC 950 | Supreme Court, 2 judges | P |  |
+| m_paramesh_2026 | M. Paramesh v VRL Logistics Ltd. | 2026 INSC 655 | Supreme Court | S | 2026-06-23 |
+| dolly_satish_gandhi_2026 | [New India Assurance Co. Ltd. v Dolly Satish Gandhi](https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf) | 2026 INSC 498 | Supreme Court, 2 judges | P | 2026-05-15 |
+| sarla_devi_2026 | [Sarla Devi v Reliance General Insurance Co. Ltd.](https://indiankanoon.org/doc/57068626/) | 2026 INSC 575 | Supreme Court, 3 judges | P | 2026-05-26 |
+| shishu_pal_2026 | [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/) | 2026 INSC 634 | Supreme Court, 2 judges | P | 2026-06-11 |
+| sameem_begum_2026 | [Sameem Begum v K. Venkat Swamy](https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year=2026/english/2026_9_112_124_EN.pdf) | 2026 INSC 864; [2026] 9 SCR 112 | Supreme Court, 2 judges | P | 2026-08-14 |
+| rashmirekha_2026 | [Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.](https://indiankanoon.org/doc/164414205/) | 2026 INSC 661; [2026] 7 SCR 494 | Supreme Court, 2 judges | P | 2026-07-01 |
+| vimal_kanwar_2013 | [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/) | (2013) 7 SCC 476; 2013 INSC 304 | Supreme Court, 2 judges | P |  |
+| helen_rebello_1998 | [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/) | (1999) 1 SCC 90; 1998 INSC 372 | Supreme Court, 2 judges | P |  |
+| khenyei_2015 | [Khenyei v New India Assurance Co. Ltd.](https://indiankanoon.org/doc/79441201/) | (2015) 9 SCC 273; 2015 INSC 389 | Supreme Court, 3 judges | P |  |
+| ganga_devi_2026 | [Ganga Devi v Rajesh Kumar (Delhi High Court), MAC.APP. 224/2024](https://indiankanoon.org/doc/33193330/) |  | High Court (DL), 1 judge | P | 2026-10-12 |
+| uma_rani_2026 | [Uma Rani v Simranjeet Singh (Delhi High Court)](https://indiankanoon.org/doc/173432675/) |  | High Court (DL) | P | 2026-07-01 |
+| karan_singh_bisht_2026 | [Karan Singh Bisht v Ravi Singh (MACT-01, Patiala House Courts, New Delhi; DAR 350/2020)](https://indiankanoon.org/doc/105820332/) |  | Tribunal (DL) |  | 2026-08-17 |
+| delhi_awards_backtest_2026 | Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv |  | dataset |  | 2026-10-10 |
+
+## What each authority is relied on for
+
+For each judgment: its court and bench, the holding the calculator relies on with its paragraph, the facts that
+limit it, and how later judgments treated it. _Ratio_ marks a binding holding, _applied_ an amount fixed on the
+case's own facts (a comparator, not a rule); where neither is marked, the advocate has yet to class it.
+Grade P: read in the original; S: known only from a summary or report.
+
+### Jan Vishwas (Amendment of Provisions) Act, 2026 (Act 8 of 2026), amendments to the Motor Vehicles Act
+
+statute · grade S
+
+- A tribunal may entertain a claim within a further twelve months after the six-month limit in s.166(3) if sufficient cause is shown (as summarised by the Government; the legal review also cites ss.168(4), 164(4) and 163(3)). _Limits:_ Known from the Government's summary and the legal review; the section text and its commencement date are not yet read.
+- _Later treatment:_ The legal review gives 15 Aug 2026 as the commencement for the Motor Vehicles Act amendments; not yet confirmed.
+
+### [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/)
+
+Supreme Court, 2 judges · (2009) 6 SCC 121; 2009 INSC 506 · grade P
+
+- **paras 14-15 (SCC 30-32):** Personal deduction: a half for an unmarried person; for a married person a third (2-3 dependants), a quarter (4-6) or a fifth (more). The scale starts at two or three dependants.
+- **para 15:** An unmarried person who supported a large dependent family may have a third deducted instead of a half; no number of dependants is fixed.
+- **para 21 and its table (SCC 42):** The multiplier is taken from a table by age.
+- _Later treatment:_ Paras 30-32 and 42 (SCC) endorsed by the Constitution Bench in Pranay Sethi (2017), para 61(v)-(vi).
+
+### [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/)
+
+Supreme Court, 5 judges · (2017) 16 SCC 680; 2017 INSC 1068 · 2017-10-31 · grade P
+
+- **paras 61(iii)-(iv) (SCC 59.3-59.4) · ratio:** Future prospects: 50%, 30% or 15% of salary less tax for a permanent job (under 40, 40-50, 50-60); 40%, 25% or 10% of established income less tax for the self-employed or those on a fixed salary.
+- **para 61(viii) · ratio:** Loss of estate ₹15,000, consortium ₹40,000 and funeral ₹15,000, to be raised by 10% every three years; no start date is given.
+- **para 46:** Approved Reshma Kumari's approach to the multiplier.
+- _Later treatment:_ A Constitution Bench; binds every smaller bench.
+
+### [Reshma Kumari v Madan Mohan](https://indiankanoon.org/doc/86908489/)
+
+Supreme Court, 3 judges · (2013) 9 SCC 65; 2013 INSC 200 · grade P
+
+- **para 40(ii) · ratio:** A multiplier of 15 for victims up to 15, whatever the type of claim. _Limits:_ Ties the 15 to the old Second Schedule, which has since been removed.
+- _Later treatment:_ Approved in Pranay Sethi (2017) para 46; followed for an injured child in Divya (2022) and Rushi Thapa (2024). Kajal (2020) and Hitesh Patel (2025), two-judge benches, used 18 without discussing it.
+
+### [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/)
+
+Supreme Court, 2 judges · (2011) 1 SCC 343; 2010 INSC 703 · grade P
+
+- **paras 5, 7-10 (SCC 9-13):** The heads of injury compensation (medical, earnings lost during treatment, future loss, pain, amenities); medical and functional disability are assessed separately.
+- **para 10:** 100% loss of earning capacity where the person cannot do their earlier work; when earning loss is total, only a token sum is due for amenities.
+
+### [Magma General Insurance Co. Ltd. v Nanu Ram](https://indiankanoon.org/doc/175246407/)
+
+Supreme Court, 2 judges · (2018) 18 SCC 130; 2018 INSC 828 · grade P
+
+- **para 8.7:** Consortium covers spousal, parental and filial consortium; filial consortium for the parents of a minor child, or an unmarried son or daughter. _Limits:_ The children were minors.
+
+### [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/)
+
+Supreme Court, 3 judges · (2021) 11 SCC 780; 2020 INSC 447 · grade P
+
+- **paras 8(e)(b)-(c), 9.7:** Consortium is awarded to each eligible claimant; loss of estate and funeral as in Pranay Sethi. _Limits:_ The children were minors.
+- **para 9.8:** Upheld a 50% cut for contributory negligence of a driver who died.
+
+### [New India Assurance Co. Ltd. v Somwati](https://indiankanoon.org/doc/97624839/)
+
+Supreme Court, 2 judges · (2020) 9 SCC 644; 2020 INSC 535 · grade P
+
+- **paras 38-40:** Consortium for each claimant entitled to it. _Limits:_ The children were minors.
+
+### [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/)
+
+Supreme Court, 3 judges · (2021) 2 SCC 166; 2021 INSC 6 · grade P
+
+- **paras 10, 12:** Without proof of income, the minimum wage in force on the accident date; a higher category may be used for an educated person.
+- **paras 13-14:** Future prospects apply to notional incomes.
+- **para 26(c):** Unpaid household work has an economic value. _Limits:_ A death claim; it kept a 25% increase on the unskilled wage for its homemaker.
+
+### [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/)
+
+Supreme Court, 2 judges · (2020) 4 SCC 413; 2020 INSC 135 · 2020-02-05 · grade P
+
+- **paras 20, 24:** An injured child's income taken at the skilled minimum wage; multiplier 18. _Limits:_ An injury claim (a child).
+- **paras 21, 22, 25 · applied:** An attendant during treatment, and one carer for life valued at the skilled wage (₹4,846 a month, rounded to ₹5,000).
+- **paras 27-29 · applied:** ₹3 lakh for marriage prospects; pain and amenities on its facts.
+- _Later treatment:_ Used 18 without discussing Reshma Kumari (three judges, 15).
+
+### [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/)
+
+Supreme Court, 2 judges · 2021 INSC 734; [2021] 7 SCR 366 · grade P
+
+- **para 16 · applied:** A child's death valued at ₹25,000 a year × 15 = ₹3,75,000, with no deduction. _Limits:_ A claim under the old s.163A schedule, for a 2004 accident; it does not fit an ordinary s.166 claim.
+- _Later treatment:_ The legal review (B-1) keeps it in the register for the s.163A schedule only.
+
+### [Divya v National Insurance Co. Ltd.](https://indiankanoon.org/doc/161415879/)
+
+Supreme Court, 2 judges · 2022 INSC 1108 · grade P
+
+- Multiplier 15 for an injured two-year-old, following Reshma Kumari. _Limits:_ An injury claim, not a death.
+
+### [Rushi Thapa v Oriental Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2023/11435/11435_2023_2_1501_56835_Judgement_05-Nov-2024.pdf)
+
+Supreme Court, 2 judges · 2024 INSC 837 · 2024-11-05 · grade P · non-reportable
+
+- **para 8:** An injured child's income and a multiplier of 15. _Limits:_ An injury claim (a child).
+
+### [Meenakshi v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/72618714/)
+
+Supreme Court, 2 judges · 2024 INSC 573 · 2024-07-23 · grade P
+
+- **paras 6-13:** Allowances that benefit the family count as income; income tax comes off.
+- **para 13:** Upheld a tax deduction on its own facts.
+- _Later treatment:_ Its own arithmetic is irregular, so it should not be cited as a worked model (legal review B-5).
+
+### [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/)
+
+Supreme Court, 2 judges · (2023) 3 SCC 439; 2022 INSC 1204 · 2022-11-16 · grade P
+
+- **para 31:** Future prospects apply to the income of an injured person.
+
+### [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf)
+
+Supreme Court, 2 judges · 2025 INSC 1070 · 2025-08-08 · grade P
+
+- **paras 9-10, 15:** An injured child's income at the skilled minimum wage. _Limits:_ An injury claim (a child); not a rule for a child's death.
+- **para 13 · applied:** Future prospects and multiplier 18 for an injured child; ₹7 lakh in all for pain and amenities (₹2 lakh of it for amenities).
+- _Later treatment:_ Used 18 without discussing Reshma Kumari (three judges, 15).
+
+### [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf)
+
+Supreme Court, 2 judges · 2025 INSC 1293 · 2025-11-06 · grade P
+
+- **paras 16-18:** The multiplier is never split.
+- **para 19 · applied:** Two 10% steps on the fixed amounts.
+
+### [Baiju v The United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf)
+
+Supreme Court, 2 judges · Order of 28 Nov 2025, SLP(C) 29251/2025 as printed on the order · 2025-11-28 · grade P · non-reportable
+
+- **para 14:** Future prospects on an injured person's income. _Limits:_ An unreported order about an adult.
+- **applied:** ₹5 lakh in all for pain and amenities (₹2 lakh of it for amenities).
+
+### [Hasina Yasmin v National Insurance Co. Ltd. (reference to a larger bench on the 10% steps)](https://indiankanoon.org/doc/41904479/)
+
+Supreme Court, 2 judges · 2025 INSC 1501 · 2025-12-17 · grade P
+
+- Referred to a larger bench whether the 10% steps run to the date of decision or are fixed by the accident date; it doubted the first reading and awarded the base amounts for a 1998 accident meanwhile. _Limits:_ A reference order; it decides nothing for later cases.
+- _Later treatment:_ No larger-bench decision found as of 24 Oct 2026.
+
+### [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/)
+
+Supreme Court, 2 judges · 2025-11-04 · grade P
+
+- Interim direction that claims not be dismissed as time-barred while the challenge to s.166(3) is decided. _Limits:_ An interim order (with ICICI Lombard v Ayiti Navaneetha); orders of 4 Nov 2025 to 20 Apr 2026 read.
+- _Later treatment:_ Check the latest order before relying on it (legal review B-4).
+
+### [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf)
+
+Supreme Court, 2 judges · Order of 10 Mar 2026, SLP(C) 21717/2025 · 2026-03-10 · grade P
+
+- **paras 24, 27:** A third deducted where the wife was the only dependant.
+- **para 25:** Future prospects added as Pranay Sethi directs.
+
+### [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/)
+
+Supreme Court, 2 judges · 2026 INSC 477 · grade P · non-reportable
+
+- **para 26 · applied:** A student's income assessed at ₹12,000 a month. _Limits:_ An accident in 2000; a comparator, not a benchmark (legal review B-8).
+
+### [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf)
+
+Supreme Court, 2 judges · 2026 INSC 454 · 2026-05-06 · grade P · non-reportable
+
+- **paras 9-10 · applied:** Two carers at the semi-skilled wage for a 100% disabled child.
+
+### [Reliance General Insurance Co. Ltd. v Priyanka Das](https://indiankanoon.org/doc/142169288/)
+
+Supreme Court, 2 judges · 2026 INSC 950 · grade P · non-reportable
+
+- **para 19:** Functional disability depends on earning ability in the open market, not on keeping a specially adjusted job; its own ₹20 lakh for marriage prospects is not a precedent. _Limits:_ An injury claim.
+
+### M. Paramesh v VRL Logistics Ltd.
+
+Supreme Court · 2026 INSC 655 · 2026-06-23 · grade S
+
+- Occupational consequences can justify a functional disability above the physical certificate; 100% for a mason with 70% physical disability. _Limits:_ Known from law reports and the legal review; the judgment's text is not yet read.
+
+### [New India Assurance Co. Ltd. v Dolly Satish Gandhi](https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf)
+
+Supreme Court, 2 judges · 2026 INSC 498 · 2026-05-15 · grade P
+
+- **para 15:** Mediclaim insurance paid to the claimant is not deducted.
+- _Later treatment:_ To be checked against the precise mediclaim rule proposed (legal review B-11).
+
+### [Sarla Devi v Reliance General Insurance Co. Ltd.](https://indiankanoon.org/doc/57068626/)
+
+Supreme Court, 3 judges · 2026 INSC 575 · 2026-05-26 · grade P
+
+- **paras 13-19 · ratio:** Ex-gratia equal to the last salary, paid under compassionate-assistance rules, is deducted from loss of dependency; future pay rises, family pension, insurance and provident fund are not. _Limits:_ A death claim; Haryana's 2006 rules. It says nothing about injuries.
+- **paras 22-25 · ratio:** A dependant who does not receive the assistance keeps their share.
+
+### [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/)
+
+Supreme Court, 2 judges · 2026 INSC 634 · 2026-06-11 · grade P
+
+- **paras 13, 20, 22:** ₹30,000 a month for loss of domestic care when a homemaker dies, where she ran the household, cared for the children and supported the spouse (or, for parents, supported them), revised 10% every three years, and in addition to her own earnings. _Limits:_ Death claims; women homemakers; all three roles met. Applied to an accident of 2001.
+- _Later treatment:_ The Delhi High Court refused it where the three roles were not met (Ganga Devi, 12 Oct 2026).
+
+### [Sameem Begum v K. Venkat Swamy](https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year=2026/english/2026_9_112_124_EN.pdf)
+
+Supreme Court, 2 judges · 2026 INSC 864; [2026] 9 SCR 112 · 2026-08-14 · grade P
+
+- Parental consortium for adult children. _Limits:_ Children aged 18 to 21 who were dependants.
+
+### [Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.](https://indiankanoon.org/doc/164414205/)
+
+Supreme Court, 2 judges · 2026 INSC 661; [2026] 7 SCR 494 · 2026-07-01 · grade P
+
+- **paras 18-20:** Income of the self-employed from an average of tax returns; returns filed after the accident need scrutiny and supporting records. _Limits:_ The average is for the self-employed only.
+
+### [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/)
+
+Supreme Court, 2 judges · (2013) 7 SCC 476; 2013 INSC 304 · grade P
+
+- **para 19:** Family pension is not deducted.
+- **paras 21-23:** Tax may not be deducted without evidence, by presuming the employer deducted it at source.
+- _Later treatment:_ Follows Helen Rebello (1998) on collateral benefits.
+
+### [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/)
+
+Supreme Court, 2 judges · (1999) 1 SCC 90; 1998 INSC 372 · grade P
+
+- Collateral benefits such as life insurance are not deducted from compensation.
+
+### [Khenyei v New India Assurance Co. Ltd.](https://indiankanoon.org/doc/79441201/)
+
+Supreme Court, 3 judges · (2015) 9 SCC 273; 2015 INSC 389 · grade P
+
+- **paras 4, 13, 18 · ratio:** Another driver's fault is never deducted from a claimant who did not contribute (composite negligence); the claimant may recover the whole award from any of the drivers.
+- **para 14 · ratio:** The claimant's own fault reduces the award in proportion, whatever their role.
+
+### [Ganga Devi v Rajesh Kumar (Delhi High Court), MAC.APP. 224/2024](https://indiankanoon.org/doc/33193330/)
+
+High Court (DL), 1 judge · 2026-10-12 · grade P
+
+- Shishu Pal's ₹30,000 refused where the three roles it describes were not met.
+
+### [Uma Rani v Simranjeet Singh (Delhi High Court)](https://indiankanoon.org/doc/173432675/)
+
+High Court (DL) · 2026-07-01 · grade P
+
+- **applied:** An injured homemaker's work valued at ₹10,000 a month. _Limits:_ An injury claim.
+
