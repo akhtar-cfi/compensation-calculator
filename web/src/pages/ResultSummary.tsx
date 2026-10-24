@@ -244,7 +244,7 @@ export function ResultSummary(props: {
     .sort((a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity]);
   // A low end far below the headline is the biggest risk to the number: say so in plain words, with its main cause.
   const top = est.swingFactors[0];
-  const wide = r.conservative < 0.8 * r.standard && top;
+  const wide = r.conservative < rules.settings.wide_range_notice_ratio.value * r.standard && top;
   return (
     <Card class="p-5 sm:p-6" id="result">
       {heading}

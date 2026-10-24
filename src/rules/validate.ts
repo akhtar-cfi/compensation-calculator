@@ -22,6 +22,7 @@ export function validateRules(
     ["statutory.s164", rules.statutory.no_fault_s164.sources],
     ["statutory.s161", rules.statutory.hit_and_run_s161.sources],
     ["statutory.limitation", rules.statutory.limitation_s166_3.sources],
+    ["statutory.pendency", rules.statutory.pendency.sources],
     ["injury_bands", rules.injuryBands.sources],
     ["practice_spread", rules.practiceSpread?.sources ?? []],
     ...rules.rangeParameters.map((p): [string, readonly string[]] => [`range.${p.id}`, p.sources]),
@@ -71,6 +72,15 @@ export function validateRules(
       problems.push(`practice_spread.${kind}: needs 0 < p25 <= median <= p75 and n >= 30`);
   }
 
+  const g = rules.settings;
+  const bands = g.offer_defaults.verdict_bands_pct;
+  if (!bands.every((x, i) => x > 0 && x < 100 && (i === 0 || x > bands[i - 1]!)))
+    problems.push(
+      "settings.offer_defaults.verdict_bands_pct: needs strictly rising values between 0 and 100",
+    );
+  for (const k of ["death", "injury"] as const)
+    if (g.range_bar_max_ratio[k] < 1) problems.push(`settings.range_bar_max_ratio.${k}: needs 1 or more`);
+
   const occ = new Set<string>();
   for (const o of rules.occupations.occupations) {
     if (occ.has(o.code)) problems.push(`occupations: duplicate code ${o.code}`);
@@ -90,9 +100,24 @@ export function validateRules(
     for (const r of st.revisions) {
       if (r.confidence === "official" && !r.notification.url)
         problems.push(`${where} ${r.effective_from}: official revision without a notification URL`);
+      if (r.confidence !== "gap")
+        for (const zone of st.zones)
+          if (!r.rates[zone])
+            problems.push(`${where} ${r.effective_from}: no rates for declared zone '${zone}'`);
       for (const [zone, set] of Object.entries(r.rates)) {
         if (!st.zones.includes(zone))
           problems.push(`${where} ${r.effective_from}: zone '${zone}' not declared`);
+        // The homemaker amount (Shishu Pal) is the standard / claimant-max income and the unskilled wage the
+        // conservative one, so the wage must not exceed it, or conservative <= standard <= claimant-max breaks.
+        const unskilled = set.unskilled;
+        const home = rules.notional.homemaker_domestic_care.monthly;
+        if (
+          typeof unskilled === "number" &&
+          (r.unit === "day" ? unskilled * st.days_per_month : unskilled) > home
+        )
+          problems.push(
+            `${where} ${r.effective_from} ${zone}: unskilled wage above the homemaker amount (${home}); scenario order breaks`,
+          );
         let prev: number | undefined;
         for (const cat of CATEGORY_ORDER) {
           const v = set[cat];
@@ -111,7 +136,7 @@ export function validateRules(
       const latest = [...dates].sort().at(-1)!;
       const fresh = st.last_checked && st.last_checked > latest ? st.last_checked : latest;
       const months = monthsBetween(fresh, opts.asOf);
-      if (months > (opts.staleMonths ?? 7))
+      if (months > (opts.staleMonths ?? rules.settings.wage_freshness_months.value))
         problems.push(
           `${where}: latest revision ${latest}${st.last_checked ? `, last checked ${st.last_checked}` : ""} - ${months} months without a check (stale)`,
         );

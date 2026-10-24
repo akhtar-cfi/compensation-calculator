@@ -11,6 +11,8 @@ export const SourceSchema = z.object({
   court: z.string().optional(),
   date: isoDate.optional(),
   url: z.string().url().optional(),
+  /** Cited only in the notes or the case library, not by a rule or by the engine. */
+  background: z.boolean().optional(),
 });
 
 export const MultiplierRuleSchema = z.object({
@@ -90,6 +92,8 @@ export const RangeParameterSchema = z.object({
   claimant_max: scenarioValue,
   sources: z.array(z.string()),
   note: z.string().optional(),
+  /** Set when the choice is made in the engine's code; the values above then describe it. */
+  implemented_in: z.string().optional(),
 });
 
 export const StatutoryRuleSchema = z.object({
@@ -226,7 +230,30 @@ export const PracticeSpreadSchema = z.object({
   injury: ratioQuartiles,
 });
 
+/** Product choices that are not rules of law (range bar, cards, offer defaults). */
+export const SettingsSchema = z.object({
+  id: z.literal("settings"),
+  verified: z.boolean(),
+  description: z.string(),
+  range_bar_max_ratio: z.object({
+    death: z.number().positive(),
+    injury: z.number().positive(),
+    note: z.string(),
+  }),
+  wide_range_notice_ratio: z.object({ value: z.number().positive().max(1), note: z.string() }),
+  negligence_cards_pct: z.object({ values: z.array(z.number().min(0).max(100)), note: z.string() }),
+  wage_freshness_months: z.object({ value: z.number().int().positive(), note: z.string() }),
+  offer_defaults: z.object({
+    interest_pct: z.number().min(0).max(30),
+    discount_pct: z.number().min(0).max(30),
+    lawyer_fee_pct: z.number().min(0).max(100),
+    verdict_bands_pct: z.tuple([z.number(), z.number(), z.number(), z.number()]),
+    note: z.string(),
+  }),
+});
+
 export type Source = z.infer<typeof SourceSchema>;
+export type Settings = z.infer<typeof SettingsSchema>;
 export type PracticeSpread = z.infer<typeof PracticeSpreadSchema>;
 export type InjuryBands = z.infer<typeof InjuryBandsSchema>;
 export type MultiplierRule = z.infer<typeof MultiplierRuleSchema>;
@@ -256,5 +283,6 @@ export interface RulesBundle {
   occupations: Occupations;
   injuryBands: InjuryBands;
   practiceSpread?: PracticeSpread;
+  settings: Settings;
   minimumWages: Record<string, MinimumWageState>;
 }

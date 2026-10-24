@@ -32,13 +32,18 @@ export function formatINRPrecise(n: number): string {
   return `${whole}.${String(paise).padStart(2, "0")}`;
 }
 
-/** Human figure to two significant digits in lakh/crore: 5281500 -> "₹53 lakh". */
+/**
+ * Human figure to two significant digits in lakh/crore: 5281500 -> "₹53 lakh". Rounds the whole-rupee amount
+ * (halves up) before choosing the unit, so 115000 -> "₹1.2 lakh" and 9950000 -> "₹1 crore".
+ */
 export function formatApprox(n: number): string {
-  const abs = Math.abs(n);
-  const round2 = (x: number) => Number(x.toPrecision(2));
-  if (abs >= 1e7) return `₹${round2(n / 1e7)} crore`;
-  if (abs >= 1e5) return `₹${round2(n / 1e5)} lakh`;
-  return formatINR(round2(n));
+  const abs = Math.round(Math.abs(n));
+  const step = 10 ** Math.max(0, String(abs).length - 2);
+  const r = Math.round(abs / step) * step;
+  const sign = n < 0 && r > 0 ? "-" : "";
+  if (r >= 1e7) return `₹${sign}${r / 1e7} crore`;
+  if (r >= 1e5) return `₹${sign}${r / 1e5} lakh`;
+  return formatINR(n < 0 ? -r : r);
 }
 
 /**

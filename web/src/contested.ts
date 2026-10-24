@@ -2,39 +2,14 @@ import type { RulesBundle } from "../../src/rules/schema.js";
 
 /**
  * The contested points of law the engine can meet, each in plain words: the question courts differ on, what the
- * conservative, standard and claimant's-best positions take, and the authorities behind them. Five points are in
- * rules/range-parameters.yaml with their sources; the other ten are decided in the engine's code, and their
- * authorities are listed here from the code's own citations. Where no authority is recorded for a choice, the list
- * is empty and the page says so.
+ * conservative, standard and claimant's-best positions take, and the authorities behind them. Every point has an
+ * entry in rules/range-parameters.yaml, and its authorities are read from there, so this page and the rules file
+ * cannot cite different judgments. Where no authority is recorded for a choice, the list is empty and the page says
+ * so.
  */
 
-/** Authorities for the points decided in code (rules/sources.yaml ids). */
-const IN_CODE = {
-  bachelor_large_family: ["sarla_verma_2009"],
-  functional_pct: ["raj_kumar_2011", "delhi_awards_backtest_2026"],
-  non_pecuniary_band: undefined, // the injury bands' own sources
-  attendant_rate: [],
-  itr_post_accident: ["rashmirekha_2026"],
-  student_income: ["kajal_2020", "mohinder_kaur_2026"],
-  injured_homemaker_income: ["kirti_2021", "shishu_pal_2026"],
-  pension_basis: ["vimal_kanwar_2013"],
-  non_earning_elderly: [],
-  mw_category: [],
-} as const satisfies Record<string, readonly string[] | undefined>;
-
-/** Points with an entry in rules/range-parameters.yaml (sources read from there). */
-const IN_RULES = [
-  "under_15_multiplier",
-  "spouse_only_deduction",
-  "conventional_escalation_steps",
-  "homemaker_income",
-  "minor_death_income",
-] as const;
-
-export type ContestedId = (typeof IN_RULES)[number] | keyof typeof IN_CODE;
-
 /** Every contested point, in the order the engine can meet them. */
-export const CONTESTED: Readonly<Record<ContestedId, true>> = {
+export const CONTESTED = {
   under_15_multiplier: true,
   spouse_only_deduction: true,
   bachelor_large_family: true,
@@ -50,7 +25,9 @@ export const CONTESTED: Readonly<Record<ContestedId, true>> = {
   functional_pct: true,
   non_pecuniary_band: true,
   attendant_rate: true,
-};
+} as const;
+
+export type ContestedId = keyof typeof CONTESTED;
 
 export interface ContestedPoint {
   id: ContestedId;
@@ -66,12 +43,7 @@ export interface ContestedPoint {
 export const isContested = (id: string): id is ContestedId => id in CONTESTED;
 
 export function contested(id: ContestedId, rules: RulesBundle): ContestedPoint {
-  const fromRules = rules.rangeParameters.find((p) => p.id === id)?.sources;
-  const sources = (IN_RULES as readonly string[]).includes(id)
-    ? (fromRules ?? [])
-    : id === "non_pecuniary_band"
-      ? rules.injuryBands.sources
-      : (IN_CODE[id as keyof typeof IN_CODE] ?? []);
+  const sources = rules.rangeParameters.find((p) => p.id === id)?.sources ?? [];
   return { id, label: `cp.${id}`, c: `cp.${id}.c`, l: `cp.${id}.l`, m: `cp.${id}.m`, sources };
 }
 

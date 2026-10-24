@@ -21,7 +21,8 @@ import { renderCases, renderEstimate, renderOffer } from "./render.js";
 
 const USAGE = `Usage:
   mact estimate <input.json|yaml> [--as-of YYYY-MM-DD] [--format md|json]
-  mact offer <input.json|yaml> --offer <rupees> [--years 6] [--interest 7.5] [--discount 7] [--fee 0] [--as-of YYYY-MM-DD]
+  mact offer <input.json|yaml> --offer <rupees> [--years N] [--interest %] [--discount %] [--fee %] [--as-of YYYY-MM-DD]
+    (defaults: years from rules/statutory/statutory.yaml, the rest from rules/settings.yaml)
   mact cases match <input.json|yaml> [--limit 3] [--format md|json]
   mact cases coverage
   mact backtest <awards.csv> [--format md|json]
@@ -192,9 +193,9 @@ async function main(argv: string[]): Promise<number> {
     }
     const check = checkOffer(out, offer, {
       yearsToAward: Number(flag(args, "years") ?? rules.statutory.pendency.tribunal_years),
-      awardInterestPct: Number(flag(args, "interest") ?? 7.5),
-      discountPct: Number(flag(args, "discount") ?? 7),
-      lawyerFeePct: Number(flag(args, "fee") ?? 0),
+      awardInterestPct: Number(flag(args, "interest") ?? rules.settings.offer_defaults.interest_pct),
+      discountPct: Number(flag(args, "discount") ?? rules.settings.offer_defaults.discount_pct),
+      lawyerFeePct: Number(flag(args, "fee") ?? rules.settings.offer_defaults.lawyer_fee_pct),
     });
     console.log(renderEstimate(out) + "\n\n" + renderOffer(check));
     return 0;

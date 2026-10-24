@@ -14,6 +14,7 @@ import {
   OccupationsSchema,
   PracticeSpreadSchema,
   RangeParameterSchema,
+  SettingsSchema,
   SourceSchema,
   StatutoryRuleSchema,
   TaxRuleSchema,
@@ -62,6 +63,7 @@ export function loadRules(root: string = REPO_ROOT): RulesBundle {
     occupations: readYaml(r("occupations.yaml"), OccupationsSchema),
     injuryBands: readYaml(r("injury/bands.yaml"), InjuryBandsSchema),
     practiceSpread: readYaml(r("practice/spread.yaml"), PracticeSpreadSchema),
+    settings: readYaml(r("settings.yaml"), SettingsSchema),
     minimumWages: loadMinimumWages(join(root, "sources", "minimum-wages")),
   };
 }

@@ -14,17 +14,17 @@ date of filing, is shown separately and never added to the headline.
 
 ## 2. Scenarios and the range
 
-| Kind of uncertainty                                                                 | How it is handled                                                                                                                |
-| ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| **Legal**: a point the courts have not settled                                      | A _range parameter_ (`rules/range-parameters.yaml`) with a cited value for the conservative, standard and claimant-max scenarios |
-| **Factual**: what can be proved (claimed income, functional disability, negligence) | An input, plus "if X is proved" sensitivity cards                                                                                |
-| **Practice**: what tribunals actually award                                         | Not used for the headline. Planned: case journeys and a back-tested band (section 7)                                             |
+| Kind of uncertainty                                                                 | How it is handled                                                                                                                                                   |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Legal**: a point the courts have not settled                                      | A _range parameter_ listed in `rules/range-parameters.yaml`: what the conservative, standard and claimant-max scenarios use, and its authority (or "none recorded") |
+| **Factual**: what can be proved (claimed income, functional disability, negligence) | An input, plus "if X is proved" sensitivity cards                                                                                                                   |
+| **Practice**: what tribunals actually award                                         | Not used for the headline. Shown separately: the practice spread and similar real cases (section 7)                                                                 |
 
 - **Scenarios are consistent.** Conservative = every contested point resolved against the claimant; claimant-max = every point in the claimant's favour.
 - **Swing factors** vary one point at a time from the standard scenario. They show which disputes matter, in rupees.
 - **Your choices** (the page's _Full detail_ option): each contested point can also be set on its own, as a lawyer would argue it. The engine then works out one more result with exactly those positions (standard wherever none is chosen). It never changes the three scenarios, and it always lies between conservative and claimant-max; a property test enforces both.
 - **Hidden range bar.** If claimant-max ÷ conservative is above 1.75 (death) or 2.5 (injury), the range bar is hidden and the scenarios are shown as cards.
-- **Invariant:** conservative ≤ standard ≤ claimant-max. A property test enforces it.
+- **Invariant:** conservative ≤ standard ≤ claimant-max. Property tests enforce it for deaths and injuries, with one known exception: when both contributory negligence and an ex-gratia deduction are entered, the order can break (negligence cuts the whole total; the ex-gratia offset is capped at the income head before that cut). Which comes first is left to the legal reviewers. The website asks for neither.
 
 ## 3. Two time axes
 
@@ -42,7 +42,7 @@ The engine never reads the clock; both dates are inputs.
 | Income: no proof           | State minimum wage **on the accident date** for the occupation's skill category, from a curated occupation list (never free-text matching). Conservative = unskilled                                                    | —                                         |
 | Income: homemaker          | ₹30,000/month "loss of domestic care", revised 10% every three years from 11 Jun 2026. Conservative = unskilled minimum wage                                                                                            | Shishu Pal (2026)                         |
 | Income: child              | **Contested.** Conservative = notional ₹25,000/year with multiplier 15 (Kurvan Ansari). Standard / claimant-max = skilled minimum wage                                                                                  | Kurvan Ansari; Kajal; Hansraj (2026)      |
-| Income: student            | Skilled minimum wage, or the course precedent (₹12,000/month for a professional course) if higher                                                                                                                       | Mohinder Kaur (2026)                      |
+| Income: student            | Skilled minimum wage, or the course precedent (₹12,000/month for a professional course) if higher (conservative: the lower of the two)                                                                                  | Mohinder Kaur (2026)                      |
 | Income: pensioner          | Pension lost (conservative: less family pension). No future prospects                                                                                                                                                   | Vimal Kanwar                              |
 | Future prospects           | Permanent job: 50 / 30 / 15% (under 40 / 40–49 / 50–60). Self-employed, fixed salary or notional income: 40 / 25 / 10%. None above 60                                                                                   | Pranay Sethi; Kirti                       |
 | Personal deduction         | Married: 1/3 (2–3 dependants), 1/4 (4–6), 1/5 (7+). Bachelor: 1/2 (1/3 for a large dependent family, claimant-max only). Spouse as the only dependant: 1/3 standard, 1/2 conservative                                   | Sarla Verma                               |
@@ -78,11 +78,23 @@ The engine never reads the clock; both dates are inputs.
 - the offending vehicle is untraced (use the hit-and-run scheme instead);
 - an owner-driver was hurt in a single-vehicle crash.
 
-**Warnings:**
+**Also a stop:** no minimum wage on file for the state and accident date, when the income rests on it.
+
+**Cautions** (the estimate is shown, with the caution):
 
 - Uninsured vehicle.
-- Claim not filed within 6 months. The Supreme Court's interim order of 4 Nov 2025 says such claims should not be dismissed as time-barred.
+- Claim not filed and 6 months or more since the accident. The Supreme Court's interim order of 4 Nov 2025 says such claims should not be dismissed as time-barred.
 - The person was driving a vehicle involved in the crash (possible contributory negligence).
+- Injury: no disability certificate; functional disability estimated from the certificate; injury estimates are experimental.
+- A child's death: the income basis is unsettled.
+- Age outside the multiplier table.
+- Minimum wage: area assumed or not an area of the state; a lower category used; the period's rates were disputed in court; the wage on file may be out of date.
+- No tax table for the year of the accident (the latest table is used).
+- Salary slips or tax returns chosen but no amount entered (the minimum wage is used).
+- No minimum wage on file for the attendant charges worked out from it (attendant days, permanent attendant), which are then taken as nil.
+- s.164 compensation awarded but no amount entered (nothing deducted).
+
+**Notes:** tax estimated from the slabs; the range is too wide for a bar; not a prediction; draft rules.
 
 **Deducted:**
 
@@ -156,13 +168,13 @@ Other findings:
 - **Minimum wages** (`sources/minimum-wages/<STATE>.yaml`):
   - Each revision records its effective date, rates, notification link and how it was verified.
   - States revise often (many every April and October).
-  - A weekly CI job fails when a schedule has had neither a new revision nor a recorded check of the official source (`last_checked`) for 7 months.
+  - A weekly CI job fails when a schedule has had neither a new revision nor a recorded check of the official source (`last_checked`) for 7 months (`rules/settings.yaml`).
   - The engine warns when an accident is more than 7 months after the latest revision on file and the official source has not been checked since the accident date.
   - **Only official orders are loaded.** Aggregator and news figures are never used as rates. Example: a forged Delhi order for 1 Oct 2025 (Rs 19,846 unskilled) was reported by compliance publishers. The Delhi Labour Department declared it fake by a circular of 14 Oct 2025. Loading it would have overstated every no-proof Delhi estimate by about 7.5%.
-  - Coverage: Delhi from 1 Apr 2019 (14 orders). Central sphere (construction schedule, Areas A/B/C) from 1 Oct 2022 (9 orders), as a labelled fallback only.
+  - Coverage: Delhi from 1 Oct 2011 to 1 Apr 2025 (28 official rate entries, one of which repeats the April 2018 rates to mark a period, and a declared gap for Apr 2012 to Mar 2013). Central sphere (construction schedule, Areas A/B/C) from 1 Oct 2022 (9 orders), as a labelled fallback only.
     - Haryana, Rajasthan, Uttar Pradesh and Madhya Pradesh are not loaded yet. Their sites refuse automated access, so the orders are collected by hand (`docs/minimum-wage-intake.md`). Until then, estimates without income proof stop with a clear message.
     - Central figures quoted elsewhere (₹13,599 / ₹15,057 / ₹20,361 a month) are basic rates without VDA. They understate the wage by about a third.
-    - From 1 Oct 2026 the Central VDA order is issued by the Labour Bureau under s.69(2) of the Code on Wages, 2019 (read from a published copy).
+    - From 1 Oct 2026 the Central VDA order is issued by the Labour Bureau under s.69(2) of the Code on Wages, 2019 (read from the Labour Bureau's own file on 10 Oct 2026).
 - **Case law and statute.** Monthly review of new Supreme Court and High Court motor-accident judgments and Gazette notifications. Watch list:
   - the larger-bench reference on escalation of conventional heads (_Hasina Yasmin_);
   - the s.166(3) limitation challenge;
@@ -181,4 +193,5 @@ Other findings:
 - **Injury estimates still run low** (median bias −16% on 113 Delhi awards after calibration) and the calibration is Delhi-only (see section 7).
 - **Delhi minimum wages:** none before Oct 2011, and none for Apr 2012 – Mar 2013 (orders not found). Accidents in 3 Mar 2017 – 31 Oct 2018 carry a legal-uncertainty warning.
 - **Offer evidence covers rejected offers only**: accepted offers are not published, so the offer ÷ award ratio (median 0.09) cannot show how good accepted offers are.
+- **Negligence with ex-gratia:** when both are entered the three figures can come out in the wrong order, by lakhs (section 2). The order of the two deductions is for the legal reviewers.
 - **The range is legal uncertainty only.** Death estimates are centred well (bias 0%) but most awards fall outside the range, because evidence risk (e.g. an income claim not accepted) is not in it.

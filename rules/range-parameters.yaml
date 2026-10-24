@@ -23,7 +23,7 @@
   claimant_max: "1/3"
   sources: [sarla_verma_2009]
 - id: homemaker_income
-  description: Monthly income for a homemaker without monetary income.
+  description: Monthly income for a deceased homemaker without monetary income.
   conservative: unskilled_minimum_wage
   standard: domestic_care
   claimant_max: domestic_care
@@ -35,3 +35,99 @@
   claimant_max: skilled_minimum_wage
   sources: [kurvan_ansari_2021, kajal_2020, hansraj_2026]
   note: The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.
+# The points below are decided in the engine's code; the values here describe what the code does, so that all
+# 15 contested points are listed in one place for the legal reviewers. Changing these words does not change
+# the code. "sources" are the authorities the code cites for the head; an empty list means none is recorded
+# for the choice itself.
+- id: functional_pct
+  description: Functional disability (loss of earning capacity) when no functional assessment is given.
+  conservative: certificate % x the conservative limb factor (whole-body certificate taken as it is)
+  standard: certificate % x the standard limb factor (whole-body certificate taken as it is)
+  claimant_max: 100% if the person cannot work at all; otherwise the certificate %
+  sources: [raj_kumar_2011, sidram_2022, delhi_awards_backtest_2026]
+  note: >-
+    The limb factors (rules/injury/bands.yaml) are the Delhi 25th percentile and median and also apply to a
+    certificate whose basis is not known. The claimant-max rule is a legal choice not yet reviewed.
+  implemented_in: src/engine/estimate.ts
+- id: non_pecuniary_band
+  description: Pain and suffering, conveyance and diet, marriage prospects, and attendant during treatment when no attendant days are given.
+  conservative: conservative column of rules/injury/bands.yaml
+  standard: standard column of rules/injury/bands.yaml
+  claimant_max: claimant-max column of rules/injury/bands.yaml
+  sources:
+    [
+      raj_kumar_2011,
+      sidram_2022,
+      baiju_2025,
+      hitesh_patel_2025,
+      hansraj_2026,
+      kajal_2020,
+      delhi_awards_backtest_2026,
+    ]
+  note: >-
+    Mostly the spread of Delhi tribunal awards. The claimant-max pain values from 50% are Supreme Court
+    anchors or unexplained values, and the marriage-prospects band is not calibrated.
+  implemented_in: src/engine/estimate.ts
+- id: attendant_rate
+  description: Wage for a permanent attendant.
+  conservative: unskilled minimum wage
+  standard: unskilled minimum wage
+  claimant_max: semi-skilled minimum wage
+  sources: []
+  note: The head itself follows Kajal and Hansraj; no authority is recorded for the semi-skilled rate.
+  implemented_in: src/engine/estimate.ts
+- id: injured_homemaker_income
+  description: Income for an injured homemaker.
+  conservative: unskilled minimum wage
+  standard: unskilled minimum wage
+  claimant_max: Shishu Pal 'loss of domestic care' amount, by analogy
+  sources: [kirti_2021, shishu_pal_2026]
+  note: Shishu Pal decided a death; its use for an injury is by analogy and untested.
+  implemented_in: src/engine/income.ts
+- id: mw_category
+  description: Skill category for the minimum wage when there is no income proof.
+  conservative: unskilled
+  standard: the occupation's category (rules/occupations.yaml)
+  claimant_max: the occupation's category (rules/occupations.yaml)
+  sources: []
+  note: No authority is recorded for the occupation-to-category mapping. Unknown occupations are unskilled.
+  implemented_in: src/engine/income.ts
+- id: student_income
+  description: Notional income for a student at college or on a professional course, or aged 18 or over.
+  conservative: the lower of the skilled minimum wage and the course precedent (professional courses)
+  standard: the higher of the two
+  claimant_max: the higher of the two
+  sources: [kajal_2020, mohinder_kaur_2026]
+  note: rules/formula/notional-income.yaml uses the precedent only if it is higher; the conservative choice is a code choice.
+  implemented_in: src/engine/income.ts
+- id: itr_post_accident
+  description: Whether income-tax returns filed after the accident are counted.
+  conservative: last three returns filed before the accident
+  standard: last three returns filed before the accident
+  claimant_max: also returns filed after the accident, if that raises the average
+  sources: [pranay_sethi_2017, rashmirekha_2026]
+  note: If no return was filed before the accident, the last three of all returns are used in every scenario.
+  implemented_in: src/engine/income.ts
+- id: pension_basis
+  description: Pension lost by a pensioner.
+  conservative: pension minus family pension
+  standard: full pension
+  claimant_max: full pension
+  sources: [vimal_kanwar_2013]
+  note: Whether Vimal Kanwar supports deducting the family pension is unconfirmed.
+  implemented_in: src/engine/income.ts
+- id: non_earning_elderly
+  description: Income for a retired person without a pension.
+  conservative: no income (only the heads that do not depend on income)
+  standard: unskilled minimum wage
+  claimant_max: unskilled minimum wage
+  sources: []
+  note: No authority is recorded.
+  implemented_in: src/engine/income.ts
+- id: bachelor_large_family
+  description: Personal deduction for an unmarried person supporting a large family (rules/formula/deduction.yaml).
+  conservative: "1/2"
+  standard: "1/2"
+  claimant_max: "1/3"
+  sources: [sarla_verma_2009]
+  implemented_in: src/engine/estimate.ts

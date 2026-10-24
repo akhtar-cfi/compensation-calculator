@@ -78,15 +78,27 @@ Confidence: contested. Signed off: **no — awaiting legal sign-off**.
 
 ## Contested points: conservative / standard / claimant-max
 
-Only legal uncertainty moves the range. Each row is one contested point.
+Only legal uncertainty moves the range. Each row is one contested point. "Decided in" says whether the
+engine reads the values from rules/range-parameters.yaml or makes the choice in its code (the row then
+describes the code).
 
-| Point | Conservative | Standard | Claimant-max | Sources |
-|---|---|---|---|---|
-| Multiplier for a person aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) |
-| Number of 10% steps applied to the Pranay Sethi conventional heads. (SC awards in 2025-26 mostly use Rs 18,150 / Rs 48,400 (two steps). "clock" = full 3-year steps since 31 Oct 2017 up to the as-of date (three steps from 31 Oct 2026). A larger-bench reference is pending.) | 0 | 2 | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/) |
-| Personal deduction for a married deceased whose only dependant is the spouse. | 1/2 | 1/3 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) |
-| Monthly income for a homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) |
-| Income basis for the death of a minor. (The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.) | kurvan_notional | skilled_minimum_wage | skilled_minimum_wage | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) |
+| Point | Conservative | Standard | Claimant-max | Sources | Decided in |
+|---|---|---|---|---|---|
+| Multiplier for a person aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
+| Number of 10% steps applied to the Pranay Sethi conventional heads. (SC awards in 2025-26 mostly use Rs 18,150 / Rs 48,400 (two steps). "clock" = full 3-year steps since 31 Oct 2017 up to the as-of date (three steps from 31 Oct 2026). A larger-bench reference is pending.) | 0 | 2 | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/) | rules file |
+| Personal deduction for a married deceased whose only dependant is the spouse. | 1/2 | 1/3 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | rules file |
+| Monthly income for a deceased homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) | rules file |
+| Income basis for the death of a minor. (The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.) | kurvan_notional | skilled_minimum_wage | skilled_minimum_wage | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
+| Functional disability (loss of earning capacity) when no functional assessment is given. (The limb factors (rules/injury/bands.yaml) are the Delhi 25th percentile and median and also apply to a certificate whose basis is not known. The claimant-max rule is a legal choice not yet reviewed.) | certificate % x the conservative limb factor (whole-body certificate taken as it is) | certificate % x the standard limb factor (whole-body certificate taken as it is) | 100% if the person cannot work at all; otherwise the certificate % | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | code (src/engine/estimate.ts) |
+| Pain and suffering, conveyance and diet, marriage prospects, and attendant during treatment when no attendant days are given. (Mostly the spread of Delhi tribunal awards. The claimant-max pain values from 50% are Supreme Court anchors or unexplained values, and the marriage-prospects band is not calibrated.) | conservative column of rules/injury/bands.yaml | standard column of rules/injury/bands.yaml | claimant-max column of rules/injury/bands.yaml | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); [Baiju v (final order of 28 Nov 2025)](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | code (src/engine/estimate.ts) |
+| Wage for a permanent attendant. (The head itself follows Kajal and Hansraj; no authority is recorded for the semi-skilled rate.) | unskilled minimum wage | unskilled minimum wage | semi-skilled minimum wage | none recorded | code (src/engine/estimate.ts) |
+| Income for an injured homemaker. (Shishu Pal decided a death; its use for an injury is by analogy and untested.) | unskilled minimum wage | unskilled minimum wage | Shishu Pal 'loss of domestic care' amount, by analogy | [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/) | code (src/engine/income.ts) |
+| Skill category for the minimum wage when there is no income proof. (No authority is recorded for the occupation-to-category mapping. Unknown occupations are unskilled.) | unskilled | the occupation's category (rules/occupations.yaml) | the occupation's category (rules/occupations.yaml) | none recorded | code (src/engine/income.ts) |
+| Notional income for a student at college or on a professional course, or aged 18 or over. (rules/formula/notional-income.yaml uses the precedent only if it is higher; the conservative choice is a code choice.) | the lower of the skilled minimum wage and the course precedent (professional courses) | the higher of the two | the higher of the two | [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/) | code (src/engine/income.ts) |
+| Whether income-tax returns filed after the accident are counted. (If no return was filed before the accident, the last three of all returns are used in every scenario.) | last three returns filed before the accident | last three returns filed before the accident | also returns filed after the accident, if that raises the average | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Rashmirekha Tripathy (income assessment from ITRs)](https://indiankanoon.org/doc/164414205/) | code (src/engine/income.ts) |
+| Pension lost by a pensioner. (Whether Vimal Kanwar supports deducting the family pension is unconfirmed.) | pension minus family pension | full pension | full pension | [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/) | code (src/engine/income.ts) |
+| Income for a retired person without a pension. (No authority is recorded.) | no income (only the heads that do not depend on income) | unskilled minimum wage | unskilled minimum wage | none recorded | code (src/engine/income.ts) |
+| Personal deduction for an unmarried person supporting a large family (rules/formula/deduction.yaml). | 1/2 | 1/2 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | code (src/engine/estimate.ts) |
 
 ## Injury: discretionary heads (experimental)
 
@@ -129,6 +141,18 @@ Sources: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), ba
 - **Limitation (s.166(3)):** 6 months. The Supreme Court's interim order (4 Nov 2025) directs that no claim be dismissed as time-barred while the challenge is pending. Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf); [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/).
 - **Interest illustration:** 6 / 7.5 / 9% over 6 years. No fixed rate; recent awards range 6-9% simple interest from the date of filing. Shown separately, never added to the headline.
 - **Typical time to award:** 6 years at tribunals, 8 at High Courts. Sources: [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/).
+
+Signed off: **no — awaiting legal sign-off**.
+
+## Settings (product choices, not law)
+
+Fixed numbers the calculator uses that are product choices, not rules of law. They are kept here so that the reviewers can see and change them in one place.
+
+- **Range bar:** shown only when highest / lowest is at most 1.75 (death) or 2.5 (injury). The range bar is shown only when highest / lowest is at or below this; otherwise scenario cards.
+- **Wide-range notice:** 0.8. The page says the low end is far below the headline when conservative < this x standard.
+- **Negligence cards:** 25% and 50%. "What if" cards shown when the person drove an involved vehicle and no negligence % is entered.
+- **Minimum-wage freshness:** 7 months. States revise minimum wages about every six months. A wage older than this at the accident date, with no recorded check of the official source since, raises a caution; the weekly staleness check uses the same window.
+- **Offer check defaults:** interest 7.5%, discount 7%, lawyer's fee 0%; verdict bands at 25 / 50 / 80 / 95% of the standard figure. Offer check: simple interest a tribunal adds, the rate used to compare money now and later, and the lawyer's fee (an advocate may not take a share of the award). Verdicts: far below / well below / below / a little below / close to the estimate, at these percentages of the standard figure. Years come from statutory.yaml.
 
 Signed off: **no — awaiting legal sign-off**.
 
@@ -191,7 +215,8 @@ Monthly rates unless stated. A gap is listed, never guessed.
 Basic rates fixed by notifications of 19 Jan 2017; VDA revised every 1 April and 1 October from CPI-IW. From 1 Oct 2026 the VDA orders are issued by the Labour Bureau, Chandigarh, under the Code on Wages, 2019 (s.69(2)).
 
 - Official source: https://clc.gov.in/clc/min-wages — Chief Labour Commissioner (C) - VDA orders by scheduled employment (archived copy of 19 Apr 2026 used)
-- Last checked: 2026-04-19
+- Official source: https://www.labourbureau.gov.in/ — Labour Bureau, Chandigarh - VDA orders from 1 Oct 2026 (Code on Wages, 2019)
+- Last checked: 2026-10-10
 
 | From | Zone | Unskilled | Semi-skilled | Skilled | Highly skilled | Order | Source quality |
 |---|---|---:|---:|---:|---:|---|---|
@@ -226,7 +251,6 @@ Basic rates fixed by notifications of 19 Jan 2017; VDA revised every 1 April and
 Gaps:
 
 - Before 1 Oct 2022: not loaded. Older orders are on paged listings (clc.gov.in/clc/min-wages/minimum-wages-1..3) in Wayback captures from 2016 onwards.
-- 1 Oct 2026: read from a published copy only; replace with the official Labour Bureau file when found.
 - Only the construction schedule is loaded; other schedules (sweeping and cleaning, watch and ward, loading and unloading, agriculture, mines) have different rates.
 
 ### Delhi (NCT)

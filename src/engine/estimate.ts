@@ -8,9 +8,8 @@ import {
   marriedDeduction,
   tableMultiplier,
 } from "./formula.js";
-import { resolveIncome, type IncomeResult } from "./income.js";
+import { mw, resolveIncome, type IncomeResult } from "./income.js";
 import { computeInjury } from "./injury.js";
-import { minimumWage } from "./minimumWage.js";
 import { formatApprox, formatINR, parseFraction } from "./money.js";
 import { allOf, ParamChooser, pickTriple, rangeValue, standardExcept } from "./params.js";
 import { applyAdjustments, sumPayable } from "./sum.js";
@@ -32,7 +31,6 @@ import {
 import { WarningSink } from "./warnings.js";
 
 export const ENGINE_VERSION = "0.2.0";
-const RANGE_RATIO_LIMIT = { death: 1.75, injury: 2.5 } as const;
 
 interface RunResult {
   result: ScenarioResult;
@@ -233,20 +231,16 @@ function runScenario(
       !input.family.married && age <= mp.max_age && functionalPct >= mp.min_functional_pct
         ? pickTriple(mp, np)
         : 0;
+    const ctx = { rules, input, asOf, ch, warn };
+    const daysGiven = inj.attendantDaysDuringTreatment !== undefined;
+    // Attendant days are paid at the unskilled day rate; the wage is looked up only when there are days to pay.
     const dailyUnskilled =
-      (minimumWage(rules, {
-        state: input.state,
-        zone: input.zone,
-        category: "unskilled",
-        on: input.accidentDate,
-      })?.monthly ?? 0) / 26;
+      (inj.attendantDaysDuringTreatment ?? 0) > 0 ? (mw(ctx, "unskilled", "attendant")?.daily ?? 0) : 0;
     let futureAttendantMonthly = 0;
     if (inj.permanentAttendant) {
       const s = ch.choose("attendant_rate", "Attendant wage: unskilled vs semi-skilled minimum wage");
       const cat = s === "claimantMax" ? "semi_skilled" : "unskilled";
-      futureAttendantMonthly =
-        minimumWage(rules, { state: input.state, zone: input.zone, category: cat, on: input.accidentDate })
-          ?.monthly ?? 0;
+      futureAttendantMonthly = mw(ctx, cat, "attendant")?.monthly ?? 0;
     }
     ({ intermediates, heads } = computeInjury({
       monthlyIncome: monthly,
@@ -256,7 +250,7 @@ function runScenario(
       monthsOffWork: inj.monthsOffWork ?? 0,
       medical: medicalBills,
       futureMedical: inj.futureMedical ?? 0,
-      ...(inj.attendantDaysDuringTreatment === undefined && b.attendant_during_treatment
+      ...(!daysGiven && b.attendant_during_treatment
         ? { attendantDuringTreatment: pickTriple(b.attendant_during_treatment, np), attendantFromBand: true }
         : { attendantDuringTreatment: (inj.attendantDaysDuringTreatment ?? 0) * dailyUnskilled }),
       futureAttendantMonthly,
@@ -314,6 +308,13 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
       "The vehicle was uninsured: the owner/driver must pay, which is harder to recover. Seek legal aid early.",
     );
   }
+  if (ok && input.s164 === "awarded_by_tribunal" && input.received?.s164 === undefined) {
+    warn.add(
+      "S164_AMOUNT_NOT_GIVEN",
+      "caution",
+      "No-fault compensation (s.164) was awarded by the tribunal, but no amount was entered, so nothing is deducted for it. Enter the amount received.",
+    );
+  }
   if (!input.claimFiledDate) {
     const months = wholeMonthsBetween(input.accidentDate, asOf);
     const lim = rules.statutory.limitation_s166_3;
@@ -321,7 +322,7 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
       warn.add(
         "LIMITATION",
         "caution",
-        `More than ${lim.months} months since the accident. s.166(3) sets a 6-month limit, but the Supreme Court (Bhagirathi Dash v Union of India, W.P.(C) 166/2024: interim order of 4 Nov 2025, continued on 17 Feb 2026) has directed that claims not be dismissed as time-barred while it decides the challenge. Check that the order still stands, and file as soon as possible.`,
+        `${lim.months} months or more since the accident. s.166(3) sets a 6-month limit, but the Supreme Court (Bhagirathi Dash v Union of India, W.P.(C) 166/2024: interim order of 4 Nov 2025, continued on 17 Feb 2026) has directed that claims not be dismissed as time-barred while it decides the challenge. Check that the order still stands, and file as soon as possible.`,
         { months: lim.months },
       );
     }
@@ -427,7 +428,7 @@ export function estimate(
       "caution",
       "The person was driving a vehicle involved in the crash: the tribunal may reduce compensation for contributory negligence.",
     );
-    for (const pct of [25, 50]) {
+    for (const pct of rules.settings.negligence_cards_pct.values) {
       const r = runScenario(rules, input, asOf, allOf("standard"), "standard", new WarningSink(), {
         contributoryNegligencePct: pct,
       });
@@ -444,7 +445,7 @@ export function estimate(
   const m = runs.claimantMax.result.net;
   const lo = Math.min(c, stdNet);
   const hi = Math.max(m, stdNet);
-  const showBar = lo > 0 && hi / lo <= RANGE_RATIO_LIMIT[input.kind];
+  const showBar = lo > 0 && hi / lo <= rules.settings.range_bar_max_ratio[input.kind];
   if (!showBar)
     warn.add(
       "RANGE_TOO_WIDE",
@@ -462,13 +463,10 @@ export function estimate(
     "info",
     "This is the amount the Supreme Court's method gives on the facts entered — not a prediction of what a tribunal will award or when.",
   );
-  const unverified = [
-    rules.multiplier,
-    rules.futureProspects,
-    rules.deduction,
-    rules.conventional,
-    rules.notional,
-  ].some((r) => !r.verified);
+  // Every rules file that carries a verified flag (wage files record who verified each revision instead).
+  const unverified = Object.values(rules).some(
+    (r) => typeof r === "object" && r !== null && "verified" in r && r.verified === false,
+  );
   if (unverified)
     warn.add("RULE_UNVERIFIED", "info", "Draft rules: not yet signed off by the legal reviewers.");
 
