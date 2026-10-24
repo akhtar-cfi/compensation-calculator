@@ -71,6 +71,12 @@ export function StopNotice(props: { code: StopCode; live?: boolean | undefined }
   );
 }
 
+/**
+ * The method is not yet signed off by a lawyer while any rules file the estimate used is unverified (legal review
+ * B-14): said in one line under the amount, on the printout and in shared text, until every file is signed off.
+ */
+export const signoffPending = (est: EstimateOutput) => est.warnings.some((w) => w.code === "RULE_UNVERIFIED");
+
 /** How many answers left are listed by name (the rest are counted). */
 const SHOWN = 3;
 
@@ -278,6 +284,11 @@ export function ResultSummary(props: {
             meaning={t("res.meaning")}
           />
           {props.change && <ChangeLine change={props.change} class="mt-2" />}
+          {signoffPending(est) && (
+            <p class="mt-2 text-xs font-semibold text-foreground" data-testid="signoff">
+              {t("res.signoff")}
+            </p>
+          )}
           {unsettled && (
             <p class="mt-2 text-xs text-muted-foreground" data-testid="basis">
               {t("res.basis")}

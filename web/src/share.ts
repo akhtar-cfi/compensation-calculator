@@ -43,6 +43,7 @@ export function shareText(
   accidentLabel?: string,
 ): string {
   const lines = [t("share.head"), t("share.asof", { d: est.asOf })];
+  if (est.warnings.some((w) => w.code === "RULE_UNVERIFIED")) lines.push(t("share.signoff"));
   // The facts the amount rests on, so a forwarded estimate is not read as applying to someone else.
   if (input) lines.push(...factLines(input, t, accidentLabel));
   const income = est.scenarios?.standard.intermediates.find((i) => i.id === "monthly_income");

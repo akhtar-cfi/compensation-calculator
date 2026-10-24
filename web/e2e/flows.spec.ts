@@ -185,6 +185,17 @@ test("the amount says when some of its usual positions are not Supreme Court rul
   await expect(page.locator("#result").getByTestId("basis")).toHaveCount(0);
 });
 
+test("the amount says the method is not yet signed off by a lawyer, on screen and in print", async ({
+  page,
+}) => {
+  const input = examples().find((e) => e.name === "death-salaried.yaml")!.input;
+  await fillForm(page, input);
+  const line = page.locator("#result").getByTestId("signoff");
+  await expect(line).toHaveText("Method not yet signed off by a lawyer.");
+  await page.emulateMedia({ media: "print" });
+  await expect(line).toBeVisible();
+});
+
 test("an offer above the estimate is said to be above it", async ({ page }) => {
   const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
   await fillForm(page, input);

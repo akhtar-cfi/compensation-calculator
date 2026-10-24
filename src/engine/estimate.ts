@@ -179,7 +179,12 @@ function runScenario(
     );
     const v = rangeValue(rules, "conventional_escalation_steps", s);
     const clock = escalationClockSteps(rules, asOf);
-    const steps = v === "clock" ? clock : Math.min(Number(v), clock);
+    const steps =
+      v === "clock"
+        ? clock
+        : v === "accident"
+          ? Math.min(escalationClockSteps(rules, input.accidentDate), clock)
+          : Math.min(Number(v), clock);
     ({ intermediates, heads } = computeDeath({
       monthlyIncome: monthly,
       futureProspectsPct: fp,
@@ -331,6 +336,31 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
 }
 
 /** Estimate MACT compensation for one case. Pure: all dates and rules are passed in. */
+/**
+ * The fixed amounts count their 10% steps up to the accident date (legal review A-12). While the larger-bench
+ * reference in Hasina Yasmin is pending, say what counting up to the date of decision would give, when it differs.
+ */
+function escalationNote(rules: RulesBundle, accidentDate: ISODate, asOf: ISODate, warn: WarningSink): void {
+  if (rangeValue(rules, "conventional_escalation_steps", "standard") !== "accident") return;
+  const now = escalationClockSteps(rules, asOf);
+  const atAccident = Math.min(escalationClockSteps(rules, accidentDate), now);
+  if (now === atAccident) return;
+  const a = conventionalAmounts(rules, atAccident);
+  const b = conventionalAmounts(rules, now);
+  const vars = {
+    estateAcc: formatINR(a.lossOfEstate),
+    consAcc: formatINR(a.consortiumPerClaimant),
+    estateNow: formatINR(b.lossOfEstate),
+    consNow: formatINR(b.consortiumPerClaimant),
+  };
+  warn.add(
+    "ESCALATION_REFERRED",
+    "caution",
+    `How to count the 10% increases on the fixed amounts is before a larger bench of the Supreme Court (Hasina Yasmin, 2025). This estimate counts them up to the accident date: loss of estate and funeral ${vars.estateAcc} each, consortium ${vars.consAcc} for each claimant. Counted up to today they would be ${vars.estateNow} and ${vars.consNow}.`,
+    vars,
+  );
+}
+
 export function estimate(
   rules: RulesBundle,
   rawInput: unknown,
@@ -452,6 +482,7 @@ export function estimate(
       "info",
       "The contested points move the amount a lot; see the scenario cards and swing factors rather than a single range.",
     );
+  if (input.kind === "death") escalationNote(rules, input.accidentDate, asOf, warn);
   if (input.kind === "injury")
     warn.add(
       "INJURY_EXPERIMENTAL",

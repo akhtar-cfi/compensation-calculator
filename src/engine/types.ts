@@ -182,7 +182,8 @@ export type WarningCode =
   | "NOT_A_PREDICTION"
   | "INCOME_MISSING"
   | "ATTENDANT_WAGE_MISSING"
-  | "S164_AMOUNT_NOT_GIVEN";
+  | "S164_AMOUNT_NOT_GIVEN"
+  | "ESCALATION_REFERRED";
 
 export interface Warning {
   readonly code: WarningCode;

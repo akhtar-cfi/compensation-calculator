@@ -35,9 +35,11 @@ describe("death: salaried, proved income (regression for the double-count bug)",
     expect(std.gross).toBe(5281500);
     expect(out.headline!.amount).toBe(5281500);
   });
-  it("brackets the standard figure with the escalation range", () => {
-    expect(out.range!.conservative).toBe(5100000 + 15000 + 15000 + 40000 * 3);
-    expect(out.range!.claimantMax).toBe(5281500); // clock has 2 steps on 10 Oct 2026
+  it("counts the 10% steps up to the accident date in every figure until today's count differs (A-12)", () => {
+    // Accident on 1 Jun 2025: two steps completed (31 Oct 2020 and 2023); today's count is also two.
+    expect(out.range!.conservative).toBe(5281500);
+    expect(out.range!.claimantMax).toBe(5281500);
+    expect(out.warnings.map((w) => w.code)).not.toContain("ESCALATION_REFERRED");
   });
   it("moves to the third escalation step from 31 Oct 2026 (claimant-max only)", () => {
     const later = estimate(rules, salaried, { asOf: "2026-10-31" });
@@ -64,8 +66,8 @@ describe("death: homemaker (Shishu Pal)", () => {
     expect(out.range!.standard).toBe(5376000 + 181500);
   });
   it("uses the unskilled minimum wage in the conservative scenario", () => {
-    // 18,000 x 12 x 1.4 x 2/3 x 16 = 32,25,600 + 1,50,000 (no escalation)
-    expect(out.range!.conservative).toBe(3225600 + 150000);
+    // 18,000 x 12 x 1.4 x 2/3 x 16 = 32,25,600 + 1,81,500 (two steps by the accident date, A-12)
+    expect(out.range!.conservative).toBe(3225600 + 181500);
     expect(out.swingFactors[0]!.parameter).toBe("homemaker_income");
   });
 });
@@ -134,8 +136,8 @@ describe("death: minor (contested basis)", () => {
   );
   it("shows both approaches and hides the range bar", () => {
     // conservative: Kurvan Ansari para 16: 25,000/yr x 15 = 3,75,000 with NO personal deduction,
-    // + loss of estate 15,000 + funeral 15,000 + filial consortium 40,000 x 2
-    expect(out.range!.conservative).toBe(375000 + 110000);
+    // + loss of estate 18,150 + funeral 18,150 + filial consortium 48,400 x 2 (two steps by the accident date)
+    expect(out.range!.conservative).toBe(375000 + 36300 + 96800);
     // standard: skilled 22,000 x 12 x 1.4 x 1/2 x 18 = 33,26,400 + 18,150 x 2 + 48,400 x 2
     expect(out.range!.standard).toBe(3326400 + 36300 + 96800);
     expect(out.range!.showBar).toBe(false);

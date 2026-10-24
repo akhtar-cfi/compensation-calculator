@@ -23,6 +23,8 @@ describe("the shared summary", () => {
     const text = shareText(est, input, t, "https://example.org/");
     expect(text).toContain("Estimate from Crashfree India");
     expect(text).not.toContain("DRAFT");
+    // The rules files are not yet signed off (legal review B-14), so shared text says so in one line.
+    expect(text).toContain("Method not yet signed off by a lawyer.");
     expect(text).toContain("Not legal advice");
     expect(text).toContain("Facts: death of a 30-year-old");
     expect(text).toContain("Delhi · accident: 2025-06-01");
@@ -33,6 +35,12 @@ describe("the shared summary", () => {
     expect(text).toContain("Monthly income used: ₹25,000");
     expect(text).toContain("₹52,81,500");
     expect(text).toContain("Not legal advice");
+  });
+
+  it("drops the sign-off line once every rules file the estimate used is signed off", () => {
+    const t = (k: string, v?: Vars) => translate(dicts, "en", k, v);
+    const signed = { ...est, warnings: est.warnings.filter((w) => w.code !== "RULE_UNVERIFIED") };
+    expect(shareText(signed, input, t, "https://example.org/")).not.toContain("signed off");
   });
 
   it("leaves no placeholder unfilled in Hindi", () => {

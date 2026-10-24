@@ -85,7 +85,7 @@ describes the code).
 | Point | Conservative | Standard | Claimant-max | Sources | Decided in |
 |---|---|---|---|---|---|
 | Multiplier for a person aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
-| Number of 10% steps applied to the Pranay Sethi conventional heads. (SC awards in 2025-26 mostly use Rs 18,150 / Rs 48,400 (two steps). "clock" = full 3-year steps since 31 Oct 2017 up to the as-of date (three steps from 31 Oct 2026). A larger-bench reference is pending.) | 0 | 2 | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/) | rules file |
+| Number of 10% steps applied to the Pranay Sethi conventional heads. (Legal review A-12 (24 Oct 2026): the headline counts the full 3-year steps since 31 Oct 2017 completed by the accident date ("accident": none before 31 Oct 2020; base amounts for accidents before 2017), the reading Hasina Yasmin (2025) preferred when it referred the question to a larger bench. Counting up to the date of decision ("clock": up to the as-of date, three steps from 31 Oct 2026), as Shishu Pal (2026) applied, is the alternative until the larger bench decides. Increases are cumulative.) | accident | accident | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Hasina Yasmin (reference to a larger bench on escalation of conventional heads)](https://indiankanoon.org/doc/41904479/); [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/) | rules file |
 | Personal deduction for a married deceased whose only dependant is the spouse. | 1/2 | 1/3 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | rules file |
 | Monthly income for a deceased homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://www.scobserver.in/supreme-court-observer-law-reports-scolr/compensation-for-homemakers-death-shishu-pal-v-surjeet/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) | rules file |
 | Income basis for the death of a minor. (The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.) | kurvan_notional | skilled_minimum_wage | skilled_minimum_wage | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
@@ -125,11 +125,11 @@ Sources: [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sid
 
 ## How far real awards land (shown next to an estimate; not part of it)
 
-Award ÷ standard estimate, middle half. Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test predict check, 10 Oct 2026.
+Award ÷ standard estimate, middle half. Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test predict check, re-measured 24 Oct 2026 after A-12.
 
 | Claim | Awards | 25th percentile | Median | 75th percentile |
 |---|---:|---:|---:|---:|
-| Death | 112 | 0.69 | 1 | 1.15 |
+| Death | 112 | 0.7 | 1 | 1.17 |
 | Injury | 113 | 0.89 | 1.19 | 1.82 |
 
 Sources: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv. Signed off: **no — awaiting legal sign-off**.

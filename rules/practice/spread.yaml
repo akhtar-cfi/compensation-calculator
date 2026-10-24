@@ -7,7 +7,7 @@
 id: practice_spread
 verified: false
 label: Delhi tribunal awards, 2024-26
-basis: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test predict check, 10 Oct 2026
+basis: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test predict check, re-measured 24 Oct 2026 after A-12
 sources: [delhi_awards_backtest_2026]
-death: { n: 112, p25: 0.69, median: 1.0, p75: 1.15 }
+death: { n: 112, p25: 0.7, median: 1.0, p75: 1.17 }
 injury: { n: 113, p25: 0.89, median: 1.19, p75: 1.82 }

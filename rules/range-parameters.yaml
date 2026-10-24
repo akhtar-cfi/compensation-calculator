@@ -9,13 +9,16 @@
   note: 15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).
 - id: conventional_escalation_steps
   description: Number of 10% steps applied to the Pranay Sethi conventional heads.
-  conservative: 0
-  standard: 2
+  conservative: accident
+  standard: accident
   claimant_max: clock
-  sources: [pranay_sethi_2017, shishu_pal_2026, hasina_yasmin_2025]
+  sources: [pranay_sethi_2017, hasina_yasmin_2025, shishu_pal_2026]
   note: >-
-    SC awards in 2025-26 mostly use Rs 18,150 / Rs 48,400 (two steps). "clock" = full 3-year steps since
-    31 Oct 2017 up to the as-of date (three steps from 31 Oct 2026). A larger-bench reference is pending.
+    Legal review A-12 (24 Oct 2026): the headline counts the full 3-year steps since 31 Oct 2017 completed by the
+    accident date ("accident": none before 31 Oct 2020; base amounts for accidents before 2017), the reading
+    Hasina Yasmin (2025) preferred when it referred the question to a larger bench. Counting up to the date of
+    decision ("clock": up to the as-of date, three steps from 31 Oct 2026), as Shishu Pal (2026) applied, is the
+    alternative until the larger bench decides. Increases are cumulative.
 - id: spouse_only_deduction
   description: Personal deduction for a married deceased whose only dependant is the spouse.
   conservative: "1/2"
