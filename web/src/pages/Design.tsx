@@ -202,7 +202,7 @@ function Demo(props: { name: string }) {
         <AnswerPanel
           approx="₹56 lakh"
           exact={5557500}
-          meaning="What the Supreme Court's method gives on these facts."
+          meaning="Estimated compensation under the MACT framework, based on the information provided."
         />
       );
     case "Range":

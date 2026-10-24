@@ -79,6 +79,15 @@ describe("web copy (EN/HI)", () => {
     }
   });
 
+  it("never calls the estimate an entitlement or the Supreme Court's own figure, or an offer fair (legal review C-1, C-3)", () => {
+    for (const [k, v] of Object.entries(en))
+      expect(v, k).not.toMatch(/entitlement|Supreme Court's method|offer (is )?fair|Is the offer fair/i);
+    for (const [k, v] of Object.entries(hi)) {
+      expect(v, k).not.toMatch(/हक़/);
+      expect(v, k).not.toMatch(/ऑफ़र (उचित|सही) है/);
+    }
+  });
+
   it("words every engine warning in Hindi, and its English wording matches the engine's", () => {
     const rules = loadRules();
     const base: EstimateInput = {

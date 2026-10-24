@@ -466,7 +466,8 @@ export function estimate(
       if (r)
         sensitivity.push({
           id: `contributory_negligence_${pct}`,
-          label: `If ${pct}% contributory negligence is found`,
+          // Legal review C-5: a hypothetical, never assumed in the standard amount.
+          label: `Illustration only: if a tribunal found ${pct}% contributory negligence`,
           delta: r.result.net - stdNet,
         });
     }
@@ -505,7 +506,7 @@ export function estimate(
   warn.add(
     "NOT_A_PREDICTION",
     "info",
-    "This is the amount the Supreme Court's method gives on the facts entered — not a prediction of what a tribunal will award or when.",
+    "Estimated compensation under the MACT framework, based on the information provided: not a prediction of what a tribunal will award or when.",
   );
   // Every rules file that carries a verified flag (wage files record who verified each revision instead).
   const unverified = Object.values(rules).some(

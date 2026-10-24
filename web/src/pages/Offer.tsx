@@ -55,21 +55,6 @@ function readOffer(f: OfferForm): {
   return { errs, values };
 }
 
-/** The plain answer to "is the offer fair?", from the offer as a share of the estimate. */
-const [FAR, WELL, BELOW, NEAR] = rules.settings.offer_defaults.verdict_bands_pct;
-const verdict = (pct: number) =>
-  pct < FAR
-    ? "far"
-    : pct < WELL
-      ? "well"
-      : pct < BELOW
-        ? "below"
-        : pct < NEAR
-          ? "near"
-          : pct <= 105
-            ? "close"
-            : "above";
-
 /**
  * "Got an offer from the insurer?": the offer as a share of the estimate, what the award would be worth with
  * interest after the usual wait, and what waiting is worth today after fees. Runs `checkOffer`, in the page.
@@ -175,22 +160,38 @@ export function OfferCheck(props: { est: EstimateOutput }) {
 
       {result && (
         <div class="mt-6 border-t border-border pt-5" data-testid="offer-result" aria-live="polite">
-          <p class="font-heading text-lg font-bold text-foreground" data-testid="offer-verdict">
-            {tooEarly ? t("offer.verdict.early") : t(`offer.verdict.${verdict(result.offerPctOfStandard)}`)}
-          </p>
-          {tooEarly && <p class="mt-1 text-sm text-foreground">{t("offer.early")}</p>}
-          <p class="mt-1 text-sm text-foreground">
-            <Tel text={t("offer.advice")} />
-          </p>
-          {!tooEarly && (
+          {/* Legal review C-1: the offer beside the estimate and the difference, never a verdict on whether to
+              accept it. */}
+          {tooEarly ? (
             <>
-              <p class="mt-3 text-sm font-semibold text-foreground" data-testid="offer-summary">
+              <p class="font-heading text-lg font-bold text-foreground" data-testid="offer-early">
+                {t("offer.early.h")}
+              </p>
+              <p class="mt-1 text-sm text-foreground">{t("offer.early")}</p>
+            </>
+          ) : (
+            <>
+              <p class="font-heading text-lg font-bold text-foreground" data-testid="offer-summary">
                 {t("offer.summary", {
                   offer: approx(formatApprox(checked!.amount)),
                   p: result.offerPctOfStandard,
                   est: approx(formatApprox(est.range!.standard)),
                 })}
               </p>
+              <p class="mt-1 text-sm text-foreground" data-testid="offer-diff">
+                {checked!.amount === est.range!.standard
+                  ? t("offer.diff.same")
+                  : t(checked!.amount < est.range!.standard ? "offer.diff.less" : "offer.diff.more", {
+                      d: approx(formatApprox(Math.abs(est.range!.standard - checked!.amount))),
+                    })}
+              </p>
+            </>
+          )}
+          <p class="mt-1 text-sm text-foreground">
+            <Tel text={t("offer.advice")} />
+          </p>
+          {!tooEarly && (
+            <>
               <div class="mt-4 grid gap-3 sm:grid-cols-3">
                 <div class="rounded-lg border border-border p-4">
                   <p class="font-heading text-xl font-bold text-brand" data-testid="offer-pct-std">

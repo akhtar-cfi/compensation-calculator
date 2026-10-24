@@ -1,8 +1,8 @@
 # MACT Compensation Estimator (India)
 
 An open, citation-backed estimator of **motor accident compensation** under section 166 of the Motor Vehicles Act, 1988:
-what the Supreme Court's method gives a family **on its own facts**, which points are contested and how much they move
-the figure, and whether a settlement offer is fair.
+estimated compensation under the MACT framework **on a family's own facts**, which points are contested and how much
+they move the figure, and how a settlement offer compares with the estimate.
 
 > **Status: draft (v0.1).** Rules are drafted from Supreme Court judgments and statute but are **not yet signed off by
 > legal reviewers**. A back-test on 226 Delhi tribunal awards (2024-26) measures how far real awards land from the
@@ -11,7 +11,7 @@ the figure, and whether a settlement offer is fair.
 
 ## What it does
 
-- **Entitlement (normative, not a prediction).** Applies Sarla Verma (multiplier, personal deduction), Pranay Sethi
+- **Estimate (normative, not a prediction).** Applies Sarla Verma (multiplier, personal deduction), Pranay Sethi
   (future prospects, conventional heads), Magma / Satinder Kaur (consortium per claimant), Raj Kumar (injury heads),
   Shishu Pal 2026 (homemakers: "loss of domestic care"), and the state minimum wage **in force on the accident date**.
 - **A range, honestly.** Only _legal_ uncertainty varies the conservative / standard / claimant-max scenarios. Every

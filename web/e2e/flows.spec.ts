@@ -164,7 +164,7 @@ test("with no disability certificate yet, the amount says what it leaves out, an
   await expect(page.locator("#result").getByTestId("no-cert")).toContainText("lost future earnings");
   await page.fill("#offer-amount", "3,00,000");
   await page.getByRole("button", { name: "Check the offer" }).click();
-  await expect(page.getByTestId("offer-verdict")).toHaveText("Too early to judge this offer");
+  await expect(page.getByTestId("offer-early")).toHaveText("The estimate is not complete yet");
   await expect(page.getByTestId("offer-result")).toContainText(
     "Get the certificate before you sign anything",
   );
@@ -196,7 +196,7 @@ test("the amount says the method is not yet signed off by a lawyer, on screen an
   await expect(line).toBeVisible();
 });
 
-test("an offer above the estimate is said to be above it", async ({ page }) => {
+test("an offer above the estimate says by how much, with no verdict", async ({ page }) => {
   const { input } = examples().find((e) => e.name === "death-salaried.yaml")!;
   await fillForm(page, input);
   const standard = Number(
@@ -204,7 +204,7 @@ test("an offer above the estimate is said to be above it", async ({ page }) => {
   );
   await page.fill("#offer-amount", String(Math.round(standard * 1.2)));
   await page.getByRole("button", { name: "Check the offer" }).click();
-  await expect(page.getByTestId("offer-verdict")).toHaveText("Above the estimate");
+  await expect(page.getByTestId("offer-diff")).toContainText("more than the estimate");
 });
 
 test("a check answered 'Not sure' is said, under the amount, to be assumed", async ({ page }) => {

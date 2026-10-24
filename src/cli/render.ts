@@ -20,7 +20,7 @@ export function renderEstimate(o: EstimateOutput): string {
     return L.join("\n");
   }
   L.push(
-    `## Your legal entitlement on these facts: **${formatINR(o.headline.amount)}** (about ${o.headline.approx})`,
+    `## Estimated compensation on these facts: **${formatINR(o.headline.amount)}** (about ${o.headline.approx})`,
   );
   L.push("");
   L.push("| Scenario | Amount |");
@@ -35,7 +35,7 @@ export function renderEstimate(o: EstimateOutput): string {
       "",
       `**How far real awards land:** in ${p.n} ${o.kind} awards (${p.label}), half came between ` +
         `${pct(p.p25)} and ${pct(p.p75)} an estimate like this (about ${formatApprox(o.range.standard * p.p25)} to ` +
-        `${formatApprox(o.range.standard * p.p75)} here). This reflects evidence and practice, not your legal entitlement.`,
+        `${formatApprox(o.range.standard * p.p75)} here). This reflects evidence and practice; it is not part of the estimate.`,
     );
   }
   L.push(

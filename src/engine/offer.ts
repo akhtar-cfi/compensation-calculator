@@ -24,7 +24,7 @@ export interface OfferCheck {
   notes: string[];
 }
 
-/** Compare a settlement offer with the estimated entitlement, including time, interest and fees. */
+/** Compare a settlement offer with the estimate, including time, interest and fees. No verdict (legal review C-1). */
 export function checkOffer(est: EstimateOutput, offer: number, o: OfferCheckOptions): OfferCheck {
   if (!est.eligible || !est.range) throw new Error("No eligible estimate to compare the offer with.");
   const std = est.range.standard;

@@ -452,19 +452,21 @@ rows:
     kinds: [death, injury]
     type: fact
     now: >-
-      A percentage entered cuts the whole total, medical bills included, whatever the person's role. The website
-      never asks for one; for the driver of a vehicle involved it shows what 25% and 50% would cost. The written
-      method (docs/law.md) says fault is not imputed to pedestrians or passengers.
-    decided: >-
-      Only the person's own established or expressly assumed fault; never another driver's (A-24). 25% and 50% stay
-      as labelled illustrations outside the standard amount (C-5). Correct the written method (B-9).
+      Only a percentage entered for the person's own fault cuts the total, whatever their role; another driver's
+      fault is never imputed. The website never asks for one; for the driver of a vehicle involved it shows what 25%
+      and 50% would cost, labelled as illustrations outside the standard amount.
     authorities:
       - { source: khenyei_2015, para: "4, 13, 14, 18" }
       - { source: satinder_kaur_2020, para: "9.8" }
     review:
-      - { id: A-24, status: approve }
-      - { id: B-9, status: approve }
-      - { id: C-5, status: approve }
+      - { id: A-24, status: approve, done: true }
+      - { id: B-9, status: approve, done: true }
+      - { id: C-5, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: >-
+          The 25% and 50% examples are labelled as illustrations (C-5); the written method no longer says fault
+          cannot apply to pedestrians or passengers (B-9).
   - id: deduction_order
     section: deductions
     step: Order of deductions when fault, cashless payments and ex-gratia meet
@@ -593,27 +595,27 @@ rows:
     kinds: [death, injury]
     type: fixed
     now: >-
-      'Legal entitlement' and 'the Supreme Court's method' describe the amount on the result, in the share text,
-      the published method and the command line, in English and Hindi.
-    decided: >-
-      'Estimated compensation under the MACT framework, based on the information provided'; no 'legal entitlement'
-      (C-3).
+      'Estimated compensation under the MACT framework, based on the information provided', on the result, in the
+      share text, the published method and the command line, in English and Hindi; no 'legal entitlement'.
     review:
-      - { id: C-3, status: approve }
+      - { id: C-3, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: "'Legal entitlement' and 'the Supreme Court's method' replaced (C-3)."
   - id: offer_check
     section: presentation
     step: Checking an insurer's offer
     kinds: [death, injury]
     type: fixed
     now: >-
-      The offer is compared with the headline and labelled: far below (under 25%), well below (under 50%), below
-      (under 80%), a little below (under 95%), close (up to 105%) or above; 'too early to judge' without a
-      disability certificate.
-    decided: >-
-      Show the offer, the estimate and the difference, with no label calling the offer fair or unfair and nothing
-      that tells the family to accept or refuse (C-1).
+      The offer, the estimate and the difference, with what waiting would be worth after interest and fees; no
+      label calling the offer fair or unfair, and nothing that tells the family to accept or refuse. Without a
+      disability certificate it says the estimate is not complete yet.
     review:
-      - { id: C-1, status: approve }
+      - { id: C-1, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: The verdict labels (far below … above) are gone; the check shows the difference instead (C-1).
   - id: questions
     section: presentation
     step: Which questions the website asks

@@ -73,11 +73,6 @@ export function validateRules(
   }
 
   const g = rules.settings;
-  const bands = g.offer_defaults.verdict_bands_pct;
-  if (!bands.every((x, i) => x > 0 && x < 100 && (i === 0 || x > bands[i - 1]!)))
-    problems.push(
-      "settings.offer_defaults.verdict_bands_pct: needs strictly rising values between 0 and 100",
-    );
   for (const k of ["death", "injury"] as const)
     if (g.range_bar_max_ratio[k] < 1) problems.push(`settings.range_bar_max_ratio.${k}: needs 1 or more`);
 

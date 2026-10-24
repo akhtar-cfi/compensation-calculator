@@ -7,8 +7,9 @@ Nothing here is legally signed off yet.
 
 ## 1. What the number means
 
-The headline is **"your legal entitlement on your facts"**: the amount the Supreme Court's method gives for the facts
-entered. It is **normative, not predictive**. Tribunals can award less or more. They may find income or disability not
+The headline is **estimated compensation under the MACT framework, based on the information provided** (legal review
+C-3): the amount the published rules give on the facts entered, built on the Supreme Court's judgments, with the
+factual assumptions and practice estimates each labelled. It is **normative, not predictive**. Tribunals can award less or more. They may find income or disability not
 proved, apply a different view on an unsettled point, or the claim may settle. Interest, usually 6–9% a year from the
 date of filing, is shown separately and never added to the headline.
 

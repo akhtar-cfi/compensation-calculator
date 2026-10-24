@@ -239,7 +239,7 @@ export function renderRulesReference(rules: RulesBundle): string {
   );
   const o = g.offer_defaults;
   L.push(
-    `- **Offer check defaults:** interest ${o.interest_pct}%, discount ${o.discount_pct}%, lawyer's fee ${o.lawyer_fee_pct}%; verdict bands at ${o.verdict_bands_pct.join(" / ")}% of the standard figure. ${o.note}`,
+    `- **Offer check defaults:** interest ${o.interest_pct}%, discount ${o.discount_pct}%, lawyer's fee ${o.lawyer_fee_pct}%. ${o.note}`,
   );
   L.push("", `Signed off: ${yes(g.verified)}.`, "");
 

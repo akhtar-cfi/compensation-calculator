@@ -275,3 +275,36 @@ describe("A-26 (with the advocate's note): ex-gratia is deducted only in Sarla D
     expect(out.scenarios?.standard.adjustments.find((a) => a.id === "ex_gratia")?.amount).toBe(-200000);
   });
 });
+
+describe("C-3, C-5: the wording of the result", () => {
+  const driver: EstimateInput = {
+    ...base,
+    kind: "death",
+    victimRole: "driver_of_involved_vehicle",
+    victim: {
+      ageYears: 30,
+      employment: "permanent",
+      income: { proof: "salary_slip", monthlySalary: 30000, monthlyTax: 0 },
+    },
+    family: { married: true, spouse: true, children: 2, parents: 0 },
+  };
+
+  it("calls the amount estimated compensation, not a legal entitlement or the Supreme Court's own figure", () => {
+    const w = estimate(rules, driver, { asOf: AS_OF }).warnings.find((x) => x.code === "NOT_A_PREDICTION");
+    expect(w?.message).toMatch(
+      /^Estimated compensation under the MACT framework, based on the information provided/,
+    );
+    expect(w?.message).not.toMatch(/Supreme Court's method|entitlement/);
+  });
+
+  it("labels the 25% and 50% fault examples as illustrations, outside the standard amount", () => {
+    const out = estimate(rules, driver, { asOf: AS_OF });
+    const cards = out.sensitivity.filter((s) => s.id.startsWith("contributory_negligence_"));
+    expect(cards).toHaveLength(2);
+    for (const c of cards)
+      expect(c.label).toMatch(/^Illustration only: if a tribunal found \d+% contributory/);
+    expect(
+      out.scenarios?.standard.adjustments.find((a) => a.id === "contributory_negligence"),
+    ).toBeUndefined();
+  });
+});

@@ -31,7 +31,7 @@ describe("practice spread (how far real awards land from the estimate)", () => {
     const md = renderEstimate(out);
     expect(md).toContain("How far real awards land");
     expect(md).toContain(`${Math.round((1 - spread.death.p25) * 100)}% below`);
-    expect(md).toContain("not your legal entitlement");
+    expect(md).toContain("it is not part of the estimate");
   });
 
   it("matches the back-test on the committed awards (re-measure after rule changes)", () => {

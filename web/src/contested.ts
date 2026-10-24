@@ -47,7 +47,7 @@ export function contested(id: ContestedId, rules: RulesBundle): ContestedPoint {
 
 /**
  * What the standard position on a point rests on, so that a High Court's reading or tribunal practice is never
- * called the Supreme Court's method: a Supreme Court ruling; a Supreme Court rule for injured children, extended to
+ * presented as a Supreme Court ruling: a Supreme Court ruling; a Supreme Court rule for injured children, extended to
  * a death (rules/range-parameters.yaml calls it an HC extension); Delhi tribunal practice (the back-test of Delhi
  * awards); or no court authority recorded.
  */

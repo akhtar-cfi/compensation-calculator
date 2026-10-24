@@ -241,13 +241,18 @@ test("on a laptop there is one column, and the bar at the bottom shows the estim
   await expect(page.locator("#result [data-testid=headline]")).toBeInViewport();
 });
 
-test("the offer check gives a plain answer and follows changed assumptions", async ({ page }) => {
+test("the offer check puts the offer beside the estimate, with no verdict, and follows changed assumptions", async ({
+  page,
+}) => {
   await fillForm(page, salaried());
   await page.getByRole("link", { name: "Check an insurer's offer" }).click();
   await expect(page.locator("#offer-amount")).toBeFocused();
   await page.keyboard.type("10,00,000");
   await page.getByRole("button", { name: "Check the offer" }).click();
-  await expect(page.getByTestId("offer-verdict")).toHaveText("Far below the estimate");
+  // Legal review C-1: the offer, the estimate and the difference; never "fair", "far below" or advice to accept.
+  await expect(page.getByTestId("offer-summary")).toContainText("% of the estimate");
+  await expect(page.getByTestId("offer-diff")).toContainText("less than the estimate");
+  await expect(page.getByTestId("offer-result")).not.toContainText(/far below|fair/i);
   const before = await page.getByTestId("offer-award").textContent();
   await page.getByRole("button", { name: "Change the assumptions" }).click();
   await page.fill("#offer-years", "3");
@@ -265,7 +270,7 @@ test("the printout lists every answer used, and the offer checked", async ({ pag
   await fillForm(page, input);
   await page.fill("#offer-amount", "8,00,000");
   await page.getByRole("button", { name: "Check the offer" }).click();
-  await expect(page.getByTestId("offer-verdict")).toBeVisible();
+  await expect(page.getByTestId("offer-summary")).toBeVisible();
   await page.emulateMedia({ media: "print" });
   const answers = page.locator("#result").getByTestId("print-answers");
   await expect(answers).toBeVisible();

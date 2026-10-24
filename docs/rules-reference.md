@@ -236,9 +236,8 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### The person's own share of fault
 
 - **Kind:** Depends on the facts
-- **Now:** A percentage entered cuts the whole total, medical bills included, whatever the person's role. The website never asks for one; for the driver of a vehicle involved it shows what 25% and 50% would cost. The written method (docs/law.md) says fault is not imputed to pedestrians or passengers.
-- **Decided:** Only the person's own established or expressly assumed fault; never another driver's (A-24). 25% and 50% stay as labelled illustrations outside the standard amount (C-5). Correct the written method (B-9).
-- **Legal review:** A-24 Approve; B-9 Approve; C-5 Approve
+- **Now:** Only a percentage entered for the person's own fault cuts the total, whatever their role; another driver's fault is never imputed. The website never asks for one; for the driver of a vehicle involved it shows what 25% and 50% would cost, labelled as illustrations outside the standard amount.
+- **Legal review:** A-24 Approve (built); B-9 Approve (built); C-5 Approve (built)
 - **Authorities:** [Khenyei v New India Assurance Co. Ltd.](https://indiankanoon.org/doc/79441201/), paras 4, 13, 14, 18; [United India Insurance Co. Ltd. v Satinder Kaur](https://indiankanoon.org/doc/142302016/), para 9.8
 
 #### Order of deductions when fault, cashless payments and ex-gratia meet
@@ -295,16 +294,14 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### What the amount is called
 
 - **Kind:** Fixed law
-- **Now:** 'Legal entitlement' and 'the Supreme Court's method' describe the amount on the result, in the share text, the published method and the command line, in English and Hindi.
-- **Decided:** 'Estimated compensation under the MACT framework, based on the information provided'; no 'legal entitlement' (C-3).
-- **Legal review:** C-3 Approve
+- **Now:** 'Estimated compensation under the MACT framework, based on the information provided', on the result, in the share text, the published method and the command line, in English and Hindi; no 'legal entitlement'.
+- **Legal review:** C-3 Approve (built)
 
 #### Checking an insurer's offer
 
 - **Kind:** Fixed law
-- **Now:** The offer is compared with the headline and labelled: far below (under 25%), well below (under 50%), below (under 80%), a little below (under 95%), close (up to 105%) or above; 'too early to judge' without a disability certificate.
-- **Decided:** Show the offer, the estimate and the difference, with no label calling the offer fair or unfair and nothing that tells the family to accept or refuse (C-1).
-- **Legal review:** C-1 Approve
+- **Now:** The offer, the estimate and the difference, with what waiting would be worth after interest and fees; no label calling the offer fair or unfair, and nothing that tells the family to accept or refuse. Without a disability certificate it says the estimate is not complete yet.
+- **Legal review:** C-1 Approve (built)
 
 #### Which questions the website asks
 
@@ -359,7 +356,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Every item of the legal review
 
-59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 11 of 59.
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 16 of 59.
 
 | Item | Decision | Built | Step |
 |---|---|---|---|
@@ -386,7 +383,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-21 | Conditional | no | Future prospects |
 | A-22 | Approve | yes | Personal deduction |
 | A-23 | Conditional | no | Pain and amenities, travel and diet, marriage prospects |
-| A-24 | Approve | no | The person's own share of fault |
+| A-24 | Approve | yes | The person's own share of fault |
 | A-25 | Hold | no | Order of deductions when fault, cashless payments and ex-gratia meet |
 | A-26 | Conditional | no | Money already received |
 | A-27 | Approve | no | Income-tax tables |
@@ -402,17 +399,17 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | B-6 | Approve | yes | Income for a pensioner |
 | B-7 | Approve | no | Income from tax returns |
 | B-8 | Approve | yes | Income for a student |
-| B-9 | Approve | no | The person's own share of fault |
+| B-9 | Approve | yes | The person's own share of fault |
 | B-10 | Conditional | no | Money already received |
 | B-11 | Conditional | no | Money already received |
 | B-12 | Hold | no | Money already received |
 | B-13 | Conditional | no | Legal sign-off of the rules |
 | B-14 | Conditional | no | Legal sign-off of the rules |
-| C-1 | Approve | no | Checking an insurer's offer |
+| C-1 | Approve | yes | Checking an insurer's offer |
 | C-2 | Conditional | no | Which questions the website asks |
-| C-3 | Approve | no | What the amount is called |
+| C-3 | Approve | yes | What the amount is called |
 | C-4 | Conditional | no | How the result is shown |
-| C-5 | Approve | no | The person's own share of fault |
+| C-5 | Approve | yes | The person's own share of fault |
 | C-6 | Conditional | no | Interest and the value of an offer over time |
 | C-7 | Approve | yes | When a wage on file may be out of date |
 | C-8 | Approve | yes | When no estimate is given |
@@ -431,7 +428,10 @@ High Court's ruling on one of them binds the tribunals in its own state.
 - 2026-10-24 · Multiplier: No caution above 70; the table's last category covers every age above 65 (A-16).
 - 2026-10-24 · Loss of estate, funeral and consortium amounts: The headline counts the steps completed by the accident date, in place of a fixed two steps (A-12).
 - 2026-10-24 · Earnings lost during treatment by a child: A child who did not earn no longer gets the skilled wage × the months of treatment (A-31).
+- 2026-10-24 · The person's own share of fault: The 25% and 50% examples are labelled as illustrations (C-5); the written method no longer says fault cannot apply to pedestrians or passengers (B-9).
 - 2026-10-24 · When no estimate is given: The hit-and-run amounts follow the accident date (C-8).
+- 2026-10-24 · What the amount is called: 'Legal entitlement' and 'the Supreme Court's method' replaced (C-3).
+- 2026-10-24 · Checking an insurer's offer: The verdict labels (far below … above) are gone; the check shows the difference instead (C-1).
 - 2026-10-24 · How real awards compare: Re-measured after A-12 (deaths, middle half of awards 0.70 to 1.17 times the estimate, 112 awards).
 - 2026-10-24 · How real awards compare: Shown for Delhi claims only (D-5).
 - 2026-10-24 · Legal sign-off of the rules: One line on every result: 'Method not yet signed off by a lawyer' (B-14).
@@ -575,7 +575,7 @@ Fixed numbers the calculator uses that are product choices, not rules of law. Th
 - **Wide-range notice:** 0.8. The page says the low end is far below the headline when conservative < this x standard.
 - **Negligence cards:** 25% and 50%. "What if" cards shown when the person drove an involved vehicle and no negligence % is entered.
 - **Minimum-wage freshness:** 7 months. States revise minimum wages about every six months. A wage older than this at the accident date, with no recorded check of the official source since, raises a caution; the weekly staleness check uses the same window.
-- **Offer check defaults:** interest 7.5%, discount 7%, lawyer's fee 0%; verdict bands at 25 / 50 / 80 / 95% of the standard figure. Offer check: simple interest a tribunal adds, the rate used to compare money now and later, and the lawyer's fee (an advocate may not take a share of the award). Verdicts: far below / well below / below / a little below / close to the estimate, at these percentages of the standard figure. Years come from statutory.yaml.
+- **Offer check defaults:** interest 7.5%, discount 7%, lawyer's fee 0%. Offer check: simple interest a tribunal adds, the rate used to compare money now and later, and the lawyer's fee (an advocate may not take a share of the award). Years come from statutory.yaml. The check shows the offer, the estimate and the difference, never a verdict on the offer (legal review C-1).
 
 Signed off: **no — awaiting legal sign-off**.
 

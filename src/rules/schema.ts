@@ -324,7 +324,6 @@ export const SettingsSchema = z.object({
     interest_pct: z.number().min(0).max(30),
     discount_pct: z.number().min(0).max(30),
     lawyer_fee_pct: z.number().min(0).max(100),
-    verdict_bands_pct: z.tuple([z.number(), z.number(), z.number(), z.number()]),
     note: z.string(),
   }),
 });
