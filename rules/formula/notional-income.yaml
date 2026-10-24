@@ -11,11 +11,6 @@ homemaker_domestic_care:
   note: >-
     Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without
     monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years.
-student_course_precedent:
-  professional:
-    monthly: 12000
-    sources: [mohinder_kaur_2026]
-    note: Engineering student (Mohinder Kaur 2026). Used only if higher than the skilled minimum wage.
 minor_death_conservative:
   annual: 25000
   multiplier: 15

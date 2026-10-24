@@ -100,7 +100,6 @@ const injuryInput = fc.record({
         }),
         fc.record({
           pensionMonthly: fc.integer({ min: 0, max: 100000 }),
-          familyPensionMonthly: fc.integer({ min: 0, max: 50000 }),
         }),
       ),
       { nil: undefined },

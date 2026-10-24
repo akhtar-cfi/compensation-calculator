@@ -107,20 +107,18 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Income for a student
 
 - **Kind:** Depends on the facts
-- **Now:** The skilled minimum wage. For a professional course the low figure takes the lower of that wage and ₹12,000 a month (Mohinder Kaur); the headline takes the higher.
-- **Decided:** No fixed ₹12,000: that judgment is a comparator only (B-8). Value from the course, qualifications, expected occupation and the accident-period wages (A-4).
-- **Legal review:** A-4 Approve; B-8 Approve
-- **Authorities:** [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/), para 26
-- **Contested points:** `student_income`
+- **Now:** The skilled minimum wage on the accident date, in every figure. Mohinder Kaur's ₹12,000 a month (an accident in 2000) is no longer used.
+- **Decided:** No fixed ₹12,000: that judgment is a comparator only (B-8). A valuation from the course, qualifications, expected occupation and the accident-period wages needs a justified method first (A-4).
+- **Legal review:** A-4 Approve (built); B-8 Approve (built)
+- **Authorities:** [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/), para 12; [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/), para 26
 
 #### Income for a pensioner
 
 - **Kind:** Fixed law
-- **Now:** The full pension in the headline and the high figure. The low figure takes the family pension off. The same rule is used for an injured pensioner.
-- **Decided:** Never deduct family pension, in any figure (A-6, B-6). Value the deceased's own pension as lost income; for an injury, account for a pension that continues.
-- **Legal review:** A-6 Approve; B-6 Approve
+- **Now:** The deceased's own pension, in full, in every figure; a family pension is never deducted, and the website no longer asks for it. An injured pensioner's pension is still treated as lost income.
+- **Decided:** Never deduct family pension, in any figure (A-6, B-6). Value the deceased's own pension as lost income; for an injury, account for a pension that continues (still to build).
+- **Legal review:** A-6 Approve; B-6 Approve (built)
 - **Authorities:** [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/), para 19; [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/)
-- **Contested points:** `pension_basis`
 
 #### Income for a retired person without a pension
 
@@ -161,9 +159,8 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Multiplier
 
 - **Kind:** Fixed law
-- **Now:** From the Sarla Verma table by the age of the person who died or was injured, never split; 5 above 65, with a caution from 71 that the age is outside the table.
-- **Decided:** 5 above 65, with no caution (A-16).
-- **Legal review:** A-16 Approve
+- **Now:** From the Sarla Verma table by the age of the person who died or was injured, never split; 5 for every age above 65.
+- **Legal review:** A-16 Approve (built)
 - **Authorities:** [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/), para 21 and its table (SCC 42); [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf), paras 16-18
 
 #### Multiplier for a child under 15
@@ -224,9 +221,8 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Earnings lost during treatment by a child
 
 - **Kind:** Fixed law (injury only)
-- **Now:** An injured child (or a student under 18 valued as a child) gets the skilled minimum wage × the months off.
-- **Decided:** None for a child who had no earnings; treatment, care and future loss stay (A-31).
-- **Legal review:** A-31 Approve
+- **Now:** None for an injured child (or a student under 18 valued as a child); treatment, care and future loss stay.
+- **Legal review:** A-31 Approve (built)
 - **Authorities:** [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/), para 5
 
 ### Deductions
@@ -364,14 +360,14 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Every item of the legal review
 
-59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 2 of 59.
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 7 of 59.
 
 | Item | Decision | Built | Step |
 |---|---|---|---|
 | A-1 | Conditional | no | Income for a homemaker who died |
 | A-2 | Conditional | no | Income with no proof (minimum wage) |
 | A-3 | Conditional | no | Income for a child who died |
-| A-4 | Approve | no | Income for a student |
+| A-4 | Approve | yes | Income for a student |
 | A-5 | Approve | no | Income from tax returns |
 | A-6 | Approve | no | Income for a pensioner |
 | A-7 | Conditional | no | Income for a retired person without a pension |
@@ -383,7 +379,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-13 | Hold | no | Lost earning ability |
 | A-14 | Conditional | no | Pain and amenities, travel and diet, marriage prospects |
 | A-15 | Conditional | no | Attendant |
-| A-16 | Approve | no | Multiplier |
+| A-16 | Approve | yes | Multiplier |
 | A-17 | Approve | no | Future prospects |
 | A-18 | Conditional | no | Income with no proof (minimum wage) |
 | A-19 | Hold | no | Income with no proof (minimum wage) |
@@ -398,15 +394,15 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-28 | Hold | no | Money already received |
 | A-29 | Conditional | no | Order of deductions when fault, cashless payments and ex-gratia meet |
 | A-30 | Conditional | no | Income from a salary |
-| A-31 | Approve | no | Earnings lost during treatment by a child |
+| A-31 | Approve | yes | Earnings lost during treatment by a child |
 | B-1 | Approve | no | Income for a child who died |
 | B-2 | Conditional | no | Who receives consortium |
 | B-3 | Conditional | yes | Loss of estate, funeral and consortium amounts |
 | B-4 | Conditional | no | Time limit for filing the claim |
 | B-5 | Conditional | no | Income from a salary |
-| B-6 | Approve | no | Income for a pensioner |
+| B-6 | Approve | yes | Income for a pensioner |
 | B-7 | Approve | no | Income from tax returns |
-| B-8 | Approve | no | Income for a student |
+| B-8 | Approve | yes | Income for a student |
 | B-9 | Approve | no | The person's own share of fault |
 | B-10 | Conditional | no | Money already received |
 | B-11 | Conditional | no | Money already received |
@@ -430,7 +426,11 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Changes
 
+- 2026-10-24 · Income for a student: The ₹12,000 for a professional course is no longer used; every figure takes the skilled wage (A-4, B-8).
+- 2026-10-24 · Income for a pensioner: The low figure no longer takes the family pension off a pensioner's income (A-6, B-6).
+- 2026-10-24 · Multiplier: No caution above 70; the table's last category covers every age above 65 (A-16).
 - 2026-10-24 · Loss of estate, funeral and consortium amounts: The headline counts the steps completed by the accident date, in place of a fixed two steps (A-12).
+- 2026-10-24 · Earnings lost during treatment by a child: A child who did not earn no longer gets the skilled wage × the months of treatment (A-31).
 - 2026-10-24 · How real awards compare: Re-measured after A-12 (deaths, middle half of awards 0.70 to 1.17 times the estimate, 112 awards).
 - 2026-10-24 · Legal sign-off of the rules: One line on every result: 'Method not yet signed off by a lawyer' (B-14).
 - 2026-10-24 · Legal sign-off of the rules: This register and the authority register published (B-13).
@@ -450,8 +450,7 @@ Multiplier by age of the deceased / injured (never by age of the claimants; neve
 | 51–55 | 11 |
 | 56–60 | 9 |
 | 61–65 | 7 |
-| 66–70 | 5 |
-| above the table | 5 (Sarla Verma's table stops at 70; courts vary for older people. Flagged as low confidence.) |
+| 66 and over | 5 |
 
 Sources: [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/); [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Preetha Krishnan v United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf). Confidence: settled. Signed off: **no — awaiting legal sign-off**.
 
@@ -494,7 +493,7 @@ Sources: [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https
 Income used when the person did not earn, or earnings cannot be proved.
 
 - **Homemaker (loss of domestic care):** ₹30,000 a month from 2026-06-11, +10% every 3 years. Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years. Sources: [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/).
-- **Student, professional course:** ₹12,000 a month. Engineering student (Mohinder Kaur 2026). Used only if higher than the skilled minimum wage. Sources: [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/).
+- **Student:** the skilled minimum wage on the accident date (legal review A-4; Mohinder Kaur's ₹12,000, for an accident in 2000, is a comparator, not a benchmark).
 - **Minor (death), conservative:** ₹25,000 a year × 15. Kurvan Ansari (SC, 16 Nov 2021, para 16): notional income Rs 25,000 a year x multiplier 15 = Rs 3,75,000 loss of dependency, with no personal-expenses deduction, for a 7-year-old (the 15 is the s.163A Second Schedule multiplier). Checked against the judgment text, 10 Oct 2026. Sources: [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/).
 
 Confidence: contested. Signed off: **no — awaiting legal sign-off**.
@@ -517,9 +516,7 @@ describes the code).
 | Wage for a permanent attendant. (The head itself follows Kajal and Hansraj; no authority is recorded for the semi-skilled rate.) | unskilled minimum wage | unskilled minimum wage | semi-skilled minimum wage | none recorded | code (src/engine/estimate.ts) |
 | Income for an injured homemaker. (Shishu Pal decided a death; its use for an injury is by analogy and untested.) | unskilled minimum wage | unskilled minimum wage | Shishu Pal 'loss of domestic care' amount, by analogy | [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/); [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/) | code (src/engine/income.ts) |
 | Skill category for the minimum wage when there is no income proof. (No authority is recorded for the occupation-to-category mapping. Unknown occupations are unskilled.) | unskilled | the occupation's category (rules/occupations.yaml) | the occupation's category (rules/occupations.yaml) | none recorded | code (src/engine/income.ts) |
-| Notional income for a student at college or on a professional course, or aged 18 or over. (rules/formula/notional-income.yaml uses the precedent only if it is higher; the conservative choice is a code choice.) | the lower of the skilled minimum wage and the course precedent (professional courses) | the higher of the two | the higher of the two | [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Mohinder Kaur v Brij Lal Arora](https://indiankanoon.org/doc/14044956/) | code (src/engine/income.ts) |
 | Whether income-tax returns filed after the accident are counted. (If no return was filed before the accident, the last three of all returns are used in every scenario.) | last three returns filed before the accident | last three returns filed before the accident | also returns filed after the accident, if that raises the average | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.](https://indiankanoon.org/doc/164414205/) | code (src/engine/income.ts) |
-| Pension lost by a pensioner. (Whether Vimal Kanwar supports deducting the family pension is unconfirmed.) | pension minus family pension | full pension | full pension | [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/) | code (src/engine/income.ts) |
 | Income for a retired person without a pension. (No authority is recorded.) | no income (only the heads that do not depend on income) | unskilled minimum wage | unskilled minimum wage | none recorded | code (src/engine/income.ts) |
 | Personal deduction for an unmarried person supporting a large family (rules/formula/deduction.yaml). | 1/2 | 1/2 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | code (src/engine/estimate.ts) |
 

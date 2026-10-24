@@ -50,7 +50,6 @@ function earningsFields(f: FormState): FieldName[] {
   return [
     ...when(inc.includes("salary") && f.proof === "salary_slip", "monthlyTax"),
     ...when(inc.includes("claimed") && noProof, "claimedMonthly"),
-    ...when(inc.includes("pension"), "familyPensionMonthly"),
     ...when(inc.includes("course"), "studentCourse"),
     ...when(ZONED_STATES.has(f.state), "zone"),
   ];
@@ -112,7 +111,7 @@ export const BLOCKS: readonly Block[] = [
   {
     id: "earnings",
     part: "more",
-    all: ["monthlyTax", "claimedMonthly", "familyPensionMonthly", "studentCourse", "zone"],
+    all: ["monthlyTax", "claimedMonthly", "studentCourse", "zone"],
     fields: earningsFields,
   },
   {

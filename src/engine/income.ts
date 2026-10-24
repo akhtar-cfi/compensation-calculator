@@ -125,7 +125,10 @@ function minorIncome(ctx: IncomeContext): IncomeResult | undefined {
       basis: "minor_skilled_minimum_wage",
       fpClass: "self_employed_or_fixed",
       sources: ["kajal_2020", "hitesh_patel_2025", "hansraj_2026"],
-      assumptions: [w.note],
+      assumptions: [
+        w.note,
+        "A child who did not earn: nothing is added for earnings lost during treatment (legal review A-31).",
+      ],
     };
   }
   ctx.warn.add(
@@ -251,27 +254,16 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
     case "student": {
       if (v.ageYears < 18 && v.studentCourse !== "college" && v.studentCourse !== "professional")
         return minorIncome(ctx);
+      // Legal review A-4, B-8: the skilled minimum wage in every figure. A course-specific valuation needs its own
+      // justified method first; the ₹12,000 in Mohinder Kaur (an accident in 2000) is a comparator, not a benchmark.
       const skilled = mw(ctx, "skilled");
       if (!skilled) return undefined;
-      const prec =
-        v.studentCourse === "professional"
-          ? rules.notional.student_course_precedent.professional.monthly
-          : undefined;
-      const s = ch.choose(
-        "student_income",
-        "Notional income for a student (skilled minimum wage vs course precedent)",
-      );
-      const lo = prec === undefined ? skilled.monthly : Math.min(skilled.monthly, prec);
-      const hi = prec === undefined ? skilled.monthly : Math.max(skilled.monthly, prec);
       return {
-        monthly: s === "conservative" ? lo : hi,
+        monthly: skilled.monthly,
         basis: "student_notional",
         fpClass: "self_employed_or_fixed",
-        sources: prec === undefined ? ["kajal_2020"] : ["mohinder_kaur_2026"],
-        assumptions: [
-          skilled.note,
-          ...(prec ? [`Professional-course precedent ${formatINR(prec)}/month (Mohinder Kaur 2026).`] : []),
-        ],
+        sources: ["kirti_2021"],
+        assumptions: [skilled.note],
       };
     }
     case "homemaker": {
@@ -328,15 +320,15 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
     case "pensioner": {
       const pension = inc.pensionMonthly ?? 0;
       if (pension > 0) {
-        const s = ch.choose("pension_basis", "Pension lost: full pension vs pension minus family pension");
-        const fam = inc.familyPensionMonthly ?? 0;
-        const monthly = s === "conservative" ? Math.max(0, pension - fam) : pension;
+        // Legal review A-6, B-6: the deceased's own pension, in full; a family pension is never deducted.
         return {
-          monthly,
+          monthly: pension,
           basis: "pension",
           fpClass: "none",
           sources: ["vimal_kanwar_2013"],
-          assumptions: [`Pension ${formatINR(pension)}/month; family pension ${formatINR(fam)}/month.`],
+          assumptions: [
+            `Pension ${formatINR(pension)}/month; a family pension is not deducted (Vimal Kanwar).`,
+          ],
         };
       }
       const s = ch.choose("non_earning_elderly", "Income for a non-earning elderly person without pension");

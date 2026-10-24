@@ -141,35 +141,40 @@ rows:
     kinds: [death, injury]
     type: fact
     now: >-
-      The skilled minimum wage. For a professional course the low figure takes the lower of that wage and ₹12,000 a
-      month (Mohinder Kaur); the headline takes the higher.
+      The skilled minimum wage on the accident date, in every figure. Mohinder Kaur's ₹12,000 a month (an accident
+      in 2000) is no longer used.
     decided: >-
-      No fixed ₹12,000: that judgment is a comparator only (B-8). Value from the course, qualifications, expected
-      occupation and the accident-period wages (A-4).
+      No fixed ₹12,000: that judgment is a comparator only (B-8). A valuation from the course, qualifications,
+      expected occupation and the accident-period wages needs a justified method first (A-4).
     authorities:
+      - { source: kirti_2021, para: "12" }
       - { source: mohinder_kaur_2026, para: "26" }
     review:
-      - { id: A-4, status: approve }
-      - { id: B-8, status: approve }
-    points: [student_income]
+      - { id: A-4, status: approve, done: true }
+      - { id: B-8, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: The ₹12,000 for a professional course is no longer used; every figure takes the skilled wage (A-4, B-8).
   - id: income_pensioner
     section: income
     step: Income for a pensioner
     kinds: [death, injury]
     type: fixed
     now: >-
-      The full pension in the headline and the high figure. The low figure takes the family pension off. The same
-      rule is used for an injured pensioner.
+      The deceased's own pension, in full, in every figure; a family pension is never deducted, and the website no
+      longer asks for it. An injured pensioner's pension is still treated as lost income.
     decided: >-
       Never deduct family pension, in any figure (A-6, B-6). Value the deceased's own pension as lost income; for an
-      injury, account for a pension that continues.
+      injury, account for a pension that continues (still to build).
     authorities:
       - { source: vimal_kanwar_2013, para: "19" }
       - { source: helen_rebello_1998 }
     review:
       - { id: A-6, status: approve }
-      - { id: B-6, status: approve }
-    points: [pension_basis]
+      - { id: B-6, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: The low figure no longer takes the family pension off a pensioner's income (A-6, B-6).
   - id: income_retired
     section: income
     step: Income for a retired person without a pension
@@ -265,14 +270,16 @@ rows:
     kinds: [death, injury]
     type: fixed
     now: >-
-      From the Sarla Verma table by the age of the person who died or was injured, never split; 5 above 65, with a
-      caution from 71 that the age is outside the table.
-    decided: 5 above 65, with no caution (A-16).
+      From the Sarla Verma table by the age of the person who died or was injured, never split; 5 for every age
+      above 65.
     authorities:
       - { source: sarla_verma_2009, para: "21 and its table (SCC 42)" }
       - { source: preetha_krishnan_2025, para: "16-18" }
     review:
-      - { id: A-16, status: approve }
+      - { id: A-16, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: No caution above 70; the table's last category covers every age above 65 (A-16).
   - id: multiplier_under_15
     section: formula
     step: Multiplier for a child under 15
@@ -418,12 +425,14 @@ rows:
     kinds: [injury]
     type: fixed
     now: >-
-      An injured child (or a student under 18 valued as a child) gets the skilled minimum wage × the months off.
-    decided: None for a child who had no earnings; treatment, care and future loss stay (A-31).
+      None for an injured child (or a student under 18 valued as a child); treatment, care and future loss stay.
     authorities:
       - { source: raj_kumar_2011, para: "5" }
     review:
-      - { id: A-31, status: approve }
+      - { id: A-31, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: A child who did not earn no longer gets the skilled wage × the months of treatment (A-31).
   # ---------------------------------------------------------------- deductions
   - id: medical_bills
     section: deductions

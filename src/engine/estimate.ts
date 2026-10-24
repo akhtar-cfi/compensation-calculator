@@ -55,21 +55,14 @@ function consortiumClaimantsOf(input: EstimateInput): number {
   return (f.spouse ? 1 : 0) + (f.children ?? 0) + (f.parents ?? 0);
 }
 
-function resolveMultiplier(rules: RulesBundle, age: number, ch: ParamChooser, warn: WarningSink): number {
+function resolveMultiplier(rules: RulesBundle, age: number, ch: ParamChooser): number {
   if (age < 15) {
     const s = ch.choose("under_15_multiplier", "Multiplier for a person under 15 (15 vs 18)");
     return Number(rangeValue(rules, "under_15_multiplier", s));
   }
   const m = tableMultiplier(rules, age);
-  if (!m) throw new Error("unreachable");
-  if (!m.inTable)
-    warn.add(
-      "AGE_OUTSIDE_TABLE",
-      "caution",
-      `Age ${age} is outside the Sarla Verma table; multiplier ${m.multiplier} used.`,
-      { age, multiplier: m.multiplier },
-    );
-  return m.multiplier;
+  if (m === undefined) throw new Error(`no multiplier band for age ${age}`);
+  return m;
 }
 
 function resolveDeduction(rules: RulesBundle, input: EstimateInput, ch: ParamChooser): number {
@@ -165,7 +158,7 @@ function runScenario(
   if (!income) return undefined;
   const monthly = opts.incomeOverrideMonthly ?? income.monthly;
   const age = input.victim.ageYears;
-  const multiplier = income.multiplierOverride ?? resolveMultiplier(rules, age, ch, warn);
+  const multiplier = income.multiplierOverride ?? resolveMultiplier(rules, age, ch);
   const fp = futureProspectsPct(rules, age, income.fpClass);
   const medicalBills = Math.max(0, (input.medical?.bills ?? 0) - (input.medical?.paidByCashlessScheme ?? 0));
 
@@ -252,7 +245,8 @@ function runScenario(
       futureProspectsPct: fp,
       multiplier,
       functionalPct,
-      monthsOffWork: inj.monthsOffWork ?? 0,
+      // Legal review A-31: a child valued at a notional wage had no earnings to lose while being treated.
+      monthsOffWork: income.basis === "minor_skilled_minimum_wage" ? 0 : (inj.monthsOffWork ?? 0),
       medical: medicalBills,
       futureMedical: inj.futureMedical ?? 0,
       ...(!daysGiven && b.attendant_during_treatment

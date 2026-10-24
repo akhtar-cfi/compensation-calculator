@@ -160,19 +160,11 @@ async function answer(page: Page, block: string, input: EstimateInput) {
       await openGroup(page, "insurance");
       return radio(page, "vehicleInsured", input.offendingVehicle === "identified_insured" ? "yes" : "no");
     case "earnings": {
-      const todo = [
-        inc?.monthlyTax,
-        inc?.claimedMonthly,
-        inc?.familyPensionMonthly,
-        v.studentCourse,
-        input.zone,
-      ];
+      const todo = [inc?.monthlyTax, inc?.claimedMonthly, v.studentCourse, input.zone];
       if (todo.every((x) => x === undefined)) return;
       await openGroup(page, "earnings");
       if (inc?.monthlyTax !== undefined) await page.fill("#monthlyTax", String(inc.monthlyTax));
       if (inc?.claimedMonthly !== undefined) await page.fill("#claimedMonthly", String(inc.claimedMonthly));
-      if (inc?.familyPensionMonthly !== undefined)
-        await page.fill("#familyPensionMonthly", String(inc.familyPensionMonthly));
       if (v.studentCourse) await radio(page, "studentCourse", v.studentCourse);
       if (input.zone) await page.selectOption("#zone", input.zone);
       return;

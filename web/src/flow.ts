@@ -22,7 +22,6 @@ export type RefineId =
   | "tax"
   | "course"
   | "zone"
-  | "familyPension"
   | "claimed"
   | "insured"
   | "day"
@@ -54,7 +53,6 @@ const REFINE_FIELDS: Readonly<Record<RefineId, readonly QuestionId[]>> = {
   tax: ["monthlyTax"],
   course: ["studentCourse"],
   zone: ["zone"],
-  familyPension: ["familyPensionMonthly"],
   claimed: ["claimedMonthly"],
   insured: ["vehicleInsured"],
   day: ["accidentDay"],

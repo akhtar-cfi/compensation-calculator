@@ -46,7 +46,6 @@ export function formFromInput(i: EstimateInput): FormState {
     itrAnnualIncome: s(inc?.itrAnnualIncomes?.[0]?.income),
     claimedMonthly: s(inc?.claimedMonthly),
     pensionMonthly: s(inc?.pensionMonthly),
-    familyPensionMonthly: s(inc?.familyPensionMonthly),
     married: fam.married ? "yes" : "no",
     spouse: fam.married && death ? (fam.spouse ? "yes" : "no") : "",
     children: death ? s(fam.children ?? 0) : "",

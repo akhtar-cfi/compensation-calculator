@@ -39,7 +39,7 @@
   sources: [kurvan_ansari_2021, kajal_2020, hansraj_2026]
   note: The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.
 # The points below are decided in the engine's code; the values here describe what the code does, so that all
-# 15 contested points are listed in one place for the legal reviewers. Changing these words does not change
+# 13 contested points are listed in one place for the legal reviewers. Changing these words does not change
 # the code. "sources" are the authorities the code cites for the head; an empty list means none is recorded
 # for the choice itself.
 - id: functional_pct
@@ -95,14 +95,6 @@
   sources: []
   note: No authority is recorded for the occupation-to-category mapping. Unknown occupations are unskilled.
   implemented_in: src/engine/income.ts
-- id: student_income
-  description: Notional income for a student at college or on a professional course, or aged 18 or over.
-  conservative: the lower of the skilled minimum wage and the course precedent (professional courses)
-  standard: the higher of the two
-  claimant_max: the higher of the two
-  sources: [kajal_2020, mohinder_kaur_2026]
-  note: rules/formula/notional-income.yaml uses the precedent only if it is higher; the conservative choice is a code choice.
-  implemented_in: src/engine/income.ts
 - id: itr_post_accident
   description: Whether income-tax returns filed after the accident are counted.
   conservative: last three returns filed before the accident
@@ -110,14 +102,6 @@
   claimant_max: also returns filed after the accident, if that raises the average
   sources: [pranay_sethi_2017, rashmirekha_2026]
   note: If no return was filed before the accident, the last three of all returns are used in every scenario.
-  implemented_in: src/engine/income.ts
-- id: pension_basis
-  description: Pension lost by a pensioner.
-  conservative: pension minus family pension
-  standard: full pension
-  claimant_max: full pension
-  sources: [vimal_kanwar_2013]
-  note: Whether Vimal Kanwar supports deducting the family pension is unconfirmed.
   implemented_in: src/engine/income.ts
 - id: non_earning_elderly
   description: Income for a retired person without a pension.

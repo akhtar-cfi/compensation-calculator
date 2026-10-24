@@ -29,7 +29,6 @@ export function openChecks(rules: RulesBundle): string[] {
   const n = rules.notional;
   for (const [label, note] of [
     ["Notional income, homemaker", n.homemaker_domestic_care.note],
-    ["Notional income, student", n.student_course_precedent.professional.note],
     ["Notional income, minor (death)", n.minor_death_conservative.note],
   ] as const)
     if (/to be verified/i.test(note)) items.push(`${label}: ${note}`);
@@ -79,8 +78,10 @@ export function renderRulesReference(rules: RulesBundle): string {
   const m = rules.multiplier;
   L.push("## Multiplier (death and injury)", "", `${m.description}`, "");
   L.push("| Age | Multiplier |", "|---|---:|");
-  for (const b of m.bands) L.push(`| ${b.min_age}–${b.max_age} | ${b.multiplier} |`);
-  L.push(`| above the table | ${m.above_table.multiplier} (${m.above_table.note}) |`);
+  for (const b of m.bands)
+    L.push(
+      `| ${b.max_age === undefined ? `${b.min_age} and over` : `${b.min_age}–${b.max_age}`} | ${b.multiplier} |`,
+    );
   L.push("", `Sources: ${cite(m.sources)}. Confidence: ${m.confidence}. Signed off: ${yes(m.verified)}.`, "");
 
   const fp = rules.futureProspects;
@@ -119,9 +120,8 @@ export function renderRulesReference(rules: RulesBundle): string {
   L.push(
     `- **Homemaker (loss of domestic care):** ${formatINR(h.monthly)} a month from ${h.base_date}, +${h.step_pct}% every ${h.step_years} years. ${h.note} Sources: ${cite(h.sources)}.`,
   );
-  const st = n.student_course_precedent.professional;
   L.push(
-    `- **Student, professional course:** ${formatINR(st.monthly)} a month. ${st.note} Sources: ${cite(st.sources)}.`,
+    "- **Student:** the skilled minimum wage on the accident date (legal review A-4; Mohinder Kaur's ₹12,000, for an accident in 2000, is a comparator, not a benchmark).",
   );
   const mi = n.minor_death_conservative;
   L.push(

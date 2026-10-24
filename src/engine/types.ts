@@ -55,7 +55,6 @@ export const EstimateInputSchema = z.object({
           .optional(),
         claimedMonthly: z.number().nonnegative().optional(),
         pensionMonthly: z.number().nonnegative().optional(),
-        familyPensionMonthly: z.number().nonnegative().optional(),
       })
       .optional(),
   }),
@@ -171,7 +170,6 @@ export type WarningCode =
   | "MW_CONTESTED"
   | "ZONE_ASSUMED"
   | "RULE_UNVERIFIED"
-  | "AGE_OUTSIDE_TABLE"
   | "TAX_ESTIMATED"
   | "TAX_YEAR_MISSING"
   | "MINOR_DEATH_CONTESTED"

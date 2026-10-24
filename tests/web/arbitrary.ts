@@ -25,7 +25,6 @@ export const anyForm: fc.Arbitrary<FormState> = fc.record({
   itrAnnualIncome: str(["300000", "x"]),
   claimedMonthly: str(["15000", "x"]),
   pensionMonthly: str(["20000", "x"]),
-  familyPensionMonthly: str(["5000"]),
   married: fc.constantFrom("", "yes", "no"),
   spouse: fc.constantFrom("", "yes", "no"),
   children: str(["0", "2", "-1", "x", "25"]),

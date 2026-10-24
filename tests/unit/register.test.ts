@@ -78,9 +78,11 @@ describe("the rule register (legal review, safeguards F and B-13)", () => {
     });
     expect(validateRegister(twice).join("\n")).toMatch(/under_15_multiplier is also under/);
     const none = withRows((rows) =>
-      rows.map((r) => ({ ...r, points: r.points.filter((p) => p !== "pension_basis") })),
+      rows.map((r) => ({ ...r, points: r.points.filter((p) => p !== "attendant_rate") })),
     );
-    expect(validateRegister(none)).toContain("register: contested point pension_basis is not under any step");
+    expect(validateRegister(none)).toContain(
+      "register: contested point attendant_rate is not under any step",
+    );
   });
 
   it("rejects an untracked review item, and a flag naming an item the step does not list", () => {

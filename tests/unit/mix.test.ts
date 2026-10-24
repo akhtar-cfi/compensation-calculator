@@ -61,14 +61,14 @@ const constructed: { name: string; input: unknown }[] = [
     },
   },
   {
-    name: "a pensioner with a family pension",
+    name: "a pensioner",
     input: {
       ...base,
       kind: "death",
       victim: {
         ageYears: 65,
         employment: "pensioner",
-        income: { pensionMonthly: 20000, familyPensionMonthly: 10000 },
+        income: { pensionMonthly: 20000 },
       },
       family: { married: true, spouse: true, children: 0, parents: 0 },
     },
@@ -128,7 +128,7 @@ const amounts = (heads: readonly { id: string; amount: number }[]) =>
 
 describe("your choices on the contested points", () => {
   it("are read from the engine (the list cannot drift)", () => {
-    expect(CHOOSER_IDS.length).toBeGreaterThanOrEqual(15);
+    expect(CHOOSER_IDS.length).toBeGreaterThanOrEqual(13);
   });
 
   for (const c of CASES)

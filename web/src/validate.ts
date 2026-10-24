@@ -36,7 +36,6 @@ const INVALID: Partial<Record<FieldName, string>> = {
   itrAnnualIncome: AMOUNT,
   claimedMonthly: AMOUNT,
   pensionMonthly: AMOUNT,
-  familyPensionMonthly: AMOUNT,
   medicalBills: AMOUNT,
   cashlessPaid: AMOUNT,
 };
@@ -44,13 +43,7 @@ const INVALID: Partial<Record<FieldName, string>> = {
 /** Monthly amounts above this are refused as a typing slip (₹1 crore a month); above a tenth of it, the page asks
  * the person to check (see `amountCheck`). */
 export const MAX_MONTHLY = 1e7;
-const MONTHLY: readonly FieldName[] = [
-  "monthlySalary",
-  "monthlyTax",
-  "claimedMonthly",
-  "pensionMonthly",
-  "familyPensionMonthly",
-];
+const MONTHLY: readonly FieldName[] = ["monthlySalary", "monthlyTax", "claimedMonthly", "pensionMonthly"];
 /** Largest count a counter accepts. */
 export const MAX_COUNT: Partial<Record<FieldName, number>> = {
   children: 20,

@@ -46,7 +46,6 @@ function validValue(k: QuestionId, f: FormState): string {
     case "occupationCode":
       return "driver";
     case "pensionMonthly":
-    case "familyPensionMonthly":
       return "15000";
     case "married":
       return "no";

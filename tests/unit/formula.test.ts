@@ -34,10 +34,11 @@ describe("Sarla Verma multiplier", () => {
     [66, 5],
     [70, 5],
   ])("age %i -> %i", (age, m) => {
-    expect(tableMultiplier(rules, age)).toEqual({ multiplier: m, inTable: true });
+    expect(tableMultiplier(rules, age)).toBe(m);
   });
-  it("flags ages above the table and leaves under-15 to the range parameter", () => {
-    expect(tableMultiplier(rules, 75)).toEqual({ multiplier: 5, inTable: false });
+  it("gives 5 to every age above 65 (legal review A-16) and leaves under-15 to the range parameter", () => {
+    expect(tableMultiplier(rules, 75)).toBe(5);
+    expect(tableMultiplier(rules, 110)).toBe(5);
     expect(tableMultiplier(rules, 14)).toBeUndefined();
   });
 });

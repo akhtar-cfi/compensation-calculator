@@ -188,7 +188,6 @@ export const LABEL: Readonly<Partial<Record<FieldName, string>>> = {
   vehicleInsured: "f.insured",
   monthlyTax: "f.monthlyTax",
   claimedMonthly: "f.claimed",
-  familyPensionMonthly: "f.familyPension",
   studentCourse: "q.course.title",
   zone: "f.zone",
   dependentParents: "f.dependentParents",
@@ -307,7 +306,6 @@ export const QUESTION: Readonly<Record<QuestionId, Question>> = {
   monthlyTax: { ask: "ask.monthlyTax", hint: "f.monthlyTax.help", control: money("month"), optional: true },
   studentCourse: { ask: "ask.studentCourse", control: choice, optional: true },
   zone: { ask: "ask.zone", hint: "f.zone.central", control: { type: "zone" }, optional: true },
-  familyPensionMonthly: { ask: "ask.familyPensionMonthly", control: money("month"), optional: true },
   claimedMonthly: {
     ask: "ask.claimedMonthly",
     hint: "f.claimed.help",

@@ -452,18 +452,6 @@ export function BlockFields(props: {
               onInput={(v) => set("claimedMonthly", v)}
             />
           )}
-          {inc.includes("pension") && (
-            <MoneyInput
-              id="familyPensionMonthly"
-              monthly
-              optional
-              label={t("f.familyPension")}
-              per={t("unit.month")}
-              value={f.familyPensionMonthly}
-              error={err("familyPensionMonthly")}
-              onInput={(v) => set("familyPensionMonthly", v)}
-            />
-          )}
           {inc.includes("course") && (
             <Radios
               id="studentCourse"

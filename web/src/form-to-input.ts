@@ -32,7 +32,6 @@ export interface FormState {
   itrAnnualIncome: string;
   claimedMonthly: string;
   pensionMonthly: string;
-  familyPensionMonthly: string;
   married: YesNo;
   spouse: YesNo;
   children: string;
@@ -72,7 +71,6 @@ export const EMPTY_FORM: FormState = {
   itrAnnualIncome: "",
   claimedMonthly: "",
   pensionMonthly: "",
-  familyPensionMonthly: "",
   married: "",
   spouse: "",
   children: "",
@@ -221,7 +219,6 @@ export function formToInput(f: FormState): FormResult {
     claimedMonthly:
       fields.includes("claimed") && !salaryProof && !itrProof ? parseAmount(f.claimedMonthly) : undefined,
     pensionMonthly: fields.includes("pension") ? parseAmount(f.pensionMonthly) : undefined,
-    familyPensionMonthly: fields.includes("pension") ? parseAmount(f.familyPensionMonthly) : undefined,
   });
   const married = yesNo(f.married);
   const death = f.kind === "death";

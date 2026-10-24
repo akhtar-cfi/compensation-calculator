@@ -93,8 +93,8 @@ export const MultiplierRuleSchema = z.object({
   sources: z.array(z.string()),
   confidence: z.string(),
   verified: z.boolean(),
-  bands: z.array(z.object({ min_age: z.number(), max_age: z.number(), multiplier: z.number() })),
-  above_table: z.object({ multiplier: z.number(), note: z.string() }),
+  /** The last band has no max_age: it covers every older age. */
+  bands: z.array(z.object({ min_age: z.number(), max_age: z.number().optional(), multiplier: z.number() })),
 });
 
 const fpSlab = z.object({ below_age: z.number(), pct: z.number() });
@@ -143,9 +143,6 @@ export const NotionalIncomeRuleSchema = z.object({
     step_pct: z.number(),
     sources: z.array(z.string()),
     note: z.string(),
-  }),
-  student_course_precedent: z.object({
-    professional: z.object({ monthly: z.number(), sources: z.array(z.string()), note: z.string() }),
   }),
   minor_death_conservative: z.object({
     annual: z.number(),

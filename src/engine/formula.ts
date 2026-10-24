@@ -2,17 +2,10 @@ import type { RulesBundle } from "../rules/schema.js";
 import { completedSteps, type ISODate } from "./dates.js";
 import { parseFraction } from "./money.js";
 
-export interface MultiplierResult {
-  multiplier: number;
-  inTable: boolean;
-}
-
 /** Sarla Verma multiplier by age; under-15 handled by the caller via the range parameter. */
-export function tableMultiplier(rules: RulesBundle, age: number): MultiplierResult | undefined {
+export function tableMultiplier(rules: RulesBundle, age: number): number | undefined {
   if (age < 15) return undefined;
-  const band = rules.multiplier.bands.find((b) => age >= b.min_age && age <= b.max_age);
-  if (band) return { multiplier: band.multiplier, inTable: true };
-  return { multiplier: rules.multiplier.above_table.multiplier, inTable: false };
+  return rules.multiplier.bands.find((b) => age >= b.min_age && age <= (b.max_age ?? Infinity))?.multiplier;
 }
 
 export type FpClass = "permanent" | "self_employed_or_fixed" | "none";
