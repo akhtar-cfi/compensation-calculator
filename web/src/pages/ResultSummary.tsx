@@ -49,6 +49,8 @@ export function StopNotice(props: { code: StopCode; live?: boolean | undefined }
                 {t("stop.hnr", {
                   death: formatINR(rules.statutory.hit_and_run_s161.death),
                   hurt: formatINR(rules.statutory.hit_and_run_s161.grievous_hurt),
+                  oldDeath: formatINR(rules.statutory.hit_and_run_s161.earlier.death),
+                  oldHurt: formatINR(rules.statutory.hit_and_run_s161.earlier.grievous_hurt),
                 })}
               </li>
               <li>{t("stop.hnr.later")}</li>

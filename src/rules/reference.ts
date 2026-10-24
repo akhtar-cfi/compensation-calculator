@@ -212,7 +212,7 @@ export function renderRulesReference(rules: RulesBundle): string {
     `- **No-fault compensation (s.164):** death ${formatINR(s.no_fault_s164.death)}, grievous hurt ${formatINR(s.no_fault_s164.grievous_hurt)}. ${s.no_fault_s164.note} Sources: ${cite(s.no_fault_s164.sources)}.`,
   );
   L.push(
-    `- **Hit and run (s.161):** death ${formatINR(s.hit_and_run_s161.death)}, grievous hurt ${formatINR(s.hit_and_run_s161.grievous_hurt)}. ${s.hit_and_run_s161.note} Sources: ${cite(s.hit_and_run_s161.sources)}.`,
+    `- **Hit and run (s.161):** for accidents from ${s.hit_and_run_s161.from}, death ${formatINR(s.hit_and_run_s161.death)}, grievous hurt ${formatINR(s.hit_and_run_s161.grievous_hurt)}. ${s.hit_and_run_s161.note} Sources: ${cite(s.hit_and_run_s161.sources)}. Earlier accidents: death ${formatINR(s.hit_and_run_s161.earlier.death)}, grievous hurt ${formatINR(s.hit_and_run_s161.earlier.grievous_hurt)}. ${s.hit_and_run_s161.earlier.note} Sources: ${cite(s.hit_and_run_s161.earlier.sources)}.`,
   );
   L.push(
     `- **Limitation (s.166(3)):** ${s.limitation_s166_3.months} months. ${s.limitation_s166_3.note} Sources: ${cite(s.limitation_s166_3.sources)}.`,

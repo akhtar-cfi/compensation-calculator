@@ -170,13 +170,14 @@ test("10. a count typed above the limit is refused", async ({ page }) => {
 
 test("11. whether the parents depended on the person is asked, not silently assumed", async ({ page }) => {
   // Before: an optional "dependent parents" box, left empty, assumed both parents depended (about ₹6 lakh), and
-  // 2 dependent parents with 0 parents gave no error.
+  // 2 dependent parents with 0 parents gave no error. Since the legal review (A-22), "not sure" counts no parent
+  // as a dependant and says what it would add if they were.
   await fillForm(page, salaried());
   await expect(page.locator('input[name="dependentParents"]')).toHaveCount(0); // no parents claiming
   await radio(page, "parents", "2");
   await expect(page.locator("#result [data-missing=dependentParents]")).toBeVisible();
   await radio(page, "dependentParents", "unknown");
-  await expect(page.getByTestId("parents-assumed")).toContainText("If they did not, about");
+  await expect(page.getByTestId("parents-assumed")).toContainText("If they did depend on the person, about");
   await radio(page, "dependentParents", "0");
   await expect(page.getByTestId("parents-assumed")).toHaveCount(0);
 });

@@ -20,6 +20,7 @@ export function validateRules(
     ["notional.minor", rules.notional.minor_death_conservative.sources],
     ["statutory.s164", rules.statutory.no_fault_s164.sources],
     ["statutory.s161", rules.statutory.hit_and_run_s161.sources],
+    ["statutory.s161.earlier", rules.statutory.hit_and_run_s161.earlier.sources],
     ["statutory.limitation", rules.statutory.limitation_s166_3.sources],
     ["statutory.pendency", rules.statutory.pendency.sources],
     ["injury_bands", rules.injuryBands.sources],

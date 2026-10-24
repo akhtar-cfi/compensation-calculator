@@ -8,10 +8,19 @@ no_fault_s164:
     s.164 no-fault compensation. If it is accepted through the insurer's settlement route (s.149), the s.166
     claim petition lapses (s.166(1) proviso). If awarded, it is adjusted against the s.166 award (s.164(3)).
 hit_and_run_s161:
+  from: 2022-04-01
   death: 200000
   grievous_hurt: 50000
   sources: [mv_act_1988]
-  note: Compensation to Victims of Hit and Run Motor Accidents Scheme, 2022 (amounts unchanged by the 2026 amendment). Refundable from any later award (s.163).
+  note: Compensation to Victims of Hit and Run Motor Accidents Scheme, 2022, for accidents from 1 Apr 2022 (amounts unchanged by the 2026 amendment). Refundable from any later award (s.163).
+  # Legal review C-8: the amounts depend on the accident date.
+  earlier:
+    death: 25000
+    grievous_hurt: 12500
+    sources: [gic_hit_and_run_2023]
+    note: >-
+      Solatium Scheme, 1989, for accidents up to 31 Mar 2022, as the General Insurance Council's guide (2023)
+      summarises it; the scheme's own text has not been read.
 limitation_s166_3:
   months: 6
   sources: [mv_act_1988, bhagirathi_dash_2025]

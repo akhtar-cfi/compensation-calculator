@@ -150,9 +150,9 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Personal deduction
 
 - **Kind:** Fixed law (death only)
-- **Now:** A half if unmarried; if married, a third (2-3 dependants), a quarter (4-6) or a fifth (more). With one dependant of any kind (spouse, child or parent), a half in the low figure and a third in the headline. An unmarried person with 3 or more dependants gets a third only in the high figure. A parent answered 'not sure' counts as a dependant.
+- **Now:** A half if unmarried; if married, a third (2-3 dependants), a quarter (4-6) or a fifth (more). With one dependant of any kind (spouse, child or parent), a half in the low figure and a third in the headline. An unmarried person with 3 or more dependants gets a third only in the high figure. A parent counts as a dependant only when the answer says so; for 'not sure' the result shows what it would add if they were.
 - **Decided:** A third where the spouse is the only dependant, not extended to a sole parent or child (A-10). A half for the unmarried, a third where a large dependent family is shown, with no fixed number (A-11). Parents count as dependants only where support is shown; consortium is decided separately (A-22).
-- **Legal review:** A-10 Conditional; A-11 Approve; A-22 Approve
+- **Legal review:** A-10 Conditional; A-11 Approve; A-22 Approve (built)
 - **Authorities:** [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/), paras 14-15 (SCC 30-32); [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf), paras 24, 27
 - **Contested points:** `spouse_only_deduction`, `bachelor_large_family`
 
@@ -252,7 +252,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Money already received
 
 - **Kind:** Withheld
-- **Now:** Ex-gratia equal to pay comes off loss of dependency after a death and off future earning capacity after an injury. A no-fault award made by the tribunal, interim relief and a hit-and-run payment come off the total when an amount is entered. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
+- **Now:** Ex-gratia equal to pay comes off loss of dependency after a death (Sarla Devi's situation); after an injury it is recorded and not deducted. A no-fault award made by the tribunal, interim relief and a hit-and-run payment come off the total when an amount is entered. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
 - **Decided:** Record payments as facts and deduct only where the law is clear for that benefit. Ex-gratia only in Sarla Devi's situation, salary-equivalent assistance after a death, and a dependant who does not receive it keeps their share (A-26, B-10). No automatic s.164 set-off (A-28). No interim-relief set-off until the scheme's text is read (B-12). Separate categories for life insurance, personal mediclaim, employer reimbursement, cashless treatment and ex-gratia (B-11).
 - **Legal review:** A-26 Conditional; A-28 Hold; B-10 Conditional; B-11 Conditional; B-12 Hold
 - **Authorities:** [Sarla Devi v Reliance General Insurance Co. Ltd.](https://indiankanoon.org/doc/57068626/), paras 13-19, 22-25; [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/); [New India Assurance Co. Ltd. v Dolly Satish Gandhi](https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf), para 15; [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), ss.163, 164
@@ -262,10 +262,10 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### When no estimate is given
 
 - **Kind:** Fixed law
-- **Now:** No estimate for an owner driving alone with no other vehicle involved; for a vehicle never traced, where the hit-and-run scheme's ₹2,00,000 for a death or ₹50,000 for grievous hurt is shown, whatever the accident date; and where no-fault money was accepted through the insurer's settlement, which ends the claim.
+- **Now:** No estimate for an owner driving alone with no other vehicle involved; for a vehicle never traced, where the hit-and-run scheme's amounts are shown (₹2,00,000 for a death or ₹50,000 for grievous hurt for accidents from 1 Apr 2022; ₹25,000 and ₹12,500 under the 1989 scheme before that), with no deduction for cashless treatment; and where no-fault money was accepted through the insurer's settlement, which ends the claim.
 - **Decided:** Show the s.161 amounts subject to eligibility and the scheme's conditions, kept apart from s.166 estimates and from cashless treatment, with no deduction for cashless treatment; check which amounts applied to older accidents (C-8).
-- **Legal review:** C-8 Approve
-- **Authorities:** [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), ss.161, 166(1)
+- **Legal review:** C-8 Approve (built)
+- **Authorities:** [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), ss.161, 166(1); [General Insurance Council, "Hit and Run Motor Accident Compensation Claims" (guide, 15 Aug 2023)](https://www.gicouncil.in/media/4262/hit-and-run-motor-accident-compensation-claims.pdf)
 
 #### Time limit for filing the claim
 
@@ -316,9 +316,9 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### How real awards compare
 
 - **Kind:** Estimate from awards
-- **Now:** Shown for every state, labelled 'Delhi tribunal awards, 2024-26'.
+- **Now:** Shown for Delhi claims only, labelled 'Delhi tribunal awards, 2024-26', with the number of awards.
 - **Decided:** Delhi only, with its jurisdiction, period and limits stated; re-measured after any change to the method (D-5).
-- **Legal review:** D-5 Approve
+- **Legal review:** D-5 Approve (built)
 - **Authorities:** Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
 
 #### Legal sign-off of the rules
@@ -354,13 +354,12 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### When a wage on file may be out of date
 
 - **Kind:** Fixed law
-- **Now:** A caution when the wage on file took effect more than 7 months before the accident and the source has not been checked since; it names the effective date, not when the source was last checked.
-- **Decided:** Seven months is a trigger to check the data, not a legal expiry: show the order's effective date and the date it was last checked (C-7).
-- **Legal review:** C-7 Approve
+- **Now:** A caution when the wage on file took effect more than 7 months before the accident and the source has not been checked since; it names the order's effective date and the date the source was last checked. Seven months is a trigger to check the data, not a legal expiry.
+- **Legal review:** C-7 Approve (built)
 
 ### Every item of the legal review
 
-59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 7 of 59.
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 11 of 59.
 
 | Item | Decision | Built | Step |
 |---|---|---|---|
@@ -385,7 +384,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-19 | Hold | no | Income with no proof (minimum wage) |
 | A-20 | Approve | no | Income with no proof (minimum wage) |
 | A-21 | Conditional | no | Future prospects |
-| A-22 | Approve | no | Personal deduction |
+| A-22 | Approve | yes | Personal deduction |
 | A-23 | Conditional | no | Pain and amenities, travel and diet, marriage prospects |
 | A-24 | Approve | no | The person's own share of fault |
 | A-25 | Hold | no | Order of deductions when fault, cashless payments and ex-gratia meet |
@@ -415,25 +414,29 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | C-4 | Conditional | no | How the result is shown |
 | C-5 | Approve | no | The person's own share of fault |
 | C-6 | Conditional | no | Interest and the value of an offer over time |
-| C-7 | Approve | no | When a wage on file may be out of date |
-| C-8 | Approve | no | When no estimate is given |
+| C-7 | Approve | yes | When a wage on file may be out of date |
+| C-8 | Approve | yes | When no estimate is given |
 | D-1 | Conditional | no | Minimum wages outside Delhi |
 | D-2 | Hold | no | Delhi minimum wages |
 | D-3 | Conditional | no | Delhi minimum wages |
 | D-4 | Conditional | no | Income-tax tables |
-| D-5 | Approve | no | How real awards compare |
+| D-5 | Approve | yes | How real awards compare |
 | D-6 | Not stated | no | Delhi minimum wages |
 
 ### Changes
 
 - 2026-10-24 · Income for a student: The ₹12,000 for a professional course is no longer used; every figure takes the skilled wage (A-4, B-8).
 - 2026-10-24 · Income for a pensioner: The low figure no longer takes the family pension off a pensioner's income (A-6, B-6).
+- 2026-10-24 · Personal deduction: A parent answered 'not sure' is no longer counted as a dependant; the effect if they were is shown (A-22).
 - 2026-10-24 · Multiplier: No caution above 70; the table's last category covers every age above 65 (A-16).
 - 2026-10-24 · Loss of estate, funeral and consortium amounts: The headline counts the steps completed by the accident date, in place of a fixed two steps (A-12).
 - 2026-10-24 · Earnings lost during treatment by a child: A child who did not earn no longer gets the skilled wage × the months of treatment (A-31).
+- 2026-10-24 · When no estimate is given: The hit-and-run amounts follow the accident date (C-8).
 - 2026-10-24 · How real awards compare: Re-measured after A-12 (deaths, middle half of awards 0.70 to 1.17 times the estimate, 112 awards).
+- 2026-10-24 · How real awards compare: Shown for Delhi claims only (D-5).
 - 2026-10-24 · Legal sign-off of the rules: One line on every result: 'Method not yet signed off by a lawyer' (B-14).
 - 2026-10-24 · Legal sign-off of the rules: This register and the authority register published (B-13).
+- 2026-10-24 · When a wage on file may be out of date: The caution names the date the official source was last checked (C-7).
 
 ## Multiplier (death and injury)
 
@@ -557,7 +560,7 @@ Sources: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), ba
 ## Statutory amounts and time limits
 
 - **No-fault compensation (s.164):** death ₹5,00,000, grievous hurt ₹2,50,000. s.164 no-fault compensation. If it is accepted through the insurer's settlement route (s.149), the s.166 claim petition lapses (s.166(1) proviso). If awarded, it is adjusted against the s.166 award (s.164(3)). Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf).
-- **Hit and run (s.161):** death ₹2,00,000, grievous hurt ₹50,000. Compensation to Victims of Hit and Run Motor Accidents Scheme, 2022 (amounts unchanged by the 2026 amendment). Refundable from any later award (s.163). Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf).
+- **Hit and run (s.161):** for accidents from 2022-04-01, death ₹2,00,000, grievous hurt ₹50,000. Compensation to Victims of Hit and Run Motor Accidents Scheme, 2022, for accidents from 1 Apr 2022 (amounts unchanged by the 2026 amendment). Refundable from any later award (s.163). Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf). Earlier accidents: death ₹25,000, grievous hurt ₹12,500. Solatium Scheme, 1989, for accidents up to 31 Mar 2022, as the General Insurance Council's guide (2023) summarises it; the scheme's own text has not been read. Sources: [General Insurance Council, "Hit and Run Motor Accident Compensation Claims" (guide, 15 Aug 2023)](https://www.gicouncil.in/media/4262/hit-and-run-motor-accident-compensation-claims.pdf).
 - **Limitation (s.166(3)):** 6 months. The Supreme Court's interim order (4 Nov 2025) directs that no claim be dismissed as time-barred while the challenge is pending. Sources: [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf); [Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)](https://indiankanoon.org/doc/54856662/).
 - **Interest illustration:** 6 / 7.5 / 9% over 6 years. No fixed rate; recent awards range 6-9% simple interest from the date of filing. Shown separately, never added to the headline.
 - **Typical time to award:** 6 years at tribunals, 8 at High Courts. Sources: [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/).
@@ -765,6 +768,7 @@ Gaps:
 | uma_rani_2026 | [Uma Rani v Simranjeet Singh (Delhi High Court)](https://indiankanoon.org/doc/173432675/) |  | High Court (DL) | P | 2026-07-01 |
 | karan_singh_bisht_2026 | [Karan Singh Bisht v Ravi Singh (MACT-01, Patiala House Courts, New Delhi; DAR 350/2020)](https://indiankanoon.org/doc/105820332/) |  | Tribunal (DL) |  | 2026-08-17 |
 | delhi_awards_backtest_2026 | Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv |  | dataset |  | 2026-10-10 |
+| gic_hit_and_run_2023 | [General Insurance Council, "Hit and Run Motor Accident Compensation Claims" (guide, 15 Aug 2023)](https://www.gicouncil.in/media/4262/hit-and-run-motor-accident-compensation-claims.pdf) |  | guide | S | 2023-08-15 |
 
 ## What each authority is relied on for
 
@@ -1013,4 +1017,10 @@ High Court (DL), 1 judge · 2026-10-12 · grade P
 High Court (DL) · 2026-07-01 · grade P
 
 - **applied:** An injured homemaker's work valued at ₹10,000 a month. _Limits:_ An injury claim.
+
+### [General Insurance Council, "Hit and Run Motor Accident Compensation Claims" (guide, 15 Aug 2023)](https://www.gicouncil.in/media/4262/hit-and-run-motor-accident-compensation-claims.pdf)
+
+guide · 2023-08-15 · grade S
+
+- Accidents from 1 Apr 2022: Rs 2,00,000 for a death and Rs 50,000 for grievous hurt (the 2022 scheme); accidents up to 31 Mar 2022: Rs 25,000 and Rs 12,500 under the Solatium Scheme, 1989. _Limits:_ An industry guide summarising the schemes; the Gazette text of the 2022 scheme has not been read here.
 

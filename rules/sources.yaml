@@ -480,3 +480,14 @@
   title: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
   kind: dataset
   date: 2026-10-10
+- id: gic_hit_and_run_2023
+  title: General Insurance Council, "Hit and Run Motor Accident Compensation Claims" (guide, 15 Aug 2023)
+  kind: guide
+  date: 2023-08-15
+  grade: S
+  url: https://www.gicouncil.in/media/4262/hit-and-run-motor-accident-compensation-claims.pdf
+  propositions:
+    - holding: >-
+        Accidents from 1 Apr 2022: Rs 2,00,000 for a death and Rs 50,000 for grievous hurt (the 2022 scheme);
+        accidents up to 31 Mar 2022: Rs 25,000 and Rs 12,500 under the Solatium Scheme, 1989.
+      limits: An industry guide summarising the schemes; the Gazette text of the 2022 scheme has not been read here.

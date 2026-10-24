@@ -245,8 +245,8 @@ rows:
     now: >-
       A half if unmarried; if married, a third (2-3 dependants), a quarter (4-6) or a fifth (more). With one
       dependant of any kind (spouse, child or parent), a half in the low figure and a third in the headline. An
-      unmarried person with 3 or more dependants gets a third only in the high figure. A parent answered 'not sure'
-      counts as a dependant.
+      unmarried person with 3 or more dependants gets a third only in the high figure. A parent counts as a
+      dependant only when the answer says so; for 'not sure' the result shows what it would add if they were.
     decided: >-
       A third where the spouse is the only dependant, not extended to a sole parent or child (A-10). A half for the
       unmarried, a third where a large dependent family is shown, with no fixed number (A-11). Parents count as
@@ -257,13 +257,16 @@ rows:
     review:
       - { id: A-10, status: conditional }
       - { id: A-11, status: approve }
-      - { id: A-22, status: approve }
+      - { id: A-22, status: approve, done: true }
     points: [spouse_only_deduction, bachelor_large_family]
     flagged:
       - review: A-10
         point: >-
           One dependant who is not a spouse (one child or one parent): Sarla Verma's scale starts at two or three
           dependants, and Sushila decided only a sole spouse.
+    changes:
+      - date: 2026-10-24
+        what: "A parent answered 'not sure' is no longer counted as a dependant; the effect if they were is shown (A-22)."
   - id: multiplier
     section: formula
     step: Multiplier
@@ -488,8 +491,8 @@ rows:
     kinds: [death, injury]
     type: withheld
     now: >-
-      Ex-gratia equal to pay comes off loss of dependency after a death and off future earning capacity after an
-      injury. A no-fault award made by the tribunal, interim relief and a hit-and-run payment come off the total when
+      Ex-gratia equal to pay comes off loss of dependency after a death (Sarla Devi's situation); after an injury it
+      is recorded and not deducted. A no-fault award made by the tribunal, interim relief and a hit-and-run payment come off the total when
       an amount is entered. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
     decided: >-
       Record payments as facts and deduct only where the law is clear for that benefit. Ex-gratia only in Sarla
@@ -516,7 +519,8 @@ rows:
     type: fixed
     now: >-
       No estimate for an owner driving alone with no other vehicle involved; for a vehicle never traced, where the
-      hit-and-run scheme's ₹2,00,000 for a death or ₹50,000 for grievous hurt is shown, whatever the accident date;
+      hit-and-run scheme's amounts are shown (₹2,00,000 for a death or ₹50,000 for grievous hurt for accidents from 1
+      Apr 2022; ₹25,000 and ₹12,500 under the 1989 scheme before that), with no deduction for cashless treatment;
       and where no-fault money was accepted through the insurer's settlement, which ends the claim.
     decided: >-
       Show the s.161 amounts subject to eligibility and the scheme's conditions, kept apart from s.166 estimates and
@@ -524,8 +528,12 @@ rows:
       accidents (C-8).
     authorities:
       - { source: mv_act_1988, para: "ss.161, 166(1)" }
+      - { source: gic_hit_and_run_2023 }
     review:
-      - { id: C-8, status: approve }
+      - { id: C-8, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: The hit-and-run amounts follow the accident date (C-8).
   - id: limitation
     section: claim
     step: Time limit for filing the claim
@@ -625,17 +633,19 @@ rows:
     step: How real awards compare
     kinds: [death, injury]
     type: practice
-    now: Shown for every state, labelled 'Delhi tribunal awards, 2024-26'.
+    now: Shown for Delhi claims only, labelled 'Delhi tribunal awards, 2024-26', with the number of awards.
     decided: >-
       Delhi only, with its jurisdiction, period and limits stated; re-measured after any change to the method
       (D-5).
     authorities:
       - { source: delhi_awards_backtest_2026 }
     review:
-      - { id: D-5, status: approve }
+      - { id: D-5, status: approve, done: true }
     changes:
       - date: 2026-10-24
         what: Re-measured after A-12 (deaths, middle half of awards 0.70 to 1.17 times the estimate, 112 awards).
+      - date: 2026-10-24
+        what: Shown for Delhi claims only (D-5).
   - id: sign_off
     section: presentation
     step: Legal sign-off of the rules
@@ -714,9 +724,10 @@ rows:
     type: fixed
     now: >-
       A caution when the wage on file took effect more than 7 months before the accident and the source has not
-      been checked since; it names the effective date, not when the source was last checked.
-    decided: >-
-      Seven months is a trigger to check the data, not a legal expiry: show the order's effective date and the date
-      it was last checked (C-7).
+      been checked since; it names the order's effective date and the date the source was last checked. Seven
+      months is a trigger to check the data, not a legal expiry.
     review:
-      - { id: C-7, status: approve }
+      - { id: C-7, status: approve, done: true }
+    changes:
+      - date: 2026-10-24
+        what: The caution names the date the official source was last checked (C-7).

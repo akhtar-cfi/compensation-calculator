@@ -43,11 +43,10 @@ interface RunOptions {
   contributoryNegligencePct?: number;
 }
 
+/** Legal review A-22: a parent counts as a dependant only where the support is shown, never by default. */
 function dependantsOf(input: EstimateInput): number {
   const f = input.family;
-  return (
-    (f.spouse ? 1 : 0) + (f.children ?? 0) + (f.dependentParents ?? f.parents ?? 0) + (f.otherDependants ?? 0)
-  );
+  return (f.spouse ? 1 : 0) + (f.children ?? 0) + (f.dependentParents ?? 0) + (f.otherDependants ?? 0);
 }
 
 function consortiumClaimantsOf(input: EstimateInput): number {
@@ -108,7 +107,9 @@ function adjustmentsFor(
   const r = input.received ?? {};
   const lod =
     heads.find((h) => h.id === "loss_of_dependency" || h.id === "loss_of_earning_capacity")?.amount ?? 0;
-  if (r.exGratiaEqualToPay) {
+  // Ex-gratia equal to pay is deducted only in Sarla Devi's situation: assistance in place of salary after a death.
+  // After an injury it is recorded, not deducted (legal review A-26, with the advocate's note on it).
+  if (r.exGratiaEqualToPay && input.kind === "death") {
     adj.push({
       kind: "adjustment",
       id: "ex_gratia",
@@ -291,12 +292,18 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
     ok = false;
   }
   if (input.offendingVehicle === "unidentified") {
-    const h = rules.statutory.hit_and_run_s161;
+    // Legal review C-8: the 2022 scheme's amounts apply to accidents from 1 Apr 2022; earlier ones, the 1989 scheme's.
+    const s161 = rules.statutory.hit_and_run_s161;
+    const earlier = input.accidentDate < s161.from;
+    const h = earlier ? s161.earlier : s161;
+    const amounts = { death: formatINR(h.death), hurt: formatINR(h.grievous_hurt) };
     warn.add(
       "UNIDENTIFIED_USE_HIT_AND_RUN",
       "stop",
-      `The offending vehicle is untraced: apply under the hit-and-run scheme (s.161): ${formatINR(h.death)} for death, ${formatINR(h.grievous_hurt)} for grievous hurt.`,
-      { death: formatINR(h.death), hurt: formatINR(h.grievous_hurt) },
+      earlier
+        ? `The offending vehicle is untraced: apply under the hit-and-run scheme (s.161). For an accident before ${s161.from} the earlier scheme applies: ${amounts.death} for death, ${amounts.hurt} for grievous hurt.`
+        : `The offending vehicle is untraced: apply under the hit-and-run scheme (s.161): ${amounts.death} for death, ${amounts.hurt} for grievous hurt.`,
+      earlier ? { ...amounts, from: s161.from, variant: "earlier" } : amounts,
     );
     ok = false;
   }
@@ -464,6 +471,18 @@ export function estimate(
         });
     }
   }
+  // Legal review A-22: parents not shown to depend on the person are not counted; say what it is worth if they did.
+  const fam = input.family;
+  if (input.kind === "death" && (fam.parents ?? 0) > 0 && fam.dependentParents === undefined) {
+    const asIfDependent = { ...input, family: { ...fam, dependentParents: fam.parents } };
+    const r = runScenario(rules, asIfDependent, asOf, allOf("standard"), "standard", new WarningSink());
+    if (r && r.result.net !== stdNet)
+      sensitivity.push({
+        id: "parents_dependent",
+        label: "If the parents are shown to have depended on the person's income",
+        delta: r.result.net - stdNet,
+      });
+  }
 
   const c = runs.conservative.result.net;
   const m = runs.claimantMax.result.net;
@@ -532,9 +551,11 @@ export function estimate(
     },
     headline: { amount: stdNet, approx: formatApprox(stdNet) },
     range: { conservative: c, standard: stdNet, claimantMax: m, showBar },
-    ...(rules.practiceSpread && {
-      practiceSpread: { ...rules.practiceSpread[input.kind], label: rules.practiceSpread.label },
-    }),
+    // Legal review D-5: the comparison describes Delhi tribunals, so it is shown for Delhi claims only.
+    ...(rules.practiceSpread &&
+      input.state === "DL" && {
+        practiceSpread: { ...rules.practiceSpread[input.kind], label: rules.practiceSpread.label },
+      }),
     swingFactors: swing,
     sensitivity,
     interest,

@@ -29,7 +29,7 @@ same page records, for each judgment, its bench, the holding relied on and how l
 | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Legal**: a point the courts have not settled                                      | A _range parameter_ listed in `rules/range-parameters.yaml`: what the conservative, standard and claimant-max scenarios use, and its authority (or "none recorded") |
 | **Factual**: what can be proved (claimed income, functional disability, negligence) | An input, plus "if X is proved" sensitivity cards                                                                                                                   |
-| **Practice**: what tribunals actually award                                         | Not used for the headline. Shown separately: the practice spread and similar real cases (section 7)                                                                 |
+| **Practice**: what tribunals actually award                                         | Not used for the headline. Shown separately: the practice spread (Delhi claims only, legal review D-5) and similar real cases (section 7)                           |
 
 - **Scenarios are consistent.** Conservative = every contested point resolved against the claimant; claimant-max = every point in the claimant's favour.
 - **Swing factors** vary one point at a time from the standard scenario. They show which disputes matter, in rupees.
@@ -56,7 +56,7 @@ The engine never reads the clock; both dates are inputs.
 | Income: student            | Skilled minimum wage on the accident date, in every figure (legal review A-4: no ₹12,000 benchmark from Mohinder Kaur, a comparator only)                                                                                                                                                                                                                                                                         | Kirti (2021) para 12                      |
 | Income: pensioner          | The deceased's own pension, in full in every figure; a family pension is never deducted (legal review A-6). No future prospects                                                                                                                                                                                                                                                                                   | Vimal Kanwar                              |
 | Future prospects           | Permanent job: 50 / 30 / 15% (under 40 / 40–49 / 50–60). Self-employed, fixed salary or notional income: 40 / 25 / 10%. None above 60                                                                                                                                                                                                                                                                             | Pranay Sethi; Kirti                       |
-| Personal deduction         | Married: 1/3 (2–3 dependants), 1/4 (4–6), 1/5 (7+). Bachelor: 1/2 (1/3 for a large dependent family, claimant-max only). Spouse as the only dependant: 1/3 standard, 1/2 conservative                                                                                                                                                                                                                             | Sarla Verma                               |
+| Personal deduction         | Married: 1/3 (2–3 dependants), 1/4 (4–6), 1/5 (7+). Bachelor: 1/2 (1/3 for a large dependent family, claimant-max only). Spouse as the only dependant: 1/3 standard, 1/2 conservative. A parent is a dependant only when the answer says so (legal review A-22)                                                                                                                                                   | Sarla Verma                               |
 | Multiplier                 | Sarla Verma table by the **deceased's** age, never split. Under 15: 18 standard, 15 conservative. Above 65: 5 (legal review A-16)                                                                                                                                                                                                                                                                                 | Sarla Verma; Preetha Krishnan (2025)      |
 | Conventional heads         | Loss of estate ₹15,000 and funeral ₹15,000 (from Oct 2017). Consortium ₹40,000 **per claimant**: spouse, each child, each parent. Number of 10% steps: those completed by the accident date (none before 31 Oct 2020; base amounts before 2017) in the conservative and standard figures; counted up to the date of decision in claimant-max, until the larger bench in Hasina Yasmin decides (legal review A-12) | Pranay Sethi; Magma; Satinder Kaur        |
 | Medical before death       | Bills less amounts paid under the cashless treatment scheme                                                                                                                                                                                                                                                                                                                                                       | MV Act s.164B(5)                          |
@@ -86,7 +86,7 @@ The engine never reads the clock; both dates are inputs.
 **Stops: no estimate is shown, with an explanation, when**
 
 - s.164 compensation was accepted through the insurer (the s.166 claim lapses);
-- the offending vehicle is untraced (use the hit-and-run scheme instead);
+- the offending vehicle is untraced (use the hit-and-run scheme instead: ₹2,00,000 for a death or ₹50,000 for grievous hurt for accidents from 1 Apr 2022, ₹25,000 and ₹12,500 under the 1989 scheme before that);
 - an owner-driver was hurt in a single-vehicle crash.
 
 **Also a stop:** no minimum wage on file for the state and accident date, when the income rests on it.
@@ -112,7 +112,7 @@ The engine never reads the clock; both dates are inputs.
 - s.164 compensation awarded
 - interim relief
 - hit-and-run compensation (refundable under s.163)
-- ex-gratia equal to pay (against the income head only)
+- ex-gratia equal to pay, after a death only (against loss of dependency: Sarla Devi, 2026); after an injury it is recorded, not deducted (legal review A-26)
 
 **Never deducted:** mediclaim and life insurance (Helen Rebello; Dolly Satish Gandhi, 2026).
 

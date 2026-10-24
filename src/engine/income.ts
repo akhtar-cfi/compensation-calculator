@@ -101,11 +101,15 @@ export function mw(
     wholeMonthsBetween(r.effective_from, input.accidentDate) > freshMonths &&
     !(checked && checked >= input.accidentDate)
   ) {
+    // Legal review C-7: seven months is a trigger to check the data, not a legal expiry; say when it was checked.
+    const vars = { state: hit.state, from: r.effective_from, months: freshMonths };
     ctx.warn.add(
       "MW_MAY_BE_OUTDATED",
       "caution",
-      `The latest ${hit.state} minimum wage on file took effect on ${r.effective_from}, more than ${freshMonths} months before the accident, and the official source has not been checked since the accident date. A later revision may apply.`,
-      { state: hit.state, from: r.effective_from, months: freshMonths },
+      checked
+        ? `The latest ${hit.state} minimum wage on file took effect on ${r.effective_from}, more than ${freshMonths} months before the accident; the official source was last checked on ${checked}. A later revision may apply.`
+        : `The latest ${hit.state} minimum wage on file took effect on ${r.effective_from}, more than ${freshMonths} months before the accident, and no check of the official source is recorded. A later revision may apply.`,
+      checked ? { ...vars, checked } : { ...vars, variant: "unchecked" },
     );
   }
   return {

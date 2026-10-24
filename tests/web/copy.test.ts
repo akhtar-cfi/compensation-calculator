@@ -97,6 +97,12 @@ describe("web copy (EN/HI)", () => {
     const inputs: EstimateInput[] = [
       base,
       { ...base, offendingVehicle: "unidentified" },
+      { ...base, offendingVehicle: "unidentified", accidentDate: "2021-06-01" },
+      {
+        ...base,
+        accidentDate: "2026-09-01",
+        victim: { ageYears: 30, employment: "informal", occupationCode: "driver" },
+      },
       { ...base, offendingVehicle: "identified_uninsured", accidentDate: "2024-01-01" },
       { ...base, victimRole: "owner_driver_single_vehicle" },
       { ...base, s164: "accepted_via_insurer" },

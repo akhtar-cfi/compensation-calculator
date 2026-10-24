@@ -175,10 +175,18 @@ export const StatutoryRuleSchema = z.object({
     note: z.string(),
   }),
   hit_and_run_s161: z.object({
+    /** Accidents on or after this date get these amounts; earlier accidents get `earlier`. */
+    from: isoDate,
     death: z.number(),
     grievous_hurt: z.number(),
     sources: z.array(z.string()),
     note: z.string(),
+    earlier: z.object({
+      death: z.number(),
+      grievous_hurt: z.number(),
+      sources: z.array(z.string()),
+      note: z.string(),
+    }),
   }),
   limitation_s166_3: z.object({ months: z.number(), sources: z.array(z.string()), note: z.string() }),
   interest_illustration: z.object({

@@ -12,8 +12,8 @@ export function accidentLabel(f: FormState, t: (k: string) => string): string {
 }
 
 /**
- * "Not sure" whether the parents depended on the person: the estimate assumes they did (the engine's default). How
- * much that assumption is worth, to say so.
+ * "Not sure" whether the parents depended on the person: the estimate does not count them as dependants (legal
+ * review A-22: dependency is shown, never presumed). How much more it would be if they did, to say so.
  */
 export function parentsAssumed(
   computed: { input: EstimateInput; est: EstimateOutput } | undefined,
@@ -24,9 +24,9 @@ export function parentsAssumed(
     return undefined;
   const alt = estimate(
     rules,
-    { ...computed.input, family: { ...fam, dependentParents: 0 } },
+    { ...computed.input, family: { ...fam, dependentParents: fam.parents } },
     { asOf: today },
   );
-  const d = (computed.est.headline?.amount ?? 0) - (alt.headline?.amount ?? 0);
+  const d = (alt.headline?.amount ?? 0) - (computed.est.headline?.amount ?? 0);
   return d > 0 ? d : undefined;
 }
