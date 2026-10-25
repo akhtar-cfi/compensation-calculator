@@ -85,9 +85,9 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Income with no proof (minimum wage)
 
 - **Kind:** Depends on the facts
-- **Now:** The minimum wage on the accident date in the state where the claim is filed, at the skill level of the occupation picked from the calculator's list (low figure: unskilled; unknown occupations are unskilled). A graduate with no particular job shown gets the skilled rate; the highly skilled rate only for someone working as a professional. 'Central sphere rates' (the construction schedule, lowest city group if none is given) can be chosen instead of a state, with no caution about the substitution.
+- **Now:** The minimum wage on the accident date in the state where the claim is filed, at the skill level of the occupation picked from the calculator's list (low figure: unskilled; unknown occupations are unskilled). A graduate with no particular job shown gets the skilled rate; the highly skilled rate only for someone working as a professional. Central-sphere rates (the construction schedule, lowest city group if none is given) are offered only as the place of work for central-sphere employment, and the result says so; the page no longer suggests them when a state's wages are missing.
 - **Decided:** The occupation's wage once the occupation-to-skill list is checked (A-2). Record the accident place, the usual place of work and the filing place separately, and prefer the wage of the established employment (A-18). No generic Central substitute (A-19). The skilled wage for graduates unless a higher category is supported (A-20).
-- **Legal review:** A-2 Conditional; A-18 Conditional; A-19 Hold; A-20 Approve (built)
+- **Legal review:** A-2 Conditional; A-18 Conditional; A-19 Hold (built); A-20 Approve (built)
 - **Authorities:** [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/), paras 10, 12
 - **Contested points:** `mw_category`
 
@@ -248,17 +248,17 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Order of deductions when fault, cashless payments and ex-gratia meet
 
 - **Kind:** Withheld
-- **Now:** Cashless payments come off the medical bills before the fault cut; the fault cut then applies to the whole total; ex-gratia comes off after, capped at the income head as it was before the cut. In rare cases this puts the low figure above the headline.
+- **Now:** Cashless payments come off the medical bills. Where an established fault share and a cashless payment meet, the medical expenses are left out and a caution gives the amount under each order of deduction; the fault cut applies to the rest of the total. Ex-gratia comes off after, capped at the income head as it was before the cut. In rare cases this puts the low figure above the headline.
 - **Decided:** Record bills, the scheme-paid part and the rest separately and prevent double payment, but no automatic combined cashless and fault adjustment until a reasoned statutory opinion (A-25). Cut for established fault first, then cap any permitted adjustment at the income head, and flag cases where the order changes the result; needs specific legal approval (A-29).
-- **Legal review:** A-25 Hold; A-29 Conditional
+- **Legal review:** A-25 Hold (built); A-29 Conditional
 - **Authorities:** [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), s.164B(5); [Sarla Devi v Reliance General Insurance Co. Ltd.](https://indiankanoon.org/doc/57068626/), para 19
 
 #### Money already received
 
 - **Kind:** Withheld
-- **Now:** Ex-gratia equal to pay comes off loss of dependency after a death (Sarla Devi's situation); after an injury it is recorded and not deducted. A no-fault award made by the tribunal, interim relief and a hit-and-run payment come off the total when an amount is entered. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
+- **Now:** Ex-gratia equal to pay comes off loss of dependency after a death (Sarla Devi's situation); after an injury it is recorded and not deducted. An earlier no-fault award (s.164) and interim relief are recorded, not deducted; the result says what a set-off would take away. A hit-and-run payment, refundable under s.163, comes off the total. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
 - **Decided:** Record payments as facts and deduct only where the law is clear for that benefit. Ex-gratia only in Sarla Devi's situation, salary-equivalent assistance after a death, and a dependant who does not receive it keeps their share (A-26, B-10). No automatic s.164 set-off (A-28). No interim-relief set-off until the scheme's text is read (B-12). Separate categories for life insurance, personal mediclaim, employer reimbursement, cashless treatment and ex-gratia (B-11).
-- **Legal review:** A-26 Conditional; A-28 Hold; B-10 Conditional; B-11 Conditional; B-12 Hold
+- **Legal review:** A-26 Conditional; A-28 Hold (built); B-10 Conditional; B-11 Conditional; B-12 Hold (built)
 - **Authorities:** [Sarla Devi v Reliance General Insurance Co. Ltd.](https://indiankanoon.org/doc/57068626/), paras 13-19, 22-25; [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/); [New India Assurance Co. Ltd. v Dolly Satish Gandhi](https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf), para 15; [Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)](https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf), ss.163, 164
 
 ### The claim
@@ -351,7 +351,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 - **Kind:** Law split or open
 - **Now:** Rates from 1 Oct 2011, except 1 Apr 2012 to 31 Mar 2013, where cases without proof of income get no estimate. From 3 Mar 2017 to 31 Oct 2018 the official series is used with a caution. The latest order is of 1 Apr 2025; an order dated 13 Oct 2025 was declared fake by the Labour Department.
 - **Decided:** No interpolation: obtain the missing orders from the Labour Department or by RTI (D-2). Keep the official series for 2017-18 with a legal qualification, after a labour-law review (D-3). The last authenticated rate until a later official order is verified, and no compliance-site figures (D-6).
-- **Legal review:** D-2 Hold; D-3 Conditional; D-6 Not stated
+- **Legal review:** D-2 Hold (built); D-3 Conditional; D-6 Not stated
 
 #### When a wage on file may be out of date
 
@@ -361,7 +361,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Every item of the legal review
 
-59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 22 of 59.
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 27 of 59.
 
 | Item | Decision | Built | Step |
 |---|---|---|---|
@@ -383,16 +383,16 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-16 | Approve | yes | Multiplier |
 | A-17 | Approve | yes | Future prospects |
 | A-18 | Conditional | no | Income with no proof (minimum wage) |
-| A-19 | Hold | no | Income with no proof (minimum wage) |
+| A-19 | Hold | yes | Income with no proof (minimum wage) |
 | A-20 | Approve | yes | Income with no proof (minimum wage) |
 | A-21 | Conditional | no | Future prospects |
 | A-22 | Approve | yes | Personal deduction |
 | A-23 | Conditional | no | Pain and amenities, travel and diet, marriage prospects |
 | A-24 | Approve | yes | The person's own share of fault |
-| A-25 | Hold | no | Order of deductions when fault, cashless payments and ex-gratia meet |
+| A-25 | Hold | yes | Order of deductions when fault, cashless payments and ex-gratia meet |
 | A-26 | Conditional | no | Money already received |
 | A-27 | Approve | yes | Income-tax tables |
-| A-28 | Hold | no | Money already received |
+| A-28 | Hold | yes | Money already received |
 | A-29 | Conditional | no | Order of deductions when fault, cashless payments and ex-gratia meet |
 | A-30 | Conditional | no | Income from a salary |
 | A-31 | Approve | yes | Earnings lost during treatment by a child |
@@ -407,7 +407,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | B-9 | Approve | yes | The person's own share of fault |
 | B-10 | Conditional | no | Money already received |
 | B-11 | Conditional | no | Money already received |
-| B-12 | Hold | no | Money already received |
+| B-12 | Hold | yes | Money already received |
 | B-13 | Conditional | no | Legal sign-off of the rules |
 | B-14 | Conditional | no | Legal sign-off of the rules |
 | C-1 | Approve | yes | Checking an insurer's offer |
@@ -419,7 +419,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | C-7 | Approve | yes | When a wage on file may be out of date |
 | C-8 | Approve | yes | When no estimate is given |
 | D-1 | Conditional | no | Minimum wages outside Delhi |
-| D-2 | Hold | no | Delhi minimum wages |
+| D-2 | Hold | yes | Delhi minimum wages |
 | D-3 | Conditional | no | Delhi minimum wages |
 | D-4 | Conditional | no | Income-tax tables |
 | D-5 | Approve | yes | How real awards compare |
@@ -429,6 +429,9 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 - 2026-10-25 · Income from tax returns: A salaried person's latest return is used instead of an average; a later-filed return needs records from the time and no longer raises the high figure on its own; each return is net of its own year's tax, or the tax shown on it (A-5, B-7).
 - 2026-10-25 · Income with no proof (minimum wage): A graduate with no particular job shown now gets the skilled rate, not the highly skilled one; that rate is kept for someone working as a professional (A-20).
+- 2026-10-25 · Income with no proof (minimum wage): Central-sphere rates are no longer suggested as a rough stand-in for a state's missing wages; they are for central-sphere work only, and the result says so (A-19).
+- 2026-10-25 · Order of deductions when fault, cashless payments and ex-gratia meet: With an established fault share and a cashless payment together, the calculator no longer picks an order of deduction: the medical expenses are left out and both amounts are given (A-25).
+- 2026-10-25 · Money already received: An earlier no-fault award (s.164) and interim relief are no longer deducted; the result shows what a set-off would take away (A-28, B-12).
 - 2026-10-25 · Income-tax tables: Tables added for FY 2012-13 to 2017-18 and FY 2019-20 confirmed; a year without a table no longer borrows the latest one (A-27). A second person's check of the tables is still to come (D-4).
 - 2026-10-24 · Income for a student: The ₹12,000 for a professional course is no longer used; every figure takes the skilled wage (A-4, B-8).
 - 2026-10-24 · Income for a pensioner: The low figure no longer takes the family pension off a pensioner's income (A-6, B-6).

@@ -115,7 +115,12 @@ export function mw(
   return {
     monthly: hit.monthly,
     daily: hit.monthly / (st?.days_per_month ?? 26),
-    note: `Minimum wage ${hit.state}/${hit.zone}/${hit.category} in force on ${input.accidentDate}: ${formatINR(hit.monthly)}/month (effective ${r.effective_from}, ${r.confidence} source).`,
+    note:
+      `Minimum wage ${hit.state}/${hit.zone}/${hit.category} in force on ${input.accidentDate}: ${formatINR(hit.monthly)}/month (effective ${r.effective_from}, ${r.confidence} source).` +
+      // Legal review A-19: Central rates apply to central-sphere employment, never as a stand-in for a state's.
+      (hit.state === "CENTRAL"
+        ? " These central-sphere rates apply to work in an establishment under the Central Government (such as the railways, a mine or a major port), not in place of a state's rates."
+        : ""),
   };
 }
 

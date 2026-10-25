@@ -88,6 +88,13 @@ describe("web copy (EN/HI)", () => {
     }
   });
 
+  it("never offers central-sphere rates as a stand-in for a state's (legal review A-19)", () => {
+    for (const d of [en, hi])
+      for (const k of ["lim.MW_MISSING", "lim.MW_MISSING.proof"])
+        expect(d[k], k).not.toMatch(/“[^”]*”\s*(चुन|as the state)/);
+    expect(en["chip.state.CENTRAL"]).toMatch(/central-sphere work/i);
+  });
+
   it("words every engine warning in Hindi, and its English wording matches the engine's", () => {
     const rules = loadRules();
     const base: EstimateInput = {
@@ -146,6 +153,12 @@ describe("web copy (EN/HI)", () => {
         injury: { certificatePct: 60, permanentAttendant: true },
       },
       { ...base, s164: "awarded_by_tribunal" },
+      {
+        ...base,
+        victimRole: "driver_of_involved_vehicle",
+        contributoryNegligencePct: 25,
+        medical: { bills: 200000, paidByCashlessScheme: 150000 },
+      },
       { ...base, victim: { ageYears: 30, employment: "permanent", income: { proof: "salary_slip" } } },
       { ...base, victim: { ageYears: 30, employment: "self_employed", income: { proof: "itr" } } },
       { ...base, state: "CENTRAL", zone: "Z", victim: { ageYears: 30, employment: "informal" } },

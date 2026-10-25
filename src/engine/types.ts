@@ -187,6 +187,7 @@ export type WarningCode =
   | "INCOME_MISSING"
   | "ATTENDANT_WAGE_MISSING"
   | "S164_AMOUNT_NOT_GIVEN"
+  | "CASHLESS_FAULT_ORDER"
   | "ESCALATION_REFERRED";
 
 export interface Warning {

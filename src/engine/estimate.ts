@@ -114,22 +114,8 @@ function adjustmentsFor(
       sources: ["sarla_devi_2026"],
     });
   }
-  if (r.s164)
-    adj.push({
-      kind: "adjustment",
-      id: "s164",
-      label: "No-fault compensation already awarded (s.164)",
-      amount: -r.s164,
-      sources: ["mv_act_1988"],
-    });
-  if (r.interimRelief)
-    adj.push({
-      kind: "adjustment",
-      id: "interim_relief",
-      label: "Interim relief already paid",
-      amount: -r.interimRelief,
-      sources: ["mv_act_1988"],
-    });
+  // Legal review A-28, B-12: an earlier no-fault award (s.164) and interim relief are recorded, not set off: whether
+  // they are depends on the provision and process they were paid under. The result says what a set-off would take.
   if (r.hitAndRun)
     adj.push({
       kind: "adjustment",
@@ -157,7 +143,29 @@ function runScenario(
   const age = input.victim.ageYears;
   const multiplier = income.multiplierOverride ?? resolveMultiplier(rules, age, ch);
   const fp = futureProspectsPct(rules, age, income.fpClass);
-  const medicalBills = Math.max(0, (input.medical?.bills ?? 0) - (input.medical?.paidByCashlessScheme ?? 0));
+  const bills = input.medical?.bills ?? 0;
+  const cashless = input.medical?.paidByCashlessScheme ?? 0;
+  // Legal review A-25: with an established fault share and a cashless payment, the order of the two deductions is
+  // not settled; the medical expenses are left out and a caution gives both amounts. (The fault illustrations, which
+  // pass their share in `opts`, keep the scheme payment first.)
+  const faultPct = opts.contributoryNegligencePct === undefined ? (input.contributoryNegligencePct ?? 0) : 0;
+  const orderUnsettled = faultPct > 0 && cashless > 0;
+  if (orderUnsettled) {
+    const schemeFirst = Math.round(Math.max(0, bills - cashless) * (1 - faultPct / 100));
+    const faultFirst = Math.max(0, Math.round(bills * (1 - faultPct / 100)) - cashless);
+    warn.add(
+      "CASHLESS_FAULT_ORDER",
+      "caution",
+      `Medical expenses are left out: with a ${faultPct}% fault share and ${formatINR(cashless)} paid under the cashless scheme, the order of the two deductions is not settled. Taking the scheme payment off first leaves ${formatINR(schemeFirst)}; applying the fault share to the whole bill first leaves ${formatINR(faultFirst)}.`,
+      {
+        pct: faultPct,
+        cashless: formatINR(cashless),
+        schemeFirst: formatINR(schemeFirst),
+        faultFirst: formatINR(faultFirst),
+      },
+    );
+  }
+  const medicalBills = orderUnsettled ? 0 : Math.max(0, bills - cashless);
 
   let intermediates: Intermediate[];
   let heads: PayableHead[];
@@ -314,7 +322,7 @@ function eligibility(rules: RulesBundle, input: EstimateInput, asOf: ISODate, wa
     warn.add(
       "S164_AMOUNT_NOT_GIVEN",
       "caution",
-      "No-fault compensation (s.164) was awarded by the tribunal, but no amount was entered, so nothing is deducted for it. Enter the amount received.",
+      "No-fault compensation (s.164) was awarded by the tribunal. It is not deducted here: whether it is set off against this claim depends on the provision and the process it was paid under. Enter the amount to see what a set-off would take away.",
     );
   }
   if (!input.claimFiledDate) {
@@ -506,6 +514,20 @@ export function estimate(
         delta: r.result.net - stdNet,
       });
   }
+  // Legal review A-28, B-12: what a set-off of the amounts recorded would take away.
+  const rec = input.received ?? {};
+  if (rec.s164)
+    sensitivity.push({
+      id: "s164_set_off",
+      label: "If the tribunal sets off the earlier no-fault award (s.164)",
+      delta: -Math.min(rec.s164, stdNet),
+    });
+  if (rec.interimRelief)
+    sensitivity.push({
+      id: "interim_relief_set_off",
+      label: "If the interim relief already paid is set off",
+      delta: -Math.min(rec.interimRelief, stdNet),
+    });
   // Legal review A-22: parents not shown to depend on the person are not counted; say what it is worth if they did.
   if (input.kind === "death" && (fam.parents ?? 0) > 0 && fam.dependentParents === undefined) {
     const asIfDependent = { ...input, family: { ...fam, dependentParents: fam.parents } };

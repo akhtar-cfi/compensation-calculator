@@ -150,13 +150,19 @@ describe("death: minor (contested basis)", () => {
 });
 
 describe("adjustments", () => {
-  it("deducts amounts already received, never mediclaim, and floors at zero", () => {
+  it("records an earlier s.164 award and interim relief without deducting them (legal review A-28, B-12)", () => {
     const out = estimate(
       rules,
       { ...salaried, received: { s164: 500000, interimRelief: 200000 } },
       { asOf: AS_OF },
     );
-    expect(out.range!.standard).toBe(5281500 - 700000);
+    expect(out.range!.standard).toBe(5281500);
+    expect(out.sensitivity.find((s) => s.id === "s164_set_off")?.delta).toBe(-500000);
+    expect(out.sensitivity.find((s) => s.id === "interim_relief_set_off")?.delta).toBe(-200000);
+  });
+  it("deducts a refundable hit-and-run payment, never below zero", () => {
+    const out = estimate(rules, { ...salaried, received: { hitAndRun: 9000000 } }, { asOf: AS_OF });
+    expect(out.range!.standard).toBe(0);
   });
   it("applies a known contributory-negligence finding before other deductions", () => {
     const out = estimate(

@@ -103,17 +103,18 @@ The engine never reads the clock; both dates are inputs.
 - No tax table for the year of the accident: the estimate is withheld unless the tax actually paid is entered (another year's table is never used; legal review A-27).
 - Salary slips or tax returns chosen but no amount entered (the minimum wage is used).
 - No minimum wage on file for the attendant charges worked out from it (attendant days, permanent attendant), which are then taken as nil.
-- s.164 compensation awarded but no amount entered (nothing deducted).
+- s.164 compensation awarded: recorded, not deducted (legal review A-28).
+- An established fault share and a cashless payment together: the medical expenses are left out and both orders of deduction are given (legal review A-25).
 
 **Notes:** tax estimated from the slabs; the range is too wide for a bar; not a prediction; draft rules.
 
 **Deducted:**
 
 - contributory negligence found
-- s.164 compensation awarded
-- interim relief
 - hit-and-run compensation (refundable under s.163)
 - ex-gratia equal to pay, after a death only (against loss of dependency: Sarla Devi, 2026); after an injury it is recorded, not deducted (legal review A-26)
+
+**Recorded, not deducted (legal review A-28, B-12):** an earlier no-fault award (s.164) and interim relief. Whether they are set off depends on the provision and process they were paid under; the result shows what a set-off would take away.
 
 **Never deducted:** mediclaim and life insurance (Helen Rebello; Dolly Satish Gandhi, 2026).
 
@@ -182,7 +183,7 @@ Other findings:
   - A weekly CI job fails when a schedule has had neither a new revision nor a recorded check of the official source (`last_checked`) for 7 months (`rules/settings.yaml`).
   - The engine warns when an accident is more than 7 months after the latest revision on file and the official source has not been checked since the accident date.
   - **Only official orders are loaded.** Aggregator and news figures are never used as rates. Example: a forged Delhi order for 1 Oct 2025 (Rs 19,846 unskilled) was reported by compliance publishers. The Delhi Labour Department declared it fake by a circular of 14 Oct 2025. Loading it would have overstated every no-proof Delhi estimate by about 7.5%.
-  - Coverage: Delhi from 1 Oct 2011 to 1 Apr 2025 (28 official rate entries, one of which repeats the April 2018 rates to mark a period, and a declared gap for Apr 2012 to Mar 2013). Central sphere (construction schedule, Areas A/B/C) from 1 Oct 2022 (9 orders), as a labelled fallback only.
+  - Coverage: Delhi from 1 Oct 2011 to 1 Apr 2025 (28 official rate entries, one of which repeats the April 2018 rates to mark a period, and a declared gap for Apr 2012 to Mar 2013). Central sphere (construction schedule, Areas A/B/C) from 1 Oct 2022 (9 orders), for central-sphere work only, never as a stand-in for a state's rates (legal review A-19).
     - Haryana, Rajasthan, Uttar Pradesh and Madhya Pradesh are not loaded yet. Their sites refuse automated access, so the orders are collected by hand (`docs/minimum-wage-intake.md`). Until then, estimates without income proof stop with a clear message.
     - Central figures quoted elsewhere (₹13,599 / ₹15,057 / ₹20,361 a month) are basic rates without VDA. They understate the wage by about a third.
     - From 1 Oct 2026 the Central VDA order is issued by the Labour Bureau under s.69(2) of the Code on Wages, 2019 (read from the Labour Bureau's own file on 10 Oct 2026).

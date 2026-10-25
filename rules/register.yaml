@@ -79,8 +79,9 @@ rows:
       The minimum wage on the accident date in the state where the claim is filed, at the skill level of the
       occupation picked from the calculator's list (low figure: unskilled; unknown occupations are unskilled).
       A graduate with no particular job shown gets the skilled rate; the highly skilled rate only for someone
-      working as a professional. 'Central sphere rates' (the construction schedule, lowest city group if none is
-      given) can be chosen instead of a state, with no caution about the substitution.
+      working as a professional. Central-sphere rates (the construction schedule, lowest city group if none is
+      given) are offered only as the place of work for central-sphere employment, and the result says so; the page
+      no longer suggests them when a state's wages are missing.
     decided: >-
       The occupation's wage once the occupation-to-skill list is checked (A-2). Record the accident place, the
       usual place of work and the filing place separately, and prefer the wage of the established employment
@@ -91,7 +92,7 @@ rows:
     review:
       - { id: A-2, status: conditional }
       - { id: A-18, status: conditional }
-      - { id: A-19, status: hold }
+      - { id: A-19, status: hold, done: true }
       - { id: A-20, status: approve, done: true }
     points: [mw_category]
     flagged:
@@ -104,6 +105,10 @@ rows:
         what: >-
           A graduate with no particular job shown now gets the skilled rate, not the highly skilled one; that rate
           is kept for someone working as a professional (A-20).
+      - date: 2026-10-25
+        what: >-
+          Central-sphere rates are no longer suggested as a rough stand-in for a state's missing wages; they are
+          for central-sphere work only, and the result says so (A-19).
   - id: income_homemaker
     section: income
     step: Income for a homemaker who died
@@ -498,9 +503,10 @@ rows:
     kinds: [death, injury]
     type: withheld
     now: >-
-      Cashless payments come off the medical bills before the fault cut; the fault cut then applies to the whole
-      total; ex-gratia comes off after, capped at the income head as it was before the cut. In rare cases this puts
-      the low figure above the headline.
+      Cashless payments come off the medical bills. Where an established fault share and a cashless payment meet,
+      the medical expenses are left out and a caution gives the amount under each order of deduction; the fault
+      cut applies to the rest of the total. Ex-gratia comes off after, capped at the income head as it was before
+      the cut. In rare cases this puts the low figure above the headline.
     decided: >-
       Record bills, the scheme-paid part and the rest separately and prevent double payment, but no automatic
       combined cashless and fault adjustment until a reasoned statutory opinion (A-25). Cut for established fault
@@ -510,8 +516,13 @@ rows:
       - { source: mv_act_1988, para: "s.164B(5)" }
       - { source: sarla_devi_2026, para: "19" }
     review:
-      - { id: A-25, status: hold }
+      - { id: A-25, status: hold, done: true }
       - { id: A-29, status: conditional }
+    changes:
+      - date: 2026-10-25
+        what: >-
+          With an established fault share and a cashless payment together, the calculator no longer picks an order
+          of deduction: the medical expenses are left out and both amounts are given (A-25).
   - id: money_received
     section: deductions
     step: Money already received
@@ -519,8 +530,9 @@ rows:
     type: withheld
     now: >-
       Ex-gratia equal to pay comes off loss of dependency after a death (Sarla Devi's situation); after an injury it
-      is recorded and not deducted. A no-fault award made by the tribunal, interim relief and a hit-and-run payment come off the total when
-      an amount is entered. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
+      is recorded and not deducted. An earlier no-fault award (s.164) and interim relief are recorded, not deducted;
+      the result says what a set-off would take away. A hit-and-run payment, refundable under s.163, comes off the
+      total. There is no input for mediclaim, life insurance or provident fund, so none is deducted.
     decided: >-
       Record payments as facts and deduct only where the law is clear for that benefit. Ex-gratia only in Sarla
       Devi's situation, salary-equivalent assistance after a death, and a dependant who does not receive it keeps
@@ -534,10 +546,15 @@ rows:
       - { source: mv_act_1988, para: "ss.163, 164" }
     review:
       - { id: A-26, status: conditional }
-      - { id: A-28, status: hold }
+      - { id: A-28, status: hold, done: true }
       - { id: B-10, status: conditional }
       - { id: B-11, status: conditional }
-      - { id: B-12, status: hold }
+      - { id: B-12, status: hold, done: true }
+    changes:
+      - date: 2026-10-25
+        what: >-
+          An earlier no-fault award (s.164) and interim relief are no longer deducted; the result shows what a
+          set-off would take away (A-28, B-12).
   # ---------------------------------------------------------------- claim
   - id: eligibility
     section: claim
@@ -743,7 +760,7 @@ rows:
       series for 2017-18 with a legal qualification, after a labour-law review (D-3). The last authenticated rate
       until a later official order is verified, and no compliance-site figures (D-6).
     review:
-      - { id: D-2, status: hold }
+      - { id: D-2, status: hold, done: true }
       - { id: D-3, status: conditional }
       - { id: D-6, status: not_stated }
     flagged:
