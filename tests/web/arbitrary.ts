@@ -32,6 +32,7 @@ export const anyForm: fc.Arbitrary<FormState> = fc.record({
   parents: str(["0", "2", "3"]),
   dependentParents: str(["0", "1", "2", "5", "unknown"]),
   largeFamily: fc.constantFrom("", "yes", "no", "unknown"),
+  pensionContinues: fc.constantFrom("", "yes", "no", "unknown"),
   medicalBills: str(["100000", "x"]),
   cashlessPaid: str(["50000", "200000"]),
   certificatePct: str(["40", "120"]),

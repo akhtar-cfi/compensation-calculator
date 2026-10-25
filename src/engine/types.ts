@@ -59,6 +59,8 @@ export const EstimateInputSchema = z.object({
           .optional(),
         claimedMonthly: z.number().nonnegative().optional(),
         pensionMonthly: z.number().nonnegative().optional(),
+        /** After an injury: whether the pension goes on being paid (legal review A-6). Unknown: taken as continuing. */
+        pensionContinues: z.boolean().optional(),
       })
       .optional(),
   }),

@@ -180,7 +180,9 @@ rows:
     type: fixed
     now: >-
       The deceased's own pension, in full, in every figure; a family pension is never deducted, and the website no
-      longer asks for it. An injured pensioner's pension is still treated as lost income.
+      longer asks for it. After an injury, a pension still paid is not lost income: the person is assessed as a
+      retired person without a pension (the next step). The website asks whether it is still paid; unanswered, it is
+      taken as paid, and the result says what a stopped pension would add.
     decided: >-
       Never deduct family pension, in any figure (A-6, B-6). Value the deceased's own pension as lost income; for an
       injury, account for a pension that continues (still to build).
@@ -188,11 +190,15 @@ rows:
       - { source: vimal_kanwar_2013, para: "19" }
       - { source: helen_rebello_1998 }
     review:
-      - { id: A-6, status: approve }
+      - { id: A-6, status: approve, done: true }
       - { id: B-6, status: approve, done: true }
     changes:
       - date: 2026-10-24
         what: The low figure no longer takes the family pension off a pensioner's income (A-6, B-6).
+      - date: 2026-10-25
+        what: >-
+          An injured pensioner's pension that is still paid is no longer counted as lost income, and the website asks
+          whether it is (A-6).
   - id: income_retired
     section: income
     step: Income for a retired person without a pension
@@ -200,7 +206,9 @@ rows:
     type: fact
     now: >-
       The low figure counts no income, so only the fixed amounts are paid. The headline uses the unskilled minimum
-      wage, with no future prospects.
+      wage, with no future prospects. It also applies to an injured pensioner whose pension is still paid (A-6); a
+      pension smaller than this income therefore gives a lower figure if it stops than if it is still paid, until
+      A-7 replaces this rule.
     decided: >-
       Ask whether paid work, a business or valuable household work continued, and use proved earnings or a
       supported notional income. Never zero, or a wage, from 'retired' alone (A-7).

@@ -1,4 +1,10 @@
-import { EMPTY_FORM, askLargeFamily, incomeFields, type FormState } from "./form-to-input.js";
+import {
+  EMPTY_FORM,
+  askLargeFamily,
+  incomeFields,
+  type FormState,
+  askPensionContinues,
+} from "./form-to-input.js";
 import type { FieldName, Validation } from "./validate.js";
 
 /**
@@ -50,6 +56,7 @@ function earningsFields(f: FormState): FieldName[] {
   return [
     ...when(inc.includes("salary") && f.proof === "salary_slip", "monthlyTax"),
     ...when(inc.includes("itr") && f.proof === "itr", "itrTax"),
+    ...when(askPensionContinues(f), "pensionContinues"),
     ...when(inc.includes("claimed") && noProof, "claimedMonthly"),
     ...when(inc.includes("course"), "studentCourse"),
     ...when(ZONED_STATES.has(f.state), "zone"),
@@ -113,7 +120,7 @@ export const BLOCKS: readonly Block[] = [
   {
     id: "earnings",
     part: "more",
-    all: ["monthlyTax", "itrTax", "claimedMonthly", "studentCourse", "zone"],
+    all: ["monthlyTax", "itrTax", "pensionContinues", "claimedMonthly", "studentCourse", "zone"],
     fields: earningsFields,
   },
   {

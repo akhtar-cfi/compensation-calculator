@@ -90,7 +90,7 @@ describe("web copy (EN/HI)", () => {
 
   it("never offers central-sphere rates as a stand-in for a state's (legal review A-19)", () => {
     for (const d of [en, hi])
-      for (const k of ["lim.MW_MISSING", "lim.MW_MISSING.proof"])
+      for (const k of ["lim.MW_MISSING", "lim.MW_MISSING.proof", "lim.MW_MISSING.pension"])
         expect(d[k], k).not.toMatch(/“[^”]*”\s*(चुन|as the state)/);
     expect(en["chip.state.CENTRAL"]).toMatch(/central-sphere work/i);
   });

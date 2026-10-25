@@ -540,3 +540,74 @@ describe("A-20: a degree alone does not raise the wage", () => {
     expect(occupationCategory(rules, "professional")).toBe("highly_skilled");
   });
 });
+
+describe("A-6: an injured pensioner's pension that continues is not lost income", () => {
+  const injured = (pensionContinues?: boolean): EstimateInput => ({
+    ...base,
+    kind: "injury",
+    victim: {
+      ageYears: 62,
+      employment: "pensioner",
+      income: { pensionMonthly: 20000, ...(pensionContinues === undefined ? {} : { pensionContinues }) },
+    },
+    family: { married: true },
+    injury: { certificatePct: 40, certificateBasis: "whole_body", monthsOffWork: 4 },
+  });
+
+  it("continuing, or not known to have stopped: assessed as for a retired person without a pension", () => {
+    const noPension = {
+      ...injured(),
+      victim: { ageYears: 62, employment: "pensioner" as const, income: {} },
+    };
+    const without = estimate(rules, noPension, { asOf: AS_OF });
+    for (const c of [true, undefined]) {
+      const out = estimate(rules, injured(c), { asOf: AS_OF });
+      for (const s of SCENARIOS)
+        expect(value(out, s, "monthly_income")).toBe(value(without, s, "monthly_income"));
+      expect(out.range).toEqual(without.range);
+      expect(out.assumptions.join(" ")).toMatch(
+        c === true
+          ? /pension of ₹20,000\/month continues after the injury/
+          : /taken to continue after the injury/,
+      );
+    }
+    // Never zero from the pension alone (A-7): the low figure stays the contested no-income reading.
+    expect(value(without, "conservative", "monthly_income")).toBe(0);
+    expect(value(without, "standard", "monthly_income")).toBeGreaterThan(0);
+  });
+
+  it("stopped because of the injury: the pension is lost income", () => {
+    const out = estimate(rules, injured(false), { asOf: AS_OF });
+    for (const s of SCENARIOS) expect(value(out, s, "monthly_income")).toBe(20000);
+  });
+
+  it("'not sure' says what a stopped pension would add", () => {
+    const unsure = estimate(rules, injured(), { asOf: AS_OF });
+    const stopped = estimate(rules, injured(false), { asOf: AS_OF });
+    expect(unsure.sensitivity.find((x) => x.id === "pension_stopped")?.delta).toBe(
+      stopped.headline!.amount - unsure.headline!.amount,
+    );
+    expect(estimate(rules, injured(true), { asOf: AS_OF }).sensitivity.map((x) => x.id)).not.toContain(
+      "pension_stopped",
+    );
+    // A pension below the retired-person income would lower the figure if lost (pending A-7): no card.
+    const small = { ...injured(), victim: { ...injured().victim, income: { pensionMonthly: 1000 } } };
+    expect(estimate(rules, small, { asOf: AS_OF }).sensitivity.map((x) => x.id)).not.toContain(
+      "pension_stopped",
+    );
+  });
+
+  it("a death is unchanged: the deceased's own pension is lost in full", () => {
+    const out = estimate(
+      rules,
+      {
+        ...base,
+        kind: "death",
+        victim: { ageYears: 65, employment: "pensioner", income: { pensionMonthly: 20000 } },
+        family: { married: true, spouse: true, children: 0, parents: 0 },
+      },
+      { asOf: AS_OF },
+    );
+    expect(value(out, "standard", "monthly_income")).toBe(20000);
+  });
+});

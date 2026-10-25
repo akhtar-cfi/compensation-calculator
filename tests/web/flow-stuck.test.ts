@@ -59,6 +59,7 @@ function validValue(k: QuestionId, f: FormState): string {
       return "0";
     case "dependentParents":
     case "largeFamily":
+    case "pensionContinues":
       return "unknown";
     case "certificatePct":
       return "20";

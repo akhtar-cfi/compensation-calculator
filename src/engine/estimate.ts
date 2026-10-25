@@ -528,6 +528,26 @@ export function estimate(
       label: "If the interim relief already paid is set off",
       delta: -Math.min(rec.interimRelief, stdNet),
     });
+  // Legal review A-6: an injured pensioner whose pension is not known to continue; say what losing it would add.
+  // A pension smaller than the retired-person income would lower the figure if lost (pending A-7): no card then.
+  if (
+    input.kind === "injury" &&
+    input.victim.employment === "pensioner" &&
+    (income?.pensionMonthly ?? 0) > 0 &&
+    income?.pensionContinues === undefined
+  ) {
+    const asIfStopped = {
+      ...input,
+      victim: { ...input.victim, income: { ...income, pensionContinues: false } },
+    };
+    const r = runScenario(rules, asIfStopped, asOf, allOf("standard"), "standard", new WarningSink());
+    if (r && r.result.net > stdNet)
+      sensitivity.push({
+        id: "pension_stopped",
+        label: "If the pension stopped because of the injury",
+        delta: r.result.net - stdNet,
+      });
+  }
   // Legal review A-22: parents not shown to depend on the person are not counted; say what it is worth if they did.
   if (input.kind === "death" && (fam.parents ?? 0) > 0 && fam.dependentParents === undefined) {
     const asIfDependent = { ...input, family: { ...fam, dependentParents: fam.parents } };

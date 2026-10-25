@@ -75,6 +75,7 @@ const STRIP: Partial<Record<QuestionId, string>> = {
   spouse: "strip.spouse",
   dependentParents: "strip.dependentParents",
   largeFamily: "strip.largeFamily",
+  pensionContinues: "strip.pensionContinues",
   vehicleInsured: "strip.vehicleInsured",
   claimFiled: "strip.claimFiled",
   permanentAttendant: "strip.permanentAttendant",

@@ -20,6 +20,7 @@ export type RefineId =
   | "attendant"
   | "medical"
   | "tax"
+  | "pension"
   | "course"
   | "zone"
   | "claimed"
@@ -51,6 +52,7 @@ const REFINE_FIELDS: Readonly<Record<RefineId, readonly QuestionId[]>> = {
   attendant: ["permanentAttendant"],
   medical: ["medicalBills", "cashlessPaid"],
   tax: ["monthlyTax", "itrTax"],
+  pension: ["pensionContinues"],
   course: ["studentCourse"],
   zone: ["zone"],
   claimed: ["claimedMonthly"],

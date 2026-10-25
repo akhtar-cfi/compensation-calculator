@@ -221,6 +221,34 @@ describe("validation", () => {
     expect(fam({ employment: "minor", age: "12", largeFamily: "yes" })?.largeDependentFamily).toBeUndefined();
   });
 
+  it("asks an injured pensioner whether the pension is still paid, and passes it on (legal review A-6)", () => {
+    const hurt: FormState = {
+      ...ok,
+      kind: "injury",
+      age: "62",
+      employment: "pensioner",
+      pensionMonthly: "20000",
+      married: "yes",
+      certificatePct: "40",
+      certificateBasis: "whole_body",
+      monthsOffWork: "4",
+    };
+    const inc = (f: Partial<FormState>) => validate({ ...hurt, ...f }, TODAY).input?.victim.income;
+    // Optional: an estimate without it (the pension is then taken as still paid).
+    expect(validate(hurt, TODAY).errors).toEqual({});
+    expect(inc({})?.pensionContinues).toBeUndefined();
+    expect(inc({ pensionContinues: "yes" })?.pensionContinues).toBe(true);
+    expect(inc({ pensionContinues: "no" })?.pensionContinues).toBe(false);
+    expect(inc({ pensionContinues: "unknown" })?.pensionContinues).toBeUndefined();
+    // Not passed on after a death, or without a pension amount.
+    expect(inc({ kind: "death", pensionContinues: "no" })?.pensionContinues).toBeUndefined();
+    expect(inc({ pensionMonthly: "", pensionContinues: "no" })?.pensionContinues).toBeUndefined();
+    expect(proofItems(validate({ ...hurt, pensionContinues: "no" }, TODAY).input!)).toContain(
+      "prove.pensionStopped",
+    );
+    expect(proofItems(validate(hurt, TODAY).input!)).not.toContain("prove.pensionStopped");
+  });
+
   it("reads numbers as Indian forms and slips write them", () => {
     expect(validate({ ...ok, age: "३०" }, TODAY).input?.victim.ageYears).toBe(30);
     expect(validate({ ...ok, age: "30 yrs" }, TODAY).input?.victim.ageYears).toBe(30);

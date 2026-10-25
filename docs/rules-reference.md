@@ -120,15 +120,15 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Income for a pensioner
 
 - **Kind:** Fixed law
-- **Now:** The deceased's own pension, in full, in every figure; a family pension is never deducted, and the website no longer asks for it. An injured pensioner's pension is still treated as lost income.
+- **Now:** The deceased's own pension, in full, in every figure; a family pension is never deducted, and the website no longer asks for it. After an injury, a pension still paid is not lost income: the person is assessed as a retired person without a pension (the next step). The website asks whether it is still paid; unanswered, it is taken as paid, and the result says what a stopped pension would add.
 - **Decided:** Never deduct family pension, in any figure (A-6, B-6). Value the deceased's own pension as lost income; for an injury, account for a pension that continues (still to build).
-- **Legal review:** A-6 Approve; B-6 Approve (built)
+- **Legal review:** A-6 Approve (built); B-6 Approve (built)
 - **Authorities:** [Vimal Kanwar v Kishore Dan](https://indiankanoon.org/doc/119587841/), para 19; [Helen C. Rebello v Maharashtra SRTC](https://indiankanoon.org/doc/1340758/)
 
 #### Income for a retired person without a pension
 
 - **Kind:** Depends on the facts
-- **Now:** The low figure counts no income, so only the fixed amounts are paid. The headline uses the unskilled minimum wage, with no future prospects.
+- **Now:** The low figure counts no income, so only the fixed amounts are paid. The headline uses the unskilled minimum wage, with no future prospects. It also applies to an injured pensioner whose pension is still paid (A-6); a pension smaller than this income therefore gives a lower figure if it stops than if it is still paid, until A-7 replaces this rule.
 - **Decided:** Ask whether paid work, a business or valuable household work continued, and use proved earnings or a supported notional income. Never zero, or a wage, from 'retired' alone (A-7).
 - **Legal review:** A-7 Conditional
 - **Contested points:** `non_earning_elderly`
@@ -361,7 +361,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Every item of the legal review
 
-59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 27 of 59.
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 28 of 59.
 
 | Item | Decision | Built | Step |
 |---|---|---|---|
@@ -370,7 +370,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-3 | Conditional | no | Income for a child who died |
 | A-4 | Approve | yes | Income for a student |
 | A-5 | Approve | yes | Income from tax returns |
-| A-6 | Approve | no | Income for a pensioner |
+| A-6 | Approve | yes | Income for a pensioner |
 | A-7 | Conditional | no | Income for a retired person without a pension |
 | A-8 | Conditional | no | Income for an injured homemaker |
 | A-9 | Conditional | no | Multiplier for a child under 15 |
@@ -430,6 +430,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 - 2026-10-25 · Income from tax returns: A salaried person's latest return is used instead of an average; a later-filed return needs records from the time and no longer raises the high figure on its own; each return is net of its own year's tax, or the tax shown on it (A-5, B-7).
 - 2026-10-25 · Income with no proof (minimum wage): A graduate with no particular job shown now gets the skilled rate, not the highly skilled one; that rate is kept for someone working as a professional (A-20).
 - 2026-10-25 · Income with no proof (minimum wage): Central-sphere rates are no longer suggested as a rough stand-in for a state's missing wages; they are for central-sphere work only, and the result says so (A-19).
+- 2026-10-25 · Income for a pensioner: An injured pensioner's pension that is still paid is no longer counted as lost income, and the website asks whether it is (A-6).
 - 2026-10-25 · Order of deductions when fault, cashless payments and ex-gratia meet: With an established fault share and a cashless payment together, the calculator no longer picks an order of deduction: the medical expenses are left out and both amounts are given (A-25).
 - 2026-10-25 · Money already received: An earlier no-fault award (s.164) and interim relief are no longer deducted; the result shows what a set-off would take away (A-28, B-12).
 - 2026-10-25 · Income-tax tables: Tables added for FY 2012-13 to 2017-18 and FY 2019-20 confirmed; a year without a table no longer borrows the latest one (A-27). A second person's check of the tables is still to come (D-4).

@@ -74,6 +74,15 @@ describe("the quick estimate and its details", () => {
     const informal: FormState = { ...base, employment: "informal" };
     expect(blockOf("occupationCode", informal)).toBe("work");
     expect(blockOf("claimedMonthly", informal)).toBe("earnings");
+    const pensioner: FormState = {
+      ...base,
+      kind: "injury",
+      employment: "pensioner",
+      pensionMonthly: "15000",
+    };
+    expect(blockOf("pensionContinues", pensioner)).toBe("earnings");
+    expect(blockOf("pensionContinues", { ...pensioner, pensionMonthly: "" })).toBeUndefined();
+    expect(blockOf("pensionContinues", { ...pensioner, kind: "death" })).toBeUndefined();
     expect(blockOf("monthlySalary", informal)).toBeUndefined();
   });
 

@@ -41,6 +41,8 @@ export interface FormState {
   dependentParents: string;
   /** Unmarried: did a large family (parents, brothers or sisters without income) live on the person's income? */
   largeFamily: "" | "yes" | "no" | "unknown";
+  /** Injured pensioner: is the pension still paid after the injury? */
+  pensionContinues: "" | "yes" | "no" | "unknown";
   medicalBills: string;
   cashlessPaid: string;
   certificatePct: string;
@@ -82,6 +84,7 @@ export const EMPTY_FORM: FormState = {
   parents: "",
   dependentParents: "",
   largeFamily: "",
+  pensionContinues: "",
   medicalBills: "",
   cashlessPaid: "",
   certificatePct: "",
@@ -198,6 +201,13 @@ const yesNo = (v: YesNo): boolean | undefined => (v === "" ? undefined : v === "
 export const askLargeFamily = (f: FormState): boolean =>
   f.kind === "death" && f.married === "no" && f.employment !== "minor";
 
+/**
+ * Whether to ask if an injured pensioner's pension is still paid (legal review A-6: a pension that goes on being paid
+ * is not lost income). Asked once a pension amount is given; unanswered, the estimate takes it as still paid.
+ */
+export const askPensionContinues = (f: FormState): boolean =>
+  f.kind === "injury" && f.employment === "pensioner" && (parseAmount(f.pensionMonthly) ?? 0) > 0;
+
 /** Drops keys whose value is undefined (the schema uses exact optional properties). */
 function compact<T extends object>(o: T): T {
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as T;
@@ -236,6 +246,7 @@ export function formToInput(f: FormState): FormResult {
     claimedMonthly:
       fields.includes("claimed") && !salaryProof && !itrProof ? parseAmount(f.claimedMonthly) : undefined,
     pensionMonthly: fields.includes("pension") ? parseAmount(f.pensionMonthly) : undefined,
+    pensionContinues: askPensionContinues(f) ? yesNo(known(f.pensionContinues) ?? "") : undefined,
   });
   const married = yesNo(f.married);
   const death = f.kind === "death";

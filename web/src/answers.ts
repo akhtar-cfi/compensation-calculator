@@ -68,6 +68,7 @@ export const CHOICE_FIELDS = [
   "parents",
   "dependentParents",
   "largeFamily",
+  "pensionContinues",
   "certificateBasis",
   "state",
   "claimFiled",
@@ -141,6 +142,7 @@ export function choices(k: ChoiceField, f: FormState): Choice[] {
         NOT_SURE,
       ];
     case "largeFamily":
+    case "pensionContinues":
       return [...YES_NO, NOT_SURE];
     case "certificateBasis":
       return [...keyed("f.basis.", ["whole_body", "limb"]), NOT_SURE];
@@ -196,6 +198,7 @@ export const LABEL: Readonly<Partial<Record<FieldName, string>>> = {
   zone: "f.zone",
   dependentParents: "f.dependentParents",
   largeFamily: "f.largeFamily",
+  pensionContinues: "f.pensionContinues",
   workCapacity: "q.workNow.title",
   medicalBills: "f.medicalBills",
   cashlessPaid: "f.cashless",
@@ -290,6 +293,12 @@ export const QUESTION: Readonly<Record<QuestionId, Question>> = {
   parents: { ask: "ask.parents", control: choice },
   dependentParents: { ask: (f) => (f.parents === "1" ? "f.depends.one" : "f.depends.two"), control: choice },
   largeFamily: { ask: "f.largeFamily.q", hint: "f.largeFamily.help", control: choice },
+  pensionContinues: {
+    ask: "f.pensionContinues.q",
+    hint: "f.pensionContinues.help",
+    control: choice,
+    optional: true,
+  },
   certificatePct: { ask: "ask.certificatePct", control: { type: "certificate" } },
   certificateBasis: { ask: "ask.certificateBasis", control: choice },
   monthsOffWork: {

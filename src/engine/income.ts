@@ -348,7 +348,10 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
     }
     case "pensioner": {
       const pension = inc.pensionMonthly ?? 0;
-      if (pension > 0) {
+      // Legal review A-6: after an injury, a pension that goes on being paid is not lost income. The person is then
+      // assessed like a retired person without a pension (never zero from the pension alone; A-7).
+      const continues = pension > 0 && input.kind === "injury" && inc.pensionContinues !== false;
+      if (pension > 0 && !continues) {
         // Legal review A-6, B-6: the deceased's own pension, in full; a family pension is never deducted.
         return {
           monthly: pension,
@@ -360,6 +363,11 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
           ],
         };
       }
+      const kept = continues
+        ? [
+            `The pension of ${formatINR(pension)}/month ${inc.pensionContinues === true ? "continues" : "is taken to continue"} after the injury, so it is not lost income; the income is assessed as for a retired person without a pension.`,
+          ]
+        : [];
       const s = ch.choose("non_earning_elderly", "Income for a non-earning elderly person without pension");
       if (s === "conservative") {
         return {
@@ -367,7 +375,7 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
           basis: "no_income",
           fpClass: "none",
           sources: [],
-          assumptions: ["No income assessed; only conventional heads."],
+          assumptions: [...kept, "No income assessed; only conventional heads."],
         };
       }
       const w = mw(ctx, "unskilled");
@@ -377,7 +385,7 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
         basis: "elderly_minimum_wage",
         fpClass: "none",
         sources: [],
-        assumptions: [w.note],
+        assumptions: [...kept, w.note],
       };
     }
     default: {

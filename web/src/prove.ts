@@ -15,6 +15,8 @@ export function proofItems(input: EstimateInput): string[] {
   // Legal review A-17: a permanent job is proved on its own, apart from the pay.
   if (input.victim.employment === "permanent" && inc?.proof !== "salary_slip") k.push("prove.permanent");
   if (input.victim.employment === "pensioner") k.push("prove.pension");
+  if (input.kind === "injury" && input.victim.income?.pensionContinues === false)
+    k.push("prove.pensionStopped");
   if (input.family.largeDependentFamily === true) k.push("prove.largeFamily");
   if (input.kind === "injury" || input.medical?.bills !== undefined) k.push("prove.medical");
   if (input.kind === "injury") {

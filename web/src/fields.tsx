@@ -13,7 +13,7 @@ import {
 import type { LucideIcon } from "lucide-preact";
 import { choices, chosen, LABEL, setAnswer, type ChoiceField, type IconName } from "./answers";
 import { rules } from "./data";
-import { askLargeFamily, incomeFields, type FormState } from "./form-to-input";
+import { askLargeFamily, askPensionContinues, incomeFields, type FormState } from "./form-to-input";
 import { useLang, useT } from "./i18n";
 import {
   Checkbox,
@@ -460,6 +460,18 @@ export function BlockFields(props: {
               value={f.itrTax}
               error={err("itrTax")}
               onInput={(v) => set("itrTax", v)}
+            />
+          )}
+          {askPensionContinues(f) && (
+            <Radios
+              id="pensionContinues"
+              optional
+              label={t("f.pensionContinues.q")}
+              hint={t("f.pensionContinues.help")}
+              value={f.pensionContinues}
+              error={err("pensionContinues")}
+              onChange={(v) => set("pensionContinues", v as FormState["pensionContinues"])}
+              options={opts("pensionContinues")}
             />
           )}
           {inc.includes("claimed") && noProof && (
