@@ -13,7 +13,7 @@ export type FieldName = keyof FormState;
 
 /** Maps a path in the engine's input schema back to the answer that supplies it. */
 export function fieldOfPath(path: string): FieldName | undefined {
-  if (path.includes("itrAnnualIncomes")) return "itrAnnualIncome";
+  if (path.includes("itrAnnualIncomes")) return path.endsWith("taxPaid") ? "itrTax" : "itrAnnualIncome";
   const last = path.split(".").pop() ?? "";
   const special: Record<string, FieldName> = {
     ageYears: "age",
@@ -40,6 +40,7 @@ const INVALID: Partial<Record<FieldName, string>> = {
   dependentParents: "err.parents",
   monthlySalary: AMOUNT,
   monthlyTax: AMOUNT,
+  itrTax: AMOUNT,
   itrAnnualIncome: AMOUNT,
   claimedMonthly: AMOUNT,
   pensionMonthly: AMOUNT,
@@ -127,6 +128,9 @@ export function validate(form: FormState, today: string): Validation {
   const salary = parseAmount(f.monthlySalary);
   const tax = parseAmount(f.monthlyTax);
   if (salary !== undefined && tax !== undefined && tax >= salary) set("monthlyTax", "err.tax");
+  const itr = parseAmount(f.itrAnnualIncome);
+  const itrTax = parseAmount(f.itrTax);
+  if (itr !== undefined && itrTax !== undefined && itrTax >= itr) set("itrTax", "err.itrTax");
   for (const k of DATE_FIELDS) {
     const d = parseDate(String(f[k]), { dayOptional: k === "accidentDate" });
     if (d.status === "ok" && d.iso > today) set(k, "err.future");

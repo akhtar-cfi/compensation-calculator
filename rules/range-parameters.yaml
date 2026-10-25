@@ -39,7 +39,7 @@
   sources: [kurvan_ansari_2021, kajal_2020, hansraj_2026]
   note: The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.
 # The points below are decided in the engine's code; the values here describe what the code does, so that all
-# 12 contested points are listed in one place for the legal reviewers. Changing these words does not change
+# 11 contested points are listed in one place for the legal reviewers. Changing these words does not change
 # the code. "sources" are the authorities the code cites for the head; an empty list means none is recorded
 # for the choice itself.
 - id: functional_pct
@@ -94,14 +94,6 @@
   claimant_max: the occupation's category (rules/occupations.yaml)
   sources: []
   note: No authority is recorded for the occupation-to-category mapping. Unknown occupations are unskilled.
-  implemented_in: src/engine/income.ts
-- id: itr_post_accident
-  description: Whether income-tax returns filed after the accident are counted.
-  conservative: last three returns filed before the accident
-  standard: last three returns filed before the accident
-  claimant_max: also returns filed after the accident, if that raises the average
-  sources: [pranay_sethi_2017, rashmirekha_2026]
-  note: If no return was filed before the accident, the last three of all returns are used in every scenario.
   implemented_in: src/engine/income.ts
 - id: non_earning_elderly
   description: Income for a retired person without a pension.

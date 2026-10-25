@@ -167,6 +167,17 @@ function minorIncome(ctx: IncomeContext): IncomeResult | undefined {
   };
 }
 
+/** Legal review A-27: no tax table for the year means no estimate, unless the tax actually paid is entered. */
+function taxYearMissing(ctx: IncomeContext, fy: string): undefined {
+  ctx.warn.add(
+    "TAX_YEAR_MISSING",
+    "stop",
+    `No verified income-tax table for FY ${fy}, and another year's rules are not used. Enter the tax actually paid (from the salary slip, Form 16 or the return) to get an estimate.`,
+    { fy },
+  );
+  return undefined;
+}
+
 export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
   const { rules, input, asOf, ch } = ctx;
   const v = input.victim;
@@ -182,6 +193,7 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
       annualTax = inc.monthlyTax * 12;
     } else {
       const t = annualIncomeTax(rules, inc.monthlySalary * 12, fy, true);
+      if (!t.found) return taxYearMissing(ctx, fy);
       annualTax = t.annualTax;
       ctx.warn.add(
         "TAX_ESTIMATED",
@@ -189,10 +201,6 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
         `Income tax estimated from FY ${fy} slabs; enter actual TDS if known.`,
         { fy },
       );
-      if (!t.found)
-        ctx.warn.add("TAX_YEAR_MISSING", "caution", `No tax table for FY ${fy}; used the latest table.`, {
-          fy,
-        });
       assumptions.push(`Income tax estimated at ${formatINR(annualTax)}/year (FY ${fy}).`);
     }
     const monthly = Math.max(0, inc.monthlySalary - annualTax / 12);
@@ -208,48 +216,60 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
     };
   }
 
+  // Legal review A-5, B-7 (Rashmirekha Tripathy): a return filed after the accident counts only with records from the
+  // time. A salaried person's latest return before the accident is used, never an average; a self-employed person's
+  // income is the average of up to three returns, a representative period. Each return is net of its own year's tax.
+  let lateReturnsOnly = false;
   if (proof === "itr" && inc.itrAnnualIncomes && inc.itrAnnualIncomes.length > 0) {
-    const s = ch.choose(
-      "itr_post_accident",
-      "Whether income-tax returns filed after the accident are counted",
-    );
-    const average = (rows: readonly { income: number }[]) =>
-      rows.reduce((a, r) => a + r.income, 0) / rows.length;
-    // "Last three" by financial year when every return is labelled YYYY-YY; otherwise in the order entered.
+    // In financial-year order when every return is labelled YYYY-YY; otherwise in the order entered.
     const rows = inc.itrAnnualIncomes.every((r) => /^\d{4}-\d{2}$/.test(r.fy))
       ? [...inc.itrAnnualIncomes].sort((a, b) => a.fy.localeCompare(b.fy))
       : inc.itrAnnualIncomes;
-    const preAccident = rows.filter((r) => r.filedAfterAccident !== true).slice(-3);
-    const all = rows.slice(-3);
-    // Claimant-max counts post-accident returns only if that helps the claimant; C <= L <= M must hold.
-    const last3 =
-      preAccident.length === 0
-        ? all
-        : s === "claimantMax" && average(all) > average(preAccident)
-          ? all
-          : preAccident;
-    const avg = average(last3);
-    const t = annualIncomeTax(rules, avg, fy, false);
-    ctx.warn.add(
-      "TAX_ESTIMATED",
-      "info",
-      `Income tax estimated from FY ${fy} slabs on the average return income.`,
-      { fy, variant: "itr" },
-    );
-    if (!t.found)
-      ctx.warn.add("TAX_YEAR_MISSING", "caution", `No tax table for FY ${fy}; used the latest table.`, {
-        fy,
-      });
-    const monthly = Math.max(0, (avg - t.annualTax) / 12);
-    return {
-      monthly,
-      basis: "itr_average_less_tax",
-      fpClass,
-      sources: ["pranay_sethi_2017", "rashmirekha_2026"],
-      assumptions: [
-        `Average of ${last3.length} income-tax return(s) ${formatINR(avg)}/year less tax = ${formatINR(monthly)}/month.`,
-      ],
-    };
+    const usable = rows.filter((r) => r.filedAfterAccident !== true || r.corroborated === true);
+    const leftOut = rows.length - usable.length;
+    if (usable.length > 0) {
+      const salaried = v.employment === "permanent" || v.employment === "fixed_salary";
+      const chosen = salaried ? usable.slice(-1) : usable.slice(-3);
+      const estimatedYears: string[] = [];
+      let total = 0;
+      for (const r of chosen) {
+        let tax = r.taxPaid;
+        if (tax === undefined) {
+          const year = /^\d{4}-\d{2}$/.test(r.fy) ? r.fy : fy;
+          const t = annualIncomeTax(rules, r.income, year, false);
+          if (!t.found) return taxYearMissing(ctx, year);
+          tax = t.annualTax;
+          if (!estimatedYears.includes(year)) estimatedYears.push(year);
+        }
+        total += Math.max(0, r.income - tax);
+      }
+      if (estimatedYears.length > 0)
+        ctx.warn.add(
+          "TAX_ESTIMATED",
+          "info",
+          `Income tax estimated from FY ${estimatedYears.join(", ")} slabs on the return income.`,
+          { fy: estimatedYears.join(", "), variant: "itr" },
+        );
+      const monthly = total / chosen.length / 12;
+      const assumptions = [
+        salaried
+          ? `Latest income-tax return before the accident ${formatINR(chosen[0]!.income)}/year less tax = ${formatINR(monthly)}/month (a salaried income is not averaged).`
+          : `Average of ${chosen.length} income-tax return(s) less tax = ${formatINR(monthly)}/month.`,
+      ];
+      if (leftOut > 0)
+        assumptions.push(
+          `${leftOut} return(s) filed after the accident left out: a tribunal relies on them only with records from the time (Rashmirekha Tripathy).`,
+        );
+      return {
+        monthly,
+        basis: salaried ? "itr_latest_less_tax" : "itr_average_less_tax",
+        fpClass,
+        sources: ["pranay_sethi_2017", "rashmirekha_2026"],
+        assumptions,
+      };
+    }
+    // Only returns filed after the accident, with no records from the time: valued as with no proof (below).
+    lateReturnsOnly = true;
   }
 
   switch (v.employment) {
@@ -364,7 +384,14 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
       const cat: SkillCategory = s === "conservative" ? "unskilled" : mapped;
       const w = mw(ctx, cat);
       if (!w) return undefined;
-      if (proof === "salary_slip" || proof === "itr")
+      if (lateReturnsOnly)
+        ctx.warn.add(
+          "INCOME_MISSING",
+          "caution",
+          "The only income-tax returns were filed after the accident, with no records from the time, so the minimum wage is used instead.",
+          { variant: "itr_late" },
+        );
+      else if (proof === "salary_slip" || proof === "itr")
         ctx.warn.add(
           "INCOME_MISSING",
           "caution",

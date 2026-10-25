@@ -198,6 +198,16 @@ describe("validation", () => {
     expect(validate({ ...ok, parents: "0", dependentParents: "2" }, TODAY).errors).toEqual({});
   });
 
+  it("passes on the tax shown on a return, which must be less than its income (legal review A-5, A-30)", () => {
+    const itr: FormState = { ...ok, employment: "self_employed", proof: "itr", itrAnnualIncome: "600000" };
+    const ret = (f: FormState) => validate(f, TODAY).input?.victim.income?.itrAnnualIncomes?.[0];
+    expect(ret({ ...itr, itrTax: "30000" })?.taxPaid).toBe(30000);
+    expect(ret(itr)?.taxPaid).toBeUndefined();
+    expect(validate({ ...itr, itrTax: "700000" }, TODAY).errors).toEqual({ itrTax: "err.itrTax" });
+    // An unreadable figure is reported on the tax question itself, not on the return's income.
+    expect(validate({ ...itr, itrTax: "x" }, TODAY).errors).toEqual({ itrTax: "err.amount" });
+  });
+
   it("asks an unmarried person's family whether a large family lived on their income (legal review A-11)", () => {
     expect(validate({ ...ok, largeFamily: "" }, TODAY).errors).toEqual({ largeFamily: "err.required" });
     const fam = (f: Partial<FormState>) => validate({ ...ok, ...f }, TODAY).input?.family;

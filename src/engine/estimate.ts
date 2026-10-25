@@ -485,6 +485,27 @@ export function estimate(
         delta: r.result.net - stdNet,
       });
   }
+  // Legal review A-5, B-7: returns filed after the accident are left out without records from the time; say what
+  // they would give if the tribunal accepted them.
+  const income = input.victim.income;
+  const rets = income?.itrAnnualIncomes;
+  if (
+    income?.proof === "itr" &&
+    rets?.some((r) => r.filedAfterAccident === true && r.corroborated !== true)
+  ) {
+    const backed = rets.map((r) => (r.filedAfterAccident === true ? { ...r, corroborated: true } : r));
+    const asIfBacked = {
+      ...input,
+      victim: { ...input.victim, income: { ...income, itrAnnualIncomes: backed } },
+    };
+    const r = runScenario(rules, asIfBacked, asOf, allOf("standard"), "standard", new WarningSink());
+    if (r && r.result.net !== stdNet)
+      sensitivity.push({
+        id: "itr_later_accepted",
+        label: "If the returns filed after the accident are accepted, with records from the time",
+        delta: r.result.net - stdNet,
+      });
+  }
   // Legal review A-22: parents not shown to depend on the person are not counted; say what it is worth if they did.
   if (input.kind === "death" && (fam.parents ?? 0) > 0 && fam.dependentParents === undefined) {
     const asIfDependent = { ...input, family: { ...fam, dependentParents: fam.parents } };

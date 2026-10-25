@@ -43,6 +43,8 @@ function validValue(k: QuestionId, f: FormState): string {
       return "25000";
     case "itrAnnualIncome":
       return "300000";
+    case "itrTax":
+      return "20000";
     case "occupationCode":
       return "driver";
     case "pensionMonthly":

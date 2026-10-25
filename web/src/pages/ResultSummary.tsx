@@ -84,8 +84,12 @@ const SHOWN = 3;
 
 const siteUrl = () => `${location.origin}${location.pathname}`;
 const SEV_ORDER: Record<Warning["severity"], number> = { stop: 0, caution: 1, info: 2 };
-/** Warnings that are a limit of this calculator rather than of the claim, with what to do instead. */
-const LIMITS: Partial<Record<string, string>> = { MW_MISSING: "lim.MW_MISSING" };
+/** Warnings that are a limit of this calculator rather than of the claim, with what to do instead (`proof`: the
+ * words differ when a proof of income can be given). */
+const LIMITS: Partial<Record<string, { key: string; proof?: true }>> = {
+  MW_MISSING: { key: "lim.MW_MISSING", proof: true },
+  TAX_YEAR_MISSING: { key: "lim.TAX_YEAR_MISSING" },
+};
 /** Cautions about the range: left out when there is no number to have a range. */
 const ABOUT_THE_RANGE = new Set(["MINOR_DEATH_CONTESTED"]);
 
@@ -229,9 +233,13 @@ export function ResultSummary(props: {
                 <Notice key={w.code} code={w.code} severity="caution" title={t(`warn.${w.code}`)}>
                   <p>
                     <Tel
-                      text={t(`${LIMITS[w.code]!}${props.canProve ? ".proof" : ""}`, {
-                        state: t(`stname.${props.state}`),
-                      })}
+                      text={t(
+                        `${LIMITS[w.code]!.key}${LIMITS[w.code]!.proof && props.canProve ? ".proof" : ""}`,
+                        {
+                          ...w.vars,
+                          state: t(`stname.${props.state}`),
+                        },
+                      )}
                     />
                   </p>
                 </Notice>

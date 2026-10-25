@@ -27,4 +27,6 @@ occupations:
   - { code: cook, category: skilled, en: "Cook", hi: "रसोइया" }
   - { code: clerk, category: skilled, en: "Clerk / office assistant", hi: "क्लर्क" }
   - { code: small_business_owner, category: skilled, en: "Small business / shop owner (no ITR)", hi: "छोटा व्यवसायी" }
-  - { code: graduate_professional, category: highly_skilled, en: "Graduate / professional (no income proof)", hi: "स्नातक / पेशेवर" }
+  # Legal review A-20: a degree alone gives the skilled wage; a higher category only where the work itself is shown.
+  - { code: graduate_professional, category: skilled, en: "Graduate, no particular job shown (no income proof)", hi: "स्नातक, कोई ख़ास काम नहीं बताया गया" }
+  - { code: professional, category: highly_skilled, en: "Working professional, e.g. engineer or accountant (no income proof)", hi: "पेशेवर काम, जैसे इंजीनियर या अकाउंटेंट" }

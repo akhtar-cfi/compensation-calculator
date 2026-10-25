@@ -11,7 +11,13 @@ Not yet confirmed against a primary source:
 
 - Sources without a link to the text yet (2): Jan Vishwas (Amendment of Provisions) Act, 2026 (Act 8 of 2026), amendments to the Motor Vehicles Act; M. Paramesh v VRL Logistics Ltd.
 - Delhi (NCT) minimum wage from 2012-04-01: no official order found (no rate used).
-- Income tax FY 2019-20: Not found in a source for this year: slabs, cess (same values as the checked years either side).
+- Income tax FY 2012-13: Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.
+- Income tax FY 2013-14: Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.
+- Income tax FY 2014-15: Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.
+- Income tax FY 2015-16: Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.
+- Income tax FY 2016-17: Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.
+- Income tax FY 2017-18: Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.
+- Income tax FY 2019-20: Slabs and the 4% cess confirmed 25 Oct 2026 in the Finance (No. 2) Bill 2019 memorandum (Part III, FY 2019-20).
 
 ## How the estimate is decided
 
@@ -71,18 +77,17 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Income from tax returns
 
 - **Kind:** Depends on the facts
-- **Now:** The average of the last three returns filed before the accident, less tax. The low figure and the headline count only returns filed before the accident; the high figure adds later ones if they raise the average. The website asks for one return and not when it was filed.
+- **Now:** Salaried: the latest return before the accident, never an average. Self-employed: the average of up to three returns. Each return is net of its own year's tax (the tax shown on the return when given). A return filed after the accident counts only when records from the time back it, in every figure; otherwise it is left out and the result says what it would add. The website asks for the latest return before the accident and, optionally, its tax.
 - **Decided:** Record each return's year, filing date and supporting records. Self-employed: a representative period from the returns; later returns count when supporting records back them. Salaried: no automatic average of three returns (A-5, B-7).
-- **Legal review:** A-5 Approve; B-7 Approve
+- **Legal review:** A-5 Approve (built); B-7 Approve (built)
 - **Authorities:** [Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.](https://indiankanoon.org/doc/164414205/), paras 18-20
-- **Contested points:** `itr_post_accident`
 
 #### Income with no proof (minimum wage)
 
 - **Kind:** Depends on the facts
-- **Now:** The minimum wage on the accident date in the state where the claim is filed, at the skill level of the occupation picked from the calculator's list (low figure: unskilled; unknown occupations are unskilled). Graduates get the skilled rate, with a caution. 'Central sphere rates' (the construction schedule, lowest city group if none is given) can be chosen instead of a state, with no caution about the substitution.
+- **Now:** The minimum wage on the accident date in the state where the claim is filed, at the skill level of the occupation picked from the calculator's list (low figure: unskilled; unknown occupations are unskilled). A graduate with no particular job shown gets the skilled rate; the highly skilled rate only for someone working as a professional. 'Central sphere rates' (the construction schedule, lowest city group if none is given) can be chosen instead of a state, with no caution about the substitution.
 - **Decided:** The occupation's wage once the occupation-to-skill list is checked (A-2). Record the accident place, the usual place of work and the filing place separately, and prefer the wage of the established employment (A-18). No generic Central substitute (A-19). The skilled wage for graduates unless a higher category is supported (A-20).
-- **Legal review:** A-2 Conditional; A-18 Conditional; A-19 Hold; A-20 Approve
+- **Legal review:** A-2 Conditional; A-18 Conditional; A-19 Hold; A-20 Approve (built)
 - **Authorities:** [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/), paras 10, 12
 - **Contested points:** `mw_category`
 
@@ -330,9 +335,9 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Income-tax tables
 
 - **Kind:** Fixed law
-- **Now:** Tables for FY 2018-19 to FY 2026-27, checked against official sources. For an earlier accident the latest table (FY 2026-27) is used, with a caution.
+- **Now:** Tables for FY 2012-13 to FY 2026-27, each year with its own slabs, rebate and cess (3% until FY 2017-18, then 4%), checked against official sources: the Finance Bill memoranda for FY 2012-13 to 2017-18 and FY 2019-20. For a year with no table, no other year's table is used: the estimate is withheld unless the tax actually paid is entered.
 - **Decided:** The accident year's own rules (A-27): load FY 2012-13 to 2017-18 and confirm FY 2019-20, with cess and rebate per year and a second person's check (D-4). Until then, rely on proved tax or withhold the estimate.
-- **Legal review:** A-27 Approve; D-4 Conditional
+- **Legal review:** A-27 Approve (built); D-4 Conditional
 
 #### Minimum wages outside Delhi
 
@@ -356,7 +361,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Every item of the legal review
 
-59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 18 of 59.
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 22 of 59.
 
 | Item | Decision | Built | Step |
 |---|---|---|---|
@@ -364,7 +369,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-2 | Conditional | no | Income with no proof (minimum wage) |
 | A-3 | Conditional | no | Income for a child who died |
 | A-4 | Approve | yes | Income for a student |
-| A-5 | Approve | no | Income from tax returns |
+| A-5 | Approve | yes | Income from tax returns |
 | A-6 | Approve | no | Income for a pensioner |
 | A-7 | Conditional | no | Income for a retired person without a pension |
 | A-8 | Conditional | no | Income for an injured homemaker |
@@ -379,14 +384,14 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-17 | Approve | yes | Future prospects |
 | A-18 | Conditional | no | Income with no proof (minimum wage) |
 | A-19 | Hold | no | Income with no proof (minimum wage) |
-| A-20 | Approve | no | Income with no proof (minimum wage) |
+| A-20 | Approve | yes | Income with no proof (minimum wage) |
 | A-21 | Conditional | no | Future prospects |
 | A-22 | Approve | yes | Personal deduction |
 | A-23 | Conditional | no | Pain and amenities, travel and diet, marriage prospects |
 | A-24 | Approve | yes | The person's own share of fault |
 | A-25 | Hold | no | Order of deductions when fault, cashless payments and ex-gratia meet |
 | A-26 | Conditional | no | Money already received |
-| A-27 | Approve | no | Income-tax tables |
+| A-27 | Approve | yes | Income-tax tables |
 | A-28 | Hold | no | Money already received |
 | A-29 | Conditional | no | Order of deductions when fault, cashless payments and ex-gratia meet |
 | A-30 | Conditional | no | Income from a salary |
@@ -397,7 +402,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | B-4 | Conditional | no | Time limit for filing the claim |
 | B-5 | Conditional | no | Income from a salary |
 | B-6 | Approve | yes | Income for a pensioner |
-| B-7 | Approve | no | Income from tax returns |
+| B-7 | Approve | yes | Income from tax returns |
 | B-8 | Approve | yes | Income for a student |
 | B-9 | Approve | yes | The person's own share of fault |
 | B-10 | Conditional | no | Money already received |
@@ -422,6 +427,9 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Changes
 
+- 2026-10-25 · Income from tax returns: A salaried person's latest return is used instead of an average; a later-filed return needs records from the time and no longer raises the high figure on its own; each return is net of its own year's tax, or the tax shown on it (A-5, B-7).
+- 2026-10-25 · Income with no proof (minimum wage): A graduate with no particular job shown now gets the skilled rate, not the highly skilled one; that rate is kept for someone working as a professional (A-20).
+- 2026-10-25 · Income-tax tables: Tables added for FY 2012-13 to 2017-18 and FY 2019-20 confirmed; a year without a table no longer borrows the latest one (A-27). A second person's check of the tables is still to come (D-4).
 - 2026-10-24 · Income for a student: The ₹12,000 for a professional course is no longer used; every figure takes the skilled wage (A-4, B-8).
 - 2026-10-24 · Income for a pensioner: The low figure no longer takes the family pension off a pensioner's income (A-6, B-6).
 - 2026-10-24 · Future prospects: Without salary slips, the occupation now sets the minimum wage for a salaried job, and the result names the assumption that the job was permanent and the proof a tribunal will want (A-17).
@@ -521,7 +529,6 @@ describes the code).
 | Wage for a permanent attendant. (The head itself follows Kajal and Hansraj; no authority is recorded for the semi-skilled rate.) | unskilled minimum wage | unskilled minimum wage | semi-skilled minimum wage | none recorded | code (src/engine/estimate.ts) |
 | Income for an injured homemaker. (Shishu Pal decided a death; its use for an injury is by analogy and untested.) | unskilled minimum wage | unskilled minimum wage | Shishu Pal 'loss of domestic care' amount, by analogy | [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/); [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/) | code (src/engine/income.ts) |
 | Skill category for the minimum wage when there is no income proof. (No authority is recorded for the occupation-to-category mapping. Unknown occupations are unskilled.) | unskilled | the occupation's category (rules/occupations.yaml) | the occupation's category (rules/occupations.yaml) | none recorded | code (src/engine/income.ts) |
-| Whether income-tax returns filed after the accident are counted. (If no return was filed before the accident, the last three of all returns are used in every scenario.) | last three returns filed before the accident | last three returns filed before the accident | also returns filed after the accident, if that raises the average | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.](https://indiankanoon.org/doc/164414205/) | code (src/engine/income.ts) |
 | Income for a retired person without a pension. (No authority is recorded.) | no income (only the heads that do not depend on income) | unskilled minimum wage | unskilled minimum wage | none recorded | code (src/engine/income.ts) |
 
 ## Injury: discretionary heads (experimental)
@@ -586,8 +593,14 @@ Health and education cess 4%.
 
 | Financial year | Regime | Standard deduction | Rebate up to | Slabs (upper limit: rate) | Checked against |
 |---|---|---:|---:|---|---|
+| 2012-13 | old | ₹0 | ₹0 | ₹2,00,000: 0%, ₹5,00,000: 10%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2012-2013/ub2012-13/mem/mem1.pdf) (Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.) |
+| 2013-14 | old | ₹0 | ₹5,00,000 | ₹2,00,000: 0%, ₹5,00,000: 10%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2013-2014/ub2013-14/mem/mem1.pdf) (Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.) |
+| 2014-15 | old | ₹0 | ₹5,00,000 | ₹2,50,000: 0%, ₹5,00,000: 10%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2014-2015/ub2014-15/mem/mem1.pdf) (Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.) |
+| 2015-16 | old | ₹0 | ₹5,00,000 | ₹2,50,000: 0%, ₹5,00,000: 10%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2015-2016/ub2015-16/memo/mem1.pdf) (Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.) |
+| 2016-17 | old | ₹0 | ₹5,00,000 | ₹2,50,000: 0%, ₹5,00,000: 10%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2016-2017/ub2016-17/memo/mem1.pdf) (Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.) |
+| 2017-18 | old | ₹0 | ₹3,50,000 | ₹2,50,000: 0%, ₹5,00,000: 5%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2017-2018/ub2017-18/memo/memo.pdf) (Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule.) |
 | 2018-19 | old | ₹40,000 | ₹3,50,000 | ₹2,50,000: 0%, ₹5,00,000: 5%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2023-24/doc/Budget_Speech.pdf) [2](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular_1_2019.pdf/32084fa9-506a-9f0f-b207-5a631e2190f3?t=1762868318230) [3](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064) |
-| 2019-20 | old | ₹50,000 | ₹5,00,000 | ₹2,50,000: 0%, ₹5,00,000: 5%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2023-24/doc/Budget_Speech.pdf) [2](https://www.incometaxindia.gov.in/documents/20117/6507196/circular_20_2020.pdf/e2c142ae-028c-047c-a2ef-a1e712fdd1c8?t=1762868544963) [3](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064) (Not found in a source for this year: slabs, cess (same values as the checked years either side).) |
+| 2019-20 | old | ₹50,000 | ₹5,00,000 | ₹2,50,000: 0%, ₹5,00,000: 5%, ₹10,00,000: 20%, above: 30% | [1](https://www.indiabudget.gov.in/budget2023-24/doc/Budget_Speech.pdf) [2](https://www.incometaxindia.gov.in/documents/20117/6507196/circular_20_2020.pdf/e2c142ae-028c-047c-a2ef-a1e712fdd1c8?t=1762868544963) [3](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064) [4](https://www.indiabudget.gov.in/budget2019-20/doc/memo.pdf) (Slabs and the 4% cess confirmed 25 Oct 2026 in the Finance (No. 2) Bill 2019 memorandum (Part III, FY 2019-20).) |
 | 2020-21 | old | ₹50,000 | ₹5,00,000 | ₹2,50,000: 0%, ₹5,00,000: 5%, ₹10,00,000: 20%, above: 30% | [1](https://www.incometaxindia.gov.in/documents/20117/6507196/circular_20_2020.pdf/e2c142ae-028c-047c-a2ef-a1e712fdd1c8?t=1762868544963) [2](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064) |
 | 2021-22 | old | ₹50,000 | ₹5,00,000 | ₹2,50,000: 0%, ₹5,00,000: 5%, ₹10,00,000: 20%, above: 30% | [1](https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1) [2](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-24-2022.pdf/d27dd45f-94ba-f69f-3acc-32a8b31e43aa?t=1762868713421) [3](https://www.indiabudget.gov.in/budget2021-22/doc/memo.pdf) [4](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064) |
 | 2022-23 | old | ₹50,000 | ₹5,00,000 | ₹2,50,000: 0%, ₹5,00,000: 5%, ₹10,00,000: 20%, above: 30% | [1](https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1) [2](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-24-2022.pdf/d27dd45f-94ba-f69f-3acc-32a8b31e43aa?t=1762868713421) [3](https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064) |
@@ -626,7 +639,8 @@ Signed off: **no — awaiting legal sign-off**.
 | cook | Cook | रसोइया | skilled |
 | clerk | Clerk / office assistant | क्लर्क | skilled |
 | small_business_owner | Small business / shop owner (no ITR) | छोटा व्यवसायी | skilled |
-| graduate_professional | Graduate / professional (no income proof) | स्नातक / पेशेवर | highly_skilled |
+| graduate_professional | Graduate, no particular job shown (no income proof) | स्नातक, कोई ख़ास काम नहीं बताया गया | skilled |
+| professional | Working professional, e.g. engineer or accountant (no income proof) | पेशेवर काम, जैसे इंजीनियर या अकाउंटेंट | highly_skilled |
 
 Signed off: **no — awaiting legal sign-off**.
 

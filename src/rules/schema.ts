@@ -212,6 +212,8 @@ export const TaxRuleSchema = z.object({
       standard_deduction: z.number(),
       rebate_upto: z.number(),
       rebate_max: z.number(),
+      /** Cess for this year, where it differs from the file's (3% before FY 2018-19, then 4%). */
+      cess_pct: z.number().optional(),
       /** s.87A marginal relief: tax just above rebate_upto is capped at the income above it (new regime). */
       marginal_relief: z.boolean().default(false),
       slabs: z.array(z.tuple([z.number().nullable(), z.number()])),

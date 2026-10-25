@@ -50,6 +50,10 @@ export const EstimateInputSchema = z.object({
               fy: z.string(),
               income: z.number().nonnegative(),
               filedAfterAccident: z.boolean().optional(),
+              /** Filed after the accident, but backed by records from the time (books, bank statements). */
+              corroborated: z.boolean().optional(),
+              /** The tax shown on the return, used before any estimate from the slabs. */
+              taxPaid: z.number().nonnegative().optional(),
             }),
           )
           .optional(),

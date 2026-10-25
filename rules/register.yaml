@@ -50,9 +50,11 @@ rows:
     kinds: [death, injury]
     type: fact
     now: >-
-      The average of the last three returns filed before the accident, less tax. The low figure and the headline
-      count only returns filed before the accident; the high figure adds later ones if they raise the average. The
-      website asks for one return and not when it was filed.
+      Salaried: the latest return before the accident, never an average. Self-employed: the average of up to three
+      returns. Each return is net of its own year's tax (the tax shown on the return when given). A return filed
+      after the accident counts only when records from the time back it, in every figure; otherwise it is left out
+      and the result says what it would add. The website asks for the latest return before the accident and,
+      optionally, its tax.
     decided: >-
       Record each return's year, filing date and supporting records. Self-employed: a representative period from
       the returns; later returns count when supporting records back them. Salaried: no automatic average of three
@@ -60,9 +62,14 @@ rows:
     authorities:
       - { source: rashmirekha_2026, para: "18-20" }
     review:
-      - { id: A-5, status: approve }
-      - { id: B-7, status: approve }
-    points: [itr_post_accident]
+      - { id: A-5, status: approve, done: true }
+      - { id: B-7, status: approve, done: true }
+    changes:
+      - date: 2026-10-25
+        what: >-
+          A salaried person's latest return is used instead of an average; a later-filed return needs records from
+          the time and no longer raises the high figure on its own; each return is net of its own year's tax, or
+          the tax shown on it (A-5, B-7).
   - id: income_no_proof
     section: income
     step: Income with no proof (minimum wage)
@@ -71,8 +78,9 @@ rows:
     now: >-
       The minimum wage on the accident date in the state where the claim is filed, at the skill level of the
       occupation picked from the calculator's list (low figure: unskilled; unknown occupations are unskilled).
-      Graduates get the skilled rate, with a caution. 'Central sphere rates' (the construction schedule, lowest city group if none
-      is given) can be chosen instead of a state, with no caution about the substitution.
+      A graduate with no particular job shown gets the skilled rate; the highly skilled rate only for someone
+      working as a professional. 'Central sphere rates' (the construction schedule, lowest city group if none is
+      given) can be chosen instead of a state, with no caution about the substitution.
     decided: >-
       The occupation's wage once the occupation-to-skill list is checked (A-2). Record the accident place, the
       usual place of work and the filing place separately, and prefer the wage of the established employment
@@ -84,13 +92,18 @@ rows:
       - { id: A-2, status: conditional }
       - { id: A-18, status: conditional }
       - { id: A-19, status: hold }
-      - { id: A-20, status: approve }
+      - { id: A-20, status: approve, done: true }
     points: [mw_category]
     flagged:
       - review: A-18
         point: >-
           Which state's wage for someone who works in one state and claims in another: a claim may be filed where
           the claimant lives or works, where the accident happened, or where the defendant lives (s.166(2)).
+    changes:
+      - date: 2026-10-25
+        what: >-
+          A graduate with no particular job shown now gets the skilled rate, not the highly skilled one; that rate
+          is kept for someone working as a professional (A-20).
   - id: income_homemaker
     section: income
     step: Income for a homemaker who died
@@ -687,14 +700,21 @@ rows:
     kinds: [death, injury]
     type: fixed
     now: >-
-      Tables for FY 2018-19 to FY 2026-27, checked against official sources. For an earlier accident the latest
-      table (FY 2026-27) is used, with a caution.
+      Tables for FY 2012-13 to FY 2026-27, each year with its own slabs, rebate and cess (3% until FY 2017-18, then
+      4%), checked against official sources: the Finance Bill memoranda for FY 2012-13 to 2017-18 and FY 2019-20.
+      For a year with no table, no other year's table is used: the estimate is withheld unless the tax actually
+      paid is entered.
     decided: >-
       The accident year's own rules (A-27): load FY 2012-13 to 2017-18 and confirm FY 2019-20, with cess and rebate
       per year and a second person's check (D-4). Until then, rely on proved tax or withhold the estimate.
     review:
-      - { id: A-27, status: approve }
+      - { id: A-27, status: approve, done: true }
       - { id: D-4, status: conditional }
+    changes:
+      - date: 2026-10-25
+        what: >-
+          Tables added for FY 2012-13 to 2017-18 and FY 2019-20 confirmed; a year without a table no longer
+          borrows the latest one (A-27). A second person's check of the tables is still to come (D-4).
   - id: wages_other_states
     section: data
     step: Minimum wages outside Delhi

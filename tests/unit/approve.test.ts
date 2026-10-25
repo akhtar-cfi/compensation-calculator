@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { estimate } from "../../src/engine/index.js";
+import { occupationCategory } from "../../src/engine/income.js";
+import { annualIncomeTax } from "../../src/engine/tax.js";
 import type { EstimateInput, EstimateOutput, Scenario } from "../../src/engine/types.js";
 import { testRules } from "../helpers.js";
 
@@ -397,5 +399,144 @@ describe("A-17: a permanent job without salary slips", () => {
     expect(value(out, "standard", "monthly_income")).toBe(22000); // TS skilled wage from 2025-04-01
     expect(value(out, "standard", "future_prospects")).toBe(50);
     expect(out.assumptions.join(" ")).toMatch(/permanent.*proof/i);
+  });
+});
+
+describe("A-27: tax for an accident before April 2018 follows that year's own rules", () => {
+  // Rates from the Finance Bill memoranda for each year (Part III of the First Schedule: deduction from salaries).
+  it.each([
+    ["2012-13", 300000, 10300], // nil to 2,00,000, then 10%; no rebate; cess 3%
+    ["2013-14", 300000, 8240], // s.87A rebate of 2,000 up to 5 lakh
+    ["2014-15", 480000, 21630], // nil to 2,50,000
+    ["2015-16", 480000, 21630],
+    ["2016-17", 480000, 18540], // rebate 5,000
+    ["2016-17", 1200000, 190550],
+    ["2017-18", 340000, 2060], // 5% band; rebate 2,500 up to 3.5 lakh
+    ["2017-18", 360000, 5665],
+  ])("FY %s on %i a year: %i", (fy, income, tax) => {
+    expect(annualIncomeTax(rules, income, fy, true)).toEqual({ annualTax: tax, found: true });
+  });
+
+  it("never borrows another year's table: no table means no tax figure", () => {
+    expect(annualIncomeTax(rules, 300000, "2011-12", true).found).toBe(false);
+  });
+
+  const salaried = (monthlyTax?: number): EstimateInput => ({
+    ...base,
+    accidentDate: "2011-06-01",
+    claimFiledDate: "2011-07-01",
+    kind: "death",
+    victim: {
+      ageYears: 30,
+      employment: "permanent",
+      income: {
+        proof: "salary_slip",
+        monthlySalary: 40000,
+        ...(monthlyTax === undefined ? {} : { monthlyTax }),
+      },
+    },
+    family: { married: true, spouse: true, children: 2, parents: 0 },
+  });
+
+  it("withholds the estimate for a year with no table unless the tax paid is entered", () => {
+    const out = estimate(rules, salaried(), { asOf: AS_OF });
+    expect(out.headline).toBeUndefined();
+    expect(out.warnings.find((w) => w.code === "TAX_YEAR_MISSING")?.severity).toBe("stop");
+    const proved = estimate(rules, salaried(500), { asOf: AS_OF });
+    expect(value(proved, "standard", "monthly_income")).toBe(39500);
+    expect(proved.warnings.map((w) => w.code)).not.toContain("TAX_YEAR_MISSING");
+  });
+
+  it("uses the 2016-17 rules for a 2016 accident", () => {
+    const out = estimate(
+      rules,
+      { ...salaried(), accidentDate: "2016-06-01", claimFiledDate: "2016-07-01" },
+      { asOf: AS_OF },
+    );
+    expect(value(out, "standard", "monthly_income")).toBe(40000 - 18540 / 12);
+    expect(out.warnings.map((w) => w.code)).not.toContain("TAX_YEAR_MISSING");
+  });
+});
+
+describe("A-5, B-7: tax returns depend on the kind of income and when they were filed", () => {
+  const returns = [
+    { fy: "2022-23", income: 600000 },
+    { fy: "2023-24", income: 720000 },
+    { fy: "2024-25", income: 840000 },
+  ];
+  const withReturns = (
+    employment: "permanent" | "self_employed",
+    itrAnnualIncomes: EstimateInput["victim"]["income"] extends infer I
+      ? I extends { itrAnnualIncomes?: infer R }
+        ? NonNullable<R>
+        : never
+      : never,
+  ): EstimateInput => ({
+    ...base,
+    kind: "death",
+    victim: { ageYears: 35, employment, income: { proof: "itr", itrAnnualIncomes } },
+    family: { married: true, spouse: true, children: 2, parents: 0 },
+  });
+  const net = (income: number, fy: string) => income - annualIncomeTax(rules, income, fy, false).annualTax;
+
+  it("salaried: the latest return before the accident, in every figure, never an average", () => {
+    const out = estimate(rules, withReturns("permanent", returns), { asOf: AS_OF });
+    for (const s of SCENARIOS)
+      expect(value(out, s, "monthly_income")).toBeCloseTo(net(840000, "2024-25") / 12, 6);
+  });
+
+  it("self-employed: the average of up to three returns, each less its own year's tax", () => {
+    const out = estimate(rules, withReturns("self_employed", returns), { asOf: AS_OF });
+    const avg = (net(600000, "2022-23") + net(720000, "2023-24") + net(840000, "2024-25")) / 3;
+    for (const s of SCENARIOS) expect(value(out, s, "monthly_income")).toBeCloseTo(avg / 12, 6);
+    expect(rules.rangeParameters.map((p) => p.id)).not.toContain("itr_post_accident");
+  });
+
+  it("a return filed after the accident counts only with records from the time", () => {
+    const late = [
+      { fy: "2023-24", income: 600000 },
+      { fy: "2024-25", income: 900000, filedAfterAccident: true },
+    ];
+    const out = estimate(rules, withReturns("self_employed", late), { asOf: AS_OF });
+    for (const s of SCENARIOS)
+      expect(value(out, s, "monthly_income")).toBeCloseTo(net(600000, "2023-24") / 12, 6);
+    const card = out.sensitivity.find((x) => x.id === "itr_later_accepted");
+    expect(card?.delta).toBeGreaterThan(0);
+    const backed = estimate(
+      rules,
+      withReturns("self_employed", [late[0]!, { ...late[1]!, corroborated: true }]),
+      { asOf: AS_OF },
+    );
+    const avg = (net(600000, "2023-24") + net(900000, "2024-25")) / 2;
+    expect(value(backed, "standard", "monthly_income")).toBeCloseTo(avg / 12, 6);
+    expect(backed.headline!.amount - out.headline!.amount).toBe(card!.delta);
+  });
+
+  it("only later returns and no records: the minimum wage, saying why", () => {
+    const out = estimate(
+      rules,
+      withReturns("self_employed", [{ fy: "2024-25", income: 900000, filedAfterAccident: true }]),
+      { asOf: AS_OF },
+    );
+    expect(String(value(out, "standard", "monthly_income"))).not.toBe(String(net(900000, "2024-25") / 12));
+    expect(out.warnings.find((w) => w.code === "INCOME_MISSING")?.vars?.variant).toBe("itr_late");
+    expect(out.sensitivity.find((x) => x.id === "itr_later_accepted")?.delta).toBeGreaterThan(0);
+  });
+
+  it("the tax shown on the return is used before any estimate from the slabs", () => {
+    const out = estimate(
+      rules,
+      withReturns("self_employed", [{ fy: "2024-25", income: 840000, taxPaid: 30000 }]),
+      { asOf: AS_OF },
+    );
+    expect(value(out, "standard", "monthly_income")).toBe((840000 - 30000) / 12);
+    expect(out.warnings.map((w) => w.code)).not.toContain("TAX_ESTIMATED");
+  });
+});
+
+describe("A-20: a degree alone does not raise the wage", () => {
+  it("a graduate with no job shown is skilled; a working professional is highly skilled", () => {
+    expect(occupationCategory(rules, "graduate_professional")).toBe("skilled");
+    expect(occupationCategory(rules, "professional")).toBe("highly_skilled");
   });
 });

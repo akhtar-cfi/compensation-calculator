@@ -44,6 +44,7 @@ export function formFromInput(i: EstimateInput): FormState {
     monthlySalary: s(inc?.monthlySalary),
     monthlyTax: s(inc?.monthlyTax),
     itrAnnualIncome: s(inc?.itrAnnualIncomes?.[0]?.income),
+    itrTax: s(inc?.itrAnnualIncomes?.[0]?.taxPaid),
     claimedMonthly: s(inc?.claimedMonthly),
     pensionMonthly: s(inc?.pensionMonthly),
     married: fam.married ? "yes" : "no",

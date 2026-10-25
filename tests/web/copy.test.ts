@@ -151,11 +151,22 @@ describe("web copy (EN/HI)", () => {
       { ...base, state: "CENTRAL", zone: "Z", victim: { ageYears: 30, employment: "informal" } },
       {
         ...base,
-        accidentDate: "2017-06-01",
+        accidentDate: "2011-06-01",
         victim: {
           ageYears: 40,
           employment: "self_employed",
-          income: { proof: "itr", itrAnnualIncomes: [{ fy: "2016-17", income: 600000 }] },
+          income: { proof: "itr", itrAnnualIncomes: [{ fy: "2010-11", income: 600000 }] },
+        },
+      },
+      {
+        ...base,
+        victim: {
+          ageYears: 40,
+          employment: "self_employed",
+          income: {
+            proof: "itr",
+            itrAnnualIncomes: [{ fy: "2024-25", income: 600000, filedAfterAccident: true }],
+          },
         },
       },
     ];

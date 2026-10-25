@@ -50,7 +50,7 @@ const REFINE_FIELDS: Readonly<Record<RefineId, readonly QuestionId[]>> = {
   workNow: ["workCapacity"],
   attendant: ["permanentAttendant"],
   medical: ["medicalBills", "cashlessPaid"],
-  tax: ["monthlyTax"],
+  tax: ["monthlyTax", "itrTax"],
   course: ["studentCourse"],
   zone: ["zone"],
   claimed: ["claimedMonthly"],

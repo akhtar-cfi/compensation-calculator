@@ -88,19 +88,31 @@ describe("attendant wage lookups (OP-11, OP-13)", () => {
   });
 });
 
-describe("tax year missing for income-tax returns (OP-12)", () => {
-  it("raises TAX_YEAR_MISSING on the return path too", () => {
+describe("tax year missing for income-tax returns (OP-12, legal review A-27)", () => {
+  it("withholds the estimate on the return path too, unless the return's tax is entered", () => {
     const input: EstimateInput = {
       ...salariedInjury,
       kind: "death",
-      accidentDate: "2017-06-01",
+      accidentDate: "2011-06-01",
       victim: {
         ageYears: 40,
         employment: "self_employed",
-        income: { proof: "itr", itrAnnualIncomes: [{ fy: "2016-17", income: 600000 }] },
+        income: { proof: "itr", itrAnnualIncomes: [{ fy: "2010-11", income: 600000 }] },
       },
     };
     expect(codes(input)).toContain("TAX_YEAR_MISSING");
+    expect(estimate(rules, input, { asOf }).headline).toBeUndefined();
+    const withTax = {
+      ...input,
+      victim: {
+        ...input.victim,
+        income: {
+          proof: "itr" as const,
+          itrAnnualIncomes: [{ fy: "2010-11", income: 600000, taxPaid: 20000 }],
+        },
+      },
+    };
+    expect(codes(withTax)).not.toContain("TAX_YEAR_MISSING");
   });
 });
 

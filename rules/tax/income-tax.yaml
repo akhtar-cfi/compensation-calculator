@@ -5,13 +5,83 @@
 # caps the tax just above that threshold at the income above it; cess is then added. The old regime has no such relief,
 # so its take-home income really does dip just above the threshold.
 # Checked 10 Oct 2026 against official sources (CBDT circulars, incometax.gov.in, Finance Bill memoranda, PIB):
-# every value matches; FY 2019-20 slabs and cess were not found in a source for that year (same as the checked years
-# either side). From 1 Apr 2026 the Income-tax Act, 2025 applies (rebate s.156, new-regime rates s.202; 'tax year').
+# every value matches. FY 2012-13 to 2017-18 added 25 Oct 2026 from each year's Finance Bill memorandum (Part III of
+# the First Schedule: the rates for deduction from salaries that year), for accidents before April 2018 (legal review
+# A-27): cess 3% (education 2% and secondary and higher education 1%) until FY 2017-18, and no standard deduction
+# before FY 2018-19 (allowances that were exempt then, such as transport allowance, are not modelled). A year with no
+# table gets no tax figure: another year's table is never used. From 1 Apr 2026 the Income-tax Act, 2025 applies
+# (rebate s.156, new-regime rates s.202; 'tax year').
 # verified: false = not yet signed off by the legal reviewers.
 id: income_tax
 verified: false
 cess_pct: 4
 years:
+  - fy: "2012-13"
+    regime: old
+    cess_pct: 3
+    standard_deduction: 0
+    rebate_upto: 0
+    rebate_max: 0
+    slabs: [[200000, 0], [500000, 10], [1000000, 20], [null, 30]]
+    note: "No s.87A rebate yet. No surcharge for individuals that year."
+    checked_against:
+      - https://www.indiabudget.gov.in/budget2012-2013/ub2012-13/mem/mem1.pdf
+    check_note: "Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule."
+  - fy: "2013-14"
+    regime: old
+    cess_pct: 3
+    standard_deduction: 0
+    rebate_upto: 500000
+    rebate_max: 2000
+    slabs: [[200000, 0], [500000, 10], [1000000, 20], [null, 30]]
+    note: "s.87A rebate introduced: the tax or 2,000, whichever is less, up to a total income of 5 lakh (from AY 2014-15)."
+    checked_against:
+      - https://www.indiabudget.gov.in/budget2013-2014/ub2013-14/mem/mem1.pdf
+    check_note: "Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule."
+  - fy: "2014-15"
+    regime: old
+    cess_pct: 3
+    standard_deduction: 0
+    rebate_upto: 500000
+    rebate_max: 2000
+    slabs: [[250000, 0], [500000, 10], [1000000, 20], [null, 30]]
+    note: "Exemption raised to 2,50,000; s.87A unchanged (stated as the existing provision in the Finance Bill 2016 memorandum)."
+    checked_against:
+      - https://www.indiabudget.gov.in/budget2014-2015/ub2014-15/mem/mem1.pdf
+    check_note: "Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule."
+  - fy: "2015-16"
+    regime: old
+    cess_pct: 3
+    standard_deduction: 0
+    rebate_upto: 500000
+    rebate_max: 2000
+    slabs: [[250000, 0], [500000, 10], [1000000, 20], [null, 30]]
+    note: "Rates as FY 2014-15; s.87A unchanged (the Finance Bill 2016 memorandum states it as the existing provision)."
+    checked_against:
+      - https://www.indiabudget.gov.in/budget2015-2016/ub2015-16/memo/mem1.pdf
+    check_note: "Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule."
+  - fy: "2016-17"
+    regime: old
+    cess_pct: 3
+    standard_deduction: 0
+    rebate_upto: 500000
+    rebate_max: 5000
+    slabs: [[250000, 0], [500000, 10], [1000000, 20], [null, 30]]
+    note: "s.87A rebate raised to 5,000 from AY 2017-18 (FY 2016-17 income)."
+    checked_against:
+      - https://www.indiabudget.gov.in/budget2016-2017/ub2016-17/memo/mem1.pdf
+    check_note: "Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule."
+  - fy: "2017-18"
+    regime: old
+    cess_pct: 3
+    standard_deduction: 0
+    rebate_upto: 350000
+    rebate_max: 2500
+    slabs: [[250000, 0], [500000, 5], [1000000, 20], [null, 30]]
+    note: "5% on 2,50,001 to 5,00,000; s.87A rebate 2,500 up to a total income of 3.5 lakh from AY 2018-19 (FY 2017-18 income)."
+    checked_against:
+      - https://www.indiabudget.gov.in/budget2017-2018/ub2017-18/memo/memo.pdf
+    check_note: "Finance Bill memorandum as introduced; the rates for individuals below 60 in Part III of the First Schedule."
   - fy: "2018-19"
     regime: old
     standard_deduction: 40000
@@ -32,7 +102,8 @@ years:
       - https://www.indiabudget.gov.in/budget2023-24/doc/Budget_Speech.pdf
       - https://www.incometaxindia.gov.in/documents/20117/6507196/circular_20_2020.pdf/e2c142ae-028c-047c-a2ef-a1e712fdd1c8?t=1762868544963
       - https://www.incometaxindia.gov.in/documents/20117/6507196/Circular-no-03-2025.pdf/d7fbb6ed-7b91-b230-b397-97b422b31794?t=1762868895064
-    check_note: "Not found in a source for this year: slabs, cess (same values as the checked years either side)."
+      - https://www.indiabudget.gov.in/budget2019-20/doc/memo.pdf
+    check_note: "Slabs and the 4% cess confirmed 25 Oct 2026 in the Finance (No. 2) Bill 2019 memorandum (Part III, FY 2019-20)."
   - fy: "2020-21"
     regime: old
     standard_deduction: 50000

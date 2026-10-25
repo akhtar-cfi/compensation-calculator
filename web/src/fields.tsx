@@ -450,6 +450,18 @@ export function BlockFields(props: {
               onInput={(v) => set("monthlyTax", v)}
             />
           )}
+          {inc.includes("itr") && f.proof === "itr" && (
+            <MoneyInput
+              id="itrTax"
+              optional
+              label={t("f.itrTax")}
+              hint={t("f.itrTax.help")}
+              per={t("unit.year")}
+              value={f.itrTax}
+              error={err("itrTax")}
+              onInput={(v) => set("itrTax", v)}
+            />
+          )}
           {inc.includes("claimed") && noProof && (
             <MoneyInput
               id="claimedMonthly"

@@ -30,6 +30,8 @@ export interface FormState {
   monthlySalary: string;
   monthlyTax: string;
   itrAnnualIncome: string;
+  /** The tax shown on that return (a year's total). */
+  itrTax: string;
   claimedMonthly: string;
   pensionMonthly: string;
   married: YesNo;
@@ -71,6 +73,7 @@ export const EMPTY_FORM: FormState = {
   monthlySalary: "",
   monthlyTax: "",
   itrAnnualIncome: "",
+  itrTax: "",
   claimedMonthly: "",
   pensionMonthly: "",
   married: "",
@@ -227,7 +230,9 @@ export function formToInput(f: FormState): FormResult {
     monthlySalary: salaryProof ? parseAmount(f.monthlySalary) : undefined,
     monthlyTax: salaryProof ? parseAmount(f.monthlyTax) : undefined,
     itrAnnualIncomes:
-      itrProof && itr !== undefined ? [{ fy: "latest before the accident", income: itr }] : undefined,
+      itrProof && itr !== undefined
+        ? [compact({ fy: "latest before the accident", income: itr, taxPaid: parseAmount(f.itrTax) })]
+        : undefined,
     claimedMonthly:
       fields.includes("claimed") && !salaryProof && !itrProof ? parseAmount(f.claimedMonthly) : undefined,
     pensionMonthly: fields.includes("pension") ? parseAmount(f.pensionMonthly) : undefined,
