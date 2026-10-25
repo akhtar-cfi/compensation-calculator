@@ -1,4 +1,4 @@
-import { EMPTY_FORM, incomeFields, type FormState } from "./form-to-input.js";
+import { EMPTY_FORM, askLargeFamily, incomeFields, type FormState } from "./form-to-input.js";
 import type { FieldName, Validation } from "./validate.js";
 
 /**
@@ -76,7 +76,7 @@ export const BLOCKS: readonly Block[] = [
   {
     id: "family",
     part: "quick",
-    all: ["married", "spouse", "children", "parents", "dependentParents"],
+    all: ["married", "spouse", "children", "parents", "dependentParents", "largeFamily"],
     fields: (f) =>
       death(f)
         ? [
@@ -85,6 +85,7 @@ export const BLOCKS: readonly Block[] = [
             "children",
             "parents",
             ...when(Number(f.parents) > 0, "dependentParents"),
+            ...when(askLargeFamily(f), "largeFamily"),
           ]
         : ["married"],
   },

@@ -9,7 +9,9 @@ married:
   - { min_dependants: 7, max_dependants: 99, fraction: "1/5" }
 bachelor: "1/2"
 bachelor_large_family:
-  min_dependants: 3
   fraction: "1/3"
-  note: Sarla Verma allows 1/3 where a large family depended on the bachelor (e.g. widowed mother and non-earning siblings).
+  note: >-
+    Sarla Verma (para 15) allows a third where a large family depended on the unmarried person (e.g. a widowed
+    mother and non-earning siblings). No number of dependants is fixed: it is asked as a fact (legal review A-11).
+
 # Married with a single dependant (spouse only) is not covered by the table: see range-parameters.yaml.

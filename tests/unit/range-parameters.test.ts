@@ -11,16 +11,7 @@ describe("contested points", () => {
       for (const m of readFileSync(join(dir, f), "utf8").matchAll(/ch\.choose\(\s*"([a-z0-9_]+)"/g))
         ids.add(m[1]!);
     const listed = loadRules().rangeParameters.map((p) => p.id);
-    expect(ids.size).toBe(13); // 15 until the legal review (A-4, A-6) settled the student and pension points
+    expect(ids.size).toBe(12); // 15 until the legal review settled the student, pension and large-family points
     expect([...listed].sort()).toEqual([...ids].sort());
-  });
-  it("describes the large-family deduction with the values the engine reads", () => {
-    const rules = loadRules();
-    const p = rules.rangeParameters.find((x) => x.id === "bachelor_large_family")!;
-    expect([p.conservative, p.standard, p.claimant_max]).toEqual([
-      rules.deduction.bachelor,
-      rules.deduction.bachelor,
-      rules.deduction.bachelor_large_family.fraction,
-    ]);
   });
 });

@@ -142,19 +142,19 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Future prospects
 
 - **Kind:** Fixed law
-- **Now:** 50, 30 or 15% for a permanent job and 40, 25 or 10% for others, by age; none from 60. At exactly 50 the lower band. A salaried person without slips is valued at the unskilled minimum wage but keeps the permanent-job rates.
+- **Now:** 50, 30 or 15% for a permanent job and 40, 25 or 10% for others, by age; none from 60. At exactly 50 the lower band. Whether the job was permanent and whether the salary is proved are separate answers: without slips the occupation sets the minimum wage, the permanent-job rate is kept, and the result says it rests on proof that the job was permanent.
 - **Decided:** Ask for the salary proof and for whether the job was permanent as separate questions (A-17). At exactly 50, the higher band provisionally, then one verified boundary rule (A-21).
-- **Legal review:** A-17 Approve; A-21 Conditional
+- **Legal review:** A-17 Approve (built); A-21 Conditional
 - **Authorities:** [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/), paras 61(iii)-(iv); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/), paras 13-14; [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf), para 25; [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/), para 31
 
 #### Personal deduction
 
 - **Kind:** Fixed law (death only)
-- **Now:** A half if unmarried; if married, a third (2-3 dependants), a quarter (4-6) or a fifth (more). With one dependant of any kind (spouse, child or parent), a half in the low figure and a third in the headline. An unmarried person with 3 or more dependants gets a third only in the high figure. A parent counts as a dependant only when the answer says so; for 'not sure' the result shows what it would add if they were.
+- **Now:** A half if unmarried; if married, a third (2-3 dependants), a quarter (4-6) or a fifth (more). With one dependant of any kind (spouse, child or parent), a half in the low figure and a third in the headline. An unmarried person gets a third where the answers say a large family lived on their income, whatever its size; for 'not sure', a half, with what a third would add. A parent counts as a dependant only when the answer says so; for 'not sure' the result shows what it would add if they were.
 - **Decided:** A third where the spouse is the only dependant, not extended to a sole parent or child (A-10). A half for the unmarried, a third where a large dependent family is shown, with no fixed number (A-11). Parents count as dependants only where support is shown; consortium is decided separately (A-22).
-- **Legal review:** A-10 Conditional; A-11 Approve; A-22 Approve (built)
+- **Legal review:** A-10 Conditional; A-11 Approve (built); A-22 Approve (built)
 - **Authorities:** [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/), paras 14-15 (SCC 30-32); [Sushila v Sudhakar](https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf), paras 24, 27
-- **Contested points:** `spouse_only_deduction`, `bachelor_large_family`
+- **Contested points:** `spouse_only_deduction`
 
 #### Multiplier
 
@@ -356,7 +356,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Every item of the legal review
 
-59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 16 of 59.
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 18 of 59.
 
 | Item | Decision | Built | Step |
 |---|---|---|---|
@@ -370,13 +370,13 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-8 | Conditional | no | Income for an injured homemaker |
 | A-9 | Conditional | no | Multiplier for a child under 15 |
 | A-10 | Conditional | no | Personal deduction |
-| A-11 | Approve | no | Personal deduction |
+| A-11 | Approve | yes | Personal deduction |
 | A-12 | Conditional | yes | Loss of estate, funeral and consortium amounts |
 | A-13 | Hold | no | Lost earning ability |
 | A-14 | Conditional | no | Pain and amenities, travel and diet, marriage prospects |
 | A-15 | Conditional | no | Attendant |
 | A-16 | Approve | yes | Multiplier |
-| A-17 | Approve | no | Future prospects |
+| A-17 | Approve | yes | Future prospects |
 | A-18 | Conditional | no | Income with no proof (minimum wage) |
 | A-19 | Hold | no | Income with no proof (minimum wage) |
 | A-20 | Approve | no | Income with no proof (minimum wage) |
@@ -424,7 +424,9 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 - 2026-10-24 · Income for a student: The ₹12,000 for a professional course is no longer used; every figure takes the skilled wage (A-4, B-8).
 - 2026-10-24 · Income for a pensioner: The low figure no longer takes the family pension off a pensioner's income (A-6, B-6).
+- 2026-10-24 · Future prospects: Without salary slips, the occupation now sets the minimum wage for a salaried job, and the result names the assumption that the job was permanent and the proof a tribunal will want (A-17).
 - 2026-10-24 · Personal deduction: A parent answered 'not sure' is no longer counted as a dependant; the effect if they were is shown (A-22).
+- 2026-10-24 · Personal deduction: An unmarried person's family is asked whether a large family lived on their income: a third if so, in every figure, with no fixed number of dependants; before, a third applied only in the high figure and only from 3 dependants (A-11).
 - 2026-10-24 · Multiplier: No caution above 70; the table's last category covers every age above 65 (A-16).
 - 2026-10-24 · Loss of estate, funeral and consortium amounts: The headline counts the steps completed by the accident date, in place of a fixed two steps (A-12).
 - 2026-10-24 · Earnings lost during treatment by a child: A child who did not earn no longer gets the skilled wage × the months of treatment (A-31).
@@ -479,7 +481,7 @@ Deduction for the deceased's personal and living expenses (Sarla Verma, approved
 | 4–6 | 1/4 |
 | 7–99 | 1/5 |
 | Bachelor | 1/2 |
-| Bachelor, 3+ dependants | 1/3 (Sarla Verma allows 1/3 where a large family depended on the bachelor (e.g. widowed mother and non-earning siblings).) |
+| Unmarried, a large dependent family shown | 1/3 (Sarla Verma (para 15) allows a third where a large family depended on the unmarried person (e.g. a widowed mother and non-earning siblings). No number of dependants is fixed: it is asked as a fact (legal review A-11).) |
 
 Sources: [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/); [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/). Confidence: settled. Signed off: **no — awaiting legal sign-off**.
 
@@ -521,7 +523,6 @@ describes the code).
 | Skill category for the minimum wage when there is no income proof. (No authority is recorded for the occupation-to-category mapping. Unknown occupations are unskilled.) | unskilled | the occupation's category (rules/occupations.yaml) | the occupation's category (rules/occupations.yaml) | none recorded | code (src/engine/income.ts) |
 | Whether income-tax returns filed after the accident are counted. (If no return was filed before the accident, the last three of all returns are used in every scenario.) | last three returns filed before the accident | last three returns filed before the accident | also returns filed after the accident, if that raises the average | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.](https://indiankanoon.org/doc/164414205/) | code (src/engine/income.ts) |
 | Income for a retired person without a pension. (No authority is recorded.) | no income (only the heads that do not depend on income) | unskilled minimum wage | unskilled minimum wage | none recorded | code (src/engine/income.ts) |
-| Personal deduction for an unmarried person supporting a large family (rules/formula/deduction.yaml). | 1/2 | 1/2 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | code (src/engine/estimate.ts) |
 
 ## Injury: discretionary heads (experimental)
 

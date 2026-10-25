@@ -12,7 +12,6 @@ import type { RulesBundle } from "../../src/rules/schema.js";
 export const CONTESTED = {
   under_15_multiplier: true,
   spouse_only_deduction: true,
-  bachelor_large_family: true,
   conventional_escalation_steps: true,
   minor_death_income: true,
   itr_post_accident: true,
@@ -57,7 +56,6 @@ export type Basis = (typeof BASES)[number];
 const STANDARD_BASIS: Readonly<Record<ContestedId, Basis | { death: Basis; injury: Basis }>> = {
   under_15_multiplier: { death: "extension", injury: "sc" },
   spouse_only_deduction: "sc",
-  bachelor_large_family: "sc",
   conventional_escalation_steps: "sc",
   minor_death_income: "extension",
   itr_post_accident: "sc",

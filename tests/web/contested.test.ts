@@ -24,7 +24,7 @@ function engineIds(): string[] {
 describe("the contested points of law, in plain words", () => {
   it("covers every point the engine can meet, and nothing else", () => {
     const ids = engineIds();
-    expect(ids.length).toBe(13);
+    expect(ids.length).toBe(12);
     expect(Object.keys(CONTESTED).sort()).toEqual(ids.sort());
   });
 

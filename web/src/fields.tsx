@@ -13,7 +13,7 @@ import {
 import type { LucideIcon } from "lucide-preact";
 import { choices, chosen, LABEL, setAnswer, type ChoiceField, type IconName } from "./answers";
 import { rules } from "./data";
-import { incomeFields, type FormState } from "./form-to-input";
+import { askLargeFamily, incomeFields, type FormState } from "./form-to-input";
 import { useLang, useT } from "./i18n";
 import {
   Checkbox,
@@ -290,6 +290,17 @@ export function BlockFields(props: {
                   />
                 )}
               </Pair>
+              {askLargeFamily(f) && (
+                <Radios
+                  id="largeFamily"
+                  label={t("f.largeFamily.q")}
+                  hint={t("f.largeFamily.help")}
+                  value={f.largeFamily}
+                  error={err("largeFamily")}
+                  onChange={(v) => set("largeFamily", v as FormState["largeFamily"])}
+                  options={opts("largeFamily")}
+                />
+              )}
             </>
           )}
         </div>

@@ -102,7 +102,7 @@ export function renderRulesReference(rules: RulesBundle): string {
   for (const b of d.married) L.push(`| ${b.min_dependants}–${b.max_dependants} | ${b.fraction} |`);
   L.push(`| Bachelor | ${d.bachelor} |`);
   L.push(
-    `| Bachelor, ${d.bachelor_large_family.min_dependants}+ dependants | ${d.bachelor_large_family.fraction} (${d.bachelor_large_family.note}) |`,
+    `| Unmarried, a large dependent family shown | ${d.bachelor_large_family.fraction} (${d.bachelor_large_family.note}) |`,
   );
   L.push("", `Sources: ${cite(d.sources)}. Confidence: ${d.confidence}. Signed off: ${yes(d.verified)}.`, "");
 

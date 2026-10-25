@@ -1,5 +1,12 @@
 import type { EstimateInput } from "../../src/engine/types.js";
-import { formToInput, incomeFields, parseAmount, parseDate, type FormState } from "./form-to-input.js";
+import {
+  askLargeFamily,
+  formToInput,
+  incomeFields,
+  parseAmount,
+  parseDate,
+  type FormState,
+} from "./form-to-input.js";
 import { ALL_FIELDS, pruneInactive } from "./questions.js";
 
 export type FieldName = keyof FormState;
@@ -106,6 +113,8 @@ export function validate(form: FormState, today: string): Validation {
     if (f.parents.trim() === "") set("parents", "err.count");
     // Whether the parents depended on the person changes the deduction for personal expenses: asked, with "Not sure".
     if (Number(f.parents) > 0 && f.dependentParents === "") set("dependentParents", "err.required");
+    // Whether a large family lived on an unmarried person's income changes the deduction too (legal review A-11).
+    if (askLargeFamily(f) && f.largeFamily === "") set("largeFamily", "err.required");
   }
   for (const [k, max] of Object.entries(MAX_COUNT) as [FieldName, number][]) {
     const n = Number(f[k]);

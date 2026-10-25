@@ -221,8 +221,9 @@ rows:
     type: fixed
     now: >-
       50, 30 or 15% for a permanent job and 40, 25 or 10% for others, by age; none from 60. At exactly 50 the lower
-      band. A salaried person without slips is valued at the unskilled minimum wage but keeps the permanent-job
-      rates.
+      band. Whether the job was permanent and whether the salary is proved are separate answers: without slips the
+      occupation sets the minimum wage, the permanent-job rate is kept, and the result says it rests on proof that
+      the job was permanent.
     decided: >-
       Ask for the salary proof and for whether the job was permanent as separate questions (A-17). At exactly 50,
       the higher band provisionally, then one verified boundary rule (A-21).
@@ -232,11 +233,16 @@ rows:
       - { source: sushila_2026, para: "25" }
       - { source: sidram_2022, para: "31" }
     review:
-      - { id: A-17, status: approve }
+      - { id: A-17, status: approve, done: true }
       - { id: A-21, status: conditional }
     flagged:
       - review: A-21
         point: Future prospects at exactly 50 years old fall at the boundary of two bands.
+    changes:
+      - date: 2026-10-24
+        what: >-
+          Without salary slips, the occupation now sets the minimum wage for a salaried job, and the result names
+          the assumption that the job was permanent and the proof a tribunal will want (A-17).
   - id: personal_deduction
     section: formula
     step: Personal deduction
@@ -245,8 +251,9 @@ rows:
     now: >-
       A half if unmarried; if married, a third (2-3 dependants), a quarter (4-6) or a fifth (more). With one
       dependant of any kind (spouse, child or parent), a half in the low figure and a third in the headline. An
-      unmarried person with 3 or more dependants gets a third only in the high figure. A parent counts as a
-      dependant only when the answer says so; for 'not sure' the result shows what it would add if they were.
+      unmarried person gets a third where the answers say a large family lived on their income, whatever its size;
+      for 'not sure', a half, with what a third would add. A parent counts as a dependant only when the answer says
+      so; for 'not sure' the result shows what it would add if they were.
     decided: >-
       A third where the spouse is the only dependant, not extended to a sole parent or child (A-10). A half for the
       unmarried, a third where a large dependent family is shown, with no fixed number (A-11). Parents count as
@@ -256,9 +263,9 @@ rows:
       - { source: sushila_2026, para: "24, 27" }
     review:
       - { id: A-10, status: conditional }
-      - { id: A-11, status: approve }
+      - { id: A-11, status: approve, done: true }
       - { id: A-22, status: approve, done: true }
-    points: [spouse_only_deduction, bachelor_large_family]
+    points: [spouse_only_deduction]
     flagged:
       - review: A-10
         point: >-
@@ -267,6 +274,11 @@ rows:
     changes:
       - date: 2026-10-24
         what: "A parent answered 'not sure' is no longer counted as a dependant; the effect if they were is shown (A-22)."
+      - date: 2026-10-24
+        what: >-
+          An unmarried person's family is asked whether a large family lived on their income: a third if so, in
+          every figure, with no fixed number of dependants; before, a third applied only in the high figure and only
+          from 3 dependants (A-11).
   - id: multiplier
     section: formula
     step: Multiplier

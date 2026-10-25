@@ -29,6 +29,7 @@ const base: FormState = {
   married: "no",
   children: "0",
   parents: "0",
+  largeFamily: "no",
 };
 
 const QUICK = ["kind", "checks", "age", "work", "family"];

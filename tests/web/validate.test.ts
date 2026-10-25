@@ -19,6 +19,7 @@ const ok: FormState = {
   children: "0",
   parents: "2",
   dependentParents: "2",
+  largeFamily: "no",
 };
 
 describe("validation", () => {
@@ -197,6 +198,19 @@ describe("validation", () => {
     expect(validate({ ...ok, parents: "0", dependentParents: "2" }, TODAY).errors).toEqual({});
   });
 
+  it("asks an unmarried person's family whether a large family lived on their income (legal review A-11)", () => {
+    expect(validate({ ...ok, largeFamily: "" }, TODAY).errors).toEqual({ largeFamily: "err.required" });
+    const fam = (f: Partial<FormState>) => validate({ ...ok, ...f }, TODAY).input?.family;
+    expect(fam({ largeFamily: "yes" })?.largeDependentFamily).toBe(true);
+    expect(fam({ largeFamily: "no" })?.largeDependentFamily).toBe(false);
+    expect(fam({ largeFamily: "unknown" })?.largeDependentFamily).toBeUndefined();
+    // Not asked, and not passed on, for a married person or a child.
+    expect(validate({ ...ok, married: "yes", spouse: "yes", largeFamily: "" }, TODAY).errors).toEqual({});
+    expect(fam({ married: "yes", spouse: "yes", largeFamily: "yes" })?.largeDependentFamily).toBeUndefined();
+    expect(validate({ ...ok, employment: "minor", age: "12", largeFamily: "" }, TODAY).errors).toEqual({});
+    expect(fam({ employment: "minor", age: "12", largeFamily: "yes" })?.largeDependentFamily).toBeUndefined();
+  });
+
   it("reads numbers as Indian forms and slips write them", () => {
     expect(validate({ ...ok, age: "३०" }, TODAY).input?.victim.ageYears).toBe(30);
     expect(validate({ ...ok, age: "30 yrs" }, TODAY).input?.victim.ageYears).toBe(30);
@@ -257,5 +271,23 @@ describe("what to prove", () => {
       "prove.offwork",
       "prove.vehicle",
     ]);
+  });
+
+  it("asks for proof of a permanent job without slips, and of a large family's dependence (A-17, A-11)", () => {
+    const v = validate(
+      { ...ok, employment: "permanent", proof: "none", occupationCode: "driver", largeFamily: "yes" },
+      TODAY,
+    );
+    expect(proofItems(v.input!)).toEqual([
+      "prove.fir",
+      "prove.pm",
+      "prove.heirs",
+      "prove.age",
+      "prove.permanent",
+      "prove.largeFamily",
+      "prove.vehicle",
+    ]);
+    // The occupation is asked without slips, and passed on (it sets the minimum wage).
+    expect(v.input?.victim.occupationCode).toBe("driver");
   });
 });

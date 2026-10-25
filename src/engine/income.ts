@@ -378,7 +378,15 @@ export function resolveIncome(ctx: IncomeContext): IncomeResult | undefined {
         basis: `minimum_wage_${cat}`,
         fpClass,
         sources: [],
-        assumptions: [w.note],
+        assumptions: [
+          w.note,
+          // Legal review A-17: the salary and the permanence of the job are proved separately.
+          ...(v.employment === "permanent" && proof !== "salary_slip"
+            ? [
+                "The job is taken as permanent, as answered, so future prospects use the permanent-job rate; a tribunal will want proof of it (an appointment letter or service record).",
+              ]
+            : []),
+        ],
       };
     }
   }

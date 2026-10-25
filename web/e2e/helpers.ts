@@ -132,6 +132,12 @@ async function answer(page: Page, block: string, input: EstimateInput) {
             "dependentParents",
             fam.dependentParents === undefined ? "unknown" : String(fam.dependentParents),
           );
+        if (!fam.married && v.employment !== "minor")
+          await radio(
+            page,
+            "largeFamily",
+            fam.largeDependentFamily === undefined ? "unknown" : fam.largeDependentFamily ? "yes" : "no",
+          );
       }
       return;
     case "injury":

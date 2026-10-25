@@ -116,7 +116,7 @@ export const DeductionRuleSchema = z.object({
   verified: z.boolean(),
   married: z.array(z.object({ min_dependants: z.number(), max_dependants: z.number(), fraction })),
   bachelor: fraction,
-  bachelor_large_family: z.object({ min_dependants: z.number(), fraction, note: z.string() }),
+  bachelor_large_family: z.object({ fraction, note: z.string() }),
 });
 
 export const ConventionalRuleSchema = z.object({

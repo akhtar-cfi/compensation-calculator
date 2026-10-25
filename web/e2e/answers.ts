@@ -56,6 +56,14 @@ export function formFromInput(i: EstimateInput): FormState {
           ? "unknown"
           : String(fam.dependentParents)
         : "",
+    largeFamily:
+      death && !fam.married && v.employment !== "minor"
+        ? fam.largeDependentFamily === undefined
+          ? "unknown"
+          : fam.largeDependentFamily
+            ? "yes"
+            : "no"
+        : "",
     medicalBills: s(i.medical?.bills),
     cashlessPaid: s(i.medical?.paidByCashlessScheme),
     certificatePct: s(inj?.certificatePct),

@@ -65,6 +65,8 @@ export const EstimateInputSchema = z.object({
     parents: z.number().int().min(0).max(2).optional(),
     dependentParents: z.number().int().min(0).max(2).optional(),
     otherDependants: z.number().int().min(0).optional(),
+    /** An unmarried person who supported a large dependent family (Sarla Verma para 15): asked, not counted. */
+    largeDependentFamily: z.boolean().optional(),
   }),
   medical: z
     .object({

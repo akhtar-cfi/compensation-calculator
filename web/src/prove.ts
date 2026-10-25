@@ -12,7 +12,10 @@ export function proofItems(input: EstimateInput): string[] {
   if (inc?.proof === "salary_slip") k.push("prove.salary");
   else if (inc?.proof === "itr") k.push("prove.itr");
   else if (inc?.claimedMonthly !== undefined) k.push("prove.claimed");
+  // Legal review A-17: a permanent job is proved on its own, apart from the pay.
+  if (input.victim.employment === "permanent" && inc?.proof !== "salary_slip") k.push("prove.permanent");
   if (input.victim.employment === "pensioner") k.push("prove.pension");
+  if (input.family.largeDependentFamily === true) k.push("prove.largeFamily");
   if (input.kind === "injury" || input.medical?.bills !== undefined) k.push("prove.medical");
   if (input.kind === "injury") {
     const i = input.injury;

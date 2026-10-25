@@ -108,7 +108,10 @@ describe("asking one question at a time", () => {
     const m = giveAnswer(fam, "married", "no");
     expect(tap(m, "family")).toEqual({ focus: "children" });
     expect(tap(giveAnswer(m, "children", "2"), "family")).toEqual({ focus: "parents" });
-    expect(tap(giveAnswer(giveAnswer(m, "children", "2"), "parents", "0"), "family")).toBe("advance");
+    // Unmarried: whether a large family lived on the person's income comes last (legal review A-11).
+    const p0 = giveAnswer(giveAnswer(m, "children", "2"), "parents", "0");
+    expect(tap(p0, "family")).toEqual({ focus: "largeFamily" });
+    expect(tap(giveAnswer(p0, "largeFamily", "unknown"), "family")).toBe("advance");
     expect(tap(giveAnswer(giveAnswer(m, "children", "2"), "parents", "2"), "family")).toEqual({
       focus: "dependentParents",
     });

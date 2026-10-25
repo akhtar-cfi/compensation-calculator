@@ -16,6 +16,7 @@ const base: FormState = {
   married: "no",
   children: "0",
   parents: "0",
+  largeFamily: "no",
   accidentDate: "2025-06-",
 };
 

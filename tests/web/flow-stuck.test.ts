@@ -56,6 +56,7 @@ function validValue(k: QuestionId, f: FormState): string {
     case "parents":
       return "0";
     case "dependentParents":
+    case "largeFamily":
       return "unknown";
     case "certificatePct":
       return "20";

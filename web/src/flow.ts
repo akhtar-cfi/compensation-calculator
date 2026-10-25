@@ -35,7 +35,7 @@ const SCREEN_FIELDS: Readonly<Record<ScreenId, readonly QuestionId[]>> = {
   s164: ["s164"],
   age: ["age"],
   work: ["employment", "proof", "monthlySalary", "itrAnnualIncome", "occupationCode", "pensionMonthly"],
-  family: ["married", "spouse", "children", "parents", "dependentParents"],
+  family: ["married", "spouse", "children", "parents", "dependentParents", "largeFamily"],
   injury: ["certificatePct", "certificateBasis", "monthsOffWork"],
   when: ["accidentDate"],
   state: ["state"],

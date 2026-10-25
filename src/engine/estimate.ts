@@ -78,13 +78,9 @@ function resolveDeduction(rules: RulesBundle, input: EstimateInput, ch: ParamCho
     }
     return parseFraction(rules.deduction.bachelor);
   }
-  if (
-    dependants >= rules.deduction.bachelor_large_family.min_dependants &&
-    input.victim.employment !== "minor"
-  ) {
-    const s = ch.choose("bachelor_large_family", "Bachelor supporting a large family: 1/2 vs 1/3");
-    if (s === "claimantMax") return parseFraction(rules.deduction.bachelor_large_family.fraction);
-  }
+  // Legal review A-11: a third where a large dependent family is shown, whatever the number; no threshold.
+  if (input.family.largeDependentFamily === true && input.victim.employment !== "minor")
+    return parseFraction(rules.deduction.bachelor_large_family.fraction);
   return parseFraction(rules.deduction.bachelor);
 }
 
@@ -472,8 +468,24 @@ export function estimate(
         });
     }
   }
-  // Legal review A-22: parents not shown to depend on the person are not counted; say what it is worth if they did.
   const fam = input.family;
+  // Legal review A-11: an unmarried person whose family's dependency is not known; say what a third would give.
+  if (
+    input.kind === "death" &&
+    !fam.married &&
+    fam.largeDependentFamily === undefined &&
+    input.victim.employment !== "minor"
+  ) {
+    const asIfLarge = { ...input, family: { ...fam, largeDependentFamily: true } };
+    const r = runScenario(rules, asIfLarge, asOf, allOf("standard"), "standard", new WarningSink());
+    if (r && r.result.net !== stdNet)
+      sensitivity.push({
+        id: "large_family",
+        label: "If a large family is shown to have depended on the person's income",
+        delta: r.result.net - stdNet,
+      });
+  }
+  // Legal review A-22: parents not shown to depend on the person are not counted; say what it is worth if they did.
   if (input.kind === "death" && (fam.parents ?? 0) > 0 && fam.dependentParents === undefined) {
     const asIfDependent = { ...input, family: { ...fam, dependentParents: fam.parents } };
     const r = runScenario(rules, asIfDependent, asOf, allOf("standard"), "standard", new WarningSink());

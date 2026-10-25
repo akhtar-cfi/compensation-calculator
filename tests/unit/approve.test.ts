@@ -308,3 +308,94 @@ describe("C-3, C-5: the wording of the result", () => {
     ).toBeUndefined();
   });
 });
+
+describe("A-11: an unmarried person's deduction is a third only where a large dependent family is shown", () => {
+  const single = (largeDependentFamily?: boolean): EstimateInput => ({
+    ...base,
+    kind: "death",
+    victim: {
+      ageYears: 28,
+      employment: "permanent",
+      income: { proof: "salary_slip", monthlySalary: 30000, monthlyTax: 0 },
+    },
+    family: {
+      married: false,
+      parents: 2,
+      dependentParents: 2,
+      otherDependants: 3,
+      ...(largeDependentFamily === undefined ? {} : { largeDependentFamily }),
+    },
+  });
+
+  it("a third in every figure where it is shown; no fixed number of dependants", () => {
+    const out = estimate(rules, single(true), { asOf: AS_OF });
+    for (const s of SCENARIOS) expect(value(out, s, "personal_deduction")).toBeCloseTo(1 / 3);
+  });
+
+  it("a half where it is not, in every figure; the large family is no longer a contested point", () => {
+    const out = estimate(rules, single(false), { asOf: AS_OF });
+    for (const s of SCENARIOS) expect(value(out, s, "personal_deduction")).toBeCloseTo(1 / 2);
+    expect(rules.rangeParameters.map((p) => p.id)).not.toContain("bachelor_large_family");
+    expect(out.sensitivity.find((x) => x.id === "large_family")).toBeUndefined();
+  });
+
+  it("'not sure': a half, with what a third would add", () => {
+    const unsure = estimate(rules, single(), { asOf: AS_OF });
+    const shown = estimate(rules, single(true), { asOf: AS_OF });
+    expect(value(unsure, "standard", "personal_deduction")).toBeCloseTo(1 / 2);
+    expect(unsure.sensitivity.find((x) => x.id === "large_family")?.delta).toBe(
+      shown.headline!.amount - unsure.headline!.amount,
+    );
+  });
+
+  it("'not sure' with no parents claiming still says what a third would add: brothers and sisters count too", () => {
+    const alone = { ...single(), family: { married: false, parents: 0 } };
+    const out = estimate(rules, alone, { asOf: AS_OF });
+    expect(out.sensitivity.find((x) => x.id === "large_family")?.delta).toBeGreaterThan(0);
+  });
+
+  it("a child's death is never a large-family case: no third, no note", () => {
+    const child = estimate(
+      rules,
+      {
+        ...single(true),
+        victim: { ageYears: 12, employment: "minor" },
+        family: { married: false, parents: 2, dependentParents: 2, largeDependentFamily: true },
+      },
+      { asOf: AS_OF },
+    );
+    const unsure = estimate(
+      rules,
+      { ...single(), victim: { ageYears: 12, employment: "minor" }, family: { married: false, parents: 2 } },
+      { asOf: AS_OF },
+    );
+    expect(unsure.sensitivity.find((x) => x.id === "large_family")).toBeUndefined();
+    expect(child.headline?.amount).toBe(
+      estimate(
+        rules,
+        {
+          ...single(false),
+          victim: { ageYears: 12, employment: "minor" },
+          family: { married: false, parents: 2, dependentParents: 2 },
+        },
+        { asOf: AS_OF },
+      ).headline?.amount,
+    );
+  });
+});
+
+describe("A-17: a permanent job without salary slips", () => {
+  const input: EstimateInput = {
+    ...base,
+    kind: "death",
+    victim: { ageYears: 30, employment: "permanent", occupationCode: "driver", income: { proof: "none" } },
+    family: { married: true, spouse: true, children: 2, parents: 0 },
+  };
+
+  it("uses the occupation's minimum wage, and keeps the permanent-job rate as a stated assumption", () => {
+    const out = estimate(rules, input, { asOf: AS_OF });
+    expect(value(out, "standard", "monthly_income")).toBe(22000); // TS skilled wage from 2025-04-01
+    expect(value(out, "standard", "future_prospects")).toBe(50);
+    expect(out.assumptions.join(" ")).toMatch(/permanent.*proof/i);
+  });
+});

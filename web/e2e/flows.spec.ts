@@ -420,6 +420,9 @@ test("the whole form can be answered with the keyboard alone", async ({ page }) 
   await expect(page.locator('input[name="parents"][value="1"]')).toBeChecked();
   await tabTo('input[name="dependentParents"][value="1"]');
   await page.keyboard.press("Space");
+  await tabTo('input[name="largeFamily"][value="yes"]');
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator('input[name="largeFamily"][value="no"]')).toBeChecked();
   await tabTo("#accidentDate-month");
   await page.keyboard.press("ArrowDown");
   await tabTo("#accidentDate-year");

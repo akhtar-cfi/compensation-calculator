@@ -39,7 +39,7 @@
   sources: [kurvan_ansari_2021, kajal_2020, hansraj_2026]
   note: The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.
 # The points below are decided in the engine's code; the values here describe what the code does, so that all
-# 13 contested points are listed in one place for the legal reviewers. Changing these words does not change
+# 12 contested points are listed in one place for the legal reviewers. Changing these words does not change
 # the code. "sources" are the authorities the code cites for the head; an empty list means none is recorded
 # for the choice itself.
 - id: functional_pct
@@ -111,10 +111,3 @@
   sources: []
   note: No authority is recorded.
   implemented_in: src/engine/income.ts
-- id: bachelor_large_family
-  description: Personal deduction for an unmarried person supporting a large family (rules/formula/deduction.yaml).
-  conservative: "1/2"
-  standard: "1/2"
-  claimant_max: "1/3"
-  sources: [sarla_verma_2009]
-  implemented_in: src/engine/estimate.ts

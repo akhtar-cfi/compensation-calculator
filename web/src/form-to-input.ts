@@ -37,6 +37,8 @@ export interface FormState {
   children: string;
   parents: string;
   dependentParents: string;
+  /** Unmarried: did a large family (parents, brothers or sisters without income) live on the person's income? */
+  largeFamily: "" | "yes" | "no" | "unknown";
   medicalBills: string;
   cashlessPaid: string;
   certificatePct: string;
@@ -76,6 +78,7 @@ export const EMPTY_FORM: FormState = {
   children: "",
   parents: "",
   dependentParents: "",
+  largeFamily: "",
   medicalBills: "",
   cashlessPaid: "",
   certificatePct: "",
@@ -94,7 +97,9 @@ export function incomeFields(
   switch (e) {
     case "permanent":
     case "fixed_salary":
-      return ["salary", "claimed"];
+      // Without salary slips the occupation sets the minimum wage (legal review A-17: the job's status and its pay
+      // are proved separately).
+      return ["salary", "claimed", "occupation"];
     case "self_employed":
       return ["itr", "claimed", "occupation"];
     case "informal":
@@ -183,6 +188,13 @@ const known = <T extends string>(v: T): Exclude<T, "" | "unknown"> | undefined =
 
 const yesNo = (v: YesNo): boolean | undefined => (v === "" ? undefined : v === "yes");
 
+/**
+ * Whether to ask if a large family lived on the person's income (legal review A-11: a third is deducted for personal
+ * expenses instead of a half where that is shown). Asked after a death of an unmarried person who was not a child.
+ */
+export const askLargeFamily = (f: FormState): boolean =>
+  f.kind === "death" && f.married === "no" && f.employment !== "minor";
+
 /** Drops keys whose value is undefined (the schema uses exact optional properties). */
 function compact<T extends object>(o: T): T {
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as T;
@@ -245,6 +257,7 @@ export function formToInput(f: FormState): FormResult {
       children: death ? num(f.children) : undefined,
       parents: death ? num(f.parents) : undefined,
       dependentParents: death && f.dependentParents !== "unknown" ? num(f.dependentParents) : undefined,
+      largeDependentFamily: askLargeFamily(f) ? yesNo(known(f.largeFamily) ?? "") : undefined,
     }),
     medical:
       parseAmount(f.medicalBills) !== undefined
