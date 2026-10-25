@@ -144,12 +144,6 @@ export const NotionalIncomeRuleSchema = z.object({
     sources: z.array(z.string()),
     note: z.string(),
   }),
-  minor_death_conservative: z.object({
-    annual: z.number(),
-    multiplier: z.number(),
-    sources: z.array(z.string()),
-    note: z.string(),
-  }),
 });
 
 const scenarioValue = z.union([z.number(), z.string()]);

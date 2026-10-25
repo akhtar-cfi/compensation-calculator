@@ -134,8 +134,8 @@ rows:
     kinds: [death]
     type: conflict
     now: >-
-      The skilled minimum wage plus 40% future prospects in the headline. The low figure uses ₹25,000 a year × 15
-      (Kurvan Ansari), so the lost income is always ₹3,75,000.
+      The skilled minimum wage plus 40% future prospects in every figure, with a caution that no Supreme Court rule
+      decides a child's death in an ordinary claim. Kurvan Ansari's ₹25,000 a year is not used (B-1).
     decided: >-
       Remove the ₹25,000 floor. A notional income justified on the facts, with the accident-period skilled wage as a
       reference, without claiming a rule that binds every child's death. A short precedent note comes first (A-3).
@@ -146,13 +146,17 @@ rows:
       - { source: kurvan_ansari_2021, para: "16" }
     review:
       - { id: A-3, status: conditional }
-      - { id: B-1, status: approve }
-    points: [minor_death_income]
+      - { id: B-1, status: approve, done: true }
     flagged:
       - review: A-3
         point: >-
           No Supreme Court rule for a child's death in an ordinary claim: Kurvan Ansari's ₹25,000 came from the old
           s.163A schedule, and Hitesh Patel's skilled wage from an injury case.
+    changes:
+      - date: 2026-10-25
+        what: >-
+          Kurvan Ansari's ₹25,000 a year (the old s.163A schedule) no longer sets the low figure for a child's death;
+          every figure uses the skilled minimum wage (B-1).
   - id: income_student
     section: income
     step: Income for a student

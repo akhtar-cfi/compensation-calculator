@@ -11,7 +11,7 @@ describe("contested points", () => {
       for (const m of readFileSync(join(dir, f), "utf8").matchAll(/ch\.choose\(\s*"([a-z0-9_]+)"/g))
         ids.add(m[1]!);
     const listed = loadRules().rangeParameters.map((p) => p.id);
-    expect(ids.size).toBe(11); // 15 until the legal review settled the student, pension, large-family and return points
+    expect(ids.size).toBe(10); // 15 until the legal review settled the student, pension, large-family, return and child-death points
     expect([...listed].sort()).toEqual([...ids].sort());
   });
 });

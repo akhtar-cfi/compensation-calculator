@@ -125,7 +125,7 @@ export function mw(
 }
 
 function minorIncome(ctx: IncomeContext): IncomeResult | undefined {
-  const { rules, input, ch } = ctx;
+  const { input } = ctx;
   if (input.kind === "injury") {
     const w = mw(ctx, "skilled");
     if (!w) return undefined;
@@ -140,27 +140,12 @@ function minorIncome(ctx: IncomeContext): IncomeResult | undefined {
       ],
     };
   }
+  // Legal review B-1: Kurvan Ansari's ₹25,000 a year belongs to the old s.163A schedule, not to a claim under s.166.
   ctx.warn.add(
     "MINOR_DEATH_CONTESTED",
     "caution",
-    "The income basis for a child's death is unsettled; the range shows both approaches.",
+    "There is no Supreme Court rule for the income of a child who died, in an ordinary claim. This estimate uses the skilled minimum wage, as the Supreme Court does for injured children (Kajal, Hitesh Patel); Kurvan Ansari's ₹25,000 a year came from the old s.163A schedule and is not used.",
   );
-  const s = ch.choose("minor_death_income", "Income basis for the death of a minor");
-  const v = rangeValue(rules, "minor_death_income", s);
-  if (v === "kurvan_notional") {
-    const k = rules.notional.minor_death_conservative;
-    return {
-      monthly: k.annual / 12,
-      basis: "minor_notional_kurvan",
-      fpClass: "none",
-      sources: k.sources,
-      multiplierOverride: k.multiplier,
-      deductionOverride: 0,
-      assumptions: [
-        `Notional income ${formatINR(k.annual)}/year with multiplier ${k.multiplier} and no personal deduction (Kurvan Ansari, para 16).`,
-      ],
-    };
-  }
   const w = mw(ctx, "skilled");
   if (!w) return undefined;
   return {

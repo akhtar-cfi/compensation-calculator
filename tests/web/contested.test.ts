@@ -24,7 +24,7 @@ function engineIds(): string[] {
 describe("the contested points of law, in plain words", () => {
   it("covers every point the engine can meet, and nothing else", () => {
     const ids = engineIds();
-    expect(ids.length).toBe(11);
+    expect(ids.length).toBe(10);
     expect(Object.keys(CONTESTED).sort()).toEqual(ids.sort());
   });
 
@@ -61,8 +61,6 @@ describe("the contested points of law, in plain words", () => {
         if (cited.length === 0) expect(b, id).toBe("none");
       }
     // The rules file itself calls the income for a child's death an extension of the rule for injured children.
-    expect(rules.rangeParameters.find((p) => p.id === "minor_death_income")?.note).toMatch(/HC extension/);
-    expect(standardBasis("minor_death_income", "death")).toBe("extension");
     expect(standardBasis("under_15_multiplier", "death")).toBe("extension");
     expect(standardBasis("under_15_multiplier", "injury")).toBe("sc");
     // Functional disability read from a certificate, and the injury bands, follow Delhi tribunal practice.

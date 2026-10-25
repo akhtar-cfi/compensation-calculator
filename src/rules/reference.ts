@@ -27,10 +27,7 @@ export function openChecks(rules: RulesBundle): string[] {
     if (y.check_note) items.push(`Income tax FY ${y.fy}: ${y.check_note}`);
   }
   const n = rules.notional;
-  for (const [label, note] of [
-    ["Notional income, homemaker", n.homemaker_domestic_care.note],
-    ["Notional income, minor (death)", n.minor_death_conservative.note],
-  ] as const)
+  for (const [label, note] of [["Notional income, homemaker", n.homemaker_domestic_care.note]] as const)
     if (/to be verified/i.test(note)) items.push(`${label}: ${note}`);
   return items.length
     ? [
@@ -123,9 +120,8 @@ export function renderRulesReference(rules: RulesBundle): string {
   L.push(
     "- **Student:** the skilled minimum wage on the accident date (legal review A-4; Mohinder Kaur's ₹12,000, for an accident in 2000, is a comparator, not a benchmark).",
   );
-  const mi = n.minor_death_conservative;
   L.push(
-    `- **Minor (death), conservative:** ${formatINR(mi.annual)} a year × ${mi.multiplier}. ${mi.note} Sources: ${cite(mi.sources)}.`,
+    "- **Minor (death):** the skilled minimum wage on the accident date, as for an injured child; no Supreme Court rule decides a child's death in an ordinary claim (legal review A-3). Kurvan Ansari's ₹25,000 a year applied the old s.163A schedule and is not used (B-1).",
   );
   L.push("", `Confidence: ${n.confidence}. Signed off: ${yes(n.verified)}.`, "");
 

@@ -103,11 +103,10 @@ High Court's ruling on one of them binds the tribunals in its own state.
 #### Income for a child who died
 
 - **Kind:** Law split or open (death only)
-- **Now:** The skilled minimum wage plus 40% future prospects in the headline. The low figure uses ₹25,000 a year × 15 (Kurvan Ansari), so the lost income is always ₹3,75,000.
+- **Now:** The skilled minimum wage plus 40% future prospects in every figure, with a caution that no Supreme Court rule decides a child's death in an ordinary claim. Kurvan Ansari's ₹25,000 a year is not used (B-1).
 - **Decided:** Remove the ₹25,000 floor. A notional income justified on the facts, with the accident-period skilled wage as a reference, without claiming a rule that binds every child's death. A short precedent note comes first (A-3). Kurvan Ansari stays in the register for the old s.163A schedule only (B-1).
-- **Legal review:** A-3 Conditional; B-1 Approve
+- **Legal review:** A-3 Conditional; B-1 Approve (built)
 - **Authorities:** [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf), paras 9, 15; [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/), para 20; [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/), para 16
-- **Contested points:** `minor_death_income`
 
 #### Income for a student
 
@@ -361,7 +360,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 
 ### Every item of the legal review
 
-59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 28 of 59.
+59 items: 22 Approve, 30 Conditional, 6 Hold, 1 Not stated. Built: 29 of 59.
 
 | Item | Decision | Built | Step |
 |---|---|---|---|
@@ -396,7 +395,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 | A-29 | Conditional | no | Order of deductions when fault, cashless payments and ex-gratia meet |
 | A-30 | Conditional | no | Income from a salary |
 | A-31 | Approve | yes | Earnings lost during treatment by a child |
-| B-1 | Approve | no | Income for a child who died |
+| B-1 | Approve | yes | Income for a child who died |
 | B-2 | Conditional | no | Who receives consortium |
 | B-3 | Conditional | yes | Loss of estate, funeral and consortium amounts |
 | B-4 | Conditional | no | Time limit for filing the claim |
@@ -430,6 +429,7 @@ High Court's ruling on one of them binds the tribunals in its own state.
 - 2026-10-25 · Income from tax returns: A salaried person's latest return is used instead of an average; a later-filed return needs records from the time and no longer raises the high figure on its own; each return is net of its own year's tax, or the tax shown on it (A-5, B-7).
 - 2026-10-25 · Income with no proof (minimum wage): A graduate with no particular job shown now gets the skilled rate, not the highly skilled one; that rate is kept for someone working as a professional (A-20).
 - 2026-10-25 · Income with no proof (minimum wage): Central-sphere rates are no longer suggested as a rough stand-in for a state's missing wages; they are for central-sphere work only, and the result says so (A-19).
+- 2026-10-25 · Income for a child who died: Kurvan Ansari's ₹25,000 a year (the old s.163A schedule) no longer sets the low figure for a child's death; every figure uses the skilled minimum wage (B-1).
 - 2026-10-25 · Income for a pensioner: An injured pensioner's pension that is still paid is no longer counted as lost income, and the website asks whether it is (A-6).
 - 2026-10-25 · Order of deductions when fault, cashless payments and ex-gratia meet: With an established fault share and a cashless payment together, the calculator no longer picks an order of deduction: the medical expenses are left out and both amounts are given (A-25).
 - 2026-10-25 · Money already received: An earlier no-fault award (s.164) and interim relief are no longer deducted; the result shows what a set-off would take away (A-28, B-12).
@@ -511,7 +511,7 @@ Income used when the person did not earn, or earnings cannot be proved.
 
 - **Homemaker (loss of domestic care):** ₹30,000 a month from 2026-06-11, +10% every 3 years. Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years. Sources: [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/).
 - **Student:** the skilled minimum wage on the accident date (legal review A-4; Mohinder Kaur's ₹12,000, for an accident in 2000, is a comparator, not a benchmark).
-- **Minor (death), conservative:** ₹25,000 a year × 15. Kurvan Ansari (SC, 16 Nov 2021, para 16): notional income Rs 25,000 a year x multiplier 15 = Rs 3,75,000 loss of dependency, with no personal-expenses deduction, for a 7-year-old (the 15 is the s.163A Second Schedule multiplier). Checked against the judgment text, 10 Oct 2026. Sources: [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/).
+- **Minor (death):** the skilled minimum wage on the accident date, as for an injured child; no Supreme Court rule decides a child's death in an ordinary claim (legal review A-3). Kurvan Ansari's ₹25,000 a year applied the old s.163A schedule and is not used (B-1).
 
 Confidence: contested. Signed off: **no — awaiting legal sign-off**.
 
@@ -523,11 +523,10 @@ describes the code).
 
 | Point | Conservative | Standard | Claimant-max | Sources | Decided in |
 |---|---|---|---|---|---|
-| Multiplier for a person aged under 15. (15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).) | 15 | 18 | 18 | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
+| Multiplier for a person aged under 15. (15 in Reshma Kumari (three judges, tied to the old Second Schedule); 18 in the injury line (Kajal, Hitesh Patel, Hansraj; two judges). Kurvan Ansari's 15 applied the s.163A schedule (legal review B-1).) | 15 | 18 | 18 | [Reshma Kumari v Madan Mohan](https://indiankanoon.org/doc/86908489/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
 | Number of 10% steps applied to the Pranay Sethi conventional heads. (Legal review A-12 (24 Oct 2026): the headline counts the full 3-year steps since 31 Oct 2017 completed by the accident date ("accident": none before 31 Oct 2020; base amounts for accidents before 2017), the reading Hasina Yasmin (2025) preferred when it referred the question to a larger bench. Counting up to the date of decision ("clock": up to the as-of date, three steps from 31 Oct 2026), as Shishu Pal (2026) applied, is the alternative until the larger bench decides. Increases are cumulative.) | accident | accident | clock | [National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)](https://indiankanoon.org/doc/139996215/); [Hasina Yasmin v National Insurance Co. Ltd. (reference to a larger bench on the 10% steps)](https://indiankanoon.org/doc/41904479/); [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/) | rules file |
 | Personal deduction for a married deceased whose only dependant is the spouse. | 1/2 | 1/3 | 1/3 | [Sarla Verma v Delhi Transport Corporation](https://indiankanoon.org/doc/837924/) | rules file |
 | Monthly income for a deceased homemaker without monetary income. | unskilled_minimum_wage | domestic_care | domestic_care | [Shishu Pal v Surjeet](https://indiankanoon.org/doc/158690569/); [Kirti v Oriental Insurance Co. Ltd.](https://indiankanoon.org/doc/106405133/) | rules file |
-| Income basis for the death of a minor. (The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.) | kurvan_notional | skilled_minimum_wage | skilled_minimum_wage | [Kurvan Ansari v Shyam Kishore Murmu](https://indiankanoon.org/doc/117494438/); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf) | rules file |
 | Functional disability (loss of earning capacity) when no functional assessment is given. (The limb factors (rules/injury/bands.yaml) are the Delhi 25th percentile and median and also apply to a certificate whose basis is not known. The claimant-max rule is a legal choice not yet reviewed.) | certificate % x the conservative limb factor (whole-body certificate taken as it is) | certificate % x the standard limb factor (whole-body certificate taken as it is) | 100% if the person cannot work at all; otherwise the certificate % | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | code (src/engine/estimate.ts) |
 | Pain and suffering, conveyance and diet, marriage prospects, and attendant during treatment when no attendant days are given. (Mostly the spread of Delhi tribunal awards. The claimant-max pain values from 50% are Supreme Court anchors or unexplained values, and the marriage-prospects band is not calibrated.) | conservative column of rules/injury/bands.yaml | standard column of rules/injury/bands.yaml | claimant-max column of rules/injury/bands.yaml | [Raj Kumar v Ajay Kumar](https://indiankanoon.org/doc/153578069/); [Sidram v Divisional Manager, United India Insurance Co. Ltd.](https://indiankanoon.org/doc/77644422/); [Baiju v The United India Insurance Co. Ltd.](https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf); [Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari](https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf); [Hansraj v Mukesh Nath](https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf); [Kajal v Jagdish Chand](https://indiankanoon.org/doc/180443810/); Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv | code (src/engine/estimate.ts) |
 | Wage for a permanent attendant. (The head itself follows Kajal and Hansraj; no authority is recorded for the semi-skilled rate.) | unskilled minimum wage | unskilled minimum wage | semi-skilled minimum wage | none recorded | code (src/engine/estimate.ts) |

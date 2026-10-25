@@ -17,7 +17,6 @@ export function validateRules(
     ["personal_deduction", rules.deduction.sources],
     ["conventional_heads", rules.conventional.sources],
     ["notional.homemaker", rules.notional.homemaker_domestic_care.sources],
-    ["notional.minor", rules.notional.minor_death_conservative.sources],
     ["statutory.s164", rules.statutory.no_fault_s164.sources],
     ["statutory.s161", rules.statutory.hit_and_run_s161.sources],
     ["statutory.s161.earlier", rules.statutory.hit_and_run_s161.earlier.sources],

@@ -85,8 +85,6 @@ const SHOWN = 3;
 
 const siteUrl = () => `${location.origin}${location.pathname}`;
 const SEV_ORDER: Record<Warning["severity"], number> = { stop: 0, caution: 1, info: 2 };
-/** Cautions about the range: left out when there is no number to have a range. */
-const ABOUT_THE_RANGE = new Set(["MINOR_DEATH_CONTESTED"]);
 
 /**
  * The live summary: what is still needed, why there is no number, or the number itself with its range and how far
@@ -221,7 +219,7 @@ export function ResultSummary(props: {
         <p class="mt-1 text-sm text-muted-foreground">{t("res.none.lead")}</p>
         <div class="mt-4 grid gap-2">
           {warnings
-            .filter((w) => w.severity !== "info" && !ABOUT_THE_RANGE.has(w.code))
+            .filter((w) => w.severity !== "info")
             .map((w) =>
               isLimit(w.code) ? (
                 // A limit of the calculator, not of the claim: amber, with what to do instead.

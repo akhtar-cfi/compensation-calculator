@@ -134,18 +134,15 @@ describe("death: minor (contested basis)", () => {
     },
     { asOf: AS_OF },
   );
-  it("shows both approaches and hides the range bar", () => {
-    // conservative: Kurvan Ansari para 16: 25,000/yr x 15 = 3,75,000 with NO personal deduction,
+  it("uses the skilled wage in every figure; only the multiplier differs (legal review B-1, A-9)", () => {
+    // Kurvan Ansari's Rs 25,000 x 15 is the old s.163A schedule and is no longer used (B-1).
+    // conservative: skilled 22,000 x 12 x 1.4 x 1/2 x 15 = 27,72,000
     // + loss of estate 18,150 + funeral 18,150 + filial consortium 48,400 x 2 (two steps by the accident date)
-    expect(out.range!.conservative).toBe(375000 + 36300 + 96800);
-    // standard: skilled 22,000 x 12 x 1.4 x 1/2 x 18 = 33,26,400 + 18,150 x 2 + 48,400 x 2
+    expect(out.range!.conservative).toBe(2772000 + 36300 + 96800);
+    // standard: skilled 22,000 x 12 x 1.4 x 1/2 x 18 = 33,26,400
     expect(out.range!.standard).toBe(3326400 + 36300 + 96800);
-    expect(out.range!.showBar).toBe(false);
+    expect(out.range!.showBar).toBe(true);
     expect(out.warnings.map((w) => w.code)).toContain("MINOR_DEATH_CONTESTED");
-  });
-  it("reproduces Kurvan Ansari's loss of dependency (Rs 25,000 x 15 = Rs 3,75,000, para 16)", () => {
-    const dep = out.scenarios!.conservative.heads.find((h) => h.id === "loss_of_dependency");
-    expect(dep?.amount).toBe(375000);
   });
 });
 

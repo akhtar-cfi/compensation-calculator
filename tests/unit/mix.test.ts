@@ -128,7 +128,7 @@ const amounts = (heads: readonly { id: string; amount: number }[]) =>
 
 describe("your choices on the contested points", () => {
   it("are read from the engine (the list cannot drift)", () => {
-    expect(CHOOSER_IDS.length).toBeGreaterThanOrEqual(11);
+    expect(CHOOSER_IDS.length).toBeGreaterThanOrEqual(10);
   });
 
   for (const c of CASES)

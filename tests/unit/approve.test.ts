@@ -541,6 +541,42 @@ describe("A-20: a degree alone does not raise the wage", () => {
   });
 });
 
+describe("B-1: Kurvan Ansari's ₹25,000 belongs to the old s.163A schedule, not to a claim under s.166", () => {
+  const child: EstimateInput = {
+    ...base,
+    kind: "death",
+    victim: { ageYears: 8, employment: "minor" },
+    family: { married: false, parents: 2 },
+  };
+
+  it("values a child's death at the skilled minimum wage, with the usual deduction, in every figure", () => {
+    const out = estimate(rules, child, { asOf: AS_OF });
+    const incomes = SCENARIOS.map((s) => value(out, s, "monthly_income"));
+    expect(new Set(incomes).size).toBe(1);
+    expect(incomes[0]).toBeGreaterThan(25000 / 12);
+    for (const s of SCENARIOS) expect(value(out, s, "personal_deduction")).toBe(0.5);
+  });
+
+  it("is no longer a contested point; the multiplier for a child under 15 still is (A-9)", () => {
+    expect(rules.rangeParameters.map((p) => p.id)).not.toContain("minor_death_income");
+    const out = estimate(rules, child, { asOf: AS_OF });
+    expect(out.swingFactors.map((f) => f.parameter)).not.toContain("minor_death_income");
+    expect(value(out, "conservative", "multiplier")).toBe(15);
+    expect(value(out, "standard", "multiplier")).toBe(18);
+    expect(rules.rangeParameters.find((p) => p.id === "under_15_multiplier")?.sources).not.toContain(
+      "kurvan_ansari_2021",
+    );
+  });
+
+  it("says that no Supreme Court rule decides a child's death in an ordinary claim", () => {
+    const w = estimate(rules, child, { asOf: AS_OF }).warnings.find(
+      (x) => x.code === "MINOR_DEATH_CONTESTED",
+    );
+    expect(w?.message).toMatch(/s\.163A schedule/);
+    expect(w?.message).not.toMatch(/range/);
+  });
+});
+
 describe("A-6: an injured pensioner's pension that continues is not lost income", () => {
   const injured = (pensionContinues?: boolean): EstimateInput => ({
     ...base,

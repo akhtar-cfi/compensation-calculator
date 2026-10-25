@@ -5,8 +5,10 @@
   conservative: 15
   standard: 18
   claimant_max: 18
-  sources: [kurvan_ansari_2021, kajal_2020, hitesh_patel_2025, hansraj_2026]
-  note: 15 in the death line (Kurvan Ansari); 18 in the injury line (Kajal, Hitesh Patel, Hansraj).
+  sources: [reshma_kumari_2013, kajal_2020, hitesh_patel_2025, hansraj_2026]
+  note: >-
+    15 in Reshma Kumari (three judges, tied to the old Second Schedule); 18 in the injury line (Kajal, Hitesh Patel,
+    Hansraj; two judges). Kurvan Ansari's 15 applied the s.163A schedule (legal review B-1).
 - id: conventional_escalation_steps
   description: Number of 10% steps applied to the Pranay Sethi conventional heads.
   conservative: accident
@@ -31,15 +33,8 @@
   standard: domestic_care
   claimant_max: domestic_care
   sources: [shishu_pal_2026, kirti_2021]
-- id: minor_death_income
-  description: Income basis for the death of a minor.
-  conservative: kurvan_notional
-  standard: skilled_minimum_wage
-  claimant_max: skilled_minimum_wage
-  sources: [kurvan_ansari_2021, kajal_2020, hansraj_2026]
-  note: The skilled-minimum-wage rule is settled for injured minors; its use for deaths is an HC extension.
 # The points below are decided in the engine's code; the values here describe what the code does, so that all
-# 11 contested points are listed in one place for the legal reviewers. Changing these words does not change
+# 10 contested points are listed in one place for the legal reviewers. Changing these words does not change
 # the code. "sources" are the authorities the code cites for the head; an empty list means none is recorded
 # for the choice itself.
 - id: functional_pct
