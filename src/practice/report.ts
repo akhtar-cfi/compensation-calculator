@@ -305,7 +305,7 @@ export interface PracticeSummary {
   period?: { from: string; to: string };
   byCourt: Record<string, Count>;
   byYear: Record<string, Count>;
-  replicate: { death: Tally; injury: Tally; byCourt: Record<string, Tally> };
+  replicate: { death: Tally; injury: Tally; byCourt: Record<string, Tally>; byYear: Record<string, Tally> };
   /** For each point, how many awards took each option. */
   points: Record<string, Record<string, number>>;
 }
@@ -323,7 +323,7 @@ export function summarisePractice(rules: RulesBundle, all: readonly PracticeRow[
     repeats: all.length - rows.length,
     byCourt: {},
     byYear: {},
-    replicate: { death: tally(), injury: tally(), byCourt: {} },
+    replicate: { death: tally(), injury: tally(), byCourt: {}, byYear: {} },
     points: {},
   };
   const years = rows
@@ -338,6 +338,7 @@ export function summarisePractice(rules: RulesBundle, all: readonly PracticeRow[
     const p = practiceOf(rules, r);
     s.replicate[k][p.replicate]++;
     (s.replicate.byCourt[r.court] ??= tally())[p.replicate]++;
+    if (r.award_date) (s.replicate.byYear[r.award_date.slice(0, 4)] ??= tally())[p.replicate]++;
     if (p.escalation) add(s.points, "escalation", p.escalation);
     if (p.escalation_method) add(s.points, "escalation_method", p.escalation_method);
     if (p.under_15_multiplier) add(s.points, `under_15_multiplier.${k}`, p.under_15_multiplier);
@@ -431,6 +432,9 @@ export function renderPracticeReport(s: PracticeSummary): string {
     `| Death | ${tl(s.replicate.death)} |`,
     `| Injury | ${tl(s.replicate.injury)} |`,
     ...courts.map((c) => `| ${COURT_NAMES[c] ?? c} | ${tl(s.replicate.byCourt[c]!)} |`),
+    ...Object.keys(s.replicate.byYear)
+      .sort()
+      .map((y) => `| Awards of ${y} | ${tl(s.replicate.byYear[y]!)} |`),
     "",
     ...(s.replicate.injury.pass + s.replicate.injury.fail === 0
       ? [

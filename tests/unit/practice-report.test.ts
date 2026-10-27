@@ -206,6 +206,7 @@ describe("the report", () => {
 
   it("counts awards by court, year and kind", () => {
     expect(summary.n).toBe(3);
+    expect(summary.replicate.byYear["2026"]).toEqual({ pass: 0, fail: 0, skipped: 1 });
     expect(summary.byCourt["Rohini"]).toEqual({ death: 1, injury: 1 });
     expect(summary.byCourt["PHC"]).toEqual({ death: 1, injury: 0 });
   });

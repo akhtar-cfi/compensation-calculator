@@ -36,6 +36,14 @@ The calculator's formula is fed each table's own income, future prospects, deduc
 | Indian Kanoon copies (various Delhi courts) | 44   | 4    | 183           | 92%       |
 | Patiala House                               | 80   | 2    | 50            | 98%       |
 | Rohini                                      | 143  | 29   | 379           | 83%       |
+| Awards of 2019                              | 0    | 1    | 3             | 0%        |
+| Awards of 2020                              | 2    | 0    | 6             | 100%      |
+| Awards of 2021                              | 1    | 0    | 9             | 100%      |
+| Awards of 2022                              | 12   | 1    | 25            | 92%       |
+| Awards of 2023                              | 33   | 9    | 68            | 79%       |
+| Awards of 2024                              | 73   | 1    | 157           | 99%       |
+| Awards of 2025                              | 86   | 11   | 197           | 89%       |
+| Awards of 2026                              | 123  | 13   | 272           | 90%       |
 
 Injury tables in these forms give the loss of earning capacity without the multiplier or future prospects behind it, so the head cannot be recomputed from the table alone.
 
