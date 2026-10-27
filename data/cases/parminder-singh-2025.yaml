@@ -1,0 +1,40 @@
+id: parminder-singh-2025
+title: Student, 21, Punjab, quadriplegia (injury)
+citation: Parminder Singh v. Honey Goyal and Others, 2025 INSC 361, Civil Appeal No. ___ of 2025 (arising out of
+  S.L.P. (C) No. 4484 of 2020)
+court: SC
+source_url: https://www.livelaw.in/pdf_upload/4341820198150160081judgement18-mar-2025-591847.pdf
+kind: injury
+archetypes:
+- injury_severe_100
+- injury_paraplegia
+state: PB
+facts:
+  accident_date: '2014-06-03'
+  age: 21
+  employment: student
+  occupation: pursuing studies to become a veterinary doctor; state-level volleyball player; had done a pig-farming
+    course
+  disability_pct: 100
+  family: injured claimant himself
+journey:
+- forum: mact
+  amount: 516000
+- forum: high_court
+  date: '2019-09-04'
+  amount: 1525600
+- forum: supreme_court
+  date: '2025-03-18'
+  amount: 3684000
+what_mattered:
+- An income below the unskilled minimum wage was rejected; given his sport and training the Court took Rs 7,500
+  a month, plus 40% future prospects.
+- Total dependence justified attendant, future medical, physiotherapy and marriage-prospects heads that the lower
+  courts had not given.
+- The Court directed that compensation be paid by direct transfer into the claimant's bank account.
+summary: A 21-year-old student and state-level volleyball player was left paralysed in all four limbs in Punjab
+  in 2014. The tribunal awarded Rs 5.16 lakh and the High Court Rs 15.26 lakh. In 2025 the Supreme Court awarded
+  Rs 36.84 lakh, nearly 11 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

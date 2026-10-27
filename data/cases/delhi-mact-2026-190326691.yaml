@@ -1,0 +1,35 @@
+id: delhi-mact-2026-190326691
+title: Shop worker whose income was not proved, 20, Delhi, 30% disability (injury)
+citation: 'Saleem Vs. Saidan & Ors., MACT No.: 496/2023 (FIR no. 331/2023, PS Kalindi Kunj; CNR No.: DLSE01 -011715-2023)'
+court: MACT
+source_url: https://indiankanoon.org/doc/190326691/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2023-07-06'
+  claim_filed: '2023-11-08'
+  age: 20
+  employment: informal
+  occupation: worker at a biryani shop (employment and income not proved)
+  disability_pct: 30
+  family: injured man himself (motorcycle rider)
+journey:
+- forum: mact
+  date: '2026-05-05'
+  amount: 1443798
+  note: No deduction; insurer's legal offer (amount not stated) was not accepted
+interest_pct: 7.5
+what_mattered:
+- Claimed Rs.18,000/month not proved (he did not even know the shop's name), so Uttar Pradesh minimum wage Rs.10,275/month
+  (his Aadhaar residence) used, though the accident was in Delhi
+- 56% lower-limb disability from open tibia/patella fractures assessed as 30% functional disability; he still works
+  at the same shop but in insecure manual work
+- 'Age 20: 40% future prospects and multiplier 18; 6 months'' loss of income'
+- Medical bills of only Rs.4,340 (government hospital) rounded up to Rs.5,000
+summary: A 20-year-old shop worker whose income was not proved was injured in Delhi in 2023, and left with 30% functional
+  disability. The tribunal awarded Rs 14.44 lakh in 2026, 2.8 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

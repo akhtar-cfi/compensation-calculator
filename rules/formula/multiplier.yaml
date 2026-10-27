@@ -1,0 +1,18 @@
+id: multiplier
+description: Multiplier by age of the deceased / injured (never by age of the claimants; never split).
+sources: [sarla_verma_2009, pranay_sethi_2017, preetha_krishnan_2025]
+confidence: settled
+verified: false
+bands:
+  - { min_age: 15, max_age: 25, multiplier: 18 }
+  - { min_age: 26, max_age: 30, multiplier: 17 }
+  - { min_age: 31, max_age: 35, multiplier: 16 }
+  - { min_age: 36, max_age: 40, multiplier: 15 }
+  - { min_age: 41, max_age: 45, multiplier: 14 }
+  - { min_age: 46, max_age: 50, multiplier: 13 }
+  - { min_age: 51, max_age: 55, multiplier: 11 }
+  - { min_age: 56, max_age: 60, multiplier: 9 }
+  - { min_age: 61, max_age: 65, multiplier: 7 }
+  # Sarla Verma's last category is "above 65": it does not end at 70 (legal review A-16).
+  - { min_age: 66, multiplier: 5 }
+# Under-15 is contested and resolved through range-parameters.yaml (under_15_multiplier).

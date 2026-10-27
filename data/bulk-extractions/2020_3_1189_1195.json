@@ -1,0 +1,93 @@
+{
+  "record_version": 1,
+  "doc_id": "2020_3_1189_1195",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2020 INSC 263",
+  "cnr": "ESCR010002122020",
+  "decided": "2020-03-04",
+  "citation": "2020 INSC 263; [2020] 3 S.C.R. 1189",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2020/english/2020_3_1189_1195_EN.pdf",
+  "quote_check": "verified, 10/10 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2020_3_1189_1195",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "Not a motor accident compensation claim: two consumer complaints by the deceased car owner's widow against his insurer, for the car's own damage and personal accident cover, decided by consumer forums, not a Claims Tribunal. The Supreme Court decided only the insurer's liability.",
+      "kind": "death",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "RJ",
+      "accident_date": "2010-06-06",
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "supreme_court",
+        "date": "2020-03-04",
+        "amount": null,
+        "by": "owner",
+        "note": "Appeal by the deceased car owner's widow allowed: the insurer is liable to indemnify under the policy. The case came from consumer forums, not a claims tribunal, so no compensation amount is recorded."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [],
+      "holding": "An owner hiring a driver need only see a licence that looks genuine and satisfy himself the driver is competent; he need not check it with licensing authorities unless there is cause to doubt it. The insurer remains liable under the policy unless it proves the owner knew or had notice the licence was fake or invalid.",
+      "para": "9-11",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Car owner and daughter killed; widow's claim on the car's insurance, Rajasthan (consumer case, death)",
+    "family_summary": "In June 2010 a car collided with a tractor, killing the car's owner and his daughter and damaging the car. The insurer refused to pay because the hired driver's licence could not be verified, but the consumer forums ordered it to pay Rs 3,57,500 for the car and Rs 2,00,000 under the personal accident cover, each with 9% interest. In February 2018 the National Commission cleared the insurer because the licensing office had no record of the licence. In March 2020, almost ten years after the crash, the Supreme Court held the insurer liable because the owner had checked the licence and had no reason to doubt it.",
+    "what_mattered": [
+      "The owner checked the driver's licence when hiring him, the driver drove competently, and the insurer never said the owner was careless in hiring him.",
+      "An owner need not verify a genuine-looking licence with transport offices across the country; the insurer must prove the owner knew or had notice it was fake.",
+      "This was a consumer complaint on the car's own insurance, not a claims tribunal case, so no compensation award is recorded."
+    ],
+    "archetypes": [],
+    "audience": "lawyers",
+    "review_notes": [
+      "Precedent quote keeps the law report's page-margin letter B after 'It would be', as it appears in the text file.",
+      "No TOPIC_PATTERNS id covers insurer liability for a fake or unverifiable licence, so precedent topics is empty.",
+      "Consumer-forum case (own damage and personal accident cover), recorded for its precedent on the licence defence; reviewer may drop it from the cases list."
+    ]
+  }
+}

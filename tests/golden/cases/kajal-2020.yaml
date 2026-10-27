@@ -1,0 +1,96 @@
+id: kajal-2020
+title: "Kajal v Jagdish Chand & Ors."
+citation: "(2020) 4 SCC 413" # 2020 INSC 135; Civil Appeal No. 735 of 2020 (@ SLP(C) No. 15504 of 2019)
+court: SC
+judgment_date: 2020-02-05
+source_url: "https://api.sci.gov.in/supremecourt/2019/19924/19924_2019_11_1502_20257_Judgement_05-Feb-2020.pdf"
+kind: injury
+facts:
+  accident_date: 2007-10-18
+  age_at_accident: 12
+  state: Haryana # treated at Karnal / PGI Chandigarh; Haryana 2010 minimum-wage notification used
+  occupation: student # school-going child
+  employment: minor
+  claimants: null
+  disability: { certificate_pct: 100, functional_pct: null } # PGI Board certificate Ex.P6: 100%; brain injury, IQ < 20%
+judgment_params:
+  monthly_income: 4846 # minimum wage of a skilled workman (Haryana notification, 2010)
+  future_prospects_pct: 40
+  personal_deduction: null
+  multiplier: 18
+  disability_pct_applied: 100 # implicit: loss of future earnings taken in full; no % factor shown
+  attendant: { attendants: 2, monthly_per_attendant: 5000, multiplier: 18 }
+  hospital_attendants: { attendants: 2, per_day: 500, days: 51 }
+  conventional: null
+  interest_pct: 7.5
+expected:
+  heads:
+    medical_hospitalisation_transportation: 250000 # = medical 2,00,000 + transportation 50,000 (para 19)
+    loss_of_earnings_family_members: 51000 # 2 attendants x Rs.500/day x 51 days in hospital (para 21)
+    loss_of_earning_capacity: 1466000 # "Loss of future earnings"
+    attendant: 2160000
+    pain_suffering_and_loss_of_amenities: 1500000
+    marriage_prospects: 300000
+    future_medical: 500000
+  total: 6227000
+  lower_forums: { mact: 1108501, high_court: 2578501 }
+computation_quote: |
+  [para 19] ... Therefore, the amount payable for actual medical expenses is increased from
+  Rs.1,38,501/- to Rs.2,00,000/-. The amount awarded for transportation at Rs.50,000/- is
+  reasonable. Therefore, under this head we award Rs.2,50,000/-.
+
+  [para 20] ... The appellant has placed before us material to show that the minimum wages
+  payable to a skilled workman is Rs.4846/- per month. In our opinion this would be the
+  minimum amount which she would have earned on becoming a major. Adding 40% for the future
+  prospects, it works to be Rs.6784.40/- per month, i.e., 81,412.80 per annum. Applying the
+  multiplier of 18 it works out to Rs.14,65,430.40, which is rounded off to Rs.14,66,000/-
+
+  [para 21] ... In the hospital the claimant would have had at least two attendants, and
+  taking the cost of each at Rs.500/- per day for 51 days, we award her Rs.51,000/-.
+
+  [para 24] ... Keeping the claimant's age in mind, the multiplier in this case should be 18
+  as opposed to 44 taken by the High Court.
+
+  [para 25] ... The claimant has placed before us a notification of the State of Haryana of
+  the year 2010, wherein the wages for skilled labourer is Rs.4846/- per month. We, therefore,
+  assess the cost of one attendant at Rs.5,000/- and she will require two attendants which
+  works out to Rs.10,000/- per month, which comes to Rs.1,20,000/- per annum, and using the
+  multiplier of 18 it works out to Rs.21,60,000/- for attendant charges for her entire life.
+  This takes care of all the pecuniary damages.
+
+  [para 27] ... Therefore, we feel in the peculiar facts and circumstances of the case even
+  after taking a very conservative view of the matter an amount payable for the pain and
+  suffering of this child should be at least Rs.15,00,000/-.
+
+  [para 28] The Tribunal has awarded Rs.3,00,000/- for loss of marriage prospects. We see no
+  reason to interfere with this finding.
+
+  [para 29] ... it would not be unjust to award her Rs.5,00,000/- for future medical expenses.
+
+  [para 32] In view of the above, we award a sum of Rs.62,27,000/- to the claimant under the
+  following heads :
+  S.No. | Heads                                                        | Amount
+  (i)   | Expenses relating to treatment, hospitalisation and transportation | Rs. 2,50,000/-
+  (ii)  | Loss of earnings (family members)                            | Rs. 51,000/-
+  (iii) | Loss of future earnings                                      | Rs.14,66,000/-
+  (iv)  | Attendant charges                                            | Rs.21,60,000/-
+  (v)   | Pain, suffering, loss of amenities                           | Rs.15,00,000/-
+  (vi)  | Loss of Marriage prospects                                   | Rs. 3,00,000/-
+  (vii) | Future medical treatment                                     | Rs. 5,00,000/-
+  This amount shall carry an interest @7.5% p.a. from the date of filing of the claim
+  petition till payment/deposit of the amount.
+paragraphs: ["19", "20", "21", "22", "24", "25", "26", "27", "28", "29", "31", "32"]
+notes: >-
+  Arithmetic verified: heads sum to 62,27,000 (matches). ROUNDING: loss of future earnings
+  4846 x 1.4 x 12 x 18 = 14,65,430.40, rounded UP by the Court to 14,66,000 (nearest thousand);
+  a calculator without this rounding will be 569.60 short. Attendant charges use a rounded
+  Rs.5,000 per attendant (vs skilled MW 4,846) x 2 attendants x 12 x 18. No explicit disability
+  percentage factor is applied (100% disability). Head (i) merges medical (2,00,000) and
+  transportation (50,000); head (v) merges pain & suffering with loss of amenities.
+  The (ii) 'loss of earnings (family members)' head is in substance hospital-period attendant
+  charges. Lower forums: HC table in para 4 prints attendant charges as "Rs. 3,20,000/-
+  (Rs.2500 for 44 years)" but para 22 states 13,20,000 (2,500 x 12 x 44), and only 13,20,000
+  makes the HC total of 25,78,501 add up - the 3,20,000 is a typo in the judgment. HC used
+  notional income Rs.15,000/annum x 18 x 100% = 2,70,000. Neutral citation 2020 INSC 135 is not
+  printed on the SCI PDF (from secondary sources). Wording verbatim; layout normalised.
+verified: false

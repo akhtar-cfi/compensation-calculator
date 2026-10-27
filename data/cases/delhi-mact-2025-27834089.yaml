@@ -1,0 +1,43 @@
+id: delhi-mact-2025-27834089
+title: Auto-rickshaw driver, 47, Delhi, 5% disability (injury)
+citation: Ekrar Khan @ Ikraj Vs. Tofik & Ors., MACT No.110/21 (MACP No. 110/21), DLND010053792021
+court: MACT
+source_url: https://indiankanoon.org/doc/27834089/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+- contributory_negligence
+state: DL
+facts:
+  accident_date: '2021-03-09'
+  claim_filed: '2021-08-24'
+  age: 47
+  employment: informal
+  occupation: auto-rickshaw driver (no proof of income filed)
+  disability_pct: 5
+  family: the injured himself
+journey:
+- forum: insurer_offer
+  amount: 72357
+  note: plus actual medical bills, after deducting 25% for contributory negligence; not acceptable to the petitioner
+- forum: mact
+  date: '2025-12-12'
+  amount: 311355
+  note: Rs.4,15,140 assessed, less 25% contributory negligence (Rs.1,03,785); 7.5% interest from filing of claim
+    petition
+interest_pct: 7.5
+what_mattered:
+- Claimed Rs.30,000/month as auto driver but admitted no proof of income, so minimum wage of a skilled worker in
+  Delhi (Rs.18,797) was used
+- 12% permanent disability of right lower limb was cut to 5% functional whole-body disability because the disability
+  did not stop him driving an auto
+- '25% contributory negligence: claimant drove his auto into a parked truck despite clear visibility and room to
+  pass'
+- Only 2 of 5 medical bills were in his name (Rs.478 allowed); hospitalisation not documented, so only 3 months'
+  loss of earnings
+summary: A 47-year-old auto-rickshaw driver was injured in Delhi in 2021, and left with 5% functional disability.
+  The insurer offered Rs 72,357, which was not accepted. The tribunal awarded Rs 3.11 lakh in 2025 after a 25% cut
+  for the victim's own negligence, 4.8 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

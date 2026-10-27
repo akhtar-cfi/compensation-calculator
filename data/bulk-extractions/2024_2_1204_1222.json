@@ -1,0 +1,103 @@
+{
+  "record_version": 1,
+  "doc_id": "2024_2_1204_1222",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2024 INSC 361",
+  "cnr": "ESCR010004042024",
+  "decided": "2024-02-08",
+  "citation": "2024 INSC 361; [2024] 2 S.C.R. 1204",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/english/2024_2_1204_1222_EN.pdf",
+  "quote_check": "verified, 13/13 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2024_2_1204_1222",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "Remand: no forum decided an amount. The tribunal dismissed the claim for lack of territorial jurisdiction, the High Court upheld that, and the Supreme Court set both aside and sent the claim back to the tribunal to decide compensation on merits.",
+      "kind": "death",
+      "outcome": "remanded",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "UK",
+      "accident_date": "2006-03-07",
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2010-10-06",
+        "amount": null,
+        "by": null,
+        "note": "Claim filed in 2006 was dismissed about 4 years later for lack of territorial jurisdiction; the tribunal also decided all other issues against the father without examining their merits. Nothing awarded."
+      },
+      {
+        "forum": "high_court",
+        "date": "2016-11-28",
+        "amount": null,
+        "by": "claimant",
+        "note": "The father's appeal, filed in 2010, was dismissed about 6 years later; the Uttarakhand High Court looked only at territorial jurisdiction. Nothing awarded."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2024-02-08",
+        "amount": null,
+        "by": "claimant",
+        "note": "Both decisions set aside; claim restored to the same tribunal to decide compensation on merits within six months, with parties free to add evidence. No amount decided."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [],
+      "holding": "Where territorial jurisdiction cannot be decided on the pleadings alone and a Claims Tribunal lets parties lead evidence, it must pronounce on all framed issues (Order XIV Rule 2 CPC), not decide them against the claimant without examining merits. Lack of territorial jurisdiction does not make an award a nullity.",
+      "para": "28",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Son, motorcyclist hit by a tractor, Uttarakhand (death; claim sent back to tribunal)",
+    "family_summary": "A father's son died in March 2006 when a tractor hit him and his motorcycle in Uttarakhand. The father claimed compensation the same year, but in October 2010 the tribunal dismissed the claim for lack of territorial jurisdiction and decided every other issue against him without examining it; the High Court upheld this in November 2016. In February 2024, almost 18 years after the accident, the Supreme Court set both decisions aside and sent the claim back to the tribunal to decide compensation within six months. No amount has been awarded yet.",
+    "what_mattered": [
+      "The tribunal had let both sides lead evidence over four years, so the Supreme Court said it should have decided every issue instead of ruling them all against the father without looking at the merits.",
+      "The insurer did business within the tribunal's area and the law lets the claimant choose where to file, so the claim could be heard there.",
+      "The tribunal's findings would have blocked a fresh claim elsewhere, leaving the family with no remedy; that failure of justice is why both decisions were set aside."
+    ],
+    "archetypes": [],
+    "audience": "lawyers",
+    "review_notes": []
+  }
+}

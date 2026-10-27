@@ -1,0 +1,115 @@
+{
+  "record_version": 1,
+  "doc_id": "2026_8_284_306",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2026 INSC 793",
+  "cnr": "ESCR010002512026",
+  "decided": "2026-08-04",
+  "citation": "2026 INSC 793; [2026] 8 S.C.R. 284",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/english/2026_8_284_306_EN.pdf",
+  "quote_check": "verified, 18/18 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2026_8_284_306",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_dismissed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "TS",
+      "accident_date": "1996-07-13",
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": "self_employed",
+      "occupation": "seafood business (as claimed by the family; income not proved)",
+      "proof": "none",
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": 4500,
+      "income_basis": "notional",
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": 1000500,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 7.5,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2009-12-08",
+        "amount": 0,
+        "by": null,
+        "note": "Claim dismissed: the tribunal held the family not entitled to any compensation, noting that no extra premium had been paid to cover the owner's personal risk."
+      },
+      {
+        "forum": "high_court",
+        "date": "2024-07-30",
+        "amount": 1000500,
+        "by": "claimant",
+        "note": "Family's appeal allowed: the comprehensive policy was held to cover the owner travelling in the car as a passenger; Rs 10,00,500 awarded with 7.5% interest a year on a notional income of Rs 4,500 a month."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2026-08-04",
+        "amount": 1000500,
+        "by": "insurer",
+        "note": "Insurer's appeal dismissed: under a comprehensive/package policy the insurer is liable for any occupant, per the IRDA circular of 16.11.2009; the High Court's award stands."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "liability"
+      ],
+      "holding": "Under a comprehensive/package motor policy, the insurer is liable to compensate any occupant in the vehicle, in line with the IRDA circular of 16.11.2009. The Court upheld the High Court's view that this covered the car's owner travelling in it as a passenger, and said courts should not take a hyper-technical approach in motor accident claims.",
+      "para": "34",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, age not stated, car owner travelling in his own car, Telangana (death)",
+    "family_summary": "In July 1996 a man died of his injuries after an unidentified lorry hit his car from behind while he was travelling in it. In 2009 the tribunal gave his family nothing, because no extra premium had been paid to cover the owner himself. In 2024 the High Court awarded Rs 10,00,500 with 7.5% interest, holding that his comprehensive policy covered him as an occupant. In August 2026 the Supreme Court upheld that award, 30 years after the accident.",
+    "what_mattered": [
+      "The car had a comprehensive ('package') insurance policy, not just the basic third-party cover. Under a 16.11.2009 circular of the insurance regulator (IRDA), insurers must pay for anyone travelling in a car with such a policy, so the owner riding in his own car was covered.",
+      "With no proof of his earnings, the High Court used a notional income of Rs 4,500 a month.",
+      "The Supreme Court said courts should not turn down motor accident claims on narrow technical points."
+    ],
+    "archetypes": [
+      "death_informal_no_proof",
+      "death_self_employed"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: precedent.topics set to [\"liability\"]; the holding decides whether the insurer must pay for the owner riding in his own car (para 34).",
+      "fixed: duplicate finding on precedent.topics (liability) covered by the same change.",
+      "fixed: archetypes add death_self_employed; para 28 says the deceased ran a seafood business and employment is already self_employed.",
+      "fixed: what_mattered[0] now explains comprehensive ('package') cover versus basic third-party cover and that IRDA is the insurance regulator.",
+      "fixed: what_mattered[2] replaces 'hyper-technical approach' with plain words (no turning down claims on narrow technical points).",
+      "fixed: payload.uncertain notes the 2009 circular post-dates the 1996 accident and that the para 23.4 four-layer structure puts owner/driver cover in a separate optional add-on."
+    ]
+  }
+}

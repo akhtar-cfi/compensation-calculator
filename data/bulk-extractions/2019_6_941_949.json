@@ -1,0 +1,118 @@
+{
+  "record_version": 1,
+  "doc_id": "2019_6_941_949",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2019 INSC 489",
+  "cnr": "ESCR010008702019",
+  "decided": "2019-04-09",
+  "citation": "2019 INSC 489; [2019] 6 S.C.R. 941",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2019/english/2019_6_941_949_EN.pdf",
+  "quote_check": "verified, 26/26 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2019_6_941_949",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": null,
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": "salaried employee",
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": 7242,
+      "income_basis": "proved_salary",
+      "future_prospects_pct": 50,
+      "deduction": "1/2",
+      "multiplier": 16,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_dependency": 1042848,
+        "other:loss_of_companionship": 30000
+      },
+      "awarded_formula_head": 1042848,
+      "total_award": 1072848,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": 2,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": 465488,
+        "by": null,
+        "note": "Multiplier 8 from the parents' average age, 1/3 deduction, no future prospects, Rs 2,000 for loss of companionship. Date not stated."
+      },
+      {
+        "forum": "high_court",
+        "date": null,
+        "amount": 479972,
+        "by": null,
+        "note": "Multiplier 11 from the parents' ages (54 and 53), 50% deduction, no future prospects. The High Court, the date and who appealed are not stated."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2019-04-09",
+        "amount": 1072848,
+        "by": "claimant",
+        "note": "Connected appeal C.A. No. 178/2017 allowed to the extent of the recomputed table: multiplier 16 by the deceased's own age, 50% future prospects, 50% deduction, Rs 30,000 for loss of companionship; Rs 5,92,876 more, with 9% interest."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "multiplier"
+      ],
+      "holding": "When an unmarried person (a bachelor) dies in a motor accident, the multiplier is chosen by the age of the deceased, not the age of the parents or other dependents. A three-judge bench treated this as settled by Sube Singh, Munna Lal Jain, Reshma Kumari and Pranay Sethi and rejected the insurer's plea to use the dependents' ages.",
+      "para": "13",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": "multiplier"
+    },
+    "title_anon": "Salaried person, Rs 7,242 a month, state not stated (death)",
+    "family_summary": "A salaried person earning Rs 7,242 a month died in a road accident. The tribunal awarded Rs 4,65,488 and the High Court Rs 4,79,972, both choosing the multiplier from the parents' ages. On 9 April 2019 the Supreme Court decided this appeal together with three related appeals. Following its ruling in the lead case, it used the deceased's own age (multiplier 16), added 50% future prospects and raised the award to Rs 10,72,848 with 9% interest. The earlier dates are not given; the Supreme Court appeal was numbered in 2017.",
+    "what_mattered": [
+      "The Supreme Court held that the multiplier follows the deceased's own age, not the parents' ages, which lifted it from 11 to 16.",
+      "Future prospects of 50% were added for the first time, and loss of companionship went up from Rs 2,000 to Rs 30,000.",
+      "The court heard the multiplier point even though the other side said it was not raised, because a ground in the appeal petition was wide enough to cover it."
+    ],
+    "archetypes": [
+      "death_salaried",
+      "death_bachelor"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "Extractor: precedent checked against rules/formula/multiplier.yaml (multiplier by age of the deceased, never the claimants); no departure.",
+      "fixed: payload.outcome set to appeal_partly_allowed; C.A. 178/2017 was 'allowed to the aforesaid extent' (qualified), matching the batch convention.",
+      "fixed: journey.2.note now says the appeal was allowed to the extent of the recomputed table.",
+      "fixed: payload.uncertain notes that multiplier 16 on the deceased's age matches the Sarla Verma 31-35 band and 50% future prospects suggests a permanent job under 40; age and employment kept empty (reviewer findings 3 and 6 merged into one line).",
+      "fixed: precedent.rule_id set to multiplier (holding confirms multiplier by deceased's age); departs_from_rules stays false.",
+      "fixed: family_summary no longer says all four appeals raised the same question; C.A. 178/2017 was decided by following the lead ruling."
+    ]
+  }
+}

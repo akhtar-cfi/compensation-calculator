@@ -1,0 +1,13 @@
+id: notional_income
+description: Income used when the person did not earn, or earnings cannot be proved.
+confidence: contested
+verified: false
+homemaker_domestic_care:
+  monthly: 30000
+  base_date: 2026-06-11
+  step_years: 3
+  step_pct: 10
+  sources: [shishu_pal_2026]
+  note: >-
+    Shishu Pal: "loss of domestic care" Rs 30,000/month is the stand-in monthly income for a homemaker without
+    monetary income, and is added to proved income if she also earned. Revised 10% cumulatively every three years.

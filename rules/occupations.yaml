@@ -1,0 +1,32 @@
+# Curated occupation list -> skill category for the state minimum-wage lookup (no free-text matching).
+# Categories: unskilled | semi_skilled | skilled | highly_skilled. Mapping must be signed off; states define
+# categories in their own schedules, so this is a default only.
+verified: false
+occupations:
+  - { code: agricultural_labourer, category: unskilled, en: "Agricultural labourer / farm worker", hi: "खेतिहर मज़दूर" }
+  - { code: construction_labourer, category: unskilled, en: "Construction labourer", hi: "निर्माण मज़दूर" }
+  - { code: daily_wage_labourer, category: unskilled, en: "Daily-wage labourer", hi: "दिहाड़ी मज़दूर" }
+  - { code: domestic_worker, category: unskilled, en: "Domestic worker", hi: "घरेलू कामगार" }
+  - { code: cleaner_sweeper, category: unskilled, en: "Cleaner / sweeper", hi: "सफ़ाई कर्मचारी" }
+  - { code: porter_loader, category: unskilled, en: "Porter / loader", hi: "पल्लेदार / लोडर" }
+  - { code: street_vendor, category: unskilled, en: "Street vendor / hawker", hi: "रेहड़ी-पटरी विक्रेता" }
+  - { code: farmer_cultivator, category: unskilled, en: "Farmer (own land, no income proof)", hi: "किसान" }
+  - { code: helper, category: semi_skilled, en: "Helper / assistant", hi: "हेल्पर" }
+  - { code: shop_worker, category: semi_skilled, en: "Shop worker / salesperson", hi: "दुकान कर्मचारी" }
+  - { code: security_guard, category: semi_skilled, en: "Security guard", hi: "सुरक्षा गार्ड" }
+  - { code: delivery_rider, category: semi_skilled, en: "Delivery rider / courier", hi: "डिलीवरी राइडर" }
+  - { code: factory_worker, category: semi_skilled, en: "Factory / machine worker", hi: "फ़ैक्टरी कर्मचारी" }
+  - { code: driver, category: skilled, en: "Driver (auto / taxi / truck / bus)", hi: "ड्राइवर" }
+  - { code: mason, category: skilled, en: "Mason", hi: "राजमिस्त्री" }
+  - { code: carpenter, category: skilled, en: "Carpenter", hi: "बढ़ई" }
+  - { code: electrician, category: skilled, en: "Electrician", hi: "इलेक्ट्रीशियन" }
+  - { code: plumber, category: skilled, en: "Plumber", hi: "प्लंबर" }
+  - { code: mechanic, category: skilled, en: "Mechanic", hi: "मैकेनिक" }
+  - { code: tailor, category: skilled, en: "Tailor", hi: "दर्ज़ी" }
+  - { code: welder, category: skilled, en: "Welder", hi: "वेल्डर" }
+  - { code: cook, category: skilled, en: "Cook", hi: "रसोइया" }
+  - { code: clerk, category: skilled, en: "Clerk / office assistant", hi: "क्लर्क" }
+  - { code: small_business_owner, category: skilled, en: "Small business / shop owner (no ITR)", hi: "छोटा व्यवसायी" }
+  # Legal review A-20: a degree alone gives the skilled wage; a higher category only where the work itself is shown.
+  - { code: graduate_professional, category: skilled, en: "Graduate, no particular job shown (no income proof)", hi: "स्नातक, कोई ख़ास काम नहीं बताया गया" }
+  - { code: professional, category: highly_skilled, en: "Working professional, e.g. engineer or accountant (no income proof)", hi: "पेशेवर काम, जैसे इंजीनियर या अकाउंटेंट" }

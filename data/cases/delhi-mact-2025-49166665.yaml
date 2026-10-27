@@ -1,0 +1,40 @@
+id: delhi-mact-2025-49166665
+title: Shopkeeper, 46, Delhi, 1.5% disability (injury)
+citation: 'Dinesh Dua vs Vipin Aggarwal and Ors., New No. 612/19, Unique ID No.: DLNW01-007254-2022, FIR No. 1141/21,
+  PS Maurya Enclave'
+court: MACT
+source_url: https://indiankanoon.org/doc/49166665/
+kind: injury
+archetypes:
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2021-10-27'
+  claim_filed: '2022-07-23'
+  age: 46
+  employment: self_employed
+  occupation: said he ran a dupatta/ladies-fabric shop (shop not proved; income shown by ITRs)
+  disability_pct: 1.5
+  family: the injured himself
+journey:
+- forum: insurer_offer
+  amount: 82000
+  note: legal offer not accepted
+- forum: mact
+  date: '2025-07-26'
+  amount: 1081947
+  note: Rs.10,81,946.49 rounded off; 7.5% interest from filing of DAR (23.07.2022)
+interest_pct: 7.5
+what_mattered:
+- Income taken as the average of three pre-accident ITRs (Rs.49,838.38/month); no tax had been deducted
+- Business/shop was not proved, so the doctor's evidence on work impact was ignored and 3% limb disability was taken
+  as only 1.5% functional disability
+- Treatment-cum-recuperation fixed at 14 months from bed-rest certificates, giving Rs.6,97,737 loss of income -
+  far larger than the loss of earning capacity head
+- Medi-claim reimbursements excluded but the out-of-pocket balance and two medi-claim premiums (Rs.26,236) were
+  allowed as medical expenses
+summary: A 46-year-old shopkeeper was injured in Delhi in 2021, and left with 1.5% functional disability. The insurer
+  offered Rs 82,000, which was not accepted. The tribunal awarded Rs 10.82 lakh in 2025, 3.7 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

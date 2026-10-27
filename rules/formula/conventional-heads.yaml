@@ -1,0 +1,15 @@
+id: conventional_heads
+description: >-
+  Loss of estate, funeral expenses and loss of consortium (per claimant: spousal, parental, filial),
+  as fixed in Pranay Sethi with a 10% increase every three years.
+sources: [pranay_sethi_2017, magma_2018, satinder_kaur_2020, shishu_pal_2026, hasina_yasmin_2025]
+confidence: contested
+verified: false
+base:
+  loss_of_estate: 15000
+  funeral: 15000
+  consortium_per_claimant: 40000
+base_date: 2017-10-31
+step_years: 3
+step_pct: 10
+# Number of 10% steps applied is a range parameter (conventional_escalation_steps).

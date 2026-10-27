@@ -1,0 +1,21 @@
+# A 25-year-old delivery rider (no income proof) with a leg injury: 40% limb disability, six months off work.
+kind: injury
+accidentDate: "2025-06-01"
+claimFiledDate: "2025-07-01"
+state: DL
+victimRole: driver_of_involved_vehicle
+victim:
+  ageYears: 25
+  employment: informal
+  occupationCode: delivery_rider
+family:
+  married: false
+medical:
+  bills: 200000
+  paidByCashlessScheme: 150000
+injury:
+  certificatePct: 40
+  certificateBasis: limb
+  workCapacity: with_difficulty
+  monthsOffWork: 6
+  hospitalDays: 10

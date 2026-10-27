@@ -1,0 +1,33 @@
+id: rajendra-singh-2020-child
+title: School girl, about 12 (death)
+citation: Rajendra Singh and Others v. National Insurance Company Limited and Others, Civil Appeal No. 2625 of 2020 (decided with Civil Appeal No. 2624 of 2020)
+court: SC
+source_url: https://api.sci.gov.in/supremecourt/2018/14265/14265_2018_34_1502_22630_Judgement_18-Jun-2020.pdf
+kind: death
+archetypes:
+- death_child
+- contributory_negligence
+facts:
+  accident_date: '2012-12-25'
+  age: 12
+  employment: student
+  occupation: school-going child, travelling in a horse cart with her mother
+  family: father and three minor siblings
+journey:
+- forum: mact
+  amount: 160000
+  note: notional income Rs 36,000 a year, 50% personal deduction, multiplier 15, then a 50% cut for contributory negligence
+- forum: high_court
+  amount: 160000
+  note: the High Court dismissed the appeal and stated no figure; the tribunal's amount stood
+- forum: supreme_court
+  date: '2020-06-18'
+  amount: 295000
+  note: contributory-negligence cut removed; no separate future prospects for a child
+what_mattered:
+- Passengers in a horse cart cannot be blamed just because the cart was in the middle of the road; the 50% cut was set aside.
+- The Court kept the notional income and refused a separate head for a child's future prospects, because a young child's future earnings cannot be estimated (Satender).
+- The same judgment raised the award for her mother's death, decided alongside (see the homemaker case).
+summary: A girl of about 12 died with her mother when a bus hit the horse cart they were travelling in, in 2012. The tribunal awarded Rs 1.6 lakh after a 50% cut for contributory negligence, and the High Court did not interfere. In 2020 the Supreme Court removed the cut and awarded Rs 2.95 lakh.
+extracted_by: AI-assisted extraction from the judgment text; amounts and dates checked against the judgment by hand
+verified_by: []

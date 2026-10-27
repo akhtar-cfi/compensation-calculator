@@ -1,0 +1,40 @@
+id: jitendra-2025
+title: Labourer, 25, Madhya Pradesh, hand amputated (injury)
+citation: Jitendra v. Sadiya & Ors., 2025 INSC 166 (Civil Appeal No. 2209 of 2025, arising out of SLP (C) No. 575
+  of 2025)
+court: SC
+source_url: https://admin.caseguru.in/storage/uploads/judgement_pdf/Jitendra%20Vs%20Sadiya%20&%20Ors%202025%20caseguru.pdf
+kind: injury
+archetypes:
+- injury_amputation
+- injury_partial_disability_self_employed_or_manual
+state: MP
+facts:
+  accident_date: '2016-09-25'
+  age: 25
+  employment: informal
+  occupation: labourer; hand caught in a tractor-mounted thresher and amputated below the elbow
+  disability_pct: 80
+  family: the injured man himself (said he was the only earning member of his family)
+journey:
+- forum: mact
+  date: '2021-06-21'
+  amount: 376090
+- forum: high_court
+  date: '2023-08-21'
+  amount: 661690
+- forum: supreme_court
+  date: '2025-02-07'
+  amount: 2055452
+interest_pct: 6
+what_mattered:
+- 'Losing a hand nearly ends a labourer''s ability to work: functional disability was 80%, not the 20% or 40% used
+  below.'
+- Without proof of income, the unskilled minimum wage (Rs 6,850 a month) applies, not a lower notional figure.
+- Attendant charges were added and pain and suffering raised.
+summary: A 25-year-old labourer in Madhya Pradesh lost his right hand below the elbow in a thresher mounted on a
+  tractor in 2016. The tribunal awarded Rs 3.76 lakh on 20% disability and the High Court Rs 6.62 lakh on 40%. In
+  2025 the Supreme Court awarded Rs 20.55 lakh on 80% functional disability, about 8 years after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

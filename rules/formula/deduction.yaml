@@ -1,0 +1,17 @@
+id: personal_deduction
+description: Deduction for the deceased's personal and living expenses (Sarla Verma, approved in Pranay Sethi).
+sources: [sarla_verma_2009, pranay_sethi_2017]
+confidence: settled
+verified: false
+married:
+  - { min_dependants: 2, max_dependants: 3, fraction: "1/3" }
+  - { min_dependants: 4, max_dependants: 6, fraction: "1/4" }
+  - { min_dependants: 7, max_dependants: 99, fraction: "1/5" }
+bachelor: "1/2"
+bachelor_large_family:
+  fraction: "1/3"
+  note: >-
+    Sarla Verma (para 15) allows a third where a large family depended on the unmarried person (e.g. a widowed
+    mother and non-earning siblings). No number of dependants is fixed: it is asked as a fact (legal review A-11).
+
+# Married with a single dependant (spouse only) is not covered by the table: see range-parameters.yaml.

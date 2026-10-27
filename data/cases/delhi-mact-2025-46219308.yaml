@@ -1,0 +1,36 @@
+id: delhi-mact-2025-46219308
+title: Boy, 8, Delhi, 7.5% disability (injury)
+citation: Master Yashvardhan Vs. Dheeraj Ahuja & Ors., MACT No. 348/21 (DLNT0100 7439 2021), FIR No. 634/19, PS
+  Mukherjee Nagar
+court: MACT
+source_url: https://indiankanoon.org/doc/46219308/
+kind: injury
+archetypes:
+- uninsured_vehicle
+state: DL
+facts:
+  accident_date: '2019-12-22'
+  claim_filed: '2021-10-11'
+  age: 8
+  employment: minor
+  occupation: child, no income
+  disability_pct: 7.5
+  family: the injured child, through his mother as natural guardian
+journey:
+- forum: mact
+  date: '2025-01-30'
+  amount: 708036
+  note: compensation Rs.7,08,035.88; with 9% interest for 39 months 20 days the award is Rs.9,19,000 (rounded);
+    vehicle uninsured, driver and owner jointly and severally liable
+interest_pct: 9
+what_mattered:
+- 'Child with no income: notional income taken as the minimum wage of a skilled workman (Rs.17,991) plus 40% future
+  prospects, following Delhi High Court child-injury rulings'
+- 15% permanent disability of the left upper limb was halved to 7.5% whole-body functional disability
+- 'Nil medical expenses: treatment was in government hospitals and no medical bills were proved (Rs.60,000 claimed)'
+- E-rickshaw was uninsured, so the driver and owner were held liable; chargesheet and res ipsa loquitur established
+  negligence
+summary: An 8-year-old boy was injured in Delhi in 2019, and left with 7.5% functional disability. The tribunal
+  awarded Rs 7.08 lakh in 2025, 5.1 years after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

@@ -1,0 +1,14 @@
+# A 35-year-old homemaker dies; survived by husband and two children.
+kind: death
+accidentDate: "2026-03-01"
+claimFiledDate: "2026-04-01"
+state: DL
+victimRole: pedestrian
+victim:
+  ageYears: 35
+  employment: homemaker
+family:
+  married: true
+  spouse: true
+  children: 2
+  parents: 0

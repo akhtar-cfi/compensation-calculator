@@ -1,0 +1,128 @@
+{
+  "record_version": 1,
+  "doc_id": "2026_7_195_207",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2026 INSC 653",
+  "cnr": "ESCR010001962026",
+  "decided": "2026-06-23",
+  "citation": "2026 INSC 653; [2026] 7 S.C.R. 195",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/english/2026_7_195_207_EN.pdf",
+  "quote_check": "verified, 39/39 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2026_7_195_207",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "DL",
+      "accident_date": "2013-06-11",
+      "filing_date": "2013-09-11",
+      "award_date": "2017-11-30",
+      "age": 20,
+      "employment": "student",
+      "occupation": "Chartered Accountancy (Final) student doing articleship",
+      "proof": "other",
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": 55500,
+      "income_basis": "notional",
+      "future_prospects_pct": 50,
+      "deduction": "1/2",
+      "multiplier": 18,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": 2,
+      "heads": {
+        "loss_of_dependency": 8091900,
+        "loss_of_estate": 15000,
+        "funeral": 15000,
+        "consortium": 80000
+      },
+      "awarded_formula_head": 8091900,
+      "total_award": 8201900,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": false,
+      "spouse": false,
+      "children": 0,
+      "parents": 2,
+      "dependent_parents": 2,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2017-11-30",
+        "amount": 8121900,
+        "by": null,
+        "note": "Tribunal took Rs 55,500 a month, less 10% tax, plus 50% future prospects, half deduction, multiplier 18; 9% interest from the date the detailed accident report was filed with the tribunal (Sept 2013). No consortium."
+      },
+      {
+        "forum": "high_court",
+        "date": "2022-08-08",
+        "amount": 8121900,
+        "by": "both",
+        "note": "Cross-appeals by the insurer (negligence, excess) and the parents (enhancement) both dismissed; award kept in full."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2026-06-23",
+        "amount": 8201900,
+        "by": "both",
+        "note": "Insurer's appeal dismissed; parents' appeal partly allowed: Rs 40,000 filial consortium to each parent added, with interest as awarded by the tribunal."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "future_prospects",
+        "notional_income",
+        "student",
+        "consortium",
+        "contributory_negligence"
+      ],
+      "holding": "Hitting a stationary truck from behind does not by itself prove the car driver negligent. For a professional student, income cannot rest on assumed career success or unrelated professionals' salaries. Adding future prospects to an already forward-looking income overlaps, though the Court did not cut the award. An omitted filial consortium head must be added.",
+      "para": "16-25",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 20, chartered accountancy student, Delhi (death)",
+    "family_summary": "A 20-year-old chartered accountancy student died in 2013 when the car he was in hit a truck left standing on a dark Delhi road without lights or warning signs. The tribunal awarded Rs 81,21,900 in 2017, and the High Court kept that amount in 2022 after appeals by both the insurer and his parents. In 2026 the Supreme Court rejected the insurer's appeal and refused to value his income on a qualified CA's salary, but added Rs 80,000 for the parents' loss of their son's company, making Rs 82,01,900 with 9% interest, 13 years after the accident.",
+    "what_mattered": [
+      "The truck driver and owner never gave evidence, and the injured car driver's account of an unlit truck stood, so the claim that the car driver was to blame failed.",
+      "The tribunal used an entry-level government officer's pay (Rs 55,500 a month), not his small stipend, and still added 50% for future prospects. The Supreme Court saw this as an overlap but would not cut it after 13 years, nor raise it on qualified CAs' salaries or unproved tuition income.",
+      "Both lower courts gave the parents nothing for losing their son's love and company (filial consortium); the Supreme Court added Rs 40,000 for each parent."
+    ],
+    "archetypes": [
+      "death_student",
+      "death_bachelor",
+      "contributory_negligence"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: precedent.holding rewritten (55 words) to add the rear-end negligence point (para 16) and drop the cited-case personal name.",
+      "fixed: precedent.topics now include notional_income and contributory_negligence (paras 16-17, 19-23).",
+      "fixed: archetypes add contributory_negligence; insurer's plea against the car driver was rejected at all three courts (0%).",
+      "fixed: cited-case personal name removed from precedent.holding via the new holding wording.",
+      "fixed: precedent.para widened from 20-25 to 16-25 to cover the negligence holding.",
+      "fixed: what_mattered[1] now explains the future-prospects overlap the Court left in place and the unproved tuition income; 'Group-A officer' replaced with plain words.",
+      "fixed: what_mattered[2] explains filial consortium in plain words (loss of son's love and company).",
+      "fixed: family_summary now says the Supreme Court refused to value income on a qualified CA's salary.",
+      "fixed: journey[0].note spells out DAR as the detailed accident report filed with the tribunal (Sept 2013); 'police' left out as the judgment does not say who filed it."
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+id: saroj-2024
+title: Farmer, 45, Haryana (death)
+citation: Saroj & Ors. v. IFFCO-Tokio General Insurance Co. & Ors., 2024 INSC 816 (Civil Appeals arising out of
+  SLP (C) Nos. 23939-23940 of 2023)
+court: SC
+source_url: https://api.sci.gov.in/supremecourt/2023/37573/37573_2023_11_1501_56640_Judgement_24-Oct-2024.pdf
+kind: death
+archetypes:
+- death_self_employed
+- death_informal_no_proof
+state: HR
+facts:
+  accident_date: '2015-08-04'
+  claim_filed: '2015-12-16'
+  age: 45
+  employment: self_employed
+  occupation: agriculturist who owned his own tractor and a JCB machine; notional income taken at District Commissioner
+    rates
+  family: wife and sons (claimants 2 and 3 were minors at the relevant time)
+journey:
+- forum: mact
+  date: '2017-04-26'
+  amount: 1935400
+  note: the judgment's own table says Rs 20,35,400
+- forum: high_court
+  date: '2023-03-09'
+  amount: 922336
+- forum: supreme_court
+  date: '2024-10-24'
+  amount: 1500000
+interest_pct: 8
+what_mattered:
+- Age is proved by the school leaving certificate, not the Aadhaar card, which proves identity only.
+- An appeal court should not swap a reasonable notional income (district rates) for a lower minimum wage just because
+  another view is possible.
+- Recomputing under Pranay Sethi (25% future prospects, standard consortium) left the final award below the tribunal's.
+summary: A 45-year-old farmer who owned a tractor and a JCB machine died in Haryana in 2015. The tribunal awarded
+  Rs 19.35 lakh; the High Court cut it to Rs 9.22 lakh. In 2024 the Supreme Court awarded Rs 15 lakh, about 9 years
+  after the accident.
+extracted_by: AI-assisted extraction from the judgment text; every amount and date matched to a verbatim quote by
+  script
+verified_by: []

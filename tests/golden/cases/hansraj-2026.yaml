@@ -1,0 +1,88 @@
+id: hansraj-2026
+title: "Hansraj v Mukesh Nath & Ors."
+citation: "2026 INSC 454" # also reported as 2026 LiveLaw (SC) 468; C.A. @ SLP(C) No. 13122 of 2024
+court: SC
+judgment_date: 2026-05-06
+source_url: "https://api.sci.gov.in/supremecourt/2024/24731/24731_2024_3_1501_70801_Judgement_06-May-2026.pdf"
+# Also read: https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf
+kind: injury
+facts:
+  accident_date: 2016-11-08
+  age_at_accident: 14
+  state: Rajasthan
+  occupation: student # 14-year-old pillion rider
+  employment: minor
+  claimants: null
+  disability: { certificate_pct: 100, functional_pct: null } # "suffered 100% permanent disability"; no separate functional %
+judgment_params:
+  monthly_income: 5800 # Rajasthan skilled-workman minimum wage 2016 = Rs.5,746, rounded off to Rs.5,800
+  future_prospects_pct: 40
+  personal_deduction: null
+  multiplier: 18
+  disability_pct_applied: 100 # implicit; loss of income taken in full
+  attendant: { attendants: 2, monthly_per_attendant: 5000, multiplier: 18 } # Rs.5,000 = semi-skilled wage
+  conventional: null
+  interest_pct: 6
+expected:
+  heads:
+    loss_of_earning_capacity: 1753920
+    attendant: 2160000
+    medical: 69743 # medical bills 49,743 (MACT) + operation 20,000 (HC)
+    pain_suffering_and_loss_of_amenities: 1000000
+    future_medical: 300000
+    marriage_prospects: 300000
+    conveyance_special_diet: 100000 # "Special Diet & Transportation"
+  total: 5683663
+  lower_forums: { mact: 776543, high_court: 1217543 }
+computation_quote: |
+  [para 8] ... The High Court has considered the notional annual income as ₹30,000/-. This
+  amount is on a lower side. The notional income would have to be determined on the basis of
+  the minimum wages admissible for a skilled workman in the State of Rajasthan in 2016. Such
+  minimum wages were ₹5,746/- per month. Taking the monthly notional income at ₹5,800/-, the
+  annual income would be ₹69,600/-. Future prospects at 40% would make the annual income as
+  ₹97,440/-. On the basis of the age of the appellant, multiplier of 18 has been rightly
+  applied. On that basis, the loss of income would come to ₹17,53,920/-.
+
+  [para 9] Under the head of attendant charges, the High Court has awarded sum of ₹1,21,800/-.
+  This figure again is on a lower side. As held by this Court in Kajal (supra), the minimum
+  wages admissible in this regard will have to be taken. The figure of ₹5,000/- as monthly
+  wages of a semi-skilled workman is accordingly taken into account being the charges of an
+  attendant for a month. The appellant having suffered permanent disability, he would require
+  the assistance of two attendants round the clock. Applying the multiplier of 18, this figure
+  would come to ₹21,60,000/-.
+
+  [para 10] Insofar as the amount admissible towards medical bills and operation of the
+  appellant is concerned, the High Court has awarded a sum of ₹49,743/- and ₹20,000/-
+  respectively as per the documentary material submitted by the appellant. No further
+  enhancement in this regard is called for. Insofar as mental pain and suffering alongwith
+  loss of amenities is concerned, the amount ₹10,00,000/- can be awarded. Towards future
+  medical expenses, the amount deserves to be enhanced to ₹3,00,000/-. Similarly, on account
+  of loss of marriage prospects a sum of ₹3,00,000/- deserves to be paid. ₹1,00,000/- deserves
+  to be awarded under the head of special diet and transportation.
+  Thus, the total amount of compensation now admissible would be ₹56,83,663/-. This amount of
+  compensation would carry interest at the rate of 6% per annum from the date of filing of
+  the claim petition till the actual payment is made. ...
+  HEAD                       | COMPENSATION
+  Notional Income            | ₹5,746 p.m. - Rounded off to ₹5,800 = 5,800 x 12 = ₹69,600/-
+  Future Prospects @ 40%     | ₹69,600 x 1.4 = ₹97,440/-
+  Multiplier of 18           | ₹97,440 x 18 = ₹17,53,920/-
+  Loss of Income             | ₹17,53,920/-
+  Attendant Charges          | ₹10,000 x 12 months x 18 multiplier = ₹21,60,000/- (For 2 Attendants)
+  Medical Bills & Operation  | ₹49,743 (As provided by MACT) + ₹20,000 for operation (As provided by the HC) = ₹69,743/-
+  Mental Pain & Suffering alongwith loss of amenities | ₹10,00,000/-
+  Future Medical expenses    | ₹3,00,000/-
+  Loss of marriage prospects | ₹3,00,000/-
+  Special Diet & Transportation | ₹1,00,000/-
+  TOTAL                      | ₹56,83,663/-
+paragraphs: ["8", "9", "10", "11"]
+notes: >-
+  Arithmetic verified: heads sum to 56,83,663 (matches). Income ROUNDING: skilled MW 5,746
+  rounded up to 5,800 before x12 (a calculator using 5,746 gets 17,37,590 not 17,53,920).
+  Attendant: 2 x Rs.5,000 (semi-skilled) x 12 x 18. No explicit disability % factor (100%).
+  Disbursement: 25% of attendant charges released now, 75% in FD with Rs.1,50,000 released
+  annually (para 11) - not a quantum issue. HC computed FP on the post-multiplier figure
+  (30,000 x 18 = 5,40,000 + 40% = 7,56,000), equivalent arithmetic. Neutral citation on the SCI
+  PDF is 2026 INSC 454; the task brief's '2026 LiveLaw (SC) 468' is the LiveLaw report of the
+  same judgment (LiveLaw headnote confirms 56,83,663). Some secondary summaries (taxguru) wrongly
+  report Rs.83.38 lakh and 9% interest - the judgment says 56,83,663 at 6%.
+verified: false

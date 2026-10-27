@@ -1,0 +1,120 @@
+{
+  "record_version": 1,
+  "doc_id": "2024_7_1433_1442",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2024 INSC 573",
+  "cnr": "ESCR010005282024",
+  "decided": "2024-07-23",
+  "citation": "2024 INSC 573; [2024] 7 S.C.R. 1433",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/english/2024_7_1433_1442_EN.pdf",
+  "quote_check": "verified, 33/33 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2024_7_1433_1442",
+    "source": "sc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "KA",
+      "accident_date": "2013-08-29",
+      "filing_date": null,
+      "award_date": "2015-11-25",
+      "age": 26,
+      "employment": "permanent",
+      "occupation": "Service consultant in a private limited company",
+      "proof": "salary_slip",
+      "claimed_monthly_income": 56935,
+      "income_monthly_accepted": 45668,
+      "income_basis": "proved_salary",
+      "future_prospects_pct": 50,
+      "deduction": "1/2",
+      "multiplier": 17,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_dependency": 9316272,
+        "funeral": 25000,
+        "love_affection": 25000
+      },
+      "awarded_formula_head": 9316272,
+      "total_award": 9366272,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": false,
+      "spouse": false,
+      "children": null,
+      "parents": 1,
+      "dependent_parents": 1,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2015-11-25",
+        "amount": 10401000,
+        "by": null,
+        "note": "Tribunal took salary Rs 50,942 less Rs 200 professional tax, 50% personal deduction, 50% future prospects and multiplier 17, plus Rs 25,000 each for love and affection and funeral; 6% interest. No income tax deducted."
+      },
+      {
+        "forum": "high_court",
+        "date": "2017-08-02",
+        "amount": 4957035,
+        "by": "insurer",
+        "note": "Insurer's appeal partly allowed: future prospects applied to basic pay only, leaving out house rent allowance, flexible benefit plan and provident fund contribution, and income tax deducted; award cut to Rs 49,57,035."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2024-07-23",
+        "amount": 9366272,
+        "by": "claimant",
+        "note": "Mother's appeal partly allowed: allowances added back to salary before future prospects, but 10% income tax kept as a deduction; award Rs 93,66,272."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "future_prospects"
+      ],
+      "holding": "For a salaried victim in private service, allowances such as house rent allowance, flexible benefit plan and the employer's provident fund contribution are part of income and must be added to basic salary before the future-prospects increase is applied. Income tax is still deducted from the gross salary when working out income.",
+      "para": "6-7, 10, 12-13",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 26, service consultant, Karnataka (death)",
+    "family_summary": "A 26-year-old unmarried service consultant working for a private company died in a road accident in August 2013. His mother, his only dependant, claimed compensation before the tribunal in Karnataka. The tribunal awarded Rs 1,04,01,000 in 2015, but in 2017 the High Court cut it to Rs 49,57,035 on the insurer's appeal. In July 2024, almost 11 years after the accident, the Supreme Court raised it to Rs 93,66,272.",
+    "what_mattered": [
+      "The Supreme Court held that house rent allowance, flexible benefit plan and the company's provident fund contribution count as salary, so the 50% added for expected future pay rises (future prospects) applies to them too; the High Court had applied it to basic pay only.",
+      "His salary certificate, income tax returns and Form 16 proved a salary of Rs 50,942 a month, but income tax of 10% was deducted, which kept the final award below the tribunal's.",
+      "The court's own arithmetic counted his whole after-tax salary as the yearly loss: it took off half for his personal expenses, then added back half for future pay rises. The usual method counts three-quarters, so this award is higher than a standard calculation would give."
+    ],
+    "archetypes": [
+      "death_salaried",
+      "death_bachelor"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: award_date set to 2015-11-25 (tribunal award date), with evidence quote.",
+      "fixed: parents set to 1 (the mother, claimant and sole dependant); father's status not stated, so 1 is a lower bound.",
+      "fixed: uncertain[4] now says the SC's table nets to 100% of after-tax income; the usual order gives Rs 69,87,204, about Rs 23.29 lakh less. Added a what_mattered line saying so.",
+      "fixed: family_summary no longer places the employer in Karnataka; Karnataka is tied to where the claim was heard.",
+      "fixed: what_mattered[0] explains future prospects in plain words.",
+      "fixed: precedent.holding drops 'actually payable'; the Court applied a flat 10% income tax, not a computed liability.",
+      "fixed: precedent.para widened to 6-7, 10, 12-13 to include the reasoning and the general rule in para 10."
+    ]
+  }
+}

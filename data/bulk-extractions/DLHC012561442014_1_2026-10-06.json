@@ -1,0 +1,113 @@
+{
+  "record_version": 1,
+  "doc_id": "DLHC012561442014_1_2026-10-06",
+  "source": "hc",
+  "court": "High Court of Delhi",
+  "case": "MAC.APP. 13/2015",
+  "cnr": "DLHC012561442014",
+  "decided": "2026-10-06",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/court%3D7_26/bench%3Ddhcdb/DLHC012561442014_1_2026-10-06.pdf",
+  "quote_check": "verified, 39/39 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "DLHC012561442014_1_2026-10-06",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "High Court of Delhi",
+      "court_level": "hc",
+      "state_code": "DL",
+      "accident_date": "2013-03-16",
+      "filing_date": null,
+      "award_date": "2014-09-12",
+      "age": 23,
+      "employment": "self_employed",
+      "occupation": "driver-cum-owner of a small commercial goods vehicle (graduate)",
+      "proof": "other",
+      "claimed_monthly_income": 32000,
+      "income_monthly_accepted": 25000,
+      "income_basis": "notional",
+      "future_prospects_pct": 40,
+      "deduction": "1/4",
+      "multiplier": 18,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": 4,
+      "heads": {
+        "loss_of_dependency": 5670000,
+        "consortium": 160000,
+        "loss_of_estate": 15000,
+        "funeral": 15000
+      },
+      "awarded_formula_head": 5670000,
+      "total_award": 5860000,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 7.5,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 1,
+      "parents": 2,
+      "dependent_parents": 2,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2014-09-12",
+        "amount": 6310000,
+        "by": null,
+        "note": "Tis Hazari tribunal: notional income Rs 25,000 a month, 50% future prospects, 1/4 deduction, multiplier 18; Rs 1,00,000 love and affection and Rs 1,00,000 consortium; no contributory negligence; 7.5% interest."
+      },
+      {
+        "forum": "high_court",
+        "date": "2026-10-06",
+        "amount": 5860000,
+        "by": "insurer",
+        "note": "Insurer's appeal partly allowed: income and no-negligence finding upheld; future prospects cut to 40%, love and affection removed, consortium Rs 40,000 x 4, estate and funeral Rs 15,000 each; award reduced by Rs 4,50,000."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "state",
+      "state_code": "DL",
+      "topics": [
+        "notional_income"
+      ],
+      "holding": "Without documentary proof of income, consistent payment of instalments on a substantial loan can be evidence of sufficient earning capacity, and minimum wage notifications need not be applied, especially when nothing shows the deceased was an unskilled labourer. Here a Rs 15,344 monthly vehicle-loan instalment, kept up despite some bounced cheques, supported a notional income of Rs 25,000 a month.",
+      "para": "40",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 23, goods vehicle owner-driver, Delhi (death)",
+    "family_summary": "In March 2013 a 23-year-old graduate who drove his own small goods vehicle in Delhi was fatally injured when, at 5:30 in the morning, it hit a broken-down dumper left standing in the fast lane with no blinkers or warning signs behind it, according to the police record. His widow, parents and young daughter claimed, and in September 2014 the tribunal awarded Rs 63,10,000. On the insurer's appeal, the High Court in October 2026 upheld his Rs 25,000 monthly income and the finding that he was not to blame, but reduced the award to Rs 58,60,000. The case took about 13 and a half years from the accident.",
+    "what_mattered": [
+      "There was no tax return or salary proof, but bank records showed he kept up a Rs 15,344 monthly loan instalment on his vehicle, with bounced cheques paid within weeks, so both courts took his income as Rs 25,000 a month rather than the minimum wage.",
+      "The dumper driver told police he had put out no reflector or warning, and he never testified otherwise, so the High Court found no contributory negligence by the deceased.",
+      "The award fell by Rs 4,50,000 mainly because the High Court cut future prospects from 50% to the standard 40% (loss of support Rs 56,70,000, not Rs 60,75,000) and dropped Rs 1,00,000 for love and affection. Raising consortium to Rs 1,60,000 (Rs 40,000 each to four family members) offset part of it."
+    ],
+    "archetypes": [
+      "death_self_employed",
+      "death_informal_no_proof",
+      "contributory_negligence"
+    ],
+    "audience": "both",
+    "review_notes": [
+      "fixed: what_mattered[2] now says consortium rose to Rs 1,60,000 and offset part of the cut; the Rs 4,50,000 fall came from 40% future prospects and dropping love and affection.",
+      "fixed: precedent.topics set to notional_income; para 40 decides income without documents from loan EMIs instead of minimum wages.",
+      "fixed: precedent.holding now says loan payment 'can be evidence of' earning capacity (para 40) and notes bounced cheques made good (para 30).",
+      "fixed: what_mattered[0] now says the courts took Rs 25,000 a month as the income, not a proven floor, and mentions bounced cheques paid within 15 to 20 days.",
+      "fixed: family_summary gives 5:30 a.m. instead of dawn and attributes the missing blinkers and warning signs to the police record (FIR, driver's statement)."
+    ]
+  }
+}

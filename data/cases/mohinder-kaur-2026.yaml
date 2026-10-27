@@ -1,0 +1,30 @@
+id: mohinder-kaur-2026
+title: Engineering student, 22, Punjab (death)
+citation: "Mohinder Kaur (D) through L.R. v Brij Lal Arora & Ors., 2026 INSC 477"
+court: SC
+source_url: "https://www.verdictum.in/pdf_upload/2026/05/13/mohinder-kaur-v-brij-lal-arora-1777513.pdf"
+golden_id: mohinder-kaur-2026
+kind: death
+archetypes: [death_student, death_bachelor]
+state: PB
+facts:
+  accident_date: 2000-05-28
+  age: 22
+  employment: student
+  occupation: third-year mechanical engineering student
+  family: parent
+journey:
+  - {forum: mact, amount: 223000}
+  - {forum: high_court, amount: 1344000}
+  - {forum: supreme_court, date: 2026-05-12, amount: 1925070, note: "the appellant had died; a legal representative continued the case"}
+interest_pct: 7.5
+what_mattered:
+  - "A notional income of Rs 12,000 a month was accepted for an engineering student (for a death in 2000)."
+  - "Future prospects (40%) and the personal deduction apply to notional income too."
+  - "The multiplier follows the age of the person who died (18), not the parent's age (the tribunal had used 11)."
+summary: >-
+  A 22-year-old engineering student died in 2000. The tribunal awarded Rs 2.23 lakh and the High Court
+  Rs 13.44 lakh. In 2026, almost 26 years after the accident, the Supreme Court awarded Rs 19.25 lakh; by then
+  the appellant had died and a legal representative carried the case.
+extracted_by: AI-assisted extraction from the judgment text; arithmetic re-checked against the golden test
+verified_by: []

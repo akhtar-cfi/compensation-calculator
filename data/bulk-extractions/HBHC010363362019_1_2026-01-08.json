@@ -1,0 +1,93 @@
+{
+  "record_version": 1,
+  "doc_id": "HBHC010363362019_1_2026-01-08",
+  "source": "hc",
+  "court": "High Court for State of Telangana",
+  "case": "MACMA 3126/2019",
+  "cnr": "HBHC010363362019",
+  "decided": "2026-01-08",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2026/court%3D36_29/bench%3Dtaphc/HBHC010363362019_1_2026-01-08.pdf",
+  "quote_check": "verified, 9/9 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "HBHC010363362019_1_2026-01-08",
+    "source": "hc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "Both appeals were closed in terms of a High Court Lok Adalat settlement: Rs 34,00,000 'in addition to' an amount the insurer had already deposited, which the order does not state (it also says the deposit is to be credited). The final total cannot be determined.",
+      "kind": "death",
+      "outcome": "other",
+      "court": "High Court for the State of Telangana",
+      "court_level": "hc",
+      "state_code": "TS",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": "2019-06-03",
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 9,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 3,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2019-06-03",
+        "amount": 4896480,
+        "by": null,
+        "note": "Motor Accident Claims Tribunal awarded Rs 48,96,480 with proportionate costs and 9% a year interest from the date of the claim petition."
+      },
+      {
+        "forum": "high_court",
+        "date": "2026-01-08",
+        "amount": null,
+        "by": "both",
+        "note": "Family's and insurer's appeals settled before the High Court Lok Adalat on 13 Sept 2025 for Rs 34,00,000 in full and final settlement, stated as in addition to an unstated amount the insurer had deposited; the High Court closed both appeals in those terms."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Married man with three children, age not stated, Telangana (death)",
+    "family_summary": "A married man in Telangana died, leaving his wife, three children and two older relatives who appear to be his parents; the order does not describe the accident. In June 2019 the Motor Accident Claims Tribunal awarded the family Rs 48,96,480 with 9% interest a year. Both the family and the insurer appealed, and in September 2025 they settled before the High Court Lok Adalat for Rs 34,00,000, said to be on top of money the insurer had already deposited (amount not stated). The High Court closed both appeals in January 2026, more than 11 years after the claim was filed in 2014.",
+    "what_mattered": [
+      "No court decided the appeals on their merits: both sides agreed a settlement in the High Court Lok Adalat, and the High Court closed the appeals on that basis.",
+      "The order does not say how much the insurer had already deposited, so the final amount cannot be compared with the tribunal's Rs 48,96,480.",
+      "If the insurer pays late, the unpaid amount carries 9% interest a year, as the tribunal had ordered; the minor children's shares stay in fixed deposits until they come of age."
+    ],
+    "archetypes": [
+      "lok_adalat"
+    ],
+    "audience": "families",
+    "review_notes": [
+      "Marked unusable: settlement total not determinable (Rs 34,00,000 plus or including an unstated deposit). A reviewer who reads it as Rs 34,00,000 in total could set usable true with total_award 3400000.",
+      "The Lok Adalat settlement is folded into the high_court step, not a separate lok_adalat step, so the Sheet's tribunal columns keep the tribunal's Rs 48,96,480.",
+      "Common order also decides MACMA 2916/2019 (the family's appeal); no separate doc for it was found in docs.jsonl."
+    ]
+  }
+}

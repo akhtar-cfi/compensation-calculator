@@ -1,0 +1,96 @@
+{
+  "record_version": 1,
+  "doc_id": "2018_1_626_635",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2018 INSC 128",
+  "cnr": "ESCR010003902018",
+  "decided": "2018-02-09",
+  "citation": "2018 INSC 128; [2018] 1 S.C.R. 626",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2018/english/2018_1_626_635_EN.pdf",
+  "quote_check": "verified, 15/15 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2018_1_626_635",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "No total award can be recorded: the judgment states only the High Court's enhancement of Rs 2,80,000 across ten connected death and injury appeals, which the Supreme Court affirmed while removing the 50% contributory-negligence cut. The tribunal's award and any total are not stated.",
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "HR",
+      "accident_date": "2011-12-15",
+      "filing_date": null,
+      "award_date": null,
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 7.5,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": 2,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": null,
+        "amount": null,
+        "by": null,
+        "note": "Haryana tribunal held the tanker driver solely negligent for parking in the middle of a busy road at night without indicators or parking lights. Its award amount and date are not stated in this judgment."
+      },
+      {
+        "forum": "high_court",
+        "date": "2016-02-01",
+        "amount": null,
+        "by": "claimant",
+        "note": "On appeals for enhancement, the Punjab and Haryana High Court added Rs 2,80,000 but held the father, who was driving, 50% to blame and cut the whole compensation by half. The resulting total is not stated."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2018-02-09",
+        "amount": null,
+        "by": "claimant",
+        "note": "Children's appeals allowed: the 50% contributory-negligence cut was set aside and the tribunal's finding restored, so the full compensation including the Rs 2,80,000 enhancement is payable. No total stated."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Couple killed and two children (14, 9) hurt when car hit unlit parked tanker, Haryana (death)",
+    "family_summary": "In December 2011 a car hit the back of a gas tanker left parked in the middle of a busy highway at night without lights; the father driving and the mother beside him died, and their two children, aged 14 and 9, were hurt. The Haryana tribunal held the tanker driver wholly to blame; its award is not stated in this judgment. In February 2016 the High Court added Rs 2,80,000 but blamed the father half and cut the whole compensation by 50%. In February 2018, over six years after the crash, the Supreme Court removed that cut, so the children get the full amount including the Rs 2,80,000.",
+    "what_mattered": [
+      "An independent eyewitness said oncoming headlights stopped the father from seeing the unlit tanker, and the other side never challenged this in cross-examination.",
+      "The police site plan showed the tanker parked in the middle of the road; the High Court had reversed the tribunal's careful finding without giving any reason.",
+      "Claims need proof only on the balance of probabilities, not proof beyond reasonable doubt as in a criminal trial."
+    ],
+    "archetypes": [
+      "contributory_negligence"
+    ],
+    "audience": "both",
+    "review_notes": []
+  }
+}

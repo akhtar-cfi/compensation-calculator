@@ -1,0 +1,58 @@
+{
+  "name": "mact-compensation-estimator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open, citation-backed estimator of motor accident (MACT, s.166 MV Act) compensation in India: legal entitlement on your facts, offer check and case journeys.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "mact": "tsx src/cli/mact.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "rules:validate": "tsx src/cli/mact.ts rules validate",
+    "ci": "npm run typecheck && npm run web:typecheck && npm run lint && npm run test && npm run rules:validate",
+    "web:data": "tsx web/scripts/build-data.ts",
+    "web:typecheck": "tsc --noEmit -p web",
+    "web:build": "npm run web:data && vite build --config web/vite.config.ts",
+    "web:preview": "vite preview --config web/vite.config.ts",
+    "web:e2e": "playwright test -c web/playwright.config.ts",
+    "web:smoke": "E2E_BASE_URL=https://mact-compensation-calculator.vercel.app/ playwright test -c web/playwright.config.ts parity flows",
+    "web:design-doc": "tsx web/scripts/design-doc.ts",
+    "web:budget": "tsx web/scripts/budget.ts"
+  },
+  "dependencies": {
+    "@vercel/analytics": "2.0.1",
+    "hyparquet": "1.31.2",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@eslint/js": "^10.0.1",
+    "@fontsource/montserrat": "5.3.0",
+    "@playwright/test": "1.64.0",
+    "@preact/preset-vite": "2.10.6",
+    "@tailwindcss/vite": "4.1.18",
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "^5.0.3",
+    "eslint": "^10.12.0",
+    "fast-check": "^4.10.2",
+    "geist": "1.7.2",
+    "lucide-preact": "1.55.0",
+    "marked": "15.0.12",
+    "preact": "10.29.8",
+    "prettier": "^3.9.10",
+    "tailwindcss": "4.1.18",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "7.3.7",
+    "vitest": "^5.0.3"
+  }
+}

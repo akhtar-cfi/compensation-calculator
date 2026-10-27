@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+package-lock.json
+docs/rules-reference.md
+web/dist
+web/src/generated
+web/test-results
+web/playwright-report
+docs/ui-design-system.md
+# Compact data kept one record per line (and watch-seen.json, which `mact watch` rewrites in its own format)
+data/cases
+rules/occupations.yaml
+sources/minimum-wages
+sources/watch-seen.json
+data/bulk-extractions/*.json

@@ -1,0 +1,493 @@
+# Citation registry, and the authority register the legal review asked for (B-13): for each judgment its bench,
+# grade, what it is relied on for (holding, paragraph, factual limits) and how later judgments treated it.
+# `verified: false` until the legal reviewers sign off (see docs/methodology.md).
+# Fields we could not confirm (exact dates / reporter citations / claim types) are left out rather than guessed.
+# `weight` (ratio, obiter, applied) is set only where the judgment's own role makes it plain; the rest is for the
+# advocate to classify (B-13). Paragraph numbers are the official ones unless marked SCC.
+- id: mv_act_1988
+  title: Motor Vehicles Act, 1988 (as amended by the Motor Vehicles (Amendment) Act, 2019, in force 1 Apr 2022)
+  kind: statute
+  grade: P
+  url: https://prsindia.org/files/bills_acts/bills_parliament/2019/Motor%20Vehicles%20(Amendment)%20Act,%202019.pdf
+- id: jan_vishwas_2026
+  title: Jan Vishwas (Amendment of Provisions) Act, 2026 (Act 8 of 2026), amendments to the Motor Vehicles Act
+  kind: statute
+  claim: statute
+  grade: S
+  propositions:
+    - holding: >-
+        A tribunal may entertain a claim within a further twelve months after the six-month limit in s.166(3) if
+        sufficient cause is shown (as summarised by the Government; the legal review also cites ss.168(4), 164(4)
+        and 163(3)).
+      limits: Known from the Government's summary and the legal review; the section text and its commencement date are not yet read.
+  treatment: The legal review gives 15 Aug 2026 as the commencement for the Motor Vehicles Act amendments; not yet confirmed.
+- id: sarla_verma_2009
+  title: Sarla Verma v Delhi Transport Corporation
+  citation: (2009) 6 SCC 121; 2009 INSC 506
+  court: SC
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/837924/
+  propositions:
+    - holding: >-
+        Personal deduction: a half for an unmarried person; for a married person a third (2-3 dependants), a
+        quarter (4-6) or a fifth (more). The scale starts at two or three dependants.
+      para: 14-15 (SCC 30-32)
+    - holding: An unmarried person who supported a large dependent family may have a third deducted instead of a half; no number of dependants is fixed.
+      para: "15"
+    - holding: The multiplier is taken from a table by age.
+      para: 21 and its table (SCC 42)
+  treatment: Paras 30-32 and 42 (SCC) endorsed by the Constitution Bench in Pranay Sethi (2017), para 61(v)-(vi).
+- id: pranay_sethi_2017
+  title: National Insurance Co. Ltd. v Pranay Sethi (Constitution Bench)
+  citation: (2017) 16 SCC 680; 2017 INSC 1068
+  court: SC
+  date: 2017-10-31
+  bench: 5
+  grade: P
+  url: https://indiankanoon.org/doc/139996215/
+  propositions:
+    - holding: >-
+        Future prospects: 50%, 30% or 15% of salary less tax for a permanent job (under 40, 40-50, 50-60); 40%, 25%
+        or 10% of established income less tax for the self-employed or those on a fixed salary.
+      para: 61(iii)-(iv) (SCC 59.3-59.4)
+      weight: ratio
+    - holding: Loss of estate ₹15,000, consortium ₹40,000 and funeral ₹15,000, to be raised by 10% every three years; no start date is given.
+      para: 61(viii)
+      weight: ratio
+    - holding: Approved Reshma Kumari's approach to the multiplier.
+      para: "46"
+  treatment: A Constitution Bench; binds every smaller bench.
+- id: reshma_kumari_2013
+  title: Reshma Kumari v Madan Mohan
+  citation: (2013) 9 SCC 65; 2013 INSC 200
+  court: SC
+  bench: 3
+  grade: P
+  url: https://indiankanoon.org/doc/86908489/
+  propositions:
+    - holding: A multiplier of 15 for victims up to 15, whatever the type of claim.
+      para: 40(ii)
+      weight: ratio
+      limits: Ties the 15 to the old Second Schedule, which has since been removed.
+  treatment: >-
+    Approved in Pranay Sethi (2017) para 46; followed for an injured child in Divya (2022) and Rushi Thapa (2024).
+    Kajal (2020) and Hitesh Patel (2025), two-judge benches, used 18 without discussing it.
+- id: raj_kumar_2011
+  title: Raj Kumar v Ajay Kumar
+  citation: (2011) 1 SCC 343; 2010 INSC 703
+  court: SC
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/153578069/
+  propositions:
+    - holding: The heads of injury compensation (medical, earnings lost during treatment, future loss, pain, amenities); medical and functional disability are assessed separately.
+      para: 5, 7-10 (SCC 9-13)
+    - holding: 100% loss of earning capacity where the person cannot do their earlier work; when earning loss is total, only a token sum is due for amenities.
+      para: "10"
+- id: magma_2018
+  title: Magma General Insurance Co. Ltd. v Nanu Ram
+  citation: (2018) 18 SCC 130; 2018 INSC 828
+  court: SC
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/175246407/
+  propositions:
+    - holding: Consortium covers spousal, parental and filial consortium; filial consortium for the parents of a minor child, or an unmarried son or daughter.
+      para: "8.7"
+      limits: The children were minors.
+- id: satinder_kaur_2020
+  title: United India Insurance Co. Ltd. v Satinder Kaur
+  citation: (2021) 11 SCC 780; 2020 INSC 447
+  court: SC
+  bench: 3
+  grade: P
+  url: https://indiankanoon.org/doc/142302016/
+  propositions:
+    - holding: Consortium is awarded to each eligible claimant; loss of estate and funeral as in Pranay Sethi.
+      para: 8(e)(b)-(c), 9.7
+      limits: The children were minors.
+    - holding: Upheld a 50% cut for contributory negligence of a driver who died.
+      para: "9.8"
+- id: somwati_2020
+  title: New India Assurance Co. Ltd. v Somwati
+  citation: (2020) 9 SCC 644; 2020 INSC 535
+  court: SC
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/97624839/
+  propositions:
+    - holding: Consortium for each claimant entitled to it.
+      para: 38-40
+      limits: The children were minors.
+- id: kirti_2021
+  title: Kirti v Oriental Insurance Co. Ltd.
+  citation: (2021) 2 SCC 166; 2021 INSC 6
+  court: SC
+  bench: 3
+  grade: P
+  url: https://indiankanoon.org/doc/106405133/
+  propositions:
+    - holding: Without proof of income, the minimum wage in force on the accident date; a higher category may be used for an educated person.
+      para: 10, 12
+    - holding: Future prospects apply to notional incomes.
+      para: 13-14
+    - holding: Unpaid household work has an economic value.
+      para: 26(c)
+      limits: A death claim; it kept a 25% increase on the unskilled wage for its homemaker.
+- id: kajal_2020
+  title: Kajal v Jagdish Chand
+  citation: (2020) 4 SCC 413; 2020 INSC 135
+  court: SC
+  date: 2020-02-05
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/180443810/
+  propositions:
+    - holding: An injured child's income taken at the skilled minimum wage; multiplier 18.
+      para: 20, 24
+      limits: An injury claim (a child).
+    - holding: An attendant during treatment, and one carer for life valued at the skilled wage (₹4,846 a month, rounded to ₹5,000).
+      para: 21, 22, 25
+      weight: applied
+    - holding: ₹3 lakh for marriage prospects; pain and amenities on its facts.
+      para: 27-29
+      weight: applied
+  treatment: Used 18 without discussing Reshma Kumari (three judges, 15).
+- id: kurvan_ansari_2021
+  title: Kurvan Ansari v Shyam Kishore Murmu
+  citation: 2021 INSC 734; [2021] 7 SCR 366
+  court: SC
+  bench: 2
+  claim: s163A
+  grade: P
+  url: https://indiankanoon.org/doc/117494438/
+  propositions:
+    - holding: A child's death valued at ₹25,000 a year × 15 = ₹3,75,000, with no deduction.
+      para: "16"
+      weight: applied
+      limits: A claim under the old s.163A schedule, for a 2004 accident; it does not fit an ordinary s.166 claim.
+  treatment: The legal review (B-1) keeps it in the register for the s.163A schedule only.
+- id: divya_2022
+  title: Divya v National Insurance Co. Ltd.
+  citation: 2022 INSC 1108
+  court: SC
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/161415879/
+  propositions:
+    - holding: Multiplier 15 for an injured two-year-old, following Reshma Kumari.
+      limits: An injury claim, not a death.
+- id: rushi_thapa_2024
+  title: Rushi Thapa v Oriental Insurance Co. Ltd.
+  citation: 2024 INSC 837
+  court: SC
+  date: 2024-11-05
+  bench: 2
+  grade: P
+  reportable: false
+  url: https://api.sci.gov.in/supremecourt/2023/11435/11435_2023_2_1501_56835_Judgement_05-Nov-2024.pdf
+  propositions:
+    - holding: An injured child's income and a multiplier of 15.
+      para: "8"
+      limits: An injury claim (a child).
+- id: meenakshi_2024
+  title: Meenakshi v Oriental Insurance Co. Ltd.
+  citation: 2024 INSC 573
+  court: SC
+  date: 2024-07-23
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/72618714/
+  propositions:
+    - holding: Allowances that benefit the family count as income; income tax comes off.
+      para: 6-13
+    - holding: Upheld a tax deduction on its own facts.
+      para: "13"
+  treatment: Its own arithmetic is irregular, so it should not be cited as a worked model (legal review B-5).
+- id: sidram_2022
+  title: Sidram v Divisional Manager, United India Insurance Co. Ltd.
+  citation: (2023) 3 SCC 439; 2022 INSC 1204
+  court: SC
+  date: 2022-11-16
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/77644422/
+  propositions:
+    - holding: Future prospects apply to the income of an injured person.
+      para: "31"
+- id: hitesh_patel_2025
+  title: Hitesh Nagjibhai Patel v Bababhai Nagjibhai Rabari
+  citation: 2025 INSC 1070
+  court: SC
+  date: 2025-08-08
+  bench: 2
+  grade: P
+  url: https://api.sci.gov.in/supremecourt/2025/11945/11945_2025_12_42_63111_FinalOrder_08-Aug-2025.pdf
+  propositions:
+    - holding: An injured child's income at the skilled minimum wage.
+      para: 9-10, 15
+      limits: An injury claim (a child); not a rule for a child's death.
+    - holding: Future prospects and multiplier 18 for an injured child; ₹7 lakh in all for pain and amenities (₹2 lakh of it for amenities).
+      para: "13"
+      weight: applied
+  treatment: Used 18 without discussing Reshma Kumari (three judges, 15).
+- id: preetha_krishnan_2025
+  title: Preetha Krishnan v United India Insurance Co. Ltd.
+  citation: 2025 INSC 1293
+  court: SC
+  date: 2025-11-06
+  bench: 2
+  grade: P
+  url: https://api.sci.gov.in/supremecourt/2025/8307/8307_2025_12_1501_65419_Judgement_06-Nov-2025.pdf
+  propositions:
+    - holding: The multiplier is never split.
+      para: 16-18
+    - holding: Two 10% steps on the fixed amounts.
+      para: "19"
+      weight: applied
+- id: baiju_2025
+  title: Baiju v The United India Insurance Co. Ltd.
+  citation: Order of 28 Nov 2025, SLP(C) 29251/2025 as printed on the order
+  court: SC
+  date: 2025-11-28
+  bench: 2
+  grade: P
+  reportable: false
+  url: https://api.sci.gov.in/supremecourt/2025/52822/52822_2025_9_59_66372_FinalOrder_28-Nov-2025.pdf
+  propositions:
+    - holding: Future prospects on an injured person's income.
+      para: "14"
+      limits: An unreported order about an adult.
+    - holding: ₹5 lakh in all for pain and amenities (₹2 lakh of it for amenities).
+      weight: applied
+- id: hasina_yasmin_2025
+  title: Hasina Yasmin v National Insurance Co. Ltd. (reference to a larger bench on the 10% steps)
+  citation: 2025 INSC 1501
+  court: SC
+  date: 2025-12-17
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/41904479/
+  propositions:
+    - holding: >-
+        Referred to a larger bench whether the 10% steps run to the date of decision or are fixed by the accident
+        date; it doubted the first reading and awarded the base amounts for a 1998 accident meanwhile.
+      limits: A reference order; it decides nothing for later cases.
+  treatment: No larger-bench decision found as of 24 Oct 2026.
+- id: bhagirathi_dash_2025
+  title: Bhagirathi Dash v Union of India, W.P.(C) 166/2024 (interim order on s.166(3) limitation; the 4 Nov 2025 order is not published, the linked order of 17 Feb 2026 continues it)
+  court: SC
+  date: 2025-11-04
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/54856662/
+  propositions:
+    - holding: Interim direction that claims not be dismissed as time-barred while the challenge to s.166(3) is decided.
+      limits: An interim order (with ICICI Lombard v Ayiti Navaneetha); orders of 4 Nov 2025 to 20 Apr 2026 read.
+  treatment: Check the latest order before relying on it (legal review B-4).
+- id: sushila_2026
+  title: Sushila v Sudhakar
+  citation: Order of 10 Mar 2026, SLP(C) 21717/2025
+  court: SC
+  date: 2026-03-10
+  bench: 2
+  grade: P
+  url: https://www.livelaw.in/pdf_upload/2026/05/08/2026-livelaw-sc-343-sushila-v-sudhakar-10-mar-2026-672616.pdf
+  propositions:
+    - holding: A third deducted where the wife was the only dependant.
+      para: 24, 27
+    - holding: Future prospects added as Pranay Sethi directs.
+      para: "25"
+- id: mohinder_kaur_2026
+  title: Mohinder Kaur v Brij Lal Arora
+  citation: 2026 INSC 477
+  court: SC
+  bench: 2
+  grade: P
+  reportable: false
+  url: https://indiankanoon.org/doc/14044956/
+  propositions:
+    - holding: A student's income assessed at ₹12,000 a month.
+      para: "26"
+      weight: applied
+      limits: An accident in 2000; a comparator, not a benchmark (legal review B-8).
+- id: hansraj_2026
+  title: Hansraj v Mukesh Nath
+  citation: 2026 INSC 454
+  court: SC
+  date: 2026-05-06
+  bench: 2
+  grade: P
+  reportable: false
+  url: https://www.livelaw.in/pdf_upload/2026/06/05/2026-livelaw-sc-468-hansraj-v-mukesh-nath-6-may-2026-678078.pdf
+  propositions:
+    - holding: Two carers at the semi-skilled wage for a 100% disabled child.
+      para: 9-10
+      weight: applied
+- id: priyanka_das_2026
+  title: Reliance General Insurance Co. Ltd. v Priyanka Das
+  citation: 2026 INSC 950
+  court: SC
+  bench: 2
+  grade: P
+  reportable: false
+  url: https://indiankanoon.org/doc/142169288/
+  propositions:
+    - holding: Functional disability depends on earning ability in the open market, not on keeping a specially adjusted job; its own ₹20 lakh for marriage prospects is not a precedent.
+      para: "19"
+      limits: An injury claim.
+- id: m_paramesh_2026
+  title: M. Paramesh v VRL Logistics Ltd.
+  citation: 2026 INSC 655
+  court: SC
+  date: 2026-06-23
+  grade: S
+  propositions:
+    - holding: Occupational consequences can justify a functional disability above the physical certificate; 100% for a mason with 70% physical disability.
+      limits: Known from law reports and the legal review; the judgment's text is not yet read.
+- id: dolly_satish_gandhi_2026
+  title: New India Assurance Co. Ltd. v Dolly Satish Gandhi
+  citation: 2026 INSC 498
+  court: SC
+  date: 2026-05-15
+  bench: 2
+  grade: P
+  url: https://api.sci.gov.in/supremecourt/2025/32269/32269_2025_11_1501_71181_Judgement_15-May-2026.pdf
+  propositions:
+    - holding: Mediclaim insurance paid to the claimant is not deducted.
+      para: "15"
+  treatment: To be checked against the precise mediclaim rule proposed (legal review B-11).
+- id: sarla_devi_2026
+  title: Sarla Devi v Reliance General Insurance Co. Ltd.
+  citation: 2026 INSC 575
+  court: SC
+  date: 2026-05-26
+  bench: 3
+  grade: P
+  url: https://indiankanoon.org/doc/57068626/
+  propositions:
+    - holding: >-
+        Ex-gratia equal to the last salary, paid under compassionate-assistance rules, is deducted from loss of
+        dependency; future pay rises, family pension, insurance and provident fund are not.
+      para: 13-19
+      weight: ratio
+      limits: A death claim; Haryana's 2006 rules. It says nothing about injuries.
+    - holding: A dependant who does not receive the assistance keeps their share.
+      para: 22-25
+      weight: ratio
+- id: shishu_pal_2026
+  title: Shishu Pal v Surjeet
+  citation: 2026 INSC 634
+  court: SC
+  date: 2026-06-11
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/158690569/
+  propositions:
+    - holding: >-
+        ₹30,000 a month for loss of domestic care when a homemaker dies, where she ran the household, cared for
+        the children and supported the spouse (or, for parents, supported them), revised 10% every three years,
+        and in addition to her own earnings.
+      para: 13, 20, 22
+      limits: Death claims; women homemakers; all three roles met. Applied to an accident of 2001.
+  treatment: The Delhi High Court refused it where the three roles were not met (Ganga Devi, 12 Oct 2026).
+- id: sameem_begum_2026
+  title: Sameem Begum v K. Venkat Swamy
+  citation: 2026 INSC 864; [2026] 9 SCR 112
+  court: SC
+  date: 2026-08-14
+  bench: 2
+  grade: P
+  url: https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year=2026/english/2026_9_112_124_EN.pdf
+  propositions:
+    - holding: Parental consortium for adult children.
+      limits: Children aged 18 to 21 who were dependants.
+- id: rashmirekha_2026
+  title: Rashmirekha Tripathy v Branch Manager (Legal Claims), Sriram General Insurance Co. Ltd.
+  citation: 2026 INSC 661; [2026] 7 SCR 494
+  court: SC
+  date: 2026-07-01
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/164414205/
+  propositions:
+    - holding: Income of the self-employed from an average of tax returns; returns filed after the accident need scrutiny and supporting records.
+      para: 18-20
+      limits: The average is for the self-employed only.
+- id: vimal_kanwar_2013
+  title: Vimal Kanwar v Kishore Dan
+  citation: (2013) 7 SCC 476; 2013 INSC 304
+  court: SC
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/119587841/
+  propositions:
+    - holding: Family pension is not deducted.
+      para: "19"
+    - holding: Tax may not be deducted without evidence, by presuming the employer deducted it at source.
+      para: 21-23
+  treatment: Follows Helen Rebello (1998) on collateral benefits.
+- id: helen_rebello_1998
+  title: Helen C. Rebello v Maharashtra SRTC
+  citation: (1999) 1 SCC 90; 1998 INSC 372
+  court: SC
+  bench: 2
+  grade: P
+  url: https://indiankanoon.org/doc/1340758/
+  propositions:
+    - holding: Collateral benefits such as life insurance are not deducted from compensation.
+- id: khenyei_2015
+  title: Khenyei v New India Assurance Co. Ltd.
+  citation: (2015) 9 SCC 273; 2015 INSC 389
+  court: SC
+  bench: 3
+  grade: P
+  url: https://indiankanoon.org/doc/79441201/
+  propositions:
+    - holding: Another driver's fault is never deducted from a claimant who did not contribute (composite negligence); the claimant may recover the whole award from any of the drivers.
+      para: 4, 13, 18
+      weight: ratio
+    - holding: The claimant's own fault reduces the award in proportion, whatever their role.
+      para: "14"
+      weight: ratio
+- id: ganga_devi_2026
+  title: Ganga Devi v Rajesh Kumar (Delhi High Court), MAC.APP. 224/2024
+  court: HC:DL
+  date: 2026-10-12
+  bench: 1
+  grade: P
+  url: https://indiankanoon.org/doc/33193330/
+  propositions:
+    - holding: Shishu Pal's ₹30,000 refused where the three roles it describes were not met.
+- id: uma_rani_2026
+  title: Uma Rani v Simranjeet Singh (Delhi High Court)
+  court: HC:DL
+  date: 2026-07-01
+  grade: P
+  url: https://indiankanoon.org/doc/173432675/
+  propositions:
+    - holding: An injured homemaker's work valued at ₹10,000 a month.
+      weight: applied
+      limits: An injury claim.
+- id: karan_singh_bisht_2026
+  title: Karan Singh Bisht v Ravi Singh (MACT-01, Patiala House Courts, New Delhi; DAR 350/2020)
+  court: MACT:DL
+  date: 2026-08-17
+  url: https://indiankanoon.org/doc/105820332/
+  background: true
+- id: delhi_awards_backtest_2026
+  title: Delhi motor accident claims tribunal awards 2024-26 (Indian Kanoon), back-test sample, per-head amounts in data/backtest/injury_heads.csv
+  kind: dataset
+  date: 2026-10-10
+- id: gic_hit_and_run_2023
+  title: General Insurance Council, "Hit and Run Motor Accident Compensation Claims" (guide, 15 Aug 2023)
+  kind: guide
+  date: 2023-08-15
+  grade: S
+  url: https://www.gicouncil.in/media/4262/hit-and-run-motor-accident-compensation-claims.pdf
+  propositions:
+    - holding: >-
+        Accidents from 1 Apr 2022: Rs 2,00,000 for a death and Rs 50,000 for grievous hurt (the 2022 scheme);
+        accidents up to 31 Mar 2022: Rs 25,000 and Rs 12,500 under the Solatium Scheme, 1989.
+      limits: An industry guide summarising the schemes; the Gazette text of the 2022 scheme has not been read here.

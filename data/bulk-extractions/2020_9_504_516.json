@@ -1,0 +1,104 @@
+{
+  "record_version": 1,
+  "doc_id": "2020_9_504_516",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2020 INSC 483",
+  "cnr": "ESCR010004982020",
+  "decided": "2020-08-07",
+  "citation": "2020 INSC 483; [2020] 9 S.C.R. 504",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2020/english/2020_9_504_516_EN.pdf",
+  "quote_check": "partial, 17/17 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2020_9_504_516",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "Remand on delay only: the Supreme Court condoned the 45-day delay in the parents' High Court appeal and sent it back to be decided on merits. It decided no amount; only the tribunal's Rs 2.24 lakh award is stated.",
+      "kind": "death",
+      "outcome": "remanded",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "UK",
+      "accident_date": "2011-04-15",
+      "filing_date": null,
+      "award_date": "2014-02-07",
+      "age": 26,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {},
+      "awarded_formula_head": null,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": 2,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2014-02-07",
+        "amount": 224000,
+        "by": null,
+        "note": "The parents claimed Rs 10 lakh for their 26-year-old son's death; the tribunal awarded Rs 2.24 lakh with 6% interest a year. Heads not stated."
+      },
+      {
+        "forum": "high_court",
+        "date": "2016-10-17",
+        "amount": null,
+        "by": "claimant",
+        "note": "The parents' appeal for more compensation was filed 45 days late because of illness in the family. The Uttarakhand High Court refused to condone the delay and dismissed the appeal without deciding the amount."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2020-08-07",
+        "amount": null,
+        "by": "claimant",
+        "note": "Parents' appeal allowed: the 45-day delay was condoned and the appeal sent back to the High Court to be decided on merits within six months. No amount decided."
+      }
+    ],
+    "precedent": {
+      "binding_scope": "all_india",
+      "state_code": null,
+      "topics": [
+        "limitation"
+      ],
+      "holding": "Section 173 of the Motor Vehicles Act being beneficial legislation, 'sufficient cause' for a late appeal against a tribunal award must be read liberally, and delay in filing or refiling cannot be viewed as strictly as in commercial claims. Courts must still weigh the parties' conduct and refuse relief where delay results from gross negligence.",
+      "para": "22-23",
+      "quote": "",
+      "departs_from_rules": false,
+      "rule_id": null
+    },
+    "title_anon": "Man, 26, bike hit parked truck, Uttarakhand (death): late appeal",
+    "family_summary": "In April 2011 a 26-year-old man died after his bike crashed into a truck parked on the road without back-lights. His parents claimed Rs 10 lakh; in February 2014 the tribunal awarded Rs 2.24 lakh with 6% interest. Their appeal for more was filed 45 days late because of illness in the family, and in October 2016 the High Court refused to excuse the delay and dismissed it without hearing it. In August 2020, over nine years after the death, the Supreme Court excused the delay and sent the appeal back to the High Court to decide within six months.",
+    "what_mattered": [
+      "The 45-day delay was short, explained by illness in the family and not in bad faith, so dismissing a death-claim appeal for it was hyper-technical.",
+      "The Motor Vehicles Act protects accident victims, so the High Court's power to hear late appeals for 'sufficient cause' must be used liberally, not as strictly as in commercial disputes."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": []
+  }
+}

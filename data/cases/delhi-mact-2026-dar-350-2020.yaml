@@ -1,0 +1,36 @@
+id: delhi-mact-2026-dar-350-2020
+title: Restaurant worker, 31, Delhi, 15% disability (injury; insurer offer refused)
+citation: "Karan Singh Bisht v Ravi Singh & Ors., DAR No. 350/2020, MACT-01, Patiala House Courts, New Delhi (17 Aug 2026)"
+court: MACT
+source_url: "https://indiankanoon.org/doc/105820332/"
+kind: injury
+archetypes: [injury_partial_disability_salaried, offer_rejected, contributory_negligence]
+state: DL
+facts:
+  accident_date: 2020-09-05
+  claim_filed: 2020-12-24
+  age: 31
+  employment: permanent
+  occupation: food and beverage associate (waiter) at a restaurant
+  disability_pct: 15
+journey:
+  - forum: insurer_offer
+    amount: 63302
+    note: "after cutting 30% because the rider supposedly had no licence (he did); not accepted"
+  - forum: mact
+    date: 2026-08-17
+    amount: 830923
+    note: "Rs 11,87,033 less 30% for contributory negligence; 80% paid out in monthly deposits over 50 months"
+interest_pct: 7.5
+what_mattered:
+  - "Salary (Rs 17,000 a month) was proved through an employer witness, salary slips and a leave certificate covering 287 days off work."
+  - "No medical bills were filed, so nothing was awarded for medical expenses."
+  - "The tribunal cut 30% for contributory negligence (not giving way to an ambulance), but rejected the insurer's 'no licence' ground."
+  - "50% future prospects were added on the 15% disability, even though his pay had risen since the accident."
+summary: >-
+  A 31-year-old restaurant worker's motorcycle was hit by an ambulance on the wrong side of the road in 2020,
+  leaving him with 15% permanent disability. The insurer offered Rs 63,302. He refused. Almost six years later
+  the tribunal awarded Rs 8.31 lakh after a 30% negligence cut, about 13 times the offer, plus 7.5% interest
+  from the date the claim was filed.
+extracted_by: AI-assisted extraction from the award text (Indian Kanoon); figures re-checked against the award
+verified_by: []

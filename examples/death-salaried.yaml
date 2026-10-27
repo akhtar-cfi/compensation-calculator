@@ -1,0 +1,18 @@
+# A 30-year-old permanent employee earning Rs 25,000/month (proved by salary slips) dies; survived by spouse and two children.
+kind: death
+accidentDate: "2025-06-01"
+claimFiledDate: "2025-08-01"
+state: DL
+victimRole: pedestrian
+offendingVehicle: identified_insured
+victim:
+  ageYears: 30
+  employment: permanent
+  income:
+    proof: salary_slip
+    monthlySalary: 25000
+family:
+  married: true
+  spouse: true
+  children: 2
+  parents: 0

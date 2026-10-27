@@ -1,0 +1,33 @@
+id: pramod-kumar-tiwari-2025
+title: Government school principal (death)
+citation: Pramod Kumar Tiwari Versus Premlal Gautam & Ors., Civil Appeal No. ___ of 2025 (Arising out of SLP (C)
+  No. 26620 of 2023); from Miscellaneous Appeal No. 783 of 2020 (High Court of Madhya Pradesh) and Claim Case No.
+  2000443 of 2016 (Second Additional MACT, Rewa)
+court: SC
+source_url: https://www.sci.gov.in/sci-get-pdf/?diary_no=447582023&type=o&order_date=2025-04-08&from=latest_judgements_order
+kind: death
+archetypes:
+- death_salaried
+state: MP
+facts:
+  employment: permanent
+  occupation: Principal in government employment
+  family: not stated (appellant-claimant; relationship to deceased not given)
+journey:
+- forum: supreme_court
+  date: '2025-04-08'
+  amount: 6694212
+  note: appeal allowed in part; Rs.66,94,212 substituted for MACT award; family pension not deductible; 6% interest
+    from filing of claim petition
+interest_pct: 6
+what_mattered:
+- Family pension cannot be deducted from salary when computing loss of dependency (Helen C. Rebello; Sebastiani
+  Lakra)
+- Monthly salary of Rs.48,196 taken, plus 30% future prospects, less 1/4 personal expenses, then 10% income tax,
+  multiplier 13
+- Rs.75,000 for funeral and transportation of body and Rs.40,000 for love and affection added
+summary: A government school principal in Madhya Pradesh died in an accident while in service. The tribunal and
+  the High Court reduced the loss of dependency by the family pension the family would receive. In 2025 the Supreme
+  Court held that family pension cannot be deducted and awarded Rs 66.94 lakh.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

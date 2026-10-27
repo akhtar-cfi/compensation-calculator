@@ -1,0 +1,97 @@
+{
+  "record_version": 1,
+  "doc_id": "MPHC010374832016_1_2024-01-12",
+  "source": "hc",
+  "court": "High Court of Madhya Pradesh",
+  "case": "MA 1877/2016",
+  "cnr": "MPHC010374832016",
+  "decided": "2024-01-12",
+  "citation": null,
+  "judgment_url": "https://indian-high-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2024/court%3D23_23/bench%3Dmphc_db_jbp/MPHC010374832016_1_2024-01-12.pdf",
+  "quote_check": "verified, 21/21 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "MPHC010374832016_1_2024-01-12",
+    "source": "hc",
+    "payload": {
+      "usable": true,
+      "unusable_reason": null,
+      "kind": "death",
+      "outcome": "appeal_partly_allowed",
+      "court": "High Court of Madhya Pradesh at Jabalpur",
+      "court_level": "hc",
+      "state_code": "MP",
+      "accident_date": null,
+      "filing_date": null,
+      "award_date": "2016-04-30",
+      "age": null,
+      "employment": null,
+      "occupation": null,
+      "proof": null,
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": null,
+      "income_basis": null,
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": null,
+      "certificate_pct": null,
+      "certificate_basis": null,
+      "consortium_claimants": null,
+      "heads": {
+        "other:non_conventional_balance": 554940,
+        "consortium": 120000,
+        "loss_of_estate": 15000,
+        "funeral": 15000
+      },
+      "awarded_formula_head": null,
+      "total_award": 704940,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": null,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": true,
+      "spouse": true,
+      "children": 2,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": null,
+      "medical_bills_awarded": null,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "mact",
+        "date": "2016-04-30",
+        "amount": 679940,
+        "by": null,
+        "note": "15th Additional Claims Tribunal, Bhopal: common award of Rs 6,79,940 in the death claim, including Rs 1,00,000 consortium to the widow and Rs 25,000 funeral expenses; insurer to pay and recover from the owner."
+      },
+      {
+        "forum": "high_court",
+        "date": "2024-01-12",
+        "amount": 704940,
+        "by": "both",
+        "note": "Claimants' appeal partly allowed: conventional heads reset to Rs 40,000 consortium each for three claimants plus Rs 15,000 loss of estate and Rs 15,000 funeral, raising the award by Rs 25,000. Insurer's two pay-and-recover appeals dismissed."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man survived by his wife and two teenage sons, Madhya Pradesh (death)",
+    "family_summary": "A man in Madhya Pradesh died in a road accident, and his wife and two teenage sons claimed compensation. In April 2016 the claims tribunal at Bhopal awarded Rs 6,79,940 and ordered the insurer to pay the family first and recover the money from the vehicle owner. In January 2024 the Madhya Pradesh High Court raised the award by Rs 25,000 to Rs 7,04,940 and rejected the insurer's appeal against paying. The appeals took almost eight years after the tribunal's award.",
+    "what_mattered": [
+      "Using Supreme Court rulings, the High Court gave Rs 40,000 each to the wife and both sons for losing his love and care (\"consortium\"), plus Rs 15,000 for his lost estate and Rs 15,000 for the funeral. The tribunal had given Rs 1,00,000 to the wife alone and Rs 25,000 for the funeral.",
+      "The insurer argued that only the Supreme Court can make it pay the family first and recover from the owner. Following a 2018 Supreme Court ruling, the High Court held that a tribunal can do this too; the insurer had not challenged the finding that the deceased was a third party."
+    ],
+    "archetypes": [],
+    "audience": "both",
+    "review_notes": [
+      "fixed: heads.loss_of_dependency 554940 moved to heads.other:non_conventional_balance; the order never labels Rs 5,54,940. awarded_formula_head stays null; other heads and total unchanged.",
+      "fixed: what_mattered[0] now explains consortium and loss of estate in plain words and drops the '2021 ruling' label (2021 is only Satinder Kaur's report year).",
+      "fixed: family_summary says the insurer's appeal (singular); only MA 1878/2016 was against this family, MA 1877/2016 was in another claimant's case.",
+      "fixed: what_mattered[1] adds the court's second reason for pay and recover: the insurer did not challenge the finding that the deceased was a third party.",
+      "fixed (duplicate warning): Same order is also filed as MPHC010374842016_1_2024-01-12 (MA 1878/2016, the insurer's appeal in this death claim); bulk-sheet lists both case numbers on this row. Do not extract that doc separately, or the claim appears twice."
+    ]
+  }
+}

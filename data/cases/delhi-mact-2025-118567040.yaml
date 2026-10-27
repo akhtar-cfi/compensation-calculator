@@ -1,0 +1,43 @@
+id: delhi-mact-2025-118567040
+title: Glass-fitting labourer, 27, Delhi, 35% disability (injury)
+citation: Mohd. Saqib v. Mahipal Singh & Ors., MACT no. 336/2022
+court: MACT
+source_url: https://indiankanoon.org/doc/118567040/
+kind: injury
+archetypes:
+- injury_amputation
+- injury_partial_disability_self_employed_or_manual
+- offer_rejected
+state: DL
+facts:
+  accident_date: '2022-02-08'
+  claim_filed: '2022-07-20'
+  age: 27
+  employment: informal
+  occupation: glass-fitting labourer in buildings (no employment proof)
+  disability_pct: 35
+  family: injured man himself (unmarried)
+journey:
+- forum: insurer_offer
+  amount: 2000000
+  note: Insurer said it was ready to settle for Rs.20 lakhs at a Pre-Lok Adalat sitting on 12.12.2024; not accepted
+    (claimant considered about Rs.30 lakhs fair). Formal legal offer not filed.
+- forum: mact
+  date: '2025-11-11'
+  amount: 3402141
+  note: Includes Rs.10 lakhs for artificial limb and replacements; interest limited to 2.5 years for claimant's
+    non-diligence
+interest_pct: 7
+what_mattered:
+- No employment proof, so income taken at Delhi unskilled minimum wage Rs.16,064/month (claimed Rs.15,000)
+- 75% left-lower-limb disability (below-knee amputation) converted to 35% whole-body functional disability because
+  he uses a prosthesis and, at 27, can learn new skills
+- Only photocopies of medical bills and treatment was free at the hospital, so nil medical expenses; prosthesis
+  awarded at proved invoice cost Rs.2 lakhs x 5 = Rs.10 lakhs
+- Claimant rejected the insurer's Rs.20 lakh settlement offer and the tribunal awarded Rs.34,02,141, but interest
+  was cut to 2.5 years for non-appearance
+summary: A 27-year-old glass-fitting labourer was injured in Delhi in 2022, and left with 35% functional disability.
+  The insurer offered Rs 20 lakh, which was not accepted. The tribunal awarded Rs 34.02 lakh in 2025, 3.8 years
+  after the accident.
+extracted_by: AI-assisted extraction from the award text; every amount and date matched to a verbatim quote by script
+verified_by: []

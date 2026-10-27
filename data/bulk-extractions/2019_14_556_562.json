@@ -1,0 +1,90 @@
+{
+  "record_version": 1,
+  "doc_id": "2019_14_556_562",
+  "source": "sc",
+  "court": "Supreme Court of India",
+  "case": "2019 INSC 1345",
+  "cnr": "ESCR010003042019",
+  "decided": "2019-12-10",
+  "citation": "2019 INSC 1345; [2019] 14 S.C.R. 556",
+  "judgment_url": "https://indian-supreme-court-judgments.s3.ap-south-1.amazonaws.com/data/pdf/year%3D2019/english/2019_14_556_562_EN.pdf",
+  "quote_check": "verified, 28/28 quotes",
+  "extraction": {
+    "schema_version": 1,
+    "doc_id": "2019_14_556_562",
+    "source": "sc",
+    "payload": {
+      "usable": false,
+      "unusable_reason": "Not a Motor Vehicles Act claim: the injured driver claimed against his employer (the truck owner) and its insurer under the Workmen's Compensation Act, 1923 before the Commissioner for Workmen's Compensation. The award follows that Act's Schedule IV relevant-factor formula, not a MACT assessment.",
+      "kind": "injury",
+      "outcome": "appeal_allowed",
+      "court": "Supreme Court of India",
+      "court_level": "sc",
+      "state_code": "KA",
+      "accident_date": "2006-05-13",
+      "filing_date": null,
+      "award_date": null,
+      "age": 33,
+      "employment": "fixed_salary",
+      "occupation": "heavy vehicle (truck) driver",
+      "proof": "other",
+      "claimed_monthly_income": null,
+      "income_monthly_accepted": 4000,
+      "income_basis": "proved_salary",
+      "future_prospects_pct": null,
+      "deduction": null,
+      "multiplier": null,
+      "disability_pct": 100,
+      "certificate_pct": 37,
+      "certificate_basis": "whole_body",
+      "consortium_claimants": null,
+      "heads": {
+        "loss_of_earning_capacity": 483984,
+        "medical": 100000
+      },
+      "awarded_formula_head": 483984,
+      "total_award": null,
+      "contributory_negligence_pct": 0,
+      "interest_rate_pct": 6,
+      "insurer_offer": null,
+      "offer_status": "not_mentioned",
+      "married": null,
+      "spouse": null,
+      "children": null,
+      "parents": null,
+      "dependent_parents": null,
+      "months_off_work": null,
+      "hospital_days": 65,
+      "medical_bills_awarded": 100000,
+      "burns": false,
+      "uncertain": []
+    },
+    "journey": [
+      {
+        "forum": "high_court",
+        "date": "2016-10-06",
+        "amount": 290390,
+        "by": "claimant",
+        "note": "Claimant's appeal against the Workmen's Compensation Commissioner's award of Rs 1,81,494 (income Rs 3,000 a month, 50% loss of earning capacity). Income raised to Rs 4,000 and loss to 60%, with 12% interest. The Commissioner is not a MACT, so no tribunal step is recorded."
+      },
+      {
+        "forum": "supreme_court",
+        "date": "2019-12-10",
+        "amount": null,
+        "by": "claimant",
+        "note": "Claimant's appeal allowed: loss of earning capacity treated as 100%, giving Rs 4,83,984, plus a Rs 1,00,000 lump sum for hospital and medical expenses (Rs 5,83,984 in all, sum not stated), with 6% interest."
+      }
+    ],
+    "precedent": null,
+    "title_anon": "Man, 33, truck driver, Karnataka (injury, workmen's compensation)",
+    "family_summary": "A 33-year-old truck driver was badly hurt in May 2006 when the loaded truck he drove for his employer went out of control after an axle broke and overturned; his right leg was permanently damaged and he spent 65 days in hospital. He claimed under the workmen's compensation law, not before a motor accident claims tribunal, and the Commissioner awarded Rs 1,81,494. In October 2016 the Karnataka High Court raised this to Rs 2,90,390. In December 2019, about 13 and a half years after the accident, the Supreme Court awarded Rs 4,83,984 plus Rs 1,00,000 for hospital and medical costs.",
+    "what_mattered": [
+      "Medical evidence that he could not stand for long, fold his legs or drive again, and needed a walking stick, led the Supreme Court to treat his loss of earning capacity as 100%, up from 50% (Commissioner) and 60% (High Court), though a doctor rated his whole-body disability at 37%.",
+      "The Supreme Court followed its earlier rulings (Raj Kumar, K. Janardhan, S. Suresh) that a driver who can no longer drive has lost all of his earning capacity.",
+      "Neither the Commissioner nor the High Court had awarded anything for his 65 days in hospital, so the Supreme Court added a lump sum of Rs 1,00,000 for hospital and medical costs."
+    ],
+    "archetypes": [],
+    "audience": "lawyers",
+    "review_notes": []
+  }
+}
