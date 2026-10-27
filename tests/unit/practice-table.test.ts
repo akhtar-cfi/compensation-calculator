@@ -230,6 +230,36 @@ describe("Delhi award tables", () => {
     expect(t.income_monthly).toBe(16858);
   });
 
+  it("takes a worked cell's result, not its first figure", () => {
+    const worked = FORM_XV.replace(
+      "Rs.11,800.6/-\n               dependency",
+      "Rs. 23,601.2/- – 11,800.6/- =\n               dependency\n                                                    11,800.6/-",
+    )
+      .replace(
+        "Rs.1,41,607.2/-\n               (D x 12)",
+        "Rs. 11,800.6 x 12 = 1,41,607.2/-\n               (D x 12)",
+      )
+      .replace(
+        "Rs.25,48,930/-\n               (D x 12 x E = F)",
+        "(D x 12 x E = 11,800.6 x 12 x 18 = Rs.\n               F)\n                                               25,48,930/-",
+      );
+    const t = parseAwardTable(worked)!;
+    expect(t.heads.loss_of_dependency).toBe(2548930);
+    expect(t.flags).not.toContain("monthly_dependency");
+    expect(t.flags).not.toContain("dependency_arithmetic");
+    // a cell whose result comes first keeps it
+    const first = parseAwardTable(FORM_XV.replace("Rs.96,800/-", "Rs.96,800/- (48,400 x 2)"))!;
+    expect(first.heads.consortium).toBe(96800);
+    // a total the layout ran into the funeral cell is not the funeral's figure
+    const runOn = parseAwardTable(
+      FORM_XV.replace(
+        " 19            TOTAL COMPENSATION                Rs.26,82,030/-\n               (F + G + H + I + J+K =L)",
+        "               TOTAL COMPENSATION (F + G + H + I + J+K =L) Rs.26,82,030/-",
+      ),
+    )!;
+    expect(runOn.heads.funeral).toBe(18150);
+  });
+
   it("returns null when there is no table", () => {
     expect(parseAwardTable("The claim petition is dismissed.")).toBeNull();
   });

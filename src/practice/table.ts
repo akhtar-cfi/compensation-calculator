@@ -170,9 +170,27 @@ function years(text: string): number | undefined {
   return m ? Number(m[1]) : undefined;
 }
 
-/** A head's amount: its first figure, or 0 when the cell says Nil and has no figure. */
+const OPERAND = String.raw`(?:Rs\.?|₹)?\s*\d[\d,]*(?:\.\d+)?\s*%?\s*(?:\/-)?`;
+/** A sum that opens with the cell's first figure: "Rs. 17,500 x 12 x 18 =", "35,000/- – 17,500/- =". */
+const SUM = new RegExp(String.raw`^${OPERAND}(?:\s*[x×*+\-–]\s*${OPERAND})*\s*=`, "i");
+
+/**
+ * A worked cell ("Rs. 17,500 x 12 x 18 = Rs. 37,80,000"): the figure after the "=", when the cell's
+ * first figure opens the sum. A cell that only ran into a later line's sum keeps its first figure.
+ */
+function worked(it: Item): number | undefined {
+  const first = it.text.search(MONEY);
+  if (first < 0) return undefined;
+  const sum = it.text.slice(first).match(SUM);
+  return sum ? tokens(it.text.slice(first + sum[0].length)).money[0] : undefined;
+}
+
+/** A cell's amount: a worked cell's result, else its first figure. */
+const figure = (it: Item): number | undefined => worked(it) ?? it.money[0];
+
+/** A head's amount: its figure, or 0 when the cell says Nil and has no figure. */
 function amount(it: Item): number | undefined {
-  if (it.money.length) return it.money[0];
+  if (it.money.length) return figure(it);
   if (NIL.test(it.text)) return 0;
   // a bare number in the cell ("Multiplier 18" is read elsewhere): amounts without Rs. or commas
   const bare = it.text.match(/(?<![\d.,/(])(\d{3,7})(?![\d.,/%])/);
@@ -335,10 +353,10 @@ function parseRegion(region: string, head: string): AwardTable {
         break;
       }
       case "monthly_dependency":
-        monthlyDependency = it.money[0];
+        monthlyDependency = figure(it);
         break;
       case "annual_dependency":
-        annualDependency = it.money[0];
+        annualDependency = figure(it);
         break;
       case "multiplier": {
         const m = it.text.match(/(?<![\d.,/])(\d{1,2})(?![\d.,/%])/);

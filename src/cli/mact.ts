@@ -13,6 +13,13 @@ import { IndianKanoonClient, buildQuery, htmlToText, ledgerTotal } from "../inge
 import { matchCases } from "../cases/match.js";
 import { checkOffer, estimate, EstimateInputSchema } from "../engine/index.js";
 import { REPO_ROOT, loadRules } from "../rules/load.js";
+import {
+  dedupe,
+  missesOf,
+  readPracticeRows,
+  renderPracticeReport,
+  summarisePractice,
+} from "../practice/report.js";
 import { renderRulesReference } from "../rules/reference.js";
 import { validateRules } from "../rules/validate.js";
 import { loadWatchSources } from "../watch/registry.js";
@@ -27,6 +34,9 @@ const USAGE = `Usage:
   mact cases coverage
   mact backtest <awards.csv> [--format md|json]
   mact backtest calibrate <injury_heads.csv> [--format md|json]
+  mact practice report <tables.jsonl> [--out report.md] [--misses misses.jsonl] [--format md|json]
+      (rows from the award-table reader, one per line; the report holds counts only, --misses lists
+       case numbers and so belongs in private storage)
   mact ik search "<terms>" [--doctypes delhidc] [--from YYYY-MM-DD] [--to YYYY-MM-DD] [--page 0] [--budget 5]
   mact ik fetch <tid...> [--ids-from file] [--budget 5]
       (needs IK_API_TOKEN; responses are cached in .cache/indiankanoon and spend is logged there;
@@ -168,6 +178,26 @@ async function main(argv: string[]): Promise<number> {
         : renderBacktest(summary, results, errors),
     );
     return errors.length ? 1 : 0;
+  }
+  if (cmd === "practice" && sub === "report" && rest[0]) {
+    const rules = loadRules();
+    const all = readPracticeRows(readFileSync(rest[0], "utf8"));
+    const rows = dedupe(all);
+    const summary = summarisePractice(rules, all);
+    const text =
+      flag(args, "format") === "json" ? JSON.stringify(summary, null, 2) : renderPracticeReport(summary);
+    const out = flag(args, "out");
+    if (out) writeFileSync(out, text);
+    else console.log(text);
+    const misses = flag(args, "misses");
+    if (misses)
+      writeFileSync(
+        misses,
+        missesOf(rows)
+          .map((m) => JSON.stringify(m))
+          .join("\n") + "\n",
+      );
+    return 0;
   }
   if (cmd === "cases" && sub === "coverage") {
     console.log(renderCoverage(loadCases()));
