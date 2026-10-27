@@ -161,8 +161,17 @@ export async function fetchTexts(
     if (fresh.length >= opts.max) break;
     if (done.has(c.doc_id) || opts.seen?.has(c.doc_id)) continue;
     done.add(c.doc_id);
-    const pdf = await getObject(c.source, c.pdf_key, opts.fetch);
-    const text = pdf ? await pdfToText(pdf, opts.pdftotext) : "";
+    let pdf = await getObject(c.source, c.pdf_key, opts.fetch);
+    let text = "";
+    if (pdf) {
+      try {
+        text = await pdfToText(pdf, opts.pdftotext);
+      } catch (e) {
+        // a damaged file (or an error page saved as .pdf) is logged as missing; one must not stop the run
+        log(`${c.doc_id}\tunreadable PDF: ${String(e).split("\n")[0]}`);
+        pdf = undefined;
+      }
+    }
     const words = wordCount(text);
     const status: Doc["status"] = !pdf
       ? "missing"

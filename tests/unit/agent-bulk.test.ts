@@ -241,6 +241,27 @@ describe("listing and fetching from the buckets", () => {
     expect(again).toEqual([]);
   });
 
+  it("logs a damaged PDF as missing and carries on with the next", async () => {
+    const work = tmp();
+    const f = fakeFetch({
+      "DLHC010000012019_1_2025-02-10.pdf": "BROKEN %PDF trailer",
+      "DLHC010000042021_1_2025-05-02.pdf": JUDGMENT,
+    });
+    const cs = await listHc(courtByState("DL")!, [2025], f);
+    const lines: string[] = [];
+    const docs = await fetchTexts(work, cs, {
+      max: 10,
+      fetch: f,
+      pdftotext: FAKE_PDFTOTEXT,
+      log: (l) => lines.push(l),
+    });
+    expect(docs.map((d) => [d.doc_id, d.status])).toEqual([
+      ["DLHC010000012019_1_2025-02-10", "missing"],
+      ["DLHC010000042021_1_2025-05-02", "ok"],
+    ]);
+    expect(lines.some((l) => l.includes("unreadable PDF"))).toBe(true);
+  });
+
   it("drops a shared-type appeal whose text is not about a motor accident claim", async () => {
     const work = tmp();
     const ec = "Appeal under the Employees Compensation Act against the Commissioner's order. ".repeat(20);
