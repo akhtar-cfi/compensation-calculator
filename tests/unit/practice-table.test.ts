@@ -206,6 +206,30 @@ describe("Delhi award tables", () => {
     expect(t.flags).toContain("figures_in_award_body");
   });
 
+  it("reads a label whose value sits between its two lines", () => {
+    const text = FORM_XV.replace(
+      " 15            Compensation for loss of                   Nil\n               love and affection (H)",
+      " 15            Compensation for loss of love and\n                                                          Nil\n               affection (H)",
+    );
+    expect(parseAwardTable(text)!.heads.love_affection).toBe(0);
+  });
+
+  it("takes the total before an interim award when only the remainder is stated", () => {
+    const text = FORM_XV.replace(
+      "19            TOTAL COMPENSATION                Rs.26,82,030/-",
+      "19            TOTAL COMPENSATION                Rs.26,32,030/- (after deducting Rs.50,000/- of the interim award)",
+    );
+    const t = parseAwardTable(text)!;
+    expect(t.total_after).toBe(2632030);
+    expect(t.total).toBe(2682030); // the heads' sum
+    expect(t.flags).toContain("total_is_after_reduction");
+  });
+
+  it("reads an amount typed with dots for commas", () => {
+    const t = parseAwardTable(FORM_XV.replace("Rs.16,858/-\n  8", "Rs.16.858.00/-\n  8"))!;
+    expect(t.income_monthly).toBe(16858);
+  });
+
   it("returns null when there is no table", () => {
     expect(parseAwardTable("The claim petition is dismissed.")).toBeNull();
   });

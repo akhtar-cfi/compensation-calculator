@@ -105,7 +105,9 @@ interface Item {
 
 const num = (s: string): number => Number(s.replace(/,/g, ""));
 
-function tokens(text: string): Item {
+function tokens(raw: string): Item {
+  // "Rs.10.201.09" is 10,201.09 typed with a dot for the comma
+  const text = raw.replace(/\b(\d{1,3})\.(\d{3})\.(\d{1,2})\b/g, "$1,$2.$3");
   const money: number[] = [];
   const percents: number[] = [];
   for (const m of text.matchAll(MONEY)) {
@@ -113,9 +115,11 @@ function tokens(text: string): Item {
     if (Number.isFinite(v)) money.push(v);
   }
   for (const m of text.matchAll(PERCENT)) percents.push(Number(m[1]));
+  // a cell's value can sit between the two lines of its label ("loss of love and / Nil / affection")
   const label = text
     .replace(MONEY, " ")
     .replace(PERCENT, " ")
+    .replace(/\b(?:nil|n\.?\s?a\.?|not applicable)\b/gi, " ")
     .replace(/[^A-Za-z&]+/g, " ")
     .toLowerCase()
     .trim();
@@ -274,6 +278,7 @@ function parseRegion(region: string, head: string): AwardTable {
   let monthlyDependency: number | undefined;
   let annualDependency: number | undefined;
   let statedDisability: number | undefined;
+  let totalCell: Item | undefined;
   let fpAmount: number | undefined;
   let dedAmount: number | undefined;
 
@@ -349,23 +354,7 @@ function parseRegion(region: string, head: string): AwardTable {
       case "total_with_interest":
         break;
       case "total": {
-        const cn = /contributory|negligence/i.test(it.text);
-        const interim = /interim/i.test(it.text);
-        const reduced = cn || interim || /deduct|\bless\b/i.test(it.text);
-        if (it.money.length > 1 && reduced) {
-          // the cell gives the total and what is left after a fault share or an interim award
-          out.total = Math.max(...it.money);
-          out.total_after = it.money[it.money.length - 1]!;
-          if (out.total_after === out.total) out.total_after = Math.min(...it.money);
-        } else if (it.money.length) {
-          out.total = it.money[0]!;
-          if (reduced) {
-            out.total_after = it.money[0]!;
-            out.flags.push("total_is_after_reduction");
-          }
-        }
-        if (cn && it.percents.length) out.cn_pct = it.percents[0]!;
-        if (interim) out.flags.push("total_after_interim");
+        totalCell = it;
         break;
       }
       case "functional_pct":
@@ -397,8 +386,8 @@ function parseRegion(region: string, head: string): AwardTable {
   if (out.kind === "death" && out.income_monthly === undefined && out.income_stated !== undefined)
     out.income_monthly = out.income_stated;
 
-  if (out.disability_pct === undefined && statedDisability !== undefined)
-    out.disability_pct = statedDisability;
+  // item 9's figure when 13(i) is left Nil
+  if (statedDisability && !out.disability_pct) out.disability_pct = statedDisability;
   // Form XVI states the loss of earning capacity twice, as pecuniary item (v) and as 13(iv) "loss of
   // future income". When the layout has shifted (v)'s figure onto the next row, the loss of income
   // carries it: swap them back. Then keep one head: (v), or 13(iv) when (v) says Nil.
@@ -439,16 +428,42 @@ function parseRegion(region: string, head: string): AwardTable {
     delete out.fp_pct;
     out.flags.push("future_prospects_unclear");
   }
-  // When the table's total is only the reduced one, the heads give the total before it.
-  if (out.flags.includes("total_is_after_reduction")) {
-    const sum = Object.values(out.heads).reduce((x, y) => x + y, 0);
-    if (sum > (out.total ?? 0)) out.total = sum;
-  }
+  if (totalCell) readTotal(out, totalCell);
   check(out, monthlyDependency);
   return out;
 }
 
 const round = (v: number, places: number): number => Math.round(v * 10 ** places) / 10 ** places;
+
+/**
+ * The total cell. It may give the total, or only what is left after a fault share (contributory
+ * negligence) or after an interim award or a deposit is taken off, or both. `total` is always the
+ * total before any such reduction: stated, or else the sum of the heads (flagged); `total_after`
+ * is the reduced figure when there is one.
+ */
+function readTotal(out: AwardTable, it: Item): void {
+  const cn = /contributory|negligence/i.test(it.text);
+  const interim = /interim/i.test(it.text);
+  const deducted = interim || /deduct|\bless\b|already (?:paid|deposited)/i.test(it.text);
+  const sum = Object.values(out.heads).reduce((x, y) => x + y, 0);
+  if (cn && it.percents.length) out.cn_pct = it.percents[0]!;
+  if (interim) out.flags.push("total_after_interim");
+  if (!it.money.length) return;
+  if (!cn && !deducted) {
+    out.total = it.money[0]!;
+    return;
+  }
+  if (cn && it.money.length > 1) {
+    // "= Rs. 38,86,260 (after contributory negligence @ 30%) = Rs. 27,20,383"
+    out.total = Math.max(...it.money);
+    out.total_after = Math.min(...it.money);
+    return;
+  }
+  // only the reduced figure is stated: the heads give the total before the reduction
+  out.total_after = it.money[0]!;
+  out.total = sum > out.total_after ? sum : out.total_after;
+  out.flags.push("total_is_after_reduction");
+}
 
 /** Arithmetic the table should satisfy; a failure is flagged, never corrected. */
 function check(t: AwardTable, monthlyDependency: number | undefined): void {
