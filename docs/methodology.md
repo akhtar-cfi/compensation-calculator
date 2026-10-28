@@ -142,6 +142,10 @@ Four checks run on every row:
 | Predict    | Only what a family knows (claimed income, proof, family, certificate, time off work)      | How far is the estimate from the award, and is the award inside the range? |
 | Offer      | The insurer's legal offer recorded in the award                                           | Offer ÷ award after any negligence cut (kill criterion K1)                 |
 
+Some tribunals, often in Bengaluru, pay future prospects as a separate head ("loss of future prospects") and state the
+loss of dependency without them. That head goes in `awarded_fp_head` and is added to the formula head before Replicate
+and Conformity compare it with the engine.
+
 Sampling bias is stated on every report: published awards over-represent Delhi, and appeals over-represent contested, low awards.
 
 **Back-test on 226 Delhi tribunal awards (10 Oct 2026)**
