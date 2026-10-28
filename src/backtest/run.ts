@@ -79,9 +79,17 @@ const intermediate = (o: EstimateOutput, id: string) =>
 const stopReason = (o: EstimateOutput) =>
   o.warnings.find((w) => w.severity === "stop")?.code ?? "no estimate";
 
+/**
+ * The tribunal's formula head as the engine computes it. Some tribunals (often in Bengaluru) pay future prospects as a
+ * separate head, "loss of future prospects", and state the loss of dependency without them; the two together are the
+ * engine's head.
+ */
+const formulaHead = (r: AwardRow) =>
+  r.awarded_formula_head === undefined ? undefined : r.awarded_formula_head + (r.awarded_fp_head ?? 0);
+
 /** Does the engine's arithmetic, fed the tribunal's own findings, reproduce the tribunal's formula head? */
 export function replicate(r: AwardRow): ReplicateResult {
-  const awarded = r.awarded_formula_head;
+  const awarded = formulaHead(r);
   if (r.income_monthly_accepted === undefined || r.multiplier_applied === undefined || awarded === undefined)
     return { status: "skipped", reason: "needs accepted income, multiplier and the awarded formula head" };
   if (r.kind === "injury" && r.disability_pct_applied === undefined)
@@ -165,13 +173,14 @@ export function conformity(rules: RulesBundle, r: AwardRow): ConformityResult {
   if (r.kind === "death" && r.married !== undefined && r.deduction_applied !== undefined)
     check("deduction", deductionOf(r.deduction_applied), "personal_deduction");
   const ruleHead = headOf(out, r);
+  const awarded = formulaHead(r);
   return {
     status: "computed",
     deviations,
     ...(ruleHead !== undefined && { ruleHead }),
     ...(ruleHead &&
-      r.awarded_formula_head !== undefined && {
-        gapPct: (r.awarded_formula_head - ruleHead) / ruleHead,
+      awarded !== undefined && {
+        gapPct: (awarded - ruleHead) / ruleHead,
       }),
   };
 }

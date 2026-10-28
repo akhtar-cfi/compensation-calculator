@@ -46,6 +46,7 @@ export const AwardRowSchema = z.object({
   disability_pct_applied: num,
   consortium_claimants: int,
   awarded_formula_head: num, // loss of dependency (death) or loss of earning capacity (injury)
+  awarded_fp_head: num, // future prospects paid as a separate head ("loss of future prospects"), outside the formula head
   awarded_total: num, // before any contributory-negligence cut
   cn_pct: num,
   offer_amount: num, // insurer's legal offer, as stated in the award

@@ -62,6 +62,14 @@ describe("replicate", () => {
     expect(r.status).toBe("skipped");
     expect(r.reason).toMatch(/no dependants/);
   });
+  it("adds future prospects paid as a separate head to the loss of dependency", () => {
+    // 20,000 x 12 x 2/3 x 17 = 27,20,000 stated as loss of dependency; the 50% future prospects, 13,60,000, as its own head.
+    const row = fixture.rows.find((r) => r.id === "fx-death-ok")!;
+    expect(runRow(rules, { ...row, awarded_formula_head: 2720000 }).replicate.status).toBe("fail");
+    const r = runRow(rules, { ...row, awarded_formula_head: 2720000, awarded_fp_head: 1360000 });
+    expect(r.replicate.status).toBe("pass");
+    expect(r.conformity.gapPct).toBeCloseTo(0, 6);
+  });
   it("skips, rather than fails, when the future-prospects % is unknown", () => {
     const row = fixture.rows.find((r) => r.id === "fx-death-ok")!;
     const r = runRow(rules, { ...row, fp_pct_applied: undefined }).replicate;
