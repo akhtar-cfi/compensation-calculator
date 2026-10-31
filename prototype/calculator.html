@@ -1,0 +1,1289 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Crashfree India — Compensation calculator (prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Montserrat:wght@600;700;800&family=Noto+Sans+Devanagari:wght@700&display=swap">
+<style>:root{--violet:#5D2DF7;--deep:#1B1340;--tint:#EFEAFE;--line:#D7CAFD;--band:#F6F7FF;--mar:#F5A524;--mtint:#FFF4DB;--mink:#8A5300;--ink:#020618;--muted:#475569;--subtle:#64748B;--hair:#E6E8F2;--teal:#0F766E;--ttint:#E6F6F4;--red:#B42318;--rtint:#FEF0EE;--sans:"Geist",system-ui,sans-serif;--head:"Montserrat",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font:400 15px/22px var(--sans);color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
+input{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--head);letter-spacing:-.4px}
+.h1{font:700 26px/32px var(--head);letter-spacing:-.5px;text-wrap:balance}
+.eyebrow{font:600 12px/16px var(--sans);letter-spacing:.9px;text-transform:uppercase;color:var(--violet)}
+.eyebrow.m{color:var(--subtle)}
+.hint{font-size:15px;line-height:22px;color:var(--muted);text-wrap:pretty}
+.small{font-size:13px;line-height:18px;color:var(--subtle)}
+.link{display:inline-flex;align-items:center;gap:6px;font:600 15px var(--sans);color:var(--violet);white-space:nowrap}
+.link.sm{font-size:13px}
+.row{display:flex;align-items:center;gap:10px}
+.between{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.col{display:flex;flex-direction:column;gap:12px}
+svg{flex:none}
+/* ---------- app shell ---------- */
+#app{min-height:100dvh;display:flex;flex-direction:column}
+.appbar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex:none}
+.appbar .back{display:inline-flex;align-items:center;gap:6px;font:600 15px var(--sans);padding:8px 8px 8px 0}
+.langpill{border:1px solid var(--hair);border-radius:16px;padding:7px 12px;font:600 13px var(--sans);font-family:"Noto Sans Devanagari",var(--sans)}
+.prog{height:4px;margin:0 20px;border-radius:2px;background:var(--tint);overflow:hidden}
+.prog em{display:block;height:100%;background:var(--violet);border-radius:2px;transition:width .4s cubic-bezier(.2,.7,.2,1)}
+.pmeta{padding:10px 20px 0;font-size:13px;color:var(--subtle)}
+.pmeta b{color:var(--violet);font-weight:600}
+.body{padding:14px 20px 180px;display:flex;flex-direction:column;gap:14px;flex:1}
+.body.res{padding-bottom:110px}
+.nav,.dkfoot,.rail,.dkmeta{display:none}
+/* ---------- controls ---------- */
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;border:1.5px solid var(--hair);background:#fff;width:100%;min-height:60px;transition:border-color .15s,background .15s}
+.opt .gl{width:44px;height:44px;border-radius:12px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--violet);flex:none}
+.opt .tx{display:flex;flex-direction:column;gap:2px;flex:1}
+.opt .tx b{font:600 16px/22px var(--sans)}
+.opt .tx span{font-size:13px;line-height:18px;color:var(--muted)}
+.opt .ra{width:22px;height:22px;border-radius:11px;border:1.5px solid var(--hair);flex:none;display:flex;align-items:center;justify-content:center}
+.opt.on{border-color:var(--violet);background:var(--tint)}
+.opt.on .gl{background:#fff}
+.opt.on .ra{background:var(--violet);border-color:var(--violet)}
+.opt:active{transform:scale(.99)}
+.ns{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;border:1.5px dashed var(--line);color:var(--muted);font:500 15px var(--sans);width:100%}
+.ns .ra{width:20px;height:20px;border-radius:10px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center}
+.ns.on{border-style:solid;border-color:var(--violet);background:var(--tint);color:var(--ink)}
+.ns.on .ra{background:var(--violet);border-color:var(--violet)}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:10px 16px;border-radius:99px;border:1.5px solid var(--hair);font:600 14px var(--sans);background:#fff;white-space:nowrap}
+.chip.on{border-color:var(--violet);background:var(--tint);color:var(--violet)}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font:600 15px var(--sans)}
+.field .fh{font-size:13px;line-height:18px;color:var(--muted)}
+.inp{display:flex;align-items:center;gap:8px;height:56px;padding:0 16px;border-radius:14px;border:1.5px solid var(--hair);background:#fff;font:600 20px var(--sans)}
+.inp:focus-within{border-color:var(--violet);box-shadow:0 0 0 3px var(--tint)}
+.inp .pre{color:var(--subtle);font-weight:500}
+.inp input{flex:1;min-width:0;border:0;outline:0;background:none;font:600 20px var(--sans);width:100%}
+.inp input::placeholder{color:#B7BECC;font-weight:500}
+.inp .suf{font:500 14px var(--sans);color:var(--subtle);white-space:nowrap}
+.inp.err{border-color:var(--red)}
+.echo{display:flex;align-items:center;gap:6px;font:600 13px var(--sans);color:var(--teal);min-height:18px}
+.errt{font:500 13px var(--sans);color:var(--red)}
+.counter{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:16px;border:1.5px solid var(--hair)}
+.counter .tx{display:flex;flex-direction:column;gap:2px}
+.counter .tx b{font:600 16px var(--sans)}
+.counter .tx span{font-size:13px;color:var(--muted)}
+.counter .ctl{display:flex;align-items:center;gap:8px}
+.counter .ctl button{width:40px;height:40px;border-radius:20px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--violet)}
+.counter .ctl b{font:700 22px var(--head);min-width:28px;text-align:center}
+.bigstep{display:flex;align-items:center;justify-content:space-between;max-width:300px}
+.bigstep button{width:56px;height:56px;border-radius:28px;background:var(--tint);color:var(--violet);display:flex;align-items:center;justify-content:center}
+.bigstep input{width:120px;text-align:center;border:0;outline:0;font:800 52px var(--head);letter-spacing:-2px;background:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:56px;padding:0 24px;border-radius:28px;background:var(--violet);color:#fff;font:600 17px var(--sans);box-shadow:0 10px 24px -10px rgba(93,45,247,.6);white-space:nowrap;transition:transform .1s,opacity .15s}
+.btn:active{transform:scale(.98)}
+.btn.soft{background:var(--tint);color:var(--violet);box-shadow:none}
+.btn.ghost{background:#fff;color:var(--violet);border:1.5px solid var(--violet);box-shadow:none}
+.btn.full{width:100%}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.note2{display:flex;gap:10px;padding:14px 16px;border-radius:14px;background:var(--band);font-size:14px;line-height:20px;color:var(--muted)}
+.note2 .tx{display:flex;flex-direction:column;gap:2px}.note2 b{color:var(--ink);font-weight:600}
+.note2.warn{background:var(--mtint);color:var(--mink)}.note2.warn b{color:var(--mink)}
+.note2.tint{background:var(--tint)}
+.calm{display:flex;gap:10px;padding:14px 16px;border-radius:16px;background:var(--mtint);color:var(--mink);font-size:14px;line-height:20px}
+.card{border-radius:20px;border:1px solid var(--hair);background:#fff;padding:18px;display:flex;flex-direction:column;gap:12px}
+.card.band{background:var(--band)}
+.card.tint{background:var(--tint);border-color:var(--line)}
+.pill{display:inline-flex;font:600 12px var(--sans);padding:5px 10px;border-radius:99px;background:var(--tint);color:var(--violet);white-space:nowrap}
+.pill.teal{background:var(--ttint);color:var(--teal)}.pill.amber{background:var(--mtint);color:var(--mink)}.pill.red{background:var(--rtint);color:var(--red)}
+.reveal{display:flex;flex-direction:column;gap:14px;padding-top:4px;border-top:1px solid var(--hair);margin-top:4px;padding-top:14px;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.chosen{display:flex;flex-direction:column;gap:6px}
+.list{display:flex;flex-direction:column;border:1.5px solid var(--hair);border-radius:14px;overflow:hidden;max-height:260px;overflow-y:auto}
+.li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--hair);font:500 14px var(--sans);width:100%}
+.li:last-child{border-bottom:0}
+.li span{font-size:12px;color:var(--subtle)}
+.li.on{background:var(--tint);color:var(--violet)}
+.search{display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border-radius:14px;border:1.5px solid var(--hair)}
+.search input{flex:1;border:0;outline:0;font:500 15px var(--sans);background:none;min-width:0}
+.yearrow{display:flex;align-items:center;justify-content:space-between;font:700 18px var(--head)}
+.yearrow button{width:36px;height:36px;border-radius:18px;background:var(--tint);color:var(--violet);display:flex;align-items:center;justify-content:center}
+.monthgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.monthgrid button{height:44px;border-radius:12px;border:1.5px solid var(--hair);font:600 14px var(--sans);text-align:center;display:flex;align-items:center;justify-content:center}
+.monthgrid button.on{border-color:var(--violet);background:var(--tint);color:var(--violet)}
+.monthgrid button[disabled]{opacity:.35}
+.chk{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:14px;border:1.5px solid var(--hair);width:100%}
+.chk i{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.chk.on i{background:var(--violet);border-color:var(--violet)}
+.chk .tx{display:flex;flex-direction:column;gap:2px;font:600 15px var(--sans)}
+.chk .tx span{font:400 13px/18px var(--sans);color:var(--muted)}
+.helpcard{display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:18px;border:1px solid var(--hair)}
+.helpcard .gl{width:48px;height:48px;border-radius:14px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--violet);flex:none}
+.helpcard b{font:600 15px var(--sans)}.helpcard span{display:block;font-size:13px;line-height:18px;color:var(--muted)}
+/* ---------- live estimate strip ---------- */
+.live{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--hair);box-shadow:0 -10px 30px -16px rgba(27,19,64,.25);padding:10px 20px calc(10px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;z-index:20}
+.live .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.live .lbl{font:600 11px var(--sans);letter-spacing:.8px;text-transform:uppercase;color:var(--subtle)}
+.live .val{font:800 20px var(--head);letter-spacing:-.4px;white-space:nowrap;transition:all .3s}
+.live.empty .val{color:var(--subtle);font:600 14px var(--sans)}
+.live .bandbar{position:relative;height:8px;border-radius:4px;background:var(--tint)}
+.live .bandbar u{position:absolute;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,#B9A6FB,var(--violet));transition:left .5s cubic-bezier(.2,.7,.2,1),right .5s cubic-bezier(.2,.7,.2,1)}
+.live .bandbar i{position:absolute;top:-3px;width:14px;height:14px;border-radius:7px;background:#fff;border:3px solid var(--violet);margin-left:-7px;transition:left .5s}
+.live .sub{display:flex;justify-content:space-between;font-size:12px;color:var(--subtle)}
+.live .sub b{color:var(--violet);font-weight:600}
+.live .btnrow{display:flex;gap:10px}
+.live .btnrow .btn{flex:1;height:52px}
+.live .rule{font-size:11px;line-height:15px;color:var(--subtle)}
+.live.flash .val{color:var(--violet)}
+.lcard{display:none}
+/* ---------- result ---------- */
+.hero{display:flex;flex-direction:column;gap:6px}
+.hero .amt2{font:800 48px/52px var(--head);letter-spacing:-1.5px;display:flex;align-items:baseline;gap:8px}
+.hero .amt2 small{font:700 20px var(--head);letter-spacing:-.3px;color:var(--muted)}
+.rangebar{position:relative;height:40px;margin-top:6px}
+.rangebar .tr{position:absolute;left:0;right:0;top:8px;height:10px;border-radius:5px;background:var(--tint)}
+.rangebar .fl{position:absolute;top:8px;height:10px;border-radius:5px;background:linear-gradient(90deg,#B9A6FB,var(--violet))}
+.rangebar .pin{position:absolute;top:0;width:26px;height:26px;margin-left:-13px;border-radius:13px;background:#fff;border:4px solid var(--violet);box-shadow:0 4px 10px rgba(93,45,247,.3)}
+.rangebar .lab{position:absolute;top:28px;font-size:12px;color:var(--subtle);white-space:nowrap}
+.readfirst{display:flex;flex-direction:column;border-radius:16px;background:var(--mtint);padding:4px 14px}
+.readfirst .h{font:600 12px var(--sans);letter-spacing:.8px;text-transform:uppercase;color:var(--mink);padding:10px 0 4px}
+.readfirst .r{display:flex;flex-direction:column;gap:3px;padding:10px 0;border-top:1px solid rgba(138,83,0,.15);width:100%}
+.readfirst .r .t{display:flex;justify-content:space-between;gap:10px;font:600 14px/19px var(--sans);color:var(--mink)}
+.readfirst .r .t span:last-child{font-weight:400;opacity:.7;font-size:12px;white-space:nowrap}
+.readfirst .r .d{font-size:13px;line-height:18px;color:var(--mink);opacity:.85}
+.tabs2{display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--band)}
+.tabs2 button{flex:1;text-align:center;padding:10px 4px;border-radius:10px;font:600 14px var(--sans);color:var(--muted);white-space:nowrap}
+.tabs2 button.on{background:#fff;color:var(--violet);box-shadow:0 1px 3px rgba(2,6,24,.1)}
+.hd4{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:14px;padding:8px 0}
+.hd4 b{font:500 14px var(--sans);color:var(--ink)}.hd4 em{font-style:normal;font:700 15px var(--head);text-align:right}
+.hd4 i{grid-column:1/3;height:8px;border-radius:4px;background:var(--tint);position:relative;display:block;margin-top:4px}
+.hd4 i u{position:absolute;inset:0 auto 0 0;background:var(--violet);border-radius:4px}
+.hd4 span{grid-column:1/3;font-size:12px;line-height:16px;color:var(--subtle)}
+.total{display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--hair);font:700 15px var(--head)}
+.total b{font:800 17px var(--head)}
+.case3{border:1px solid var(--hair);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;background:#fff}
+.case3 .who{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.case3 .who b{font:600 14px var(--sans)}
+.case3 .line{font:600 14px/19px var(--head);color:var(--ink)}
+.mult{display:inline-flex;align-items:center;font:700 13px/1 var(--head);color:var(--mink);background:var(--mtint);padding:5px 8px;border-radius:8px;white-space:nowrap}
+.jr{display:grid;grid-template-columns:110px 1fr 86px;gap:10px;align-items:center;font-size:12px;color:var(--muted)}
+.jr i{height:8px;border-radius:4px;background:var(--hair);position:relative;display:block}
+.jr i u{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--violet)}
+.jr i u.lo{background:var(--subtle)}
+.jr b{font:700 14px var(--head);text-align:right;color:var(--ink)}
+.ul{display:flex;flex-direction:column;gap:10px;list-style:none}
+.ul li{display:flex;gap:10px;font-size:14px;line-height:20px}
+.ul li svg{color:var(--violet);margin-top:2px}
+.facts{display:flex;flex-direction:column}
+.fact{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--hair);font-size:14px}
+.fact:last-child{border-bottom:0}.fact span{color:var(--subtle)}.fact b{font-weight:600;text-align:right}
+.dock2{position:fixed;left:0;right:0;bottom:0;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--hair);display:flex;gap:10px;z-index:20}
+.dock2 .btn{flex:1;height:52px;font-size:15px;padding:0 14px}
+.step{display:grid;grid-template-columns:28px 1fr auto;gap:0 10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hair)}
+.step i{width:28px;height:28px;border-radius:14px;background:var(--ttint);display:flex;align-items:center;justify-content:center;color:var(--teal)}
+.step i.v{background:var(--tint);color:var(--violet)}
+.step .k{font-size:12px;color:var(--subtle)}.step .v{font:600 15px/20px var(--sans);color:var(--ink)}
+.step button{font:600 13px var(--sans);color:var(--violet);padding:6px 0 6px 8px}
+.step .tx{display:flex;flex-direction:column}
+.twoamt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.twoamt .c{border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:2px;border:1px solid var(--hair)}
+.twoamt .c span{font-size:12px;color:var(--subtle)}.twoamt .c b{font:800 24px/28px var(--head);letter-spacing:-.6px}
+.twoamt .c.bad{background:var(--rtint);border-color:transparent}.twoamt .c.bad b{color:var(--red)}
+.twoamt .c.good{background:var(--tint);border-color:transparent}.twoamt .c.good b{color:var(--violet)}
+.ratio{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:var(--rtint);color:var(--red);font:600 15px/20px var(--sans)}
+.ratio.ok{background:var(--ttint);color:var(--teal)}
+.ratio b{font:800 26px var(--head);letter-spacing:-.5px}
+.cmp{display:flex;flex-direction:column;gap:12px}
+.cmp .r{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;font-size:13px;color:var(--muted)}
+.cmp .r i{height:12px;border-radius:6px;background:var(--hair);position:relative;display:block}
+.cmp .r i u{position:absolute;inset:0 auto 0 0;border-radius:6px;background:var(--violet);transition:width .4s}
+.cmp .r i u.lo{background:var(--red)}
+.cmp .r b{font:700 15px var(--head);color:var(--ink);white-space:nowrap}
+.sheetwrap{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheetwrap .overlay{position:absolute;inset:0;background:rgba(2,6,24,.45)}
+.sheet{position:relative;width:100%;max-width:560px;max-height:88dvh;overflow-y:auto;border-radius:24px 24px 0 0;background:#fff;padding:10px 20px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--hair);align-self:center}
+.sheet h3{font:700 20px var(--head)}
+.pre{white-space:pre-wrap;font:400 13px/19px var(--sans);background:var(--band);border-radius:14px;padding:14px}
+.toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:var(--deep);color:#fff;padding:10px 16px;border-radius:12px;font:600 13px var(--sans);z-index:60;animation:fade .2s}
+.sits .opt .gl{width:48px;height:48px}
+.tag{font:600 12px var(--sans);color:var(--subtle)}
+.bigq{font:700 30px/36px var(--head);letter-spacing:-.6px}
+.summary-chips{display:flex;gap:8px;flex-wrap:wrap}
+/* ---------- desktop ---------- */
+@media (min-width:1024px){
+  body{background:#fff}
+  .appbar,.prog,.pmeta,.live,.dock2{display:none}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px;padding:0 144px;border-bottom:1px solid var(--hair)}
+  .nav .logo svg{height:28px;width:auto;display:block}
+  .nav .right{display:flex;align-items:center;gap:16px;font:500 14px var(--sans);color:var(--muted)}
+  .dkprog{height:4px;background:var(--tint)}.dkprog em{display:block;height:100%;background:var(--violet);transition:width .4s}
+  .dkgrid{display:grid;grid-template-columns:1fr 340px;gap:64px;padding:40px 144px 60px;align-items:start;flex:1}
+  .dkmain{max-width:720px;display:flex;flex-direction:column;gap:18px}
+  .dkmain .h1{font-size:44px;line-height:52px;letter-spacing:-1.2px}
+  .dkmain .hint{font-size:17px;line-height:26px}
+  .dkmeta{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--subtle)}
+  .dkmeta b{color:var(--violet);font-weight:600}
+  .dkmeta .back{display:inline-flex;align-items:center;gap:6px;font:600 14px var(--sans);color:var(--subtle)}
+  .rail{display:flex;flex-direction:column;gap:16px;position:sticky;top:24px}
+  .lcard{display:flex;flex-direction:column;gap:12px;border-radius:24px;border:1.5px solid var(--line);background:#fff;padding:22px;box-shadow:0 20px 40px -24px rgba(27,19,64,.25)}
+  .lcard .lbl{font:600 11px var(--sans);letter-spacing:.8px;text-transform:uppercase;color:var(--subtle)}
+  .lcard .val{font:800 28px/32px var(--head);letter-spacing:-.6px}
+  .lcard .val.empty{font:600 18px var(--sans);color:var(--subtle)}
+  .lcard .bandbar{position:relative;height:8px;border-radius:4px;background:var(--tint)}
+  .lcard .bandbar u{position:absolute;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,#B9A6FB,var(--violet));transition:left .5s,right .5s}
+  .lcard .bandbar i{position:absolute;top:-3px;width:14px;height:14px;border-radius:7px;background:#fff;border:3px solid var(--violet);margin-left:-7px}
+  .decides{display:flex;flex-direction:column}
+  .dec{display:grid;grid-template-columns:18px auto 1fr;gap:10px;align-items:center;padding:8px 0;font-size:13px;color:var(--subtle);border-bottom:1px solid var(--hair)}
+  .dec:last-child{border-bottom:0}
+  .dec i{width:18px;height:18px;border-radius:9px;border:1.5px solid var(--hair);display:flex;align-items:center;justify-content:center}
+  .dec.done i{background:var(--teal);border-color:var(--teal);color:#fff}
+  .dec.now i{background:var(--violet);border-color:var(--violet);color:#fff}
+  .dec.done span{color:var(--ink)}.dec.now span{color:var(--violet);font-weight:600}
+  .dec span{white-space:nowrap}.dec em{font-style:normal;font-size:12px;text-align:right;color:var(--subtle);line-height:16px}
+  .dec.done em{color:var(--ink)}.dec.done em button{color:var(--violet);font:600 12px var(--sans);margin-left:6px}
+  .dec.now em{color:var(--violet)}
+  .lcard .rule{font-size:11px;line-height:15px;color:var(--subtle)}
+  .actions{display:flex;align-items:center;gap:20px;padding-top:6px}
+  .dkfoot{display:flex;justify-content:space-between;padding:20px 144px;border-top:1px solid var(--hair);font-size:13px;color:var(--subtle)}
+  .opts.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .body{padding:0}
+  .dkcols{display:grid;grid-template-columns:600px 1fr;gap:40px;padding:36px 144px 40px;align-items:start;flex:1}
+  .dkcols .col{gap:14px}
+  .hero .amt2{font-size:64px;line-height:68px}
+  .tabs2{max-width:640px}
+  .dkactions{display:flex;gap:10px}
+  .sheetwrap{align-items:center}
+  .sheet{border-radius:24px;max-height:80vh}
+}
+@media print{.live,.dock2,.appbar,.nav,.dkfoot,.tabs2,.sheetwrap .overlay{display:none!important}.body{padding:0}}
+
+.dkonly{display:none}.phoneonly{display:block}
+@media (min-width:1024px){.dkonly{display:block}.phoneonly{display:none}}
+</style></head><body><div id="app"></div>
+<script>window.CFI_LOGO="<svg width=\"1159\" height=\"125\" viewBox=\"0 0 1159 125\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" ><path d=\"M1034.09 121.77V35.6797H1062.52V121.77H1034.09Z\" fill=\"#4A35FF\"/><path d=\"M968.969 123.201C961.133 123.201 955.278 121.401 948.819 117.801C942.465 114.095 937.382 108.959 933.57 102.394C929.758 95.7225 927.852 87.7806 927.852 78.568C927.852 69.4612 929.758 61.6252 933.57 55.0599C937.382 48.3887 942.465 43.253 948.819 39.6526C955.278 36.0523 961.133 34.2521 968.969 34.2521C976.382 34.2521 982.629 35.8405 987.712 39.0173C992.901 42.194 996.819 47.0651 999.466 53.6304C1002.11 60.1957 1003.44 68.5082 1003.44 78.568C1003.44 88.8395 1002.17 97.2579 999.625 103.823C997.084 110.389 993.271 115.26 988.189 118.436C983.106 121.613 976.699 123.201 968.969 123.201ZM975.323 99.2169C978.711 99.2169 981.729 98.4227 984.377 96.8343C987.13 95.2459 989.3 92.9163 990.889 89.8455C992.477 86.6687 993.271 82.9095 993.271 78.568C993.271 74.2264 992.477 70.5731 990.889 67.6081C989.3 64.5373 987.13 62.2076 984.377 60.6192C981.729 59.0309 978.711 58.2367 975.323 58.2367C971.828 58.2367 968.704 59.0309 965.951 60.6192C963.304 62.2076 961.186 64.5373 959.598 67.6081C958.009 70.5731 957.215 74.2264 957.215 78.568C957.215 82.9095 958.009 86.6687 959.598 89.8455C961.186 92.9163 963.304 95.2459 965.951 96.8343C968.704 98.4227 971.828 99.2169 975.323 99.2169ZM994.224 121.772V107L994.383 78.568L992.795 50.1359V3.91406H1021.83V121.772H994.224Z\" fill=\"#4A35FF\"/><path d=\"M885.931 34.2578C892.603 34.2578 898.638 35.6344 904.039 38.3876C909.439 41.0349 912.737 45.1647 915.808 50.7769C918.985 56.3892 920.573 63.6428 920.573 72.5378V121.777H891.332V77.4617C891.332 71.32 890.061 66.8725 887.52 64.1193C885.084 61.2602 881.643 59.8307 877.195 59.8307C874.019 59.8307 871.106 60.5719 868.459 62.0544C865.812 63.431 863.747 65.6018 862.264 68.5668C860.782 71.5318 860.041 75.3968 860.041 80.162V121.777H831.227V35.6873H858.611V60.1484L853.052 53.0007C856.335 46.753 860.835 42.0938 866.553 39.0229C872.271 35.8462 878.731 34.2578 885.931 34.2578Z\" fill=\"#4A35FF\"/><path d=\"M789.531 121.773V10.5859H817.656V121.773H789.531Z\" fill=\"#4A35FF\"/><path d=\"M624.585 123.207C614.419 123.207 607.216 121.62 599.592 117.808C592.074 113.89 586.197 108.595 581.961 101.924C577.831 95.1471 575.766 87.47 575.766 78.8927C575.766 70.3155 577.778 62.6912 581.802 56.02C585.932 49.2429 591.597 44.0013 598.798 40.2951C605.998 36.483 612.407 34.2578 621.408 34.2578C629.879 34.2578 635.119 35.5829 642.108 39.0773C649.096 42.4659 654.1 48.2634 658.23 54.9346C662.359 61.6058 664.424 69.7066 664.424 79.2369C664.424 80.2958 664.371 81.5135 664.265 82.8901C664.16 84.2667 664.054 85.5374 663.948 86.7023L600.545 86.6758L599.592 70.8185H647.905L639.515 74.9203C639.621 71.0023 638.88 67.6138 637.292 64.7547C635.809 61.8956 633.691 59.6719 630.938 58.0835C628.291 56.4951 625.167 55.7009 621.567 55.7009C617.966 55.7009 614.79 56.4951 612.036 58.0835C609.389 59.6719 607.324 61.9485 605.842 64.9135C604.359 67.7726 604.225 70.8714 604.225 74.7894L605.31 80.0046C605.31 84.2403 604.465 87.5744 606.159 90.6453C607.96 93.7162 610.501 96.0987 613.784 97.793C617.066 99.3814 620.984 100.175 625.538 100.175C629.773 100.175 633.374 99.5932 636.339 98.4284C639.41 97.1576 642.427 95.2516 645.392 92.7102L661.276 109.229C657.146 113.782 652.064 117.277 646.028 119.712C639.992 122.042 632.844 123.207 624.585 123.207Z\" fill=\"#4A35FF\"/><path d=\"M718.561 123.207C708.395 123.207 701.192 121.62 693.568 117.808C686.05 113.89 680.173 108.595 675.937 101.924C671.807 95.1471 669.742 87.47 669.742 78.8927C669.742 70.3155 671.754 62.6912 675.778 56.02C679.908 49.2429 685.573 44.0013 692.774 40.2951C699.974 36.483 706.383 34.2578 715.384 34.2578C723.855 34.2578 729.095 35.5829 736.084 39.0773C743.072 42.4659 748.076 48.2634 752.206 54.9346C756.335 61.6058 758.4 69.7066 758.4 79.2369C758.4 80.2958 758.347 81.5135 758.241 82.8901C758.136 84.2667 758.03 85.5374 757.924 86.7023L694.521 86.6758L693.568 70.8185H741.881L733.491 74.9203C733.597 71.0023 732.856 67.6138 731.268 64.7547C729.785 61.8956 727.667 59.6719 724.914 58.0835C722.267 56.4951 719.143 55.7009 715.543 55.7009C711.942 55.7009 708.766 56.4951 706.012 58.0835C703.365 59.6719 701.3 61.9485 699.818 64.9135C698.335 67.7726 698.201 70.8714 698.201 74.7894L699.286 80.0046C699.286 84.2403 698.441 87.5744 700.135 90.6453C701.936 93.7162 704.477 96.0987 707.76 97.793C711.042 99.3814 714.96 100.175 719.514 100.175C723.749 100.175 727.35 99.5932 730.315 98.4284C733.386 97.1576 736.403 95.2516 739.368 92.7102L755.252 109.229C751.122 113.782 746.04 117.277 740.004 119.712C733.968 122.042 726.82 123.207 718.561 123.207Z\" fill=\"#4A35FF\"/><path d=\"M459.278 122.089V36.9523C459.278 26.5748 462.349 18.3153 468.49 12.1735C474.738 5.92586 481.895 2.48438 493.437 2.48438C497.143 2.48438 500.797 2.855 504.397 3.59625C507.997 4.33749 511.015 5.44936 513.451 6.93185L505.985 28.2162C504.715 27.4749 503.285 26.8925 501.697 26.4689C500.108 25.9395 498.52 25.6748 496.932 25.6748C493.755 25.6748 491.266 26.6278 489.466 28.5338C487.772 30.334 486.925 33.1401 486.925 36.9523V43.1469L487.719 55.6952V121.771L459.278 122.089ZM444.992 61.4133V38.8583H507.415V61.4133H444.992Z\" fill=\"#4A35FF\"/><path d=\"M406.937 34.2521C413.608 34.2521 420.235 36.8896 423.279 38.3819C428.68 41.0292 432.916 45.159 435.986 50.7713C439.163 56.3836 440.752 63.6372 440.752 72.5321V121.772H412.338V77.4561C412.338 71.3143 411.067 66.8669 408.526 64.1137C406.09 61.2546 402.649 59.8251 398.201 59.8251C395.024 59.8251 392.112 60.5663 389.465 62.0488C386.818 63.4254 384.753 65.5962 383.27 68.5611C381.788 71.5261 381.047 75.3912 381.047 80.1563V121.772H353.391V3.91406H381.047V60.1427L374.058 52.995C377.34 46.7474 381.841 42.0881 387.559 39.0173C393.277 35.8405 399.737 34.2521 406.937 34.2521Z\" fill=\"#4A35FF\"/><path d=\"M305.348 123.207C298.041 123.207 290.893 122.36 283.905 120.665C277.022 118.971 271.462 116.853 267.227 114.312L276.28 93.6632C280.304 96.0987 285.016 98.0577 290.417 99.5402C295.817 100.917 301.112 101.605 306.301 101.605C311.384 101.605 314.878 101.075 316.784 100.017C318.796 98.9578 319.802 97.5283 319.802 95.7281C319.802 94.0338 318.849 92.8161 316.943 92.0748C315.143 91.2277 312.707 90.5923 309.636 90.1688C306.671 89.7452 303.389 89.2687 299.788 88.7392C296.188 88.2098 292.535 87.5215 288.829 86.6743C285.228 85.7213 281.893 84.3447 278.822 82.5445C275.857 80.6385 273.474 78.0971 271.674 74.9203C269.874 71.7436 268.974 67.7197 268.974 62.8486C268.974 57.3422 270.562 52.4712 273.739 48.2355C277.022 43.8939 281.787 40.5054 288.034 38.0699C294.282 35.5285 301.906 34.2578 310.907 34.2578C316.943 34.2578 323.032 34.8931 329.173 36.1638C335.421 37.3286 340.663 39.1288 344.898 41.5643L335.845 62.0544C331.609 59.6189 327.373 57.9776 323.138 57.1305C318.902 56.1774 314.878 55.7009 311.066 55.7009C305.983 55.7009 302.383 56.2833 300.265 57.4481C298.253 58.6129 297.247 60.0425 297.247 61.7368C297.247 63.431 298.147 64.7547 299.947 65.7077C301.747 66.5548 304.13 67.2431 307.095 67.7726C310.166 68.1962 313.501 68.6727 317.102 69.2021C320.702 69.6257 324.302 70.314 327.903 71.267C331.609 72.2201 334.945 73.6496 337.909 75.5557C340.98 77.3558 343.416 79.8443 345.216 83.0211C347.016 86.0919 347.916 90.0629 347.916 94.9339C347.916 100.228 346.275 104.993 342.992 109.229C339.816 113.465 335.05 116.853 328.697 119.395C322.449 121.936 314.666 123.207 305.348 123.207Z\" fill=\"#4A35FF\"/><path d=\"M234.311 121.777V105.735L232.246 101.764V72.2201C232.246 67.4549 230.764 63.8017 227.799 61.2602C224.939 58.6129 220.333 57.2893 213.98 57.2893C209.85 57.2893 205.667 57.9776 201.431 59.3542C197.196 60.6249 193.595 62.4251 190.63 64.7547L180.465 44.2646C185.336 41.0878 191.161 38.6523 197.938 36.958C204.82 35.1579 211.65 34.2578 218.427 34.2578C232.405 34.2578 241.542 39.9128 246.837 44.2646C255.793 51.6255 258.431 60.6249 258.431 74.285V122.095L234.311 121.777ZM208.897 123.207C202.014 123.207 196.19 122.042 191.425 119.712C186.659 117.383 183.006 114.206 180.465 110.182C178.029 106.158 176.812 101.658 176.812 96.6811C176.812 91.3865 178.136 86.8332 180.783 83.0211C183.537 79.1031 187.718 76.1381 193.331 74.1261C198.943 72.0083 206.197 70.9494 215.092 70.9494H235.423V86.6743H219.221C214.35 86.6743 210.909 87.4685 208.897 89.0569C206.991 90.6453 206.038 92.7631 206.038 95.4104C206.038 98.0577 207.044 100.175 209.056 101.764C211.068 103.352 213.821 104.146 217.315 104.146C220.598 104.146 223.563 103.352 226.21 101.764C228.963 100.069 230.975 97.5283 232.246 94.1397L236.376 105.258C234.787 111.188 231.665 115.689 227.005 118.759C222.452 121.724 216.415 123.207 208.897 123.207Z\" fill=\"#4A35FF\"/><path d=\"M1129.09 121.777V105.735L1127.03 101.764V72.2201C1127.03 67.4549 1125.55 63.8017 1122.58 61.2602C1119.72 58.6129 1115.11 57.2893 1108.76 57.2893C1104.63 57.2893 1100.45 57.9776 1096.21 59.3542C1091.98 60.6249 1088.38 62.4251 1085.41 64.7547L1075.25 44.2646C1080.12 41.0878 1085.94 38.6523 1092.72 36.958C1099.6 35.1579 1106.43 34.2578 1113.21 34.2578C1127.19 34.2578 1136.32 39.9128 1141.62 44.2646C1150.57 51.6255 1153.21 60.6249 1153.21 74.285V122.095L1129.09 121.777ZM1103.68 123.207C1096.8 123.207 1090.97 122.042 1086.21 119.712C1081.44 117.383 1077.79 114.206 1075.25 110.182C1072.81 106.158 1071.59 101.658 1071.59 96.6811C1071.59 91.3865 1072.92 86.8332 1075.56 83.0211C1078.32 79.1031 1082.5 76.1381 1088.11 74.1261C1093.72 72.0083 1100.98 70.9494 1109.87 70.9494H1130.2V86.6743H1114C1109.13 86.6743 1105.69 87.4685 1103.68 89.0569C1101.77 90.6453 1100.82 92.7631 1100.82 95.4104C1100.82 98.0577 1101.83 100.175 1103.84 101.764C1105.85 103.352 1108.6 104.146 1112.1 104.146C1115.38 104.146 1118.34 103.352 1120.99 101.764C1123.75 100.069 1125.76 97.5283 1127.03 94.1397L1131.16 105.258C1129.57 111.188 1126.45 115.689 1121.79 118.759C1117.23 121.724 1111.2 123.207 1103.68 123.207Z\" fill=\"#4A35FF\"/><path d=\"M116.457 121.934V35.8436H142.998V60.94L138.71 53.7923C141.251 47.3329 145.381 42.5148 151.099 39.338C156.817 36.0554 163.753 34.4141 171.907 34.4141V61.5754C170.53 61.3636 169.313 61.2577 168.254 61.2577C167.301 61.1518 166.242 61.0988 165.077 61.0988C158.935 61.0988 153.958 62.7931 150.146 66.1817C146.334 69.4643 144.428 74.8648 144.428 82.3831V121.934H116.457Z\" fill=\"#4A35FF\"/><path d=\"M517.523 121.934V35.8436H544.065V60.94L539.777 53.7923C542.318 47.3329 546.448 42.5148 552.166 39.338C557.884 36.0554 564.82 34.4141 572.974 34.4141V61.5754C571.597 61.3636 570.38 61.2577 569.321 61.2577C568.368 61.1518 567.309 61.0988 566.144 61.0988C560.002 61.0988 555.025 62.7931 551.213 66.1817C547.401 69.4643 545.495 74.8648 545.495 82.3831V121.934H517.523Z\" fill=\"#4A35FF\"/><path d=\"M58.6096 124.001C49.8205 124.001 42.9928 122.46 36.6916 120.03C29.2792 117.171 22.8197 113.147 17.3133 107.958C11.9129 102.77 7.67717 96.6812 4.6063 89.6923C1.53543 82.5976 0 74.8144 0 66.343C0 57.8717 1.53543 50.1416 4.6063 43.1527C7.67717 36.0579 11.9129 29.9162 17.3133 24.7275C22.8197 19.5388 29.2792 15.3291 36.6916 12.5759C44.2099 9.7169 49.8205 8.36719 58.6096 8.36719C68.8811 8.36719 78.0406 10.1673 86.0884 13.7676C94.2421 17.368 101.019 22.5567 106.42 29.3338L86.4061 47.4413C82.8057 43.2056 78.8349 39.9759 74.4934 37.7522C70.2577 35.5285 65.4926 34.4166 60.198 34.4166C55.6446 34.4166 51.4619 35.1578 47.6497 36.6403C43.8376 38.1228 40.555 40.2936 37.8018 43.1527C35.1545 45.9059 33.0366 49.2415 31.4483 53.1595C29.9658 57.0775 29.2245 61.4191 29.2245 66.1842C29.2245 70.9494 29.9658 75.291 31.4483 79.209C33.0366 83.127 35.1545 86.5155 37.8018 89.3746C40.555 92.1278 43.8376 94.2456 47.6497 95.7281C51.4619 97.2106 55.6446 97.9519 60.198 97.9519C65.4926 97.9519 70.2577 96.8399 74.4934 94.6162C78.8349 92.3925 82.8057 89.1628 86.4061 84.9271L106.42 103.034C101.019 109.706 94.2421 114.894 86.0884 118.6C78.0406 122.201 68.8811 124.001 58.6096 124.001Z\" fill=\"#4A35FF\"/><path d=\"M1048.31 29.1204C1056.35 29.1204 1062.87 22.6016 1062.87 14.5602C1062.87 6.51882 1056.35 0 1048.31 0C1040.27 0 1033.75 6.51882 1033.75 14.5602C1033.75 22.6016 1040.27 29.1204 1048.31 29.1204Z\" fill=\"#4A35FF\"/></svg>";window.ENGINE=(function(){const module={exports:{}};
+/* =============================================================================
+   MACT compensation engine — port of the rules in
+   "CFI_MACT-Estimator_Methodology-and-Rules_DRAFT_v1_2026-10-13"
+   and the engine the live site runs (src/engine, 0.1.0, rules 2026.10.0-draft).
+
+   Three runs per estimate: conservative (C), standard (L), claimant-max (M).
+   Fifteen contested points decide where the runs differ; each can be overridden
+   alone through `mix`, which is how "what moves the number" is worked out.
+   Verified against the four worked examples to the rupee (test.js).
+   ============================================================================= */
+
+const VERSIONS = { rules: '2026.10.0-draft', engine: '0.1.0 (prototype port)' };
+
+/* ----------------------------------------------------------------- wages -- */
+const DL_WAGES = [
+  ['2011-10-01', 6656, 7356, 8112], ['2012-04-01', null, null, null],
+  ['2013-04-01', 7722, 8528, 9386], ['2013-10-01', 8086, 8918, 9802],
+  ['2014-04-01', 8554, 9438, 10374], ['2014-10-01', 8632, 9542, 10478],
+  ['2015-04-01', 9048, 10010, 10998], ['2015-10-01', 9178, 10140, 11154],
+  ['2016-04-01', 9568, 10582, 11622], ['2016-10-01', 9724, 10764, 11830],
+  ['2017-03-03', 13350, 14698, 16182], ['2017-04-01', 13584, 14958, 16468],
+  ['2018-04-01', 13896, 15296, 16858], ['2018-08-04', 13896, 15296, 16858],
+  ['2018-11-01', 14000, 15400, 16962], ['2019-04-01', 14468, 15920, 17508],
+  ['2019-10-01', 14806, 16284, 17924], ['2019-10-22', 14842, 16341, 17991],
+  ['2020-04-01', 15310, 16861, 18563], ['2020-10-01', 15492, 17069, 18797],
+  ['2021-04-01', 15908, 17537, 19291], ['2021-10-01', 16064, 17693, 19473],
+  ['2022-04-01', 16506, 18187, 20019], ['2022-10-01', 16792, 18499, 20357],
+  ['2023-04-01', 17234, 18993, 20903], ['2023-10-01', 17494, 19279, 21215],
+  ['2024-04-01', 17988, 19825, 21813], ['2024-10-01', 18066, 19929, 21917],
+  ['2025-04-01', 18456, 20371, 22411],
+];
+const CENTRAL_WAGES = [
+  ['2022-10-01', [711, 788, 866, 940], [595, 671, 788, 866], [477, 557, 671, 788]],
+  ['2023-04-01', [736, 816, 897, 973], [616, 695, 816, 897], [494, 577, 695, 816]],
+  ['2023-10-01', [751, 832, 915, 992], [628, 709, 832, 915], [504, 589, 709, 832]],
+  ['2024-04-01', [778, 862, 948, 1028], [651, 734, 862, 948], [522, 610, 734, 862]],
+  ['2024-10-01', [783, 868, 954, 1035], [655, 739, 868, 954], [526, 614, 739, 868]],
+  ['2025-04-01', [805, 893, 981, 1065], [674, 760, 893, 981], [541, 632, 760, 893]],
+  ['2025-10-01', [805, 893, 981, 1065], [674, 760, 893, 981], [541, 632, 760, 893]],
+  ['2026-04-01', [827, 918, 1008, 1094], [693, 781, 918, 1008], [556, 650, 781, 918]],
+  ['2026-10-01', [840, 933, 1024, 1111], [704, 794, 933, 1024], [565, 661, 794, 933]],
+];
+const CATS = ['unskilled', 'semi_skilled', 'skilled', 'highly_skilled'];
+const CONTESTED_DL = ['2017-03-03', '2018-10-31'];   // the quashed-then-restored period
+
+const OCCUPATIONS = [
+  { code: 'agricultural_labourer', cat: 'unskilled', en: 'Agricultural labourer / farm worker', hi: 'खेतिहर मज़दूर' },
+  { code: 'construction_labourer', cat: 'unskilled', en: 'Construction labourer', hi: 'निर्माण मज़दूर' },
+  { code: 'daily_wage_labourer', cat: 'unskilled', en: 'Daily-wage labourer', hi: 'दिहाड़ी मज़दूर' },
+  { code: 'domestic_worker', cat: 'unskilled', en: 'Domestic worker', hi: 'घरेलू कामगार' },
+  { code: 'cleaner_sweeper', cat: 'unskilled', en: 'Cleaner / sweeper', hi: 'सफ़ाई कर्मचारी' },
+  { code: 'porter_loader', cat: 'unskilled', en: 'Porter / loader', hi: 'पल्लेदार / लोडर' },
+  { code: 'street_vendor', cat: 'unskilled', en: 'Street vendor / hawker', hi: 'रेहड़ी-पटरी विक्रेता' },
+  { code: 'farmer_cultivator', cat: 'unskilled', en: 'Farmer (own land, no income proof)', hi: 'किसान' },
+  { code: 'helper', cat: 'semi_skilled', en: 'Helper / assistant', hi: 'हेल्पर' },
+  { code: 'shop_worker', cat: 'semi_skilled', en: 'Shop worker / salesperson', hi: 'दुकान कर्मचारी' },
+  { code: 'security_guard', cat: 'semi_skilled', en: 'Security guard', hi: 'सुरक्षा गार्ड' },
+  { code: 'delivery_rider', cat: 'semi_skilled', en: 'Delivery rider / courier', hi: 'डिलीवरी राइडर' },
+  { code: 'factory_worker', cat: 'semi_skilled', en: 'Factory / machine worker', hi: 'फ़ैक्टरी कर्मचारी' },
+  { code: 'driver', cat: 'skilled', en: 'Driver (auto / taxi / truck / bus)', hi: 'ड्राइवर' },
+  { code: 'mason', cat: 'skilled', en: 'Mason', hi: 'राजमिस्त्री' },
+  { code: 'carpenter', cat: 'skilled', en: 'Carpenter', hi: 'बढ़ई' },
+  { code: 'electrician', cat: 'skilled', en: 'Electrician', hi: 'इलेक्ट्रीशियन' },
+  { code: 'plumber', cat: 'skilled', en: 'Plumber', hi: 'प्लंबर' },
+  { code: 'mechanic', cat: 'skilled', en: 'Mechanic', hi: 'मैकेनिक' },
+  { code: 'tailor', cat: 'skilled', en: 'Tailor', hi: 'दर्ज़ी' },
+  { code: 'welder', cat: 'skilled', en: 'Welder', hi: 'वेल्डर' },
+  { code: 'cook', cat: 'skilled', en: 'Cook', hi: 'रसोइया' },
+  { code: 'clerk', cat: 'skilled', en: 'Clerk / office assistant', hi: 'क्लर्क' },
+  { code: 'small_business_owner', cat: 'skilled', en: 'Small business / shop owner (no ITR)', hi: 'छोटा व्यवसायी' },
+  { code: 'graduate_professional', cat: 'highly_skilled', en: 'Graduate / professional (no income proof)', hi: 'स्नातक / पेशेवर' },
+];
+const occCat = (code) => (OCCUPATIONS.find((o) => o.code === code) || {}).cat;
+
+/* Minimum wage in force. Returns { v, from, cat } or null when none is on file. */
+function minWage(state, cat, iso, zone) {
+  const i = Math.max(0, CATS.indexOf(cat));
+  if (state === 'DL') {
+    let row = null;
+    for (const r of DL_WAGES) if (r[0] <= iso) row = r;
+    if (!row || row[1] === null) return null;
+    const ci = Math.min(i, 2);                     // Delhi has no highly-skilled rate
+    return { v: row[ci + 1], from: row[0], cat: CATS[ci], contested: iso >= CONTESTED_DL[0] && iso <= CONTESTED_DL[1] };
+  }
+  if (state === 'CENTRAL') {
+    let row = null;
+    for (const r of CENTRAL_WAGES) if (r[0] <= iso) row = r;
+    if (!row) return null;
+    const area = { A: 1, B: 2, C: 3 }[zone || 'C'] || 3;
+    return { v: row[area][i] * 26, from: row[0], cat: CATS[i], zoneAssumed: !zone };
+  }
+  return null;
+}
+/* States the engine has wages for; the rest need proof of income or the Central guide. */
+const WAGE_STATES = ['DL', 'CENTRAL'];
+
+/* ------------------------------------------------------------------ tax -- */
+const TAX = [
+  { fy: '2018-19', std: 40000, rebateIf: 350000, rebate: 2500, marginal: false, slabs: [[250000, 0], [500000, 5], [1000000, 20], [Infinity, 30]] },
+  { fy: '2019-20', std: 50000, rebateIf: 500000, rebate: 12500, marginal: false, slabs: [[250000, 0], [500000, 5], [1000000, 20], [Infinity, 30]] },
+  { fy: '2020-21', std: 50000, rebateIf: 500000, rebate: 12500, marginal: false, slabs: [[250000, 0], [500000, 5], [1000000, 20], [Infinity, 30]] },
+  { fy: '2021-22', std: 50000, rebateIf: 500000, rebate: 12500, marginal: false, slabs: [[250000, 0], [500000, 5], [1000000, 20], [Infinity, 30]] },
+  { fy: '2022-23', std: 50000, rebateIf: 500000, rebate: 12500, marginal: false, slabs: [[250000, 0], [500000, 5], [1000000, 20], [Infinity, 30]] },
+  { fy: '2023-24', std: 50000, rebateIf: 700000, rebate: 25000, marginal: true, slabs: [[300000, 0], [600000, 5], [900000, 10], [1200000, 15], [1500000, 20], [Infinity, 30]] },
+  { fy: '2024-25', std: 75000, rebateIf: 700000, rebate: 25000, marginal: true, slabs: [[300000, 0], [700000, 5], [1000000, 10], [1200000, 15], [1500000, 20], [Infinity, 30]] },
+  { fy: '2025-26', std: 75000, rebateIf: 1200000, rebate: 60000, marginal: true, slabs: [[400000, 0], [800000, 5], [1200000, 10], [1600000, 15], [2000000, 20], [2400000, 25], [Infinity, 30]] },
+  { fy: '2026-27', std: 75000, rebateIf: 1200000, rebate: 60000, marginal: true, slabs: [[400000, 0], [800000, 5], [1200000, 10], [1600000, 15], [2000000, 20], [2400000, 25], [Infinity, 30]] },
+];
+const fyOf = (iso) => { const [y, m] = iso.split('-').map(Number); const s = m >= 4 ? y : y - 1; return `${s}-${String((s + 1) % 100).padStart(2, '0')}`; };
+function annualTax(annual, iso, salaried) {
+  const t = TAX.find((x) => x.fy === fyOf(iso)) || TAX[TAX.length - 1];
+  const taxable = Math.max(0, annual - (salaried ? t.std : 0));
+  let tax = 0, prev = 0;
+  for (const [upto, rate] of t.slabs) {
+    if (taxable > prev) tax += (Math.min(taxable, upto) - prev) * (rate / 100);
+    prev = upto; if (taxable <= upto) break;
+  }
+  if (taxable <= t.rebateIf) tax = Math.max(0, tax - t.rebate);
+  else if (t.marginal) tax = Math.min(tax, taxable - t.rebateIf);
+  return Math.round(tax * 1.04);
+}
+
+/* ------------------------------------------------------------- tables ---- */
+function multiplier(age, u15) {
+  if (age < 15) return u15 === 'C' ? 15 : 18;
+  if (age <= 25) return 18; if (age <= 30) return 17; if (age <= 35) return 16;
+  if (age <= 40) return 15; if (age <= 45) return 14; if (age <= 50) return 13;
+  if (age <= 55) return 11; if (age <= 60) return 9; if (age <= 65) return 7;
+  return 5;
+}
+function prospects(age, cls) {
+  if (cls === 'none' || age >= 61) return 0;
+  if (age < 40) return cls === 'permanent' ? 50 : 40;
+  if (age <= 49) return cls === 'permanent' ? 30 : 25;
+  return cls === 'permanent' ? 15 : 10;
+}
+function steps(from, asOf, years) {
+  const [fy, fm, fd] = from.split('-').map(Number);
+  let n = 0;
+  for (;;) {
+    const iso = new Date(Date.UTC(fy + years * (n + 1), fm - 1, fd)).toISOString().slice(0, 10);
+    if (iso <= asOf) n++; else break;
+    if (n > 40) break;
+  }
+  return n;
+}
+const escalate = (base, n) => { let v = base; for (let i = 0; i < n; i++) v = Math.round(v * 1.1); return v; };
+/* Months between two ISO dates, whole months only. */
+function wholeMonths(a, b) {
+  const [ay, am, ad] = a.split('-').map(Number), [by, bm, bd] = b.split('-').map(Number);
+  let m = (by - ay) * 12 + (bm - am);
+  if (bd < ad) m--;
+  return m;
+}
+
+const BANDS_PAIN = [[0, 53000, 83000, 195000], [10, 113000, 150000, 200000], [30, 150000, 200000, 250000], [50, 300000, 350000, 500000], [80, 300000, 375000, 1500000]];
+const BAND_ATTENDANT = { C: 14000, L: 30000, M: 50000 };
+const BAND_CONVEYANCE = { C: 30000, L: 50000, M: 75000 };
+const BAND_MARRIAGE = { C: 100000, L: 300000, M: 500000 };
+const painBand = (pct, run) => { let row = BANDS_PAIN[0]; for (const r of BANDS_PAIN) if (pct >= r[0]) row = r; return row[{ C: 1, L: 2, M: 3 }[run]]; };
+
+/* ------------------------------------------------------ contested points -- */
+/* Each run decides each point; `mix` can pin any point to C, L or M on its own. */
+const POINTS = [
+  'minor_death_income', 'student_income', 'homemaker_income', 'injured_homemaker_income',
+  'pension_basis', 'non_earning_elderly', 'mw_category', 'under_15_multiplier',
+  'spouse_only_deduction', 'bachelor_large_family', 'conventional_escalation_steps',
+  'functional_pct', 'non_pecuniary_band', 'attendant_rate', 'itr_post_accident',
+];
+/* What the standard position rests on (web/src/contested.ts): sc · extension · practice · none. */
+const POINT_BASIS = {
+  under_15_multiplier: { death: 'extension', injury: 'sc' }, spouse_only_deduction: 'sc',
+  bachelor_large_family: 'sc', conventional_escalation_steps: 'sc', minor_death_income: 'extension',
+  itr_post_accident: 'sc', student_income: 'sc', homemaker_income: 'sc', injured_homemaker_income: 'sc',
+  pension_basis: 'sc', non_earning_elderly: 'none', mw_category: 'none', functional_pct: 'practice',
+  non_pecuniary_band: 'practice', attendant_rate: 'none',
+};
+const POINT_SOURCES = {
+  under_15_multiplier: ['kurvan_ansari_2021', 'kajal_2020', 'hitesh_patel_2025'], spouse_only_deduction: ['sarla_verma_2009'],
+  bachelor_large_family: ['sarla_verma_2009'], conventional_escalation_steps: ['pranay_sethi_2017', 'shishu_pal_2026'],
+  minor_death_income: ['kurvan_ansari_2021', 'kajal_2020'], itr_post_accident: ['rashmirekha_2026'],
+  student_income: ['kajal_2020', 'mohinder_kaur_2026'], homemaker_income: ['shishu_pal_2026', 'kirti_2021'],
+  injured_homemaker_income: ['kirti_2021', 'shishu_pal_2026'], pension_basis: ['vimal_kanwar_2013'],
+  non_earning_elderly: [], mw_category: [], functional_pct: ['raj_kumar_2011', 'delhi_awards_backtest_2026'],
+  non_pecuniary_band: ['delhi_awards_backtest_2026', 'sidram_2022', 'baiju_2025', 'kajal_2020'], attendant_rate: [],
+};
+
+/* --------------------------------------------------------------- income -- */
+function incomeFor(f, run, asOf, pick) {
+  const iso = f.accidentDate;
+  const e = f.employment;
+  const wage = (cat) => minWage(f.state, cat, iso, f.zone);
+
+  if ((e === 'permanent' || e === 'fixed_salary') && f.proof === 'salary_slip' && f.monthlySalary) {
+    const gross = Number(f.monthlySalary);
+    const taxGiven = f.monthlyTax !== '' && f.monthlyTax != null;
+    const tax = taxGiven ? Number(f.monthlyTax) * 12 : annualTax(gross * 12, iso, true);
+    return { monthly: Math.max(0, gross - tax / 12), cls: e === 'permanent' ? 'permanent' : 'other', basis: 'salary', note: taxGiven ? null : 'TAX_ESTIMATED' };
+  }
+  if (e === 'self_employed' && f.proof === 'itr' && f.itrAnnualIncome) {
+    const annual = Number(f.itrAnnualIncome);
+    return { monthly: Math.max(0, (annual - annualTax(annual, iso, false)) / 12), cls: 'other', basis: 'itr', note: 'TAX_ESTIMATED' };
+  }
+  const mw = (cat) => { const w = wage(cat); return w ? { ...w } : null; };
+
+  if (e === 'homemaker') {
+    const dc = { monthly: escalate(30000, steps('2026-06-11', asOf, 3)), cls: 'other', basis: 'domestic_care' };
+    const p = pick(f.kind === 'death' ? 'homemaker_income' : 'injured_homemaker_income');
+    const useDC = f.kind === 'death' ? p !== 'C' : p === 'M';
+    if (useDC) return dc;
+    const w = mw('unskilled'); return w ? { monthly: w.v, cls: 'other', basis: 'mw_unskilled', wage: w } : { stop: 'mw_missing' };
+  }
+  if (e === 'minor') {
+    if (f.kind === 'death' && pick('minor_death_income') === 'C') return { monthly: 25000 / 12, cls: 'none', basis: 'kurvan', kurvan: true };
+    const w = mw('skilled'); return w ? { monthly: w.v, cls: 'other', basis: 'mw_skilled', wage: w } : { stop: 'mw_missing' };
+  }
+  if (e === 'student') {
+    const w = mw('skilled'); if (!w) return { stop: 'mw_missing' };
+    if (f.studentCourse === 'professional') {
+      const low = pick('student_income') === 'C';
+      return { monthly: low ? Math.min(w.v, 12000) : Math.max(w.v, 12000), cls: 'other', basis: 'mw_skilled', wage: w };
+    }
+    return { monthly: w.v, cls: 'other', basis: 'mw_skilled', wage: w };
+  }
+  if (e === 'pensioner') {
+    const pension = Number(f.pensionMonthly || 0);
+    if (pension > 0) {
+      const fam = Number(f.familyPensionMonthly || 0);
+      return { monthly: pick('pension_basis') === 'C' ? Math.max(0, pension - fam) : pension, cls: 'none', basis: 'pension' };
+    }
+    if (pick('non_earning_elderly') === 'C') return { monthly: 0, cls: 'none', basis: 'no_income' };
+    const w = mw('unskilled'); return w ? { monthly: w.v, cls: 'none', basis: 'mw_unskilled', wage: w } : { stop: 'mw_missing' };
+  }
+  // daily wage, informal, not working, salaried without slips, self-employed without a return
+  const cat = pick('mw_category') === 'C' ? 'unskilled' : (occCat(f.occupationCode) || 'unskilled');
+  const w = mw(cat); if (!w) return { stop: 'mw_missing' };
+  const cls = e === 'permanent' ? 'permanent' : 'other';   // OP-32: keeps permanent prospects without slips
+  return { monthly: w.v, cls, basis: `mw_${w.cat}`, wage: w, usedCat: w.cat };
+}
+
+/* ------------------------------------------------------------ deduction -- */
+const depCount = (f) => {
+  const spouse = f.married === 'yes' && f.spouse === 'yes' ? 1 : 0;
+  const dep = (f.dependentParents === 'unknown' || f.dependentParents === '') ? Number(f.parents || 0) : Number(f.dependentParents || 0);
+  return spouse + Number(f.children || 0) + dep;
+};
+const claimantCount = (f) => (f.married === 'yes' && f.spouse === 'yes' ? 1 : 0) + Number(f.children || 0) + Number(f.parents || 0);
+function deduction(f, pick) {
+  const n = depCount(f);
+  if (f.married === 'yes') {
+    if (n >= 7) return 1 / 5; if (n >= 4) return 1 / 4; if (n >= 2) return 1 / 3;
+    if (n === 1) return pick('spouse_only_deduction') === 'C' ? 1 / 2 : 1 / 3;
+    return 1 / 2;
+  }
+  if (n >= 3 && pick('bachelor_large_family') === 'M') return 1 / 3;
+  return 1 / 2;
+}
+
+/* -------------------------------------------------------- functional % -- */
+function functionalPct(f, pick) {
+  if (f.functionalPct !== '' && f.functionalPct != null) return Math.min(100, Number(f.functionalPct));
+  const p = pick('functional_pct');
+  const cannot = f.workCapacity === 'none';
+  if (f.noCertificate) return p === 'M' && cannot ? 100 : 0;
+  const cert = Number(f.certificatePct || 0);
+  if (p === 'M') return cannot ? 100 : Math.min(100, cert);
+  if (f.certificateBasis === 'whole_body') return Math.min(100, cert);
+  return Math.min(100, cert * (p === 'C' ? 0.5 : 0.53));
+}
+
+/* ----------------------------------------------------------- one run ----- */
+function runOnce(f, run, asOf, mix) {
+  const pick = (id) => (mix && mix[id]) || run;
+  const heads = [], warn = [];
+  const age = Number(f.age);
+  const inc = incomeFor(f, run, asOf, pick);
+  if (inc.stop) return { stop: inc.stop };
+  if (inc.note) warn.push(inc.note);
+  if (inc.wage && inc.wage.contested) warn.push('MW_CONTESTED');
+  if (inc.wage && inc.wage.zoneAssumed) warn.push('ZONE_ASSUMED');
+
+  const mult = inc.kurvan ? 15 : multiplier(age, pick('under_15_multiplier'));
+  if (age > 70) warn.push('AGE_OUTSIDE_TABLE');
+  const pros = inc.kurvan ? 0 : prospects(age, inc.cls);
+  const monthly = inc.monthly;
+
+  if (f.kind === 'death') {
+    const ded = inc.kurvan ? 0 : deduction(f, pick);
+    heads.push({ k: 'dependency', v: Math.round(monthly * 12 * (1 + pros / 100) * (1 - ded) * mult) });
+    const clock = steps('2017-10-31', asOf, 3);
+    const p = pick('conventional_escalation_steps');
+    const n = p === 'C' ? 0 : p === 'L' ? Math.min(2, clock) : clock;
+    const conv = escalate(15000, n), cons = escalate(40000, n);
+    heads.push({ k: 'estate', v: conv }, { k: 'funeral', v: conv });
+    const cl = claimantCount(f);
+    heads.push({ k: 'consortium', v: cons * cl, per: cons, n: cl });
+    const bills = Number(f.medicalBills || 0), cash = Number(f.cashlessPaid || 0);
+    if (bills > 0) heads.push({ k: 'medical', v: Math.max(0, bills - cash) });
+    return { heads, warn, meta: { monthly, pros, mult, ded, basis: inc.basis, wage: inc.wage, usedCat: inc.usedCat, dependants: depCount(f), claimants: cl, convStep: n } };
+  }
+
+  const fp = functionalPct(f, pick);
+  if (f.functionalPct === '' || f.functionalPct == null) warn.push(f.noCertificate ? 'NO_CERTIFICATE' : 'FUNCTIONAL_ESTIMATED');
+  warn.push('INJURY_EXPERIMENTAL');
+  heads.push({ k: 'fec', v: Math.round(monthly * 12 * (1 + pros / 100) * (fp / 100) * mult) });
+  const months = Number(f.monthsOffWork || 0);
+  if (months > 0) heads.push({ k: 'lost', v: Math.round(monthly * months) });
+  const bills = Number(f.medicalBills || 0), cash = Number(f.cashlessPaid || 0);
+  if (bills > 0) heads.push({ k: 'medical', v: Math.max(0, bills - cash) });
+  const band = pick('non_pecuniary_band');
+  heads.push({ k: 'attendant', v: BAND_ATTENDANT[band] }, { k: 'conveyance', v: BAND_CONVEYANCE[band] }, { k: 'pain', v: painBand(fp, band) });
+  if (f.married === 'no' && age <= 35 && fp >= 50) heads.push({ k: 'marriage', v: BAND_MARRIAGE[band] });
+  if (f.permanentAttendant) {
+    const w = minWage(f.state, pick('attendant_rate') === 'M' ? 'semi_skilled' : 'unskilled', f.accidentDate, f.zone);
+    if (w) heads.push({ k: 'futureAttendant', v: Math.round(w.v * 12 * mult) });
+  }
+  return { heads, warn, meta: { monthly, pros, mult, fp, basis: inc.basis, wage: inc.wage, usedCat: inc.usedCat } };
+}
+
+/* ------------------------------------------------------------- stops ----- */
+function stopsOf(f) {
+  const out = [];
+  if (f.victimRole === 'owner_driver_single_vehicle') out.push('owner_driver');
+  if (f.vehicleTraced === 'no') out.push('unidentified');
+  if (f.s164 === 'accepted_via_insurer') out.push('s164_insurer');
+  return out;
+}
+
+/* --------------------------------------------------------------- main ---- */
+function estimate(f, asOf, opts) {
+  const mix = opts && opts.mix;
+  const stops = stopsOf(f);
+  if (stops.length) return { stop: stops[0] };
+  const runs = {}, warn = new Set();
+  for (const r of ['C', 'L', 'M']) {
+    const out = runOnce(f, r, asOf, mix);
+    if (out.stop) return { stop: out.stop, state: f.state };
+    runs[r] = { ...out, total: out.heads.reduce((s, h) => s + h.v, 0) };
+    out.warn.forEach((w) => warn.add(w));
+  }
+  const C = runs.C.total, L = runs.L.total, M = runs.M.total;
+  const low = Math.min(C, L), high = Math.max(M, L);
+  const spreadOk = low > 0 && high / low <= (f.kind === 'death' ? 1.75 : 2.5);
+  const barOk = spreadOk && (M - C) / L >= 0.05;
+  if (!spreadOk) warn.add('RANGE_TOO_WIDE');
+  if (f.vehicleTraced === 'yes' && f.vehicleInsured === 'no') warn.add('UNINSURED');
+  if (f.vehicleTraced === 'unknown') warn.add('ASSUMED_TRACED');
+  if (f.s164 === 'unknown') warn.add('ASSUMED_NO_S164');
+  if (f.victimRole === 'driver_of_involved_vehicle') warn.add('CONTRIBUTORY_NEGLIGENCE');
+  // Limitation: six whole months since the accident and no claim on record.
+  if (!f.claimFiledDate && f.accidentDate && wholeMonths(f.accidentDate.length === 7 ? f.accidentDate + '-01' : f.accidentDate, asOf) >= 6) warn.add('LIMITATION');
+
+  const out = { runs, C, L, M, low, high, barOk, headline: L, warn: [...warn], asOf, versions: VERSIONS };
+  if (!mix) {
+    out.movers = movers(f, asOf, L);
+    out.whatIf = whatIfs(f, asOf, L);
+  }
+  return out;
+}
+
+/* Each contested point moved alone to C and to M; the change in the standard figure, largest first. */
+function movers(f, asOf, base) {
+  const out = [];
+  for (const id of POINTS) {
+    const toC = estimate(f, asOf, { mix: { [id]: 'C' } });
+    const toM = estimate(f, asOf, { mix: { [id]: 'M' } });
+    const dC = toC.stop ? 0 : toC.L - base, dM = toM.stop ? 0 : toM.L - base;
+    if (dC !== 0 || dM !== 0) out.push({ id, toC: dC, toM: dM, basis: typeof POINT_BASIS[id] === 'string' ? POINT_BASIS[id] : POINT_BASIS[id][f.kind], sources: POINT_SOURCES[id] });
+  }
+  out.sort((a, b) => (Math.abs(b.toC) + Math.abs(b.toM)) - (Math.abs(a.toC) + Math.abs(a.toM)));
+  return out;
+}
+
+/* "What if" cards: facts not in the three figures, each shown as its own figure. */
+function whatIfs(f, asOf, base) {
+  const out = [];
+  if (f.victimRole === 'driver_of_involved_vehicle') {
+    out.push({ id: 'neg25', v: Math.round(base * 0.75), delta: -Math.round(base * 0.25) });
+    out.push({ id: 'neg50', v: Math.round(base * 0.5), delta: -Math.round(base * 0.5) });
+  }
+  const inc = ['permanent', 'fixed_salary', 'self_employed', 'informal', 'unemployed'].includes(f.employment);
+  const noProof = !(f.proof === 'salary_slip' || f.proof === 'itr');
+  if (inc && noProof && f.claimedMonthly && Number(f.claimedMonthly) > 0) {
+    const g = { ...f, employment: f.employment === 'self_employed' ? 'self_employed' : f.employment, proof: f.employment === 'self_employed' ? 'itr' : 'salary_slip',
+      itrAnnualIncome: f.employment === 'self_employed' ? String(Number(f.claimedMonthly) * 12) : '', monthlySalary: f.employment !== 'self_employed' ? f.claimedMonthly : '' };
+    if (g.employment === 'informal' || g.employment === 'unemployed') g.employment = 'fixed_salary';
+    const alt = estimate(g, asOf, { mix: {} });
+    if (!alt.stop) out.push({ id: 'claimed', v: alt.L, delta: alt.L - base, claimed: Number(f.claimedMonthly) });
+  }
+  if (f.kind === 'death' && Number(f.parents) > 0 && (f.dependentParents === 'unknown' || f.dependentParents === '')) {
+    const alt = estimate({ ...f, dependentParents: '0' }, asOf, { mix: {} });
+    if (!alt.stop && base - alt.L > 0) out.push({ id: 'parents', v: alt.L, delta: alt.L - base });
+  }
+  return out;
+}
+
+/* ----------------------------------------------------------- rough band -- */
+/* After what happened, their age and their work: the widest honest band, with the
+   facts it assumes named. Family (death) and certificate (injury) are swept. */
+function roughBand(f, asOf) {
+  if (!f.kind || !f.age || !f.employment) return null;
+  const base = { ...f, victimRole: f.victimRole || 'not_driving', vehicleTraced: f.vehicleTraced === 'no' ? 'no' : (f.vehicleTraced || 'yes'),
+    s164: f.s164 || 'none', state: f.state || 'DL', accidentDate: f.accidentDate && f.accidentDate.split('-')[1] ? f.accidentDate : asOf.slice(0, 7) };
+  if (stopsOf(base).length) return null;
+  const variants = [];
+  if (f.kind === 'death') {
+    const fam = f.married ? [f] : [{ married: 'no', spouse: '', children: '0', parents: '0', dependentParents: '' }, { married: 'yes', spouse: 'yes', children: '4', parents: '2', dependentParents: '2' }];
+    for (const v of fam) variants.push({ ...base, ...v, children: v.children ?? f.children ?? '0', parents: v.parents ?? f.parents ?? '0' });
+  } else {
+    if (f.certificatePct || f.noCertificate) variants.push(base);
+    else variants.push({ ...base, noCertificate: true, certificatePct: '' }, { ...base, certificatePct: '60', certificateBasis: 'limb', noCertificate: false });
+  }
+  let lo = Infinity, hi = -Infinity;
+  for (const v of variants) {
+    const r = estimate(v, asOf, { mix: {} });
+    if (r.stop) continue;
+    lo = Math.min(lo, r.C); hi = Math.max(hi, r.M);
+  }
+  if (!isFinite(lo)) return null;
+  return { lo, hi, assumed: { state: !f.state, traced: !f.vehicleTraced, s164: !f.s164, family: f.kind === 'death' && !f.married, certificate: f.kind === 'injury' && !(f.certificatePct || f.noCertificate) } };
+}
+
+/* ---------------------------------------------------------- offer check -- */
+function offerCheck(standard, conservative, offer, opts) {
+  const o = Object.assign({ years: 6, rate: 7.5, discount: 7, fee: 0, elapsed: 0 }, opts || {});
+  const totalYears = o.elapsed + o.years;
+  const withInterest = standard * (1 + (o.rate / 100) * totalYears);
+  const accrued = standard * (o.rate / 100) * o.elapsed;
+  const feeAmt = withInterest * (o.fee / 100);
+  const valueToday = (withInterest - feeAmt) / Math.pow(1 + o.discount / 100, o.years);
+  const pct = standard > 0 ? (offer / standard) * 100 : 0;
+  const verdict = pct < 25 ? 'far_below' : pct < 50 ? 'well_below' : pct < 80 ? 'below' : pct < 95 ? 'near' : pct <= 110 ? 'close' : 'above';
+  return { ...o, totalYears, withInterest, accrued, feeAmt, valueToday, pct, verdict, pctConservative: conservative > 0 ? (offer / conservative) * 100 : 0, pctOfToday: valueToday > 0 ? (offer / valueToday) * 100 : 0 };
+}
+
+/* ------------------------------------------------------------- format ---- */
+function inr(n) {
+  const s = String(Math.round(Math.abs(n)));
+  const out = s.length <= 3 ? s : s.slice(0, -3).replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + s.slice(-3);
+  return (n < 0 ? '−₹' : '₹') + out;
+}
+/* Two significant figures: "₹53 lakh", "₹1.2 crore". Half-way rounds up (OP-35). */
+function inWords(n, lang) {
+  const a = Math.abs(n);
+  const lakh = lang === 'hi' ? 'लाख' : 'lakh', crore = lang === 'hi' ? 'करोड़' : 'crore';
+  const r1 = (v) => (v >= 10 ? String(Math.round(v)) : String(Math.round(v * 10 + 1e-9) / 10));
+  if (a >= 1e7) return `₹${r1(a / 1e7)} ${crore}`;
+  if (a >= 1e5) return `₹${r1(a / 1e5)} ${lakh}`;
+  if (a >= 1e3) return `₹${Math.round(a / 1e3)},000`;
+  return inr(a);
+}
+
+if (typeof module !== 'undefined') module.exports = { estimate, offerCheck, roughBand, inr, inWords, minWage, OCCUPATIONS, POINTS, stopsOf, VERSIONS, WAGE_STATES, wholeMonths };
+
+return module.exports;})();</script><script>/* Crashfree India — compensation calculator, Round 3 prototype ("the live estimate").
+   Runs the engine port (rules 2026.10.0-draft) on every answer; nothing is faked. */
+(function () {
+'use strict';
+const E = window.ENGINE;
+const AS_OF = '2026-10-31';
+const HONEST = 'Estimate so far. The court decides the final amount; it can go up or down.';
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ------------------------------------------------------------------ icons */
+const P = (d, w) => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.8}" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const I = {
+  check: P('<path d="M5 12.5 10 17 19 7"/>', 2.6), arrow: P('<path d="M5 12h14M13 6l6 6-6 6"/>', 2), back: P('<path d="M15 5l-7 7 7 7"/>'),
+  plus: P('<path d="M12 5v14M5 12h14"/>', 2.2), minus: P('<path d="M5 12h14"/>', 2.2), search: P('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'),
+  info: P('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'), alert: P('<path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/>'),
+  heart: P('<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'), band: P('<path d="m7 17 10-10M9 7l8 8"/><rect x="3" y="3" width="18" height="18" rx="6"/>'),
+  home: P('<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>'), money: P('<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/>'),
+  walk: P('<circle cx="13" cy="4" r="1.5"/><path d="m8 21 3-7 2 2v5M11 14l-1-5 3-1 2 3 3 1"/>'), wheel: P('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v6M12 15v6M3 12h6M15 12h6"/>'),
+  car: P('<path d="M5 13 7 7h10l2 6"/><rect x="3" y="13" width="18" height="6" rx="2"/><circle cx="7.5" cy="19" r="1.5"/><circle cx="16.5" cy="19" r="1.5"/>'), x: P('<path d="M6 6l12 12M18 6 6 18"/>'),
+  build: P('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h6"/>'), work: P('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5h8v2"/>'),
+  store: P('<path d="M4 9 5 4h14l1 5"/><path d="M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/>'), hand: P('<path d="M7 11V6a1.5 1.5 0 0 1 3 0v5M10 10V4a1.5 1.5 0 0 1 3 0v6M13 10V5a1.5 1.5 0 0 1 3 0v8"/><path d="M16 13a1.5 1.5 0 0 1 3 1l-1 5a4 4 0 0 1-4 3H9l-4-5a1.5 1.5 0 0 1 2-2l2 2"/>'),
+  cap: P('<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/>'), child: P('<circle cx="12" cy="7" r="3"/><path d="M6 21v-5a6 6 0 0 1 12 0v5"/>'),
+  elder: P('<circle cx="12" cy="5" r="2.5"/><path d="M9 21v-8l3-4 3 4v8M16 12l2 1v8"/>'), rest: P('<path d="M4 18h16"/><path d="M6 18V9h12v9"/><path d="M9 9V6h6v3"/>'),
+  share: P('<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8 11 8-5M8 13l8 5"/>'), print: P('<path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7"/>'),
+  copy: P('<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>'), life: P('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M5.6 5.6l3.6 3.6M14.8 14.8l3.6 3.6M18.4 5.6l-3.6 3.6M9.2 14.8l-3.6 3.6"/>'),
+  court: P('<path d="M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6z"/><path d="M9 21v-7M15 21v-7"/>'), edit: P('<path d="M4 20h4l10-10-4-4L4 16z"/>'), down: P('<path d="m6 9 6 6 6-6"/>'),
+  lock: P('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'), right: P('<path d="m9 5 7 7-7 7"/>'),
+};
+
+/* ------------------------------------------------------------------ state */
+const BLANK = { kind: '', victimRole: '', vehicleTraced: '', s164: '', age: '', employment: '', proof: '', monthlySalary: '', itrAnnualIncome: '', occupationCode: '', pensionMonthly: '',
+  married: '', spouse: '', children: '', parents: '', dependentParents: '', certificatePct: '', noCertificate: false, certificateBasis: '', monthsOffWork: '', accidentDate: '', state: '',
+  functionalPct: '', workCapacity: '', permanentAttendant: false, medicalBills: '', cashlessPaid: '', monthlyTax: '', studentCourse: '', zone: '', familyPensionMonthly: '', claimedMonthly: '',
+  vehicleInsured: '', accidentDay: '', claimFiled: '', claimFiledDate: '' };
+let S = { f: { ...BLANK }, screen: 'home', q: 'kind', di: 0, tab: 0, offer: '', offerOpts: { years: 6, rate: 7.5 }, returnTo: null, hist: [], sheet: null, scaleMax: 0, detailsDone: [], detailsSkipped: [], showAllHeads: false, moreCautions: false, occQ: '', year: 2025 };
+try { const s = JSON.parse(localStorage.getItem('cfi-proto3') || 'null'); if (s && s.f) S = { ...S, ...s, hist: [] }; } catch (e) {}
+const save = () => { try { localStorage.setItem('cfi-proto3', JSON.stringify(S)); } catch (e) {} };
+
+/* ------------------------------------------------------------------ flow */
+const f = () => S.f;
+const QUICK = ['kind', 'role', 'traced', 's164', 'age', 'work', 'family', 'injury', 'when', 'state'];
+const applies = (q) => q !== 'injury' || f().kind === 'injury';
+const quickList = () => QUICK.filter(applies);
+const STEP_OF = { kind: 'What happened', role: 'Can a claim be made', traced: 'Can a claim be made', s164: 'Can a claim be made', age: 'Age', work: 'Work', family: 'Family', injury: 'Injury', when: 'When', state: 'Where' };
+const stepsList = () => ['kind', 'checks', 'age', 'work', 'family'].concat(f().kind === 'injury' ? ['injury'] : []).concat(['when', 'state']);
+const stepKey = (q) => (['role', 'traced', 's164'].includes(q) ? 'checks' : q);
+const stepIndex = (q) => stepsList().indexOf(stepKey(q));
+function answered(step) {
+  const x = f();
+  switch (step) {
+    case 'kind': return !!x.kind; case 'checks': return !!(x.victimRole && x.vehicleTraced && x.s164); case 'age': return x.age !== '';
+    case 'work': return workDone(); case 'family': return x.married !== '' && (x.kind === 'injury' || x.married === 'no' || (x.spouse && x.children !== '' && x.parents !== '' && (x.parents === '0' || x.dependentParents !== '')));
+    case 'injury': return x.noCertificate || (x.certificatePct !== '' && x.certificateBasis !== '');
+    case 'when': return !!x.accidentDate; case 'state': return !!x.state;
+  }
+}
+function workDone() {
+  const x = f(); if (!x.employment) return false;
+  if (x.employment === 'permanent' || x.employment === 'fixed_salary') return x.proof === 'none' || (x.proof === 'salary_slip' && Number(x.monthlySalary) > 0);
+  if (x.employment === 'self_employed') return x.proof === 'none' || (x.proof === 'itr' && Number(x.itrAnnualIncome) > 0);
+  return true;
+}
+const allQuick = () => stepsList().every(answered);
+const stopCode = () => { const s = E.stopsOf(f()); return s.length ? s[0] : null; };
+
+/* Optional details that apply to this path (web/src/flow.ts REFINES). */
+function detailList() {
+  const x = f(), inj = x.kind === 'injury', out = [];
+  if (inj) out.push('functional', 'workNow', 'attendant');
+  out.push('medical');
+  if ((x.employment === 'permanent' || x.employment === 'fixed_salary') && x.proof === 'salary_slip') out.push('tax');
+  if (x.employment === 'student') out.push('course');
+  if (x.state === 'CENTRAL') out.push('zone');
+  if (x.employment === 'pensioner' && Number(x.pensionMonthly) > 0) out.push('familyPension');
+  if (['permanent', 'fixed_salary', 'self_employed', 'informal', 'unemployed'].includes(x.employment) && !(x.proof === 'salary_slip' || x.proof === 'itr')) out.push('claimed');
+  if (x.vehicleTraced === 'yes') out.push('insured');
+  out.push('day', 'claim');
+  return out;
+}
+const detailAnswered = (d) => { const x = f(); return { functional: x.functionalPct !== '', workNow: !!x.workCapacity, attendant: x.permanentAttendant === true, medical: x.medicalBills !== '', tax: x.monthlyTax !== '', course: !!x.studentCourse, zone: !!x.zone, familyPension: x.familyPensionMonthly !== '', claimed: x.claimedMonthly !== '', insured: !!x.vehicleInsured, day: x.accidentDay !== '', claim: !!x.claimFiled }[d]; };
+
+/* ------------------------------------------------------------------ engine glue */
+function engineFields() {
+  const x = { ...f() };
+  if (x.accidentDate && x.accidentDay) x.accidentDate = x.accidentDate + '-' + String(x.accidentDay).padStart(2, '0');
+  if (x.state === 'OTHER' || x.state === 'HR' || x.state === 'UP' || x.state === 'RJ' || x.state === 'MP') x.state = x.state; // engine returns mw_missing → handled below
+  if (x.claimFiled !== 'yes') x.claimFiledDate = '';
+  return x;
+}
+let cache = { key: '', est: null, band: null };
+function compute() {
+  const key = JSON.stringify(S.f);
+  if (cache.key === key) return cache;
+  const x = engineFields();
+  let est = null, band = null, centralGuide = false;
+  if (allQuick() && !stopCode()) {
+    est = E.estimate(x, AS_OF);
+    if (est.stop === 'mw_missing') { est = E.estimate({ ...x, state: 'CENTRAL' }, AS_OF); centralGuide = true; }
+    if (est && !est.stop) { est.warn = est.warn.filter((w) => w !== 'INJURY_EXPERIMENTAL'); if (centralGuide) est.warn.unshift('CENTRAL_GUIDE'); est.centralGuide = centralGuide; }
+    else est = null;
+  } else if (x.kind && x.age !== '' && x.employment) {
+    band = E.roughBand(x, AS_OF);
+    if (!band && !E.WAGE_STATES.includes(x.state)) band = E.roughBand({ ...x, state: 'CENTRAL' }, AS_OF);
+  }
+  cache = { key, est, band };
+  return cache;
+}
+
+/* ------------------------------------------------------------------ helpers */
+const inr = E.inr;
+const words = (n) => { const a = Math.abs(n); if (a >= 1e7) return '₹' + (Math.round(a / 1e5) / 100).toFixed(2).replace(/\.?0+$/, '') + ' crore'; if (a >= 1e5) { const l = a / 1e5; return '₹' + (Math.round(l * 10) / 10).toFixed(1).replace(/\.0$/, '') + ' lakh'; } if (a >= 1e3) return '₹' + Math.round(a / 1e3) + ',000'; return inr(a); };
+const num = (s) => Number(String(s).replace(/[^\d.]/g, '')) || 0;
+const fmtIn = (s) => { const n = num(s); return n ? inr(n).slice(1) : ''; };
+const echoLine = (n, suf) => n > 0 ? `${I.check.replace('width="20" height="20"', 'width="16" height="16"')}= ${inr(n)}${suf || ''}${n >= 100000 ? ' · ' + words(n) : ''}` : '';
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const monthName = (iso) => iso ? MONTHS[Number(iso.slice(5, 7)) - 1] + ' ' + iso.slice(0, 4) : '';
+const OCC_LABEL = (code) => (E.OCCUPATIONS.find((o) => o.code === code) || {}).en || '';
+const STATES = [['DL', 'Delhi'], ['HR', 'Haryana'], ['UP', 'Uttar Pradesh'], ['RJ', 'Rajasthan'], ['MP', 'Madhya Pradesh'], ['CENTRAL', 'Central government rates (a rough guide)'], ['OTHER', 'Another state']];
+const stateName = (c) => (STATES.find((s) => s[0] === c) || [])[1] || '';
+const EMPS = [['permanent', 'Permanent job', 'Regular post with yearly pay rises, government or private', 'build'], ['fixed_salary', 'Salaried (private or contract)', 'Fixed pay or contract, no regular pay rises', 'work'],
+  ['self_employed', 'Own business or profession', '', 'store'], ['informal', 'Daily wage or informal work', '', 'hand'], ['homemaker', 'Homemaker', '', 'home'], ['student', 'Student', '', 'cap'],
+  ['minor', 'Child', 'Not studying, or too young', 'child'], ['pensioner', 'Retired or pensioner', '', 'elder'], ['unemployed', 'Not working', '', 'rest']];
+const empLabel = (c) => (EMPS.find((e) => e[0] === c) || [])[1] || '';
+
+/* ------------------------------------------------------------------ navigation */
+function go(screen, extra) {
+  S.hist.push({ screen: S.screen, q: S.q, di: S.di });
+  S.screen = screen; if (extra && extra.q) S.q = extra.q; if (extra && extra.di != null) S.di = extra.di;
+  S.sheet = null; save(); render(); window.scrollTo(0, 0);
+}
+function back() {
+  if (S.sheet) { S.sheet = null; render(); return; }
+  const h = S.hist.pop(); if (!h) { S.screen = 'home'; render(); return; }
+  S.screen = h.screen; S.q = h.q; S.di = h.di; save(); render(); window.scrollTo(0, 0);
+}
+function nextQuick() {
+  if (S.returnTo) { const r = S.returnTo; S.returnTo = null; go(r); return; }
+  const stop = stopCode();
+  if (stop && ['role', 'traced', 's164'].includes(S.q)) { go('stop'); return; }
+  const list = quickList(); const i = list.indexOf(S.q);
+  for (let j = i + 1; j < list.length; j++) { if (!answered(stepKey(list[j])) || true) { go('q', { q: list[j] }); return; } }
+  go('ready');
+}
+function set(k, v) { S.f[k] = v; save(); }
+
+/* ------------------------------------------------------------------ live estimate */
+function liveModel() {
+  const c = compute(); const x = f();
+  if (S.screen === 'stop' || stopCode()) return { kind: 'stop' };
+  if (c.est) {
+    const left = detailList().filter((d) => !detailAnswered(d)).length;
+    return { kind: 'pin', lo: c.est.low, hi: c.est.high, L: c.est.L, sub: left ? `${left} optional details left` : 'All details answered' };
+  }
+  if (c.band) {
+    const left = stepsList().filter((s) => !answered(s)).length;
+    const sub = x.kind === 'injury' && !(x.certificatePct || x.noCertificate) ? 'Certificate decides most of it' : `${left} more step${left === 1 ? '' : 's'} make${left === 1 ? 's' : ''} it sharper`;
+    return { kind: 'band', lo: c.band.lo, hi: c.band.hi, sub };
+  }
+  return { kind: 'empty' };
+}
+function scale(m) {
+  const hi = m.hi; if (!S.scaleMax || hi * 1.05 > S.scaleMax) S.scaleMax = hi * 1.15;
+  const l = (m.lo / S.scaleMax) * 100, r = (hi / S.scaleMax) * 100;
+  return { l, r, pin: m.L != null ? (m.L / S.scaleMax) * 100 : null };
+}
+function liveStrip(cta) {
+  const m = liveModel();
+  if (m.kind === 'empty' || m.kind === 'stop') return `<div class="live empty"><div class="top"><span class="lbl">Your estimate</span><span class="val">${m.kind === 'stop' ? 'No number on these answers' : 'Appears after 3 answers'}</span></div>${cta ? `<div class="btnrow">${cta}</div>` : ''}</div>`;
+  const s = scale(m); const label = m.kind === 'pin' ? words(m.L) : `${words(m.lo).replace('₹', '₹')} – ${words(m.hi)}`;
+  return `<div class="live"><div class="top"><span class="lbl">Your estimate${m.kind === 'pin' ? '' : ' so far'}</span><span class="val">${label}</span></div>
+    <div class="bandbar"><u style="left:${s.l}%;right:${100 - s.r}%"></u>${s.pin != null ? `<i style="left:${s.pin}%"></i>` : ''}</div>
+    <div class="sub"><span>${words(m.lo)} – ${words(m.hi)}</span><b>${esc(m.sub)}</b></div>${cta ? `<div class="btnrow">${cta}</div>` : ''}<span class="rule">${HONEST}</span></div>`;
+}
+const DECIDES = [['kind', 'What happened', 'who claims'], ['checks', 'Can a claim be made', '3 checks'], ['age', 'Age', 'the multiplier'], ['work', 'Work', 'the income used'], ['family', 'Family', 'who shares it'], ['injury', 'Injury', 'the biggest part'], ['when', 'When', 'which year’s wages'], ['state', 'Where', 'which state’s wages']];
+function decideValue(k) {
+  const x = f();
+  switch (k) {
+    case 'kind': return x.kind === 'death' ? 'Death' : 'Injured';
+    case 'checks': return [{ not_driving: 'not driving', driver_of_involved_vehicle: 'riding', owner_driver_single_vehicle: 'owner-driver' }[x.victimRole], { yes: 'found', no: 'not found', unknown: 'not sure' }[x.vehicleTraced], { none: 'none taken', accepted_via_insurer: 'taken', unknown: 'not sure' }[x.s164]].filter(Boolean).join(' · ');
+    case 'age': return x.age; case 'work': return x.occupationCode ? OCC_LABEL(x.occupationCode).split(' /')[0] : empLabel(x.employment);
+    case 'family': return x.married === 'no' ? 'Not married' : x.kind === 'injury' ? 'Married' : `Married · ${x.children || 0} children · ${x.parents || 0} parents`;
+    case 'injury': return x.noCertificate ? 'No certificate' : `${x.certificatePct}% · ${x.certificateBasis === 'whole_body' ? 'whole body' : x.certificateBasis === 'limb' ? 'limb' : 'basis not sure'}${x.monthsOffWork ? ' · ' + x.monthsOffWork + ' months' : ''}`;
+    case 'when': return monthName(x.accidentDate); case 'state': return stateName(x.state);
+  }
+}
+function lcard(cta) {
+  const m = liveModel(); const list = stepsList(); const now = S.screen === 'q' ? stepKey(S.q) : (S.screen === 'home' ? 'kind' : '');
+  let head;
+  if (m.kind === 'empty' || m.kind === 'stop') head = `<span class="lbl">Your estimate</span><span class="val empty">${m.kind === 'stop' ? 'No number on these answers' : 'Appears after 3 answers'}</span>`;
+  else { const s = scale(m); head = `<span class="lbl">Your estimate${m.kind === 'pin' ? '' : ' so far'}</span><span class="val">${m.kind === 'pin' ? words(m.L) : words(m.lo) + ' – ' + words(m.hi)}</span><div class="bandbar"><u style="left:${s.l}%;right:${100 - s.r}%"></u>${s.pin != null ? `<i style="left:${s.pin}%"></i>` : ''}</div><div class="between" style="font-size:12px;color:var(--subtle)"><span>${words(m.lo)} – ${words(m.hi)}</span><b style="color:var(--violet)">${esc(m.sub)}</b></div>`; }
+  const rows = DECIDES.filter((d) => list.includes(d[0])).map(([k, name, d]) => {
+    const st = answered(k) && k !== now ? 'done' : k === now ? 'now' : '';
+    const right = st === 'done' ? `${esc(decideValue(k))}<button data-act="change" data-step="${k}">Change</button>` : st === 'now' ? 'Answering now' : `decides ${d}`;
+    return `<div class="dec ${st}"><i>${st === 'done' ? I.check.replace('width="20" height="20"', 'width="11" height="11"') : st === 'now' ? I.arrow.replace('width="20" height="20"', 'width="11" height="11"') : ''}</i><span>${name}</span><em>${right}</em></div>`; }).join('');
+  return `<div class="lcard">${head}<div class="decides">${rows}</div>${cta ? `<div>${cta}</div>` : ''}<span class="rule">${HONEST}</span></div>`;
+}
+const helpcard = () => `<div class="helpcard"><span class="gl">${I.life}</span><div><b>Free legal help</b><span>Your District Legal Services Authority, or the NALSA helpline <b>15100</b></span></div></div>`;
+
+/* ------------------------------------------------------------------ shell */
+function shell(main, opts) {
+  const o = Object.assign({ back: true, prog: null, meta: '', cta: '', railCta: '', rail: true, foot: true, wide: false }, opts || {});
+  const nav = `<div class="nav"><a class="logo" href="index.html" aria-label="Crashfree India">${window.CFI_LOGO || ''}</a><div class="right"><span class="row">${I.lock}Your answers stay on this device</span><button class="langpill" data-act="hindi">हिन्दी</button></div></div>${o.prog != null ? `<div class="dkprog"><em style="width:${Math.max(3, o.prog * 100)}%"></em></div>` : ''}`;
+  const appbar = `<div class="appbar">${o.back === 'landing' ? `<a class="back" href="index.html">${I.back}Home</a>` : o.back ? `<button class="back" data-act="back">${I.back}Back</button>` : '<span></span>'}<button class="langpill" data-act="hindi">हिन्दी</button></div>${o.prog != null ? `<div class="prog"><em style="width:${Math.max(3, o.prog * 100)}%"></em></div>` : ''}${o.meta ? `<div class="pmeta">${o.meta}</div>` : ''}`;
+  const rail = o.rail ? `<div class="rail">${lcard(o.railCta)}${helpcard()}</div>` : '';
+  const foot = o.foot ? `<div class="dkfoot"><span class="row">${I.life}Free legal help: your DLSA, or the NALSA helpline <b>15100</b></span><span>Not legal advice. An estimate on the facts you give.</span></div>` : '';
+  const inner = o.wide ? main : `<div class="dkgrid"><div class="dkmain">${o.meta ? `<div class="dkmeta">${o.back ? `<button class="back" data-act="back">${I.back}Back</button><span>·</span>` : ''}${o.meta}</div>` : ''}${main}</div>${rail}</div>`;
+  return `${nav}${appbar}${inner}${o.cta || ''}${foot}${S.sheet ? sheetHtml() : ''}`;
+}
+const pq = (eyebrow, title, hint) => `<div class="col" style="gap:6px"><div class="eyebrow">${eyebrow}</div><h1 class="h1">${title}</h1>${hint ? `<p class="hint">${hint}</p>` : ''}</div>`;
+const opt = (k, v, label, sub, icon, on) => `<button class="opt${on ? ' on' : ''}" data-set="${k}" data-val="${v}">${icon ? `<span class="gl">${I[icon]}</span>` : ''}<span class="tx"><b>${label}</b>${sub ? `<span>${sub}</span>` : ''}</span><span class="ra">${on ? I.check.replace('width="20" height="20"', 'width="14" height="14"').replace('currentColor', '#fff') : ''}</span></button>`;
+const notsure = (k, v, on) => `<button class="ns${on ? ' on' : ''}" data-set="${k}" data-val="${v}"><span class="ra">${on ? I.check.replace('width="20" height="20"', 'width="12" height="12"').replace('currentColor', '#fff') : ''}</span>Not sure</button>`;
+const chip = (k, v, label, on) => `<button class="chip${on ? ' on' : ''}" data-set="${k}" data-val="${v}">${label}</button>`;
+const inputMoney = (k, ph, suf, auto) => `<div class="inp"><span class="pre">₹</span><input inputmode="numeric" data-in="${k}" value="${fmtIn(f()[k])}" placeholder="${ph}"${auto ? ' autofocus' : ''}>${suf ? `<span class="suf">${suf}</span>` : ''}</div><div class="echo">${echoLine(num(f()[k]), suf ? ' ' + suf : '')}</div>`;
+const note2 = (t, b, warn, tint) => `<div class="note2${warn ? ' warn' : ''}${tint ? ' tint' : ''}">${warn ? I.info : I.info}<span class="tx"><b>${t}</b><span>${b}</span></span></div>`;
+const stepMeta = (q) => { const i = stepIndex(q), n = stepsList().length; return i < n - 1 ? `Step ${i + 1} of ${n} · <b>${n - i - 1} more</b>` : '<b>Last step</b>'; };
+const continueBtn = (ok, label) => `<button class="btn full" data-act="next"${ok ? '' : ' disabled'}>${label || 'Continue'}${I.arrow}</button>`;
+function question(q, eyebrow, title, hint, body, ok, autoAdvance) {
+  const cta = autoAdvance ? '' : continueBtn(ok, q === 'state' ? 'See my estimate' : 'Continue');
+  const actions = autoAdvance ? `<p class="small">Tap an answer to move on. You can change it later.</p>` : `<div class="actions">${cta.replace('btn full', 'btn')}</div>`;
+  return shell(`${pq(eyebrow, title, hint)}${body}<div class="dkonly">${actions}</div>`, { prog: (stepIndex(q) + 0.5) / stepsList().length, meta: stepMeta(q), cta: liveStrip(cta), railCta: '' });
+}
+
+/* ------------------------------------------------------------------ screens */
+const SITS = [['died', 'Someone died', 'The family claims for the loss', 'heart'], ['hurt', 'Someone was hurt', 'The injured person claims', 'band'], ['homemaker', 'We lost a homemaker', 'Her work at home counts: ₹30,000 a month (Supreme Court, 2026)', 'home'], ['untraced', 'The vehicle was never found', 'A different scheme pays. We show you how.', 'search'], ['offer', 'There is an offer on the table', 'Check it before anyone signs', 'money']];
+function viewHome() {
+  const held = S.offer ? note2(`Offer of ${inr(num(S.offer))} held`, 'It will be compared with your estimate at the end.', false, true) : '';
+  const body = `<div class="opts sits">${SITS.map(([id, a, b, ic]) => `<button class="opt" data-act="sit" data-id="${id}"><span class="gl">${I[ic]}</span><span class="tx"><b>${a}</b><span>${b}</span></span><span class="ra"></span></button>`).join('')}</div>${held}<p class="small">About 2 minutes. Your answers stay on this device.${f().kind ? ' <button class="link sm" data-act="resume">Continue where you left off →</button>' : ''}</p>`;
+  return shell(`${pq('Compensation calculator · free · private', 'What happened?')}${body}`, { back: 'landing', cta: liveStrip(''), meta: '' });
+}
+function viewQ() {
+  const x = f(), q = S.q;
+  if (q === 'kind') return viewHome();
+  if (q === 'role') return question(q, 'Can a claim be made? · 1 of 3', 'How was the person involved?', '', `<div class="opts">${opt('victimRole', 'not_driving', 'Not driving', 'Walking, cycling, pillion rider or passenger', 'walk', x.victimRole === 'not_driving')}${opt('victimRole', 'driver_of_involved_vehicle', 'Driving or riding one of the vehicles involved', '', 'wheel', x.victimRole === 'driver_of_involved_vehicle')}${opt('victimRole', 'owner_driver_single_vehicle', 'Owner, driving alone, no other vehicle involved', '', 'car', x.victimRole === 'owner_driver_single_vehicle')}</div>`, !!x.victimRole, true);
+  if (q === 'traced') return question(q, 'Can a claim be made? · 2 of 3', 'Was the vehicle that hit them found?', 'The police holding the FIR can tell you.', `<div class="opts">${opt('vehicleTraced', 'yes', 'Yes', '', 'search', x.vehicleTraced === 'yes')}${opt('vehicleTraced', 'no', 'No, never found (hit and run)', '', 'x', x.vehicleTraced === 'no')}${notsure('vehicleTraced', 'unknown', x.vehicleTraced === 'unknown')}</div>`, !!x.vehicleTraced, true);
+  if (q === 's164') return question(q, 'Can a claim be made? · 3 of 3', 'Has anyone already taken the insurer’s no-fault settlement?', '', `${note2('What counts', 'A fixed ₹5 lakh (death) or ₹2.5 lakh (grievous hurt) paid by the insurer after someone signed its no-fault settlement. Scheme hospital bills, the hit-and-run payment or help from an employer do not count.')}<div class="opts">${opt('s164', 'none', 'No', '', null, x.s164 === 'none')}${opt('s164', 'accepted_via_insurer', 'Yes', '', null, x.s164 === 'accepted_via_insurer')}${notsure('s164', 'unknown', x.s164 === 'unknown')}</div>`, !!x.s164, true);
+  if (q === 'age') {
+    const a = x.age === '' ? '' : Number(x.age);
+    const bands = [['Under 18', 12], ['18–30', 24], ['30–45', 37], ['45–60', 52], ['Over 60', 65]];
+    const on = (lo) => a !== '' && ((lo === 12 && a < 18) || (lo === 24 && a >= 18 && a < 30) || (lo === 37 && a >= 30 && a < 45) || (lo === 52 && a >= 45 && a < 60) || (lo === 65 && a >= 60));
+    return question(q, 'The person', 'How old were they on the day of the accident?', '', `<div class="bigstep"><button data-act="age" data-d="-1">${I.minus}</button><input inputmode="numeric" data-in="age" value="${esc(x.age)}" placeholder="—"><button data-act="age" data-d="1">${I.plus}</button></div><div class="seg">${bands.map(([l, v]) => `<button class="chip${on(v) ? ' on' : ''}" data-act="ageband" data-v="${v}">${l}</button>`).join('')}</div><p class="small">Tap a band, then fine-tune. Or type it.${a !== '' && a > 70 ? ' Over 70 is outside the standard table; the multiplier for 66–70 is used.' : ''}</p>`, x.age !== '' && Number(x.age) >= 0 && Number(x.age) <= 110);
+  }
+  if (q === 'work') return viewWork();
+  if (q === 'family') return viewFamily();
+  if (q === 'injury') return viewInjury();
+  if (q === 'when') {
+    const y = S.year, cur = x.accidentDate;
+    const grid = MONTHS.map((m, i) => { const iso = `${y}-${String(i + 1).padStart(2, '0')}`; const future = iso > AS_OF.slice(0, 7); return `<button data-act="month" data-iso="${iso}" class="${cur === iso ? 'on' : ''}"${future ? ' disabled' : ''}>${m}</button>`; }).join('');
+    return question(q, 'When and where', 'When did the accident happen?', '', `<div class="card" style="gap:12px;padding:14px"><div class="yearrow"><button data-act="year" data-d="-1">${I.back}</button><span>${y}</span><button data-act="year" data-d="1"${y >= 2026 ? ' disabled style="opacity:.3"' : ''}>${I.right}</button></div><div class="monthgrid">${grid}</div></div><p class="small">Month and year are enough. The exact day is an optional detail later.</p>`, !!x.accidentDate);
+  }
+  if (q === 'state') {
+    const noWage = x.state && !E.WAGE_STATES.includes(x.state);
+    return question(q, 'When and where', 'Where will the claim be filed?', '', `${note2('Which tribunal?', 'The claim can be filed where the accident happened, where you live, or where the other side lives. Where it is filed can change the figure.')}<div class="seg">${STATES.map(([c, n]) => chip('state', c, n, x.state === c)).join('')}</div>${noWage ? note2('No wage table for ' + stateName(x.state) + ' yet', 'Central government rates are used as a rough guide where the minimum wage is needed. Add proof of income later to replace them. Never a dead end.', true) : ''}`, !!x.state);
+  }
+}
+function viewWork() {
+  const x = f(); const e = x.employment;
+  if (!e) return question('work', 'Work and income', 'What work did they do?', '', `<div class="opts grid">${EMPS.map(([c, l, s, ic]) => opt('employment', c, l, s, ic, false)).join('')}</div>`, false, true);
+  const em = EMPS.find((v) => v[0] === e);
+  let rest = '', ok = true;
+  const chosen = `<div class="chosen">${opt('employment', e, em[1], em[2], em[3], true)}<div class="between"><span class="small">${{ homemaker: 'No income question for this kind of work', minor: 'No income question for a child', unemployed: 'No proof needed', informal: 'No proof needed for this kind of work' }[e] || ''}</span><button class="link sm" data-set="employment" data-val="">Change</button></div></div>`;
+  if (e === 'permanent' || e === 'fixed_salary') {
+    rest = `<div class="reveal"><div class="field"><label>Are there salary slips or an employer certificate?</label><div class="seg">${chip('proof', 'salary_slip', 'Yes', x.proof === 'salary_slip')}${chip('proof', 'none', 'No', x.proof === 'none')}</div></div>`;
+    if (x.proof === 'salary_slip') rest += `<div class="field"><label>Monthly salary, before deductions</label><span class="fh">Basic pay, DA, HRA and allowances from the slip. Not the take-home amount.</span>${inputMoney('monthlySalary', '25,000', 'a month', true)}</div>`;
+    else if (x.proof === 'none') rest += note2('No proof: the state minimum wage is used', 'Tribunals usually take it when income cannot be shown. You can add the salary the family says they earned later, as a detail.');
+    rest += '</div>'; ok = workDone();
+  } else if (e === 'self_employed') {
+    rest = `<div class="reveal"><div class="field"><label>Were income tax returns filed?</label><div class="seg">${chip('proof', 'itr', 'Yes', x.proof === 'itr')}${chip('proof', 'none', 'No', x.proof === 'none')}</div></div>`;
+    if (x.proof === 'itr') rest += `<div class="field"><label>Income in the latest return before the accident</label>${inputMoney('itrAnnualIncome', '4,80,000', 'a year', true)}</div>`;
+    else if (x.proof === 'none') rest += occList();
+    rest += '</div>'; ok = workDone();
+  } else if (e === 'informal' || e === 'unemployed') rest = `<div class="reveal">${occList()}</div>`;
+  else if (e === 'pensioner') rest = `<div class="reveal"><div class="field"><label>Monthly pension <span class="tag">· optional</span></label>${inputMoney('pensionMonthly', '18,500', 'a month', true)}</div></div>`;
+  else if (e === 'homemaker') rest = `<div class="reveal"><div class="note2 tint">${I.court}<span class="tx"><b>Her work at home counts.</b><span>The Supreme Court valued a homemaker’s work at ₹30,000 a month (Shishu Pal, 2026). That is the basis used.</span></span></div></div>`;
+  else if (e === 'student') rest = `<div class="reveal">${note2('A student’s lost future', 'The skilled minimum wage is used (Kajal, 2020). The course is an optional detail later.')}</div>`;
+  else if (e === 'minor') rest = `<div class="reveal">${note2('A child’s lost future', 'The skilled minimum wage is used; courts differ for a child’s death and the range shows both.')}</div>`;
+  return question('work', 'Work and income', 'What work did they do?', '', chosen + rest, ok);
+}
+function occList() {
+  const x = f(); const q = S.occQ.toLowerCase();
+  const list = E.OCCUPATIONS.filter((o) => !q || o.en.toLowerCase().includes(q)).slice(0, 8);
+  return `<div class="field"><label>What was their occupation? <span class="tag">· optional</span></label><span class="fh">Used to pick the minimum-wage category when income cannot be proved.</span><div class="search">${I.search}<input data-in="occQ" value="${esc(S.occQ)}" placeholder="Search, e.g. driver"></div><div class="list">${list.map((o) => `<button class="li${x.occupationCode === o.code ? ' on' : ''}" data-set="occupationCode" data-val="${o.code}">${o.en}<span>${o.cat.replace('_', '-')}</span></button>`).join('')}<button class="li${x.occupationCode === '' ? ' on' : ''}" data-set="occupationCode" data-val="" style="color:var(--violet)">Not in this list, or not sure</button></div></div>`;
+}
+function viewFamily() {
+  const x = f();
+  if (x.kind === 'injury') return question('family', 'Their family', 'Were they married?', 'For an injury this only decides whether loss of marriage prospects applies.', `<div class="opts">${opt('married', 'yes', 'Yes', '', null, x.married === 'yes')}${opt('married', 'no', 'No', '', null, x.married === 'no')}</div>`, !!x.married, true);
+  let rest = '';
+  if (x.married === 'yes') {
+    rest = `<div class="reveal"><div class="field"><label>Is the husband or wife claiming?</label><span class="fh">Count only family members who are claiming, or will claim. This can change later.</span><div class="seg">${chip('spouse', 'yes', 'Yes', x.spouse === 'yes')}${chip('spouse', 'no', 'No', x.spouse === 'no')}</div></div>`;
+  }
+  if (x.married) {
+    rest += `${x.married === 'yes' ? '' : '<div class="reveal">'}<div class="field"><label>Number of children claiming</label><div class="seg">${['0', '1', '2', '3', '4', '5'].map((n) => chip('children', n, n === '5' ? '5 or more' : n, x.children === n)).join('')}</div></div>
+      <div class="field"><label>Number of parents claiming</label><div class="seg">${['0', '1', '2'].map((n) => chip('parents', n, n, x.parents === n)).join('')}</div></div>`;
+    if (x.parents === '1') rest += `<div class="field"><label>Did the parent depend on the person’s income?</label><div class="seg">${chip('dependentParents', '1', 'Yes', x.dependentParents === '1')}${chip('dependentParents', '0', 'No', x.dependentParents === '0')}${chip('dependentParents', 'unknown', 'Not sure', x.dependentParents === 'unknown')}</div></div>`;
+    if (x.parents === '2') rest += `<div class="field"><label>Did the parents depend on the person’s income?</label><div class="seg">${chip('dependentParents', '2', 'Both', x.dependentParents === '2')}${chip('dependentParents', '1', 'One', x.dependentParents === '1')}${chip('dependentParents', '0', 'Neither', x.dependentParents === '0')}${chip('dependentParents', 'unknown', 'Not sure', x.dependentParents === 'unknown')}</div></div>`;
+    rest += '</div>';
+  }
+  return question('family', 'Their family', 'Were they married?', '', `<div class="opts">${opt('married', 'yes', 'Yes', '', null, x.married === 'yes')}${opt('married', 'no', 'No', '', null, x.married === 'no')}</div>${rest}`, answered('family'));
+}
+function viewInjury() {
+  const x = f();
+  const body = `<div class="field"><label>Permanent disability in the medical certificate</label><div class="inp" style="max-width:240px${x.noCertificate ? ';opacity:.4' : ''}"><input inputmode="numeric" data-in="certificatePct" value="${esc(x.certificatePct)}" placeholder="e.g. 40"${x.noCertificate ? ' disabled' : ''}><span class="suf">%</span></div>${x.certificatePct !== '' && (Number(x.certificatePct) < 1 || Number(x.certificatePct) > 100) ? '<span class="errt">Enter 1 to 100.</span>' : ''}</div>
+    <button class="chk${x.noCertificate ? ' on' : ''}" data-act="nocert"><i>${x.noCertificate ? I.check.replace('width="20" height="20"', 'width="14" height="14"').replace('currentColor', '#fff') : ''}</i><span class="tx">No certificate yet<span>Lost future earnings are then left out. We show how to get one.</span></span></button>
+    ${!x.noCertificate && x.certificatePct !== '' ? `<div class="reveal"><div class="field"><label>What does the percentage cover?</label><div class="opts">${opt('certificateBasis', 'whole_body', 'The whole body', '', null, x.certificateBasis === 'whole_body')}${opt('certificateBasis', 'limb', 'One arm or leg, or one part of the body', '', null, x.certificateBasis === 'limb')}${notsure('certificateBasis', 'unknown', x.certificateBasis === 'unknown')}</div></div></div>` : ''}
+    <div class="counter"><span class="tx"><b>Months off work during treatment</b><span>Enter 0 if none</span></span><span class="ctl"><button data-act="months" data-d="-1">${I.minus}</button><b>${x.monthsOffWork === '' ? 0 : x.monthsOffWork}</b><button data-act="months" data-d="1">${I.plus}</button></span></div>`;
+  return question('injury', 'The injury', 'The medical certificate', '', body, answered('injury') && (x.noCertificate || (Number(x.certificatePct) >= 1 && Number(x.certificatePct) <= 100)));
+}
+const STOPS = {
+  owner_driver: ['Owner, driving alone', 'This claim works differently', [], 'An owner-driver hurt with no other vehicle involved has no third-party (section 166) claim. Check the vehicle’s personal accident cover: most policies include one for the owner-driver.', 'Check the policy’s personal accident cover', 'role'],
+  unidentified: ['The vehicle was never found', 'There is still something for you', [['₹2 lakh', 'for a death'], ['₹50,000', 'for grievous hurt']], 'A tribunal claim needs an identified vehicle. Until then a government scheme (section 161) pays a fixed amount; if the vehicle is ever found the full claim opens and the scheme payment is refunded out of the award. Apply soon.', 'How to apply: FIR, the police untraced report, a death or injury certificate, and the claim form at the district office (Claims Enquiry Officer).', 'traced'],
+  s164_insurer: ['No-fault money was taken', 'This may have ended the full claim', [['₹5 lakh', 'fixed, death'], ['₹2.5 lakh', 'fixed, grievous hurt']], 'If someone signed the insurer’s no-fault settlement and was paid that fixed amount, the tribunal claim usually lapses. Other money does not end it: scheme treatment, the hit-and-run payment, ex-gratia, PF or pension.', 'Not sure it was this payment? Ask free legal aid (NALSA 15100) before giving up the claim.', 's164'],
+};
+function viewStop() {
+  const code = stopCode(); if (!code) { go('ready'); return ''; }
+  const [eb, t, amts, lead, nxt, q] = STOPS[code];
+  const body = `<div class="calm">${I.info}<span>${lead}</span></div>${amts.length ? `<div class="twoamt">${amts.map(([a, b]) => `<div class="c"><span>${b}</span><b style="font-size:22px">${a}</b></div>`).join('')}</div>` : ''}
+    <div class="card" style="gap:6px"><div class="eyebrow">What you can do</div><span style="font-size:15px;line-height:22px">${nxt}</span></div>
+    <div class="between" style="padding:12px 16px;border-radius:14px;border:1.5px solid var(--hair)"><span style="font-size:14px">${esc(decideValue('checks'))}</span><button class="link sm" data-act="change" data-step="${q}">${I.edit}Change this answer</button></div>${code === 'unidentified' ? `<button class="link" data-act="foundlater">The vehicle was found later →</button>` : ''}${helpcard()}`;
+  return shell(`${pq(eb, t)}${body}`, { prog: 0.3, meta: 'No tribunal estimate on these answers', cta: liveStrip('') });
+}
+function viewReady() {
+  const c = compute(); if (!c.est) { go('q', { q: quickList().find((q) => !answered(stepKey(q))) || 'kind' }); return ''; }
+  const est = c.est; const left = detailList().filter((d) => !detailAnswered(d)); const names = { functional: 'work now', workNow: 'work now', attendant: 'attendant', medical: 'medical bills', tax: 'income tax', course: 'course', zone: 'area', familyPension: 'family pension', claimed: 'income claimed', insured: 'vehicle insurance', day: 'exact date', claim: 'claim filed' };
+  const body = `<div class="eyebrow" style="color:var(--teal)">Your estimate is ready</div><div class="hero"><div class="amt2">${words(est.L).replace(' lakh', '<small>lakh</small>').replace(' crore', '<small>crore</small>')}</div></div>
+    <p class="hint">What the Supreme Court’s method gives on these facts. A court could award as little as about ${words(est.low)}, or up to ${words(est.high)} if it takes the claimant’s view. ${HONEST}</p>${rangebar(est)}
+    ${left.length ? `<div class="card tint" style="gap:8px"><div class="between"><b style="font:600 15px var(--sans)">${left.length} optional details make it sharper</b><span class="pill">~2 min</span></div><span class="small">${[...new Set(left.map((d) => names[d]))].join(' · ')}</span></div>` : ''}
+    <button class="card" style="gap:6px;border-color:var(--line);width:100%" data-act="offer"><div class="between"><b style="font:600 15px var(--sans)">Got an offer on the table?</b><span class="link sm">Check it ${I.arrow}</span></div></button>`;
+  const cta = `${left.length ? `<button class="btn" data-act="details" style="flex:1">Make it sharper${I.arrow}</button>` : ''}<button class="btn ghost" data-act="result" style="flex:1">Full estimate</button>`;
+  return shell(`${body}<div class="actions dkonly">${cta}</div>`, { prog: 1, meta: '<b>All steps</b> answered', cta: liveStrip(cta) });
+}
+const rangebar = (est) => { const lo = est.low, hi = est.high, L = est.L; const p = hi > lo ? ((L - lo) / (hi - lo)) * 100 : 50; return `<div class="rangebar"><div class="tr"></div><div class="fl" style="left:0;right:0"></div><div class="pin" style="left:${Math.max(4, Math.min(96, p))}%"></div><span class="lab" style="left:0">Conservative ${words(lo)}</span><span class="lab" style="right:0">Claimant’s best ${words(hi)}</span></div>`; };
+
+/* ---------- details ---------- */
+const D = {
+  functional: ['Work after the injury', 'Functional disability, if a doctor or medical board assessed it', 'How much of the earlier work the person can no longer do. If given, it replaces the estimate made from the certificate.', () => `<div class="inp" style="max-width:240px"><input inputmode="numeric" data-in="functionalPct" value="${esc(f().functionalPct)}" placeholder="e.g. 50"><span class="suf">%</span></div>`],
+  workNow: ['Work after the injury', 'Can they do their earlier work now?', 'Only “No work at all” changes the estimate. An assessment by a doctor or medical board matters most.', () => `<div class="opts">${[['full', 'Yes, fully'], ['with_difficulty', 'Yes, with difficulty'], ['lighter_only', 'Only lighter work'], ['none', 'No work at all']].map(([v, l]) => opt('workCapacity', v, l, '', null, f().workCapacity === v)).join('')}${notsure('workCapacity', 'unknown', f().workCapacity === 'unknown')}</div>`],
+  attendant: ['Work after the injury', 'Do they need someone to look after them for life?', '', () => `<div class="opts">${opt('permanentAttendant', 'true', 'Yes', '', null, f().permanentAttendant === true)}${opt('permanentAttendant', 'false', 'No', '', null, f().permanentAttendant === false && S.detailsDone.includes('attendant'))}</div>`],
+  medical: ['Medical bills', 'Medical bills so far', '', () => `<div class="field"><label>Medical bills so far</label>${inputMoney('medicalBills', '2,00,000', '', true)}</div><div class="field"><label>Of which paid under the cashless treatment scheme</label><span class="fh">Enter 0 if none.</span>${inputMoney('cashlessPaid', '0', '')}${num(f().cashlessPaid) > num(f().medicalBills) ? '<span class="errt">Cannot be more than the bills.</span>' : ''}</div>`],
+  tax: ['Income details', 'Income tax deducted each month', 'The income tax (TDS) shown on the salary slip. Leave empty and it is estimated from the tax slabs for that year.', () => `<div style="max-width:300px">${inputMoney('monthlyTax', 'e.g. 1,200', 'a month', true)}</div>`],
+  course: ['Income details', 'What were they studying?', '', () => `<div class="opts">${[['school', 'School'], ['college', 'College'], ['professional', 'Professional course (engineering, medicine, law…)']].map(([v, l]) => opt('studentCourse', v, l, '', null, f().studentCourse === v)).join('')}${notsure('studentCourse', 'unknown', f().studentCourse === 'unknown')}</div>`],
+  zone: ['Income details', 'Which area? (Central sphere rates)', 'Area A covers the largest cities. If unsure, leave this: area C, the lowest rate, is used.', () => `<div class="opts">${[['A', 'Area A (largest cities)'], ['B', 'Area B'], ['C', 'Area C (lowest rate)']].map(([v, l]) => opt('zone', v, l, '', null, f().zone === v)).join('')}</div>`],
+  familyPension: ['Income details', 'Family pension now paid each month', '', () => `<div style="max-width:300px">${inputMoney('familyPensionMonthly', '9,250', 'a month', true)}</div>`],
+  claimed: ['Income details', 'What did they earn a month, by the family’s account?', 'Without documents, tribunals usually take the state minimum wage instead. This shows what the figure would be if the income were proved.', () => `<div style="max-width:300px">${inputMoney('claimedMonthly', '22,000', 'a month', true)}</div>`],
+  insured: ['Vehicle insurance', 'Was the vehicle insured?', 'The police report (FIR) usually says.', () => `<div class="opts">${opt('vehicleInsured', 'yes', 'Yes', '', null, f().vehicleInsured === 'yes')}${opt('vehicleInsured', 'no', 'No', '', null, f().vehicleInsured === 'no')}${notsure('vehicleInsured', 'unknown', f().vehicleInsured === 'unknown')}</div>`],
+  day: ['Exact date', 'Which day of the month was it?', 'Used for the time limit, and if a wage rate changed during that month.', () => `<div class="bigstep" style="max-width:280px"><button data-act="day" data-d="-1">${I.minus}</button><input inputmode="numeric" data-in="accidentDay" value="${esc(f().accidentDay)}" placeholder="—"><button data-act="day" data-d="1">${I.plus}</button></div><p class="small">${monthName(f().accidentDate)}</p>`],
+  claim: ['The claim', 'Has a claim been filed at the tribunal (MACT)?', '', () => `<div class="opts">${opt('claimFiled', 'yes', 'Yes', '', null, f().claimFiled === 'yes')}${opt('claimFiled', 'no', 'No', '', null, f().claimFiled === 'no')}</div>${f().claimFiled === 'yes' ? `<div class="reveal"><div class="field"><label>When was the claim filed?</label><span class="fh">Interest and the deadline caution follow from this date.</span><div class="inp" style="max-width:260px"><input type="date" data-in="claimFiledDate" value="${esc(f().claimFiledDate)}" max="${AS_OF}" style="font-size:16px"></div></div></div>` : ''}`],
+};
+function viewDetail() {
+  const list = detailList(); if (S.di >= list.length) { go('check'); return ''; }
+  const d = list[S.di]; const [eb, title, hint, body] = D[d];
+  const meta = `Optional · <b>${S.di + 1} of ${list.length}</b> on this path`;
+  const cta = `<button class="btn" data-act="dsave" style="flex:1">Save and continue${I.arrow}</button>`;
+  const skip = `<button class="link" data-act="dskip">Skip this question</button>`;
+  return shell(`${pq('Make it sharper · ' + eb, title, hint)}${body()}<div class="actions dkonly">${cta}${skip}</div>`, { prog: (S.di + 1) / list.length, meta: meta + ` · <button class="link sm" data-act="dskip">Skip</button>`, cta: liveStrip(cta) });
+}
+/* ---------- check answers ---------- */
+function viewCheck() {
+  const list = stepsList(); const dl = detailList(); const done = dl.filter(detailAnswered).length;
+  const rows = DECIDES.filter((d) => list.includes(d[0])).map(([k, n]) => `<div class="step"><i>${I.check.replace('width="20" height="20"', 'width="14" height="14"')}</i><span class="tx"><span class="k">${n}</span><span class="v">${esc(decideValue(k))}</span></span><button data-act="change" data-step="${k}">Change</button></div>`).join('');
+  const drow = `<div class="step" style="border-bottom:0"><i class="v">${I.plus.replace('width="20" height="20"', 'width="14" height="14"')}</i><span class="tx"><span class="k">Optional details</span><span class="v">${done} added · ${dl.length - done} skipped</span></span><button data-act="details0">Review</button></div>`;
+  const cta = `<button class="btn full" data-act="result">See the estimate${I.arrow}</button>`;
+  return shell(`${pq('Check your answers', 'Is everything right?')}<div>${rows}${drow}</div><div class="actions dkonly">${cta.replace(' full', '')}</div>`, { meta: 'All answered', cta: liveStrip(cta) });
+}
+/* ---------- result ---------- */
+const HEADN = { dependency: 'Loss of dependency', estate: 'Loss of estate', funeral: 'Funeral expenses', consortium: 'Loss of consortium', medical: 'Medical expenses', fec: 'Loss of future earning capacity', lost: 'Loss of earnings during treatment', attendant: 'Attendant during treatment', conveyance: 'Conveyance and special diet', pain: 'Pain, suffering and loss of amenities', marriage: 'Loss of marriage prospects', futureAttendant: 'Lifelong attendant' };
+function headNote(h, m) {
+  const basis = { salary: 'salary slip', itr: 'income tax return', domestic_care: '₹30,000 a month, Supreme Court 2026', pension: 'pension', mw_unskilled: 'unskilled minimum wage', mw_semi_skilled: 'semi-skilled minimum wage', mw_skilled: 'skilled minimum wage', mw_highly_skilled: 'highly-skilled minimum wage', kurvan: 'fixed ₹25,000 a year (child)', no_income: 'no income' }[m.basis] || m.basis;
+  if (h.k === 'dependency') return `${inr(m.monthly)} a month (${basis}) × 12 × ${100 + m.pros}% future prospects − ${Math.round(m.ded * 100)}% personal expenses × ${m.mult}`;
+  if (h.k === 'fec') return `${inr(m.monthly)} a month (${basis}) × 12 × ${100 + m.pros}% future prospects × ${m.mult} × ${Math.round(m.fp * 10) / 10}% functional disability`;
+  if (h.k === 'lost') return `${f().monthsOffWork} months at ${inr(m.monthly)}`;
+  if (h.k === 'medical') return `${inr(num(f().medicalBills))} bills less ${inr(num(f().cashlessPaid))} paid cashless`;
+  if (h.k === 'consortium') return `${inr(h.per)} × ${h.n} claimant${h.n === 1 ? '' : 's'}`;
+  if (h.k === 'estate' || h.k === 'funeral') return `Fixed amount (Pranay Sethi, 2017), with ${m.convStep} 10% increases`;
+  if (h.k === 'futureAttendant') return `Unskilled minimum wage × 12 × ${m.mult}`;
+  return 'Typical Delhi tribunal award for this injury';
+}
+const CAUT_ORDER = ['CONTRIBUTORY_NEGLIGENCE', 'LIMITATION', 'NO_CERTIFICATE', 'FUNCTIONAL_ESTIMATED', 'UNINSURED', 'ASSUMED_TRACED', 'ASSUMED_NO_S164', 'CENTRAL_GUIDE', 'RANGE_TOO_WIDE', 'MW_CONTESTED', 'ZONE_ASSUMED', 'TAX_ESTIMATED', 'AGE_OUTSIDE_TABLE'];
+function cautionText(w, est) {
+  const x = f(); const he = x.kind === 'death' ? 'they' : 'he or she';
+  return {
+    CONTRIBUTORY_NEGLIGENCE: ['Reduced if the person was partly at fault', `They were driving or riding one of the vehicles. A tribunal can cut the award: a 25% cut gives ${words(est.L * 0.75)}, a 50% cut ${words(est.L * 0.5)}.`],
+    LIMITATION: ['File the claim soon: over six months since the accident', 'For now the Supreme Court has directed that late claims not be dismissed (Bhagirathi Dash, 2025–26). Do not wait.'],
+    NO_CERTIFICATE: ['No disability certificate yet', 'Lost future earnings are taken as nil until there is one. A medical-board certificate is the single biggest lever: get it before anyone talks numbers.'],
+    FUNCTIONAL_ESTIMATED: ['Disability is estimated from the certificate', 'No doctor’s functional assessment was given, so it is worked out from the certificate. The assessment is the single biggest lever.'],
+    UNINSURED: ['The vehicle was not insured', 'The owner or driver must pay, which is harder to recover. Seek legal aid early.'],
+    ASSUMED_TRACED: ['Assumed the vehicle was found', 'If it never is, the hit-and-run scheme applies instead: ₹2 lakh (death) or ₹50,000 (grievous hurt).'],
+    ASSUMED_NO_S164: ['Assumed no no-fault money was taken', 'If the insurer’s no-fault settlement was signed, the full claim may have lapsed. Check before relying on this.'],
+    CENTRAL_GUIDE: ['Central government wage rates used as a guide', `No wage table for ${stateName(x.state)} is on file yet. Proof of income replaces the guide.`],
+    RANGE_TOO_WIDE: ['The range is wide', 'Courts differ a lot on these facts; see what could move it rather than one figure.'],
+    MW_CONTESTED: ['The minimum wage for that period was disputed in court', 'The restored Delhi rate is used; a tribunal may take the lower one.'],
+    ZONE_ASSUMED: ['Area assumed', 'No area given for the Central sphere; the lowest (area C) is used.'],
+    TAX_ESTIMATED: ['Income tax estimated', 'Tax was estimated from that year’s slabs. Enter the TDS from the slip for an exact figure.'],
+    AGE_OUTSIDE_TABLE: ['Age outside the standard table', 'The multiplier for 66–70 is used.'],
+  }[w] || [w, ''];
+}
+function cautions(est, full) {
+  const ws = CAUT_ORDER.filter((w) => est.warn.includes(w)); if (!ws.length) return '';
+  const show = S.moreCautions || full ? ws : ws.slice(0, 2);
+  const rows = show.map((w) => { const [t, d] = cautionText(w, est); const open = full || S.moreCautions || S.openCaution === w; return `<button class="r" data-act="caution" data-w="${w}"><span class="t"><span>${t}</span><span>${open ? '' : 'Why'}</span></span>${open ? `<span class="d">${d}</span>` : ''}</button>`; }).join('');
+  return `<div class="readfirst"><span class="h">Read first · ${ws.length} thing${ws.length === 1 ? '' : 's'}</span>${rows}${!full && ws.length > 2 && !S.moreCautions ? `<button class="r" data-act="morecautions"><span class="t"><span style="color:var(--violet)">${ws.length - 2} more</span></span></button>` : ''}</div>`;
+}
+function heroBlock(est, dk) {
+  return `<div class="hero"><div class="eyebrow">Your estimate</div><div class="amt2">${words(est.L).replace(' lakh', '<small>lakh</small>').replace(' crore', '<small>crore</small>')}</div><span class="small">${inr(est.L)} · as of 31 Oct 2026 · ${dk ? 'what the Supreme Court’s method gives on these facts' : 'Supreme Court method'}</span></div>${rangebar(est)}
+    <p class="hint" style="font-size:14px;line-height:20px">A court could award as little as ${words(est.low)}, or up to ${words(est.high)} if it takes the claimant’s view. ${HONEST}</p>`;
+}
+function builtTab(est, all) {
+  const heads = est.runs.L.heads.filter((h) => h.v > 0).sort((a, b) => b.v - a.v); const mx = heads[0].v; const n = all ? heads.length : Math.min(3, heads.length);
+  const rows = heads.slice(0, n).map((h) => `<div class="hd4"><b>${HEADN[h.k]}</b><em>${inr(h.v)}</em><i><u style="width:${Math.max(2, (h.v / mx) * 100)}%"></u></i><span>${headNote(h, est.runs.L.meta)}</span></div>`).join('');
+  const rest = heads.slice(n); const restSum = rest.reduce((s, h) => s + h.v, 0);
+  return `${rows}${rest.length ? `<div class="between"><span class="small">${rest.length} smaller head${rest.length === 1 ? '' : 's'} · ${words(restSum)}</span><button class="link sm" data-act="allheads">Show all ${I.down}</button></div>` : ''}<div class="total"><span>Total</span><b>${inr(est.L)}</b></div>`;
+}
+const SWING = { under_15_multiplier: 'For a child under 15, courts use a multiplier of 15 or of 18', bachelor_large_family: 'For an unmarried person supporting a large family, courts deduct a half or a third for personal expenses', attendant_rate: 'An attendant’s pay at the unskilled or the semi-skilled minimum wage', minor_death_income: 'Courts differ on the income to use for a child’s death', non_earning_elderly: 'Courts differ on the income to use for an older person without a pension', pension_basis: 'The pension lost: the full pension, or the pension less the family pension now paid', spouse_only_deduction: 'When the husband or wife is the only dependant, courts deduct a half or a third', conventional_escalation_steps: 'How many 10% increases are added to the fixed amounts (funeral, estate, consortium)', functional_pct: 'How much of the earning capacity the injury takes, judged from the certificate', non_pecuniary_band: 'Pain and suffering, amenities, conveyance, diet and attendant: amounts vary between tribunals', itr_post_accident: 'Whether income tax returns filed after the accident are counted', student_income: 'A student’s income: the skilled minimum wage, or the amount in earlier cases for the course', homemaker_income: 'A homemaker’s work valued at ₹30,000 a month (Supreme Court, 2026) or at the minimum wage', injured_homemaker_income: 'An injured homemaker’s income: the minimum wage, or the Supreme Court’s 2026 value by analogy', mw_category: 'Which skill level of minimum wage the tribunal accepts for the occupation' };
+const signed = (n) => (n === 0 ? 'No change' : (n > 0 ? '+' : '−') + words(Math.abs(n)));
+function moversBlock(est) {
+  const ms = (est.movers || []).slice(0, 3); const wi = est.whatIf || [];
+  const rows = ms.map((m) => `<div class="between" style="gap:12px;padding:8px 0;border-top:1px solid var(--hair)"><span style="font-size:14px;line-height:19px">${SWING[m.id] || m.id}</span><span class="row" style="gap:6px;flex:none"><span class="pill red">${signed(m.toC)}</span><span class="pill teal">${signed(m.toM)}</span></span></div>`).join('');
+  const wrows = wi.map((w) => `<div class="between" style="gap:12px;padding:8px 0;border-top:1px solid var(--hair)"><span style="font-size:14px;line-height:19px">${{ neg25: 'If a tribunal cuts 25% for the person’s own share of blame', neg50: 'If a tribunal cuts 50% for the person’s own share of blame', claimed: `If the income the family states (${inr(w.claimed || 0)} a month) were proved`, parents: 'If the parents did not depend on the income' }[w.id]}</span><span class="pill ${w.delta < 0 ? 'red' : 'teal'}">${words(w.v)}</span></div>`).join('');
+  return `<b style="font:700 16px var(--head)">What could move it</b>${rows}${wrows}`;
+}
+function casesTab(est) {
+  const kind = f().kind; const list = CASES.filter((c) => c.kind === kind).slice(0, 2);
+  return list.map((c) => { const first = c.path[0], last = c.path[c.path.length - 1]; const mult = Math.round((last[1] / first[1]) * 10) / 10;
+    const jr = c.path.map((p) => `<div class="jr"><span>${p[0]}</span><i><u class="${p[1] < last[1] * 0.5 ? 'lo' : ''}" style="width:${Math.max(3, (p[1] / last[1]) * 100)}%"></u></i><b>${words(p[1])}</b></div>`).join('');
+    return `<div class="case3"><div class="who"><b>${c.who}</b><span class="mult">${mult}×</span></div><span class="line">${c.note}</span>${jr}<span class="small">${c.why}</span><a class="link sm" href="${c.url}" target="_blank" rel="noopener">Read the judgment ${I.arrow.replace('width="20" height="20"', 'width="14" height="14"')}</a></div>`; }).join('') + `<p class="small">Real judgments, not a prediction. They show what happened, not what you will get.</p>`;
+}
+const CASES = [
+  { id: 'delhi-mact-2026-dar-350-2020', kind: 'injury', who: 'Restaurant worker, 31 · Delhi', path: [['Insurer offered', 63302], ['Tribunal, 2026', 830923]], note: 'He refused ₹63,302. Six years on, the tribunal awarded 13 times that, even after a 30% cut for his own share of blame.', why: 'Similar: 15% disability, Delhi, income not proved', url: 'https://indiankanoon.org/doc/105820332/' },
+  { id: 'jitendra-2025', kind: 'injury', who: 'Labourer, 25 · Madhya Pradesh', path: [['Tribunal', 376090], ['High Court', 661690], ['Supreme Court, 2025', 2055452]], note: 'No income proof. The Supreme Court took 80% functional disability, not the 20% the tribunal used.', why: 'Similar: limb injury, minimum wage used', url: 'https://admin.caseguru.in/storage/uploads/judgement' },
+  { id: 'shishu-pal-2026', kind: 'death', who: 'Homemaker, 35 · Haryana', path: [['Tribunal', 242000], ['High Court', 843400], ['Supreme Court, 2026', 6277900]], note: 'The Supreme Court valued a homemaker’s work at ₹30,000 a month: 26 times the tribunal’s figure, 25 years later.', why: 'Similar: death, income not proved', url: 'https://www.verdictum.in/pdf_upload/2026/06/11/4969820252026-06-11watermark-1779118.pdf' },
+  { id: 'sadhana-tomar-2025', kind: 'death', who: 'Fruit trader, 24 · Madhya Pradesh', path: [['Tribunal', 977200], ['Supreme Court, 2025', 1752500]], note: 'Income never proved. The minimum wage set the floor, and dependent parents cut the personal deduction to a quarter.', why: 'Similar: death, minimum wage, dependants', url: 'https://www.livelaw.in/pdf_upload/860820232025-01-24-590595.pdf' },
+];
+function papersTab() {
+  const x = f(); const out = ['FIR and the police Detailed Accident Report (DAR)', 'Proof of age (Aadhaar, birth certificate or school certificate)'];
+  if (!(x.proof === 'salary_slip' || x.proof === 'itr')) out.push('Any evidence of the income claimed (employer letter, bank statements, witnesses); otherwise the minimum wage is used'); else out.push(x.proof === 'itr' ? 'Income tax returns for the years before the accident' : 'Salary slips or the employer’s certificate');
+  if (x.kind === 'injury') { out.push('Disability certificate from a medical board, and evidence of how it affects the person’s work', 'Medical bills, prescriptions and discharge summaries', 'Proof of time off work (employer letter, medical advice)'); }
+  else { out.push('Death certificate and post-mortem report', 'Proof of relationship of each claimant (ration card, Aadhaar, marriage certificate)'); }
+  out.push('Registration, insurance policy and driving licence of the vehicle');
+  return `<ul class="ul">${out.map((p) => `<li>${I.check.replace('width="20" height="20"', 'width="18" height="18"')}<span>${p}</span></li>`).join('')}</ul>`;
+}
+const NEXT = ['Free legal help: the District Legal Services Authority (DLSA) in your district, or the NALSA helpline 15100.', 'Do not accept no-fault compensation (section 164) through the insurance company’s settlement without advice: it ends the claim for full compensation.', 'Claims must be filed within six months of the accident. For now the Supreme Court has directed that claims not be dismissed as late.', 'Advocates may not charge a percentage of the award.'];
+const nextList = () => `<ul class="ul">${NEXT.map((n) => `<li>${I.arrow.replace('width="20" height="20"', 'width="18" height="18"')}<span>${n}</span></li>`).join('')}</ul>`;
+const interestRows = (est) => `<div class="facts">${[6, 7.5, 9].map((r) => `<div class="fact"><span>Interest after 6 years at ${r}%</span><b>+${words(est.L * (r / 100) * 6)}</b></div>`).join('')}</div>`;
+function viewResult() {
+  const c = compute(); if (!c.est) { go('ready'); return ''; }
+  const est = c.est; const tabs = ['Built from', 'Cases', 'Papers'];
+  const tabbar = (on, names) => `<div class="tabs2">${names.map((t, i) => `<button class="${i === on ? 'on' : ''}" data-act="tab" data-i="${i}">${t}</button>`).join('')}</div>`;
+  const content = [`<div>${builtTab(est, S.showAllHeads)}</div>`, `<div class="col">${casesTab(est)}</div>`, papersTab()][S.tab];
+  const phone = `<div class="body res">${heroBlock(est)}${cautions(est)}${tabbar(S.tab, tabs)}${content}</div>`;
+  const dock = `<div class="dock2"><button class="btn" data-act="offer">Check an offer${I.arrow}</button><button class="btn soft" data-act="nextsheet">Next steps</button><button class="btn soft" data-act="share" style="flex:0 0 52px;padding:0">${I.share}</button></div>`;
+  const left = `<div class="col">${heroBlock(est, true)}${cautions(est, true)}<div class="card" style="gap:8px"><div class="between"><b style="font:600 15px var(--sans)">Got an offer on the table?</b><span class="pill">1 min</span></div><div class="row"><div class="inp" style="flex:1"><span class="pre">₹</span><input inputmode="numeric" data-in="offer" value="${fmtIn(S.offer)}" placeholder="Amount offered"></div><button class="btn" data-act="offer" style="height:56px">Check</button></div></div><div class="card" style="gap:10px"><b style="font:700 16px var(--head)">What to do next</b>${nextList()}</div></div>`;
+  const dkTabs = ['Built from', 'Cases like yours', 'Papers', 'Interest'];
+  const dkContent = [`<div class="card" style="gap:4px">${builtTab(est, true)}</div><div class="card" style="gap:8px">${moversBlock(est)}</div>`, `<div class="col">${casesTab(est)}</div>`, `<div class="card">${papersTab()}</div>`, `<div class="card"><p class="hint">Tribunals add simple interest from the date of filing, usually 6–9% a year. It is not in the number on the left.</p>${interestRows(est)}</div>`][Math.min(S.tab, 3)];
+  const right = `<div class="col"><div class="between"><h3 style="font:700 22px var(--head)">${['How it is built', 'Cases like yours', 'Papers to collect', 'Interest, not in the number'][Math.min(S.tab, 3)]}</h3><div class="dkactions"><button class="btn soft" style="height:44px" data-act="share">${I.share}Share</button><button class="btn soft printbtn" style="height:44px" data-act="print">${I.print}Print</button></div></div>${tabbar(S.tab, dkTabs)}${dkContent}</div>`;
+  const desk = `<div class="dkcols">${left}${right}</div>`;
+  return shell(`<div class="phoneonly">${phone}</div><div class="dkonly">${desk}</div>`, { wide: true, cta: dock, meta: '' });
+}
+function viewOffer() {
+  const c = compute(); if (!c.est) { go('ready'); return ''; }
+  const est = c.est; const o = num(S.offer);
+  const amount = `<div class="field"><label>The amount offered</label><div class="inp"><span class="pre">₹</span><input inputmode="numeric" data-in="offer" value="${fmtIn(S.offer)}" placeholder="e.g. 8,00,000" autofocus></div><div class="echo">${echoLine(o)}</div></div>`;
+  let body = amount;
+  if (o > 0) {
+    const r = E.offerCheck(est.L, est.C, o, S.offerOpts); const pct = Math.round(r.pct);
+    const V = { far_below: 'Far below the estimate', well_below: 'Well below the estimate', below: 'Below the estimate', near: 'Near the estimate', close: 'Close to the estimate', above: 'Above the estimate' }[r.verdict];
+    const ok = ['near', 'close', 'above'].includes(r.verdict);
+    const mx = Math.max(o, est.L, r.withInterest);
+    body += `<div class="twoamt"><div class="c bad"><span>The offer</span><b>${words(o)}</b></div><div class="c good"><span>Your estimate</span><b>${words(est.L)}</b></div></div>
+      <div class="ratio${ok ? ' ok' : ''}"><b>${pct}%</b><span>of the estimate. ${V.replace('the estimate', 'it')}.</span></div>
+      <div class="cmp"><div class="r"><span>The offer</span><i><u class="lo" style="width:${(o / mx) * 100}%"></u></i><b>${words(o)}</b></div><div class="r"><span>Your estimate</span><i><u style="width:${(est.L / mx) * 100}%"></u></i><b>${words(est.L)}</b></div><div class="r"><span>With interest, ${S.offerOpts.years} years</span><i><u style="width:${(r.withInterest / mx) * 100}%"></u></i><b>${words(r.withInterest)}</b></div></div>
+      <div class="between"><span class="small">${S.offerOpts.years} years to award · ${S.offerOpts.rate}% interest · no fee</span><button class="link sm" data-act="assume">Change</button></div>
+      ${S.assume ? `<div class="reveal"><div class="field"><label>Years until the award</label><div class="seg">${[3, 6, 9].map((y) => `<button class="chip${S.offerOpts.years === y ? ' on' : ''}" data-act="years" data-v="${y}">${y}</button>`).join('')}</div></div><div class="field"><label>Interest rate</label><div class="seg">${[6, 7.5, 9].map((y) => `<button class="chip${S.offerOpts.rate === y ? ' on' : ''}" data-act="rate" data-v="${y}">${y}%</button>`).join('')}</div></div></div>` : ''}
+      ${note2('Signing usually ends the claim', 'A full-and-final settlement closes it. Nothing more can be asked for later, even if the injury worsens.', true)}
+      ${ok ? note2('Still take advice before signing', 'A higher figure can carry conditions. Free advice: your DLSA, or the NALSA helpline 15100.') : ''}`;
+  }
+  const cta = `<a class="btn" href="tel:15100" style="flex:1">Call 15100 for free help</a>`;
+  return shell(`${pq('Is the offer fair?', 'Here is how it compares')}${body}<div class="actions dkonly">${cta}<button class="link" data-act="result">Back to the estimate</button></div>`, { meta: `Offer ${o ? inr(o) : '—'} · estimate ${inr(est.L)}`, cta: `<div class="dock2">${cta}</div>`, rail: true });
+}
+function shareText() {
+  const c = compute(); const est = c.est; const x = f();
+  return `Estimate from Crashfree India’s compensation calculator · 31 Oct 2026\nFacts: ${x.kind === 'death' ? 'death' : 'injury'}, ${x.age} · ${x.occupationCode ? OCC_LABEL(x.occupationCode) : empLabel(x.employment)} · ${stateName(x.state)} · accident ${monthName(x.accidentDate)}\nEstimate: ${inr(est.L)} (about ${words(est.L)}) · range ${words(est.low)}–${words(est.high)}\nNot legal advice. Free help: your DLSA, or NALSA 15100.\nRules ${E.VERSIONS.rules} · engine ${E.VERSIONS.engine} · not to be cited as authority.`;
+}
+function sheetHtml() {
+  const c = compute(); const est = c.est;
+  if (S.sheet === 'next') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet"><span class="grab"></span><h3>What to do next</h3>${nextList()}<div class="eyebrow m" style="margin-top:4px">Interest is not in your number</div>${interestRows(est)}<a class="btn full" href="tel:15100">Call 15100 for free help</a></div></div>`;
+  if (S.sheet === 'offerfirst') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet"><span class="grab"></span><h3>What is the offer?</h3><p class="hint">Enter it now and it stays with you. A few questions follow, only the ones a figure needs, and the comparison appears with the number.</p><div class="inp"><span class="pre">₹</span><input inputmode="numeric" data-in="offer" value="${fmtIn(S.offer)}" placeholder="e.g. 8,00,000" autofocus></div><div class="echo">${echoLine(num(S.offer))}</div><button class="btn full" data-act="holdoffer"${num(S.offer) > 0 ? '' : ' disabled'}>Hold it and ask me the questions${I.arrow}</button></div></div>`;
+  if (S.sheet === 'share') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet"><span class="grab"></span><h3>Share or save</h3><div class="pre">${esc(shareText())}</div><div class="row"><button class="btn soft" style="flex:1;height:52px" data-act="copy">${I.copy}Copy text</button><button class="btn soft printbtn" style="flex:1;height:52px" data-act="print">${I.print}Save PDF</button></div><span class="small" style="text-align:center">Text, not a link: nothing leaves the device unless you send it.</span></div></div>`;
+  return '';
+}
+
+/* ------------------------------------------------------------------ render & events */
+function render() {
+  let html = '';
+  switch (S.screen) { case 'home': html = viewHome(); break; case 'q': html = viewQ(); break; case 'stop': html = viewStop(); break; case 'ready': html = viewReady(); break; case 'detail': html = viewDetail(); break; case 'check': html = viewCheck(); break; case 'result': html = viewResult(); break; case 'offer': html = viewOffer(); break; }
+  if (html) { const app = $('#app'); app.innerHTML = html; const a = app.querySelector('[autofocus]'); if (a && window.innerWidth >= 1024) a.focus(); }
+}
+function toast(m) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+function changeStep(step) {
+  S.returnTo = S.screen === 'check' || S.screen === 'result' ? S.screen : null;
+  const q = { kind: 'kind', checks: 'role', age: 'age', work: 'work', family: 'family', injury: 'injury', when: 'when', state: 'state' }[step];
+  if (q === 'kind') { go('home'); return; } go('q', { q });
+}
+document.addEventListener('click', (ev) => {
+  const el = ev.target.closest('[data-act],[data-set]'); if (!el) return;
+  if (el.dataset.set) {
+    const k = el.dataset.set; let v = el.dataset.val; if (k === 'permanentAttendant') v = v === 'true';
+    set(k, v);
+    if (k === 'employment') { set('proof', ''); set('occupationCode', ''); set('monthlySalary', ''); set('itrAnnualIncome', ''); S.occQ = ''; }
+    if (k === 'married' && v === 'no') { set('spouse', ''); set('children', '0'); set('parents', '0'); set('dependentParents', ''); }
+    if (k === 'married' && v === 'yes' && f().children === '0' && f().parents === '0' && !f().spouse) { set('children', ''); set('parents', ''); }
+    if (k === 'parents') set('dependentParents', v === '0' ? '' : f().dependentParents);
+    if (k === 'kind') {}
+    if (k === 'permanentAttendant' && !S.detailsDone.includes('attendant')) S.detailsDone.push('attendant');
+    const autoQ = ['victimRole', 'vehicleTraced', 's164'].includes(k) || (k === 'married' && f().kind === 'injury');
+    if (autoQ && S.screen === 'q') { setTimeout(nextQuick, 160); render(); return; }
+    render(); return;
+  }
+  const a = el.dataset.act;
+  switch (a) {
+    case 'back': back(); break;
+    case 'hindi': toast('Hindi copy is with the legal reviewer. English for now.'); break;
+    case 'sit': { const id = el.dataset.id; if (id === 'offer') { S.sheet = 'offerfirst'; render(); break; }
+      if (!f().kind || (id === 'died' && f().kind !== 'death') || (id === 'hurt' && f().kind !== 'injury')) { S.f = { ...BLANK }; S.scaleMax = 0; S.detailsDone = []; }
+      if (id === 'died') set('kind', 'death'); if (id === 'hurt') set('kind', 'injury'); if (id === 'homemaker') { set('kind', 'death'); set('employment', 'homemaker'); } if (id === 'untraced') { set('vehicleTraced', 'no'); set('kind', f().kind || 'death'); set('victimRole', 'not_driving'); go('stop'); break; }
+      go('q', { q: 'role' }); break; }
+    case 'resume': go('q', { q: quickList().find((q) => !answered(stepKey(q))) || 'state' }); break;
+    case 'next': nextQuick(); break;
+    case 'age': { const n = Math.max(0, Math.min(110, (num(f().age) || 0) + Number(el.dataset.d))); set('age', String(n)); render(); break; }
+    case 'ageband': set('age', el.dataset.v); render(); break;
+    case 'months': { const n = Math.max(0, Math.min(60, (num(f().monthsOffWork) || 0) + Number(el.dataset.d))); set('monthsOffWork', String(n)); render(); break; }
+    case 'day': { const n = Math.max(1, Math.min(31, (num(f().accidentDay) || 0) + Number(el.dataset.d))); set('accidentDay', String(n)); render(); break; }
+    case 'nocert': set('noCertificate', !f().noCertificate); if (f().noCertificate) { set('certificatePct', ''); set('certificateBasis', ''); } render(); break;
+    case 'month': set('accidentDate', el.dataset.iso); render(); break;
+    case 'year': S.year = Math.max(2011, Math.min(2026, S.year + Number(el.dataset.d))); render(); break;
+    case 'change': changeStep(el.dataset.step); break;
+    case 'foundlater': set('vehicleTraced', 'yes'); go('q', { q: 's164' }); break;
+    case 'details': S.di = 0; go('detail', { di: 0 }); break;
+    case 'details0': S.di = 0; go('detail', { di: 0 }); break;
+    case 'dsave': { const d = detailList()[S.di]; if (!S.detailsDone.includes(d)) S.detailsDone.push(d); if (S.di + 1 >= detailList().length) go('check'); else go('detail', { di: S.di + 1 }); break; }
+    case 'dskip': { if (S.di + 1 >= detailList().length) go('check'); else go('detail', { di: S.di + 1 }); break; }
+    case 'result': S.tab = 0; go('result'); break;
+    case 'tab': S.tab = Number(el.dataset.i); render(); break;
+    case 'allheads': S.showAllHeads = !S.showAllHeads; render(); break;
+    case 'caution': S.openCaution = S.openCaution === el.dataset.w ? null : el.dataset.w; render(); break;
+    case 'morecautions': S.moreCautions = true; render(); break;
+    case 'offer': go('offer'); break;
+    case 'assume': S.assume = !S.assume; render(); break;
+    case 'years': S.offerOpts.years = Number(el.dataset.v); render(); break;
+    case 'rate': S.offerOpts.rate = Number(el.dataset.v); render(); break;
+    case 'nextsheet': S.sheet = 'next'; render(); break;
+    case 'share': S.sheet = 'share'; render(); break;
+    case 'closesheet': S.sheet = null; render(); break;
+    case 'holdoffer': S.sheet = null; save(); toast('Offer of ' + inr(num(S.offer)) + ' held'); render(); break;
+    case 'copy': { const t = shareText(); if (navigator.clipboard) navigator.clipboard.writeText(t).then(() => toast('Copied')); else toast('Select the text and copy'); break; }
+    case 'print': window.print(); break;
+  }
+});
+document.addEventListener('input', (ev) => {
+  const el = ev.target.closest('[data-in]'); if (!el) return; const k = el.dataset.in; const v = el.value;
+  if (k === 'occQ') { S.occQ = v; const list = el.closest('.field').querySelector('.list'); const q = v.toLowerCase(); const items = E.OCCUPATIONS.filter((o) => !q || o.en.toLowerCase().includes(q)).slice(0, 8);
+    list.innerHTML = items.map((o) => `<button class="li${f().occupationCode === o.code ? ' on' : ''}" data-set="occupationCode" data-val="${o.code}">${o.en}<span>${o.cat.replace('_', '-')}</span></button>`).join('') + `<button class="li" data-set="occupationCode" data-val="" style="color:var(--violet)">Not in this list, or not sure</button>`; return; }
+  if (k === 'offer') { S.offer = String(num(v)); save(); el.value = fmtIn(v); const e2 = el.closest('.inp').nextElementSibling; if (e2 && e2.classList.contains('echo')) e2.innerHTML = echoLine(num(v)); if (S.sheet === 'offerfirst') { const b = document.querySelector('[data-act="holdoffer"]'); if (b) b.disabled = !(num(v) > 0); } if (S.screen === 'offer') { render(); const n = document.querySelector('[data-in="offer"]'); if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); } } return; }
+  if (['monthlySalary', 'itrAnnualIncome', 'pensionMonthly', 'medicalBills', 'cashlessPaid', 'monthlyTax', 'familyPensionMonthly', 'claimedMonthly'].includes(k)) { set(k, String(num(v))); el.value = fmtIn(v); const echo = el.closest('.inp').nextElementSibling; if (echo && echo.classList.contains('echo')) echo.innerHTML = echoLine(num(v), el.parentElement.querySelector('.suf') ? ' ' + el.parentElement.querySelector('.suf').textContent : ''); refreshChrome(); return; }
+  set(k, v); refreshChrome();
+});
+/* Re-render only the live strip, rail card and continue button while typing, so the input keeps focus. */
+function refreshChrome() {
+  const app = $('#app'); const live = app.querySelector('.live'); if (live) { const t = document.createElement('div'); t.innerHTML = liveStrip(live.querySelector('.btnrow') ? live.querySelector('.btnrow').innerHTML : ''); live.replaceWith(t.firstElementChild); }
+  const lc = app.querySelector('.lcard'); if (lc) { const t = document.createElement('div'); t.innerHTML = lcard(''); lc.replaceWith(t.firstElementChild); }
+  const ok = S.screen === 'q' ? (S.q === 'work' ? workDone() : S.q === 'injury' ? answered('injury') && (f().noCertificate || (Number(f().certificatePct) >= 1 && Number(f().certificatePct) <= 100)) : S.q === 'age' ? f().age !== '' : answered(stepKey(S.q))) : true;
+  app.querySelectorAll('[data-act="next"]').forEach((b) => { b.disabled = !ok; });
+  if (S.screen === 'q' && S.q === 'injury') { const basis = app.querySelector('[data-set="certificateBasis"]'); if (!basis && f().certificatePct !== '' && !f().noCertificate) render(); }
+}
+document.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && ev.target.matches('input') && S.screen === 'q') { const b = $('[data-act="next"]'); if (b && !b.disabled) nextQuick(); } if (ev.key === 'Escape' && S.sheet) { S.sheet = null; render(); } });
+window.addEventListener('resize', () => { clearTimeout(window.__rt); window.__rt = setTimeout(render, 150); });
+window.PROTO = { S, set, go, render, compute, reset: () => { localStorage.removeItem('cfi-proto3'); location.reload(); } };
+render();
+})();
+</script></body></html>
