@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Crashfree India — Compensation calculator (prototype)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Montserrat:wght@600;700;800&family=Noto+Sans+Devanagari:wght@700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
 <style>:root{--violet:#5D2DF7;--deep:#1B1340;--tint:#EFEAFE;--line:#D7CAFD;--band:#F6F7FF;--mar:#F5A524;--mtint:#FFF4DB;--mink:#8A5300;--ink:#020618;--muted:#475569;--subtle:#64748B;--hair:#E6E8F2;--teal:#0F766E;--ttint:#E6F6F4;--red:#B42318;--rtint:#FEF0EE;--sans:"Geist",system-ui,sans-serif;--head:"Montserrat",system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -22,14 +22,19 @@ svg{flex:none}
 /* ---------- app shell ---------- */
 #app{min-height:100dvh;display:flex;flex-direction:column}
 .appbar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex:none}
-.appbar .back{display:inline-flex;align-items:center;gap:6px;font:600 15px var(--sans);padding:8px 8px 8px 0}
+.appbar .back{display:inline-flex;align-items:center;gap:6px;font:600 15px var(--sans);padding:12px 12px 12px 0;min-height:44px}
 .langpill{border:1px solid var(--hair);border-radius:16px;padding:7px 12px;font:600 13px var(--sans);font-family:"Noto Sans Devanagari",var(--sans)}
 .prog{height:4px;margin:0 20px;border-radius:2px;background:var(--tint);overflow:hidden}
 .prog em{display:block;height:100%;background:var(--violet);border-radius:2px;transition:width .4s cubic-bezier(.2,.7,.2,1)}
 .pmeta{padding:10px 20px 0;font-size:13px;color:var(--subtle)}
 .pmeta b{color:var(--violet);font-weight:600}
-.body{padding:14px 20px 180px;display:flex;flex-direction:column;gap:14px;flex:1}
-.body.res{padding-bottom:110px}
+.body{padding:14px max(20px,env(safe-area-inset-right,0px)) calc(var(--dock-h,180px) + 16px) max(20px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px;flex:1}
+.body.res{padding-bottom:calc(var(--dock-h,90px) + 16px)}
+.dkgrid{display:block;padding:14px max(20px,env(safe-area-inset-right,0px)) calc(var(--dock-h,180px) + 16px) max(20px,env(safe-area-inset-left,0px))}
+.dkmain{display:flex;flex-direction:column;gap:14px}
+:focus-visible{outline:3px solid var(--deep);outline-offset:2px}
+.btn:focus-visible{outline:3px solid var(--deep);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 .nav,.dkfoot,.rail,.dkmeta{display:none}
 /* ---------- controls ---------- */
 .opts{display:flex;flex-direction:column;gap:10px}
@@ -48,7 +53,7 @@ svg{flex:none}
 .ns.on{border-style:solid;border-color:var(--violet);background:var(--tint);color:var(--ink)}
 .ns.on .ra{background:var(--violet);border-color:var(--violet)}
 .seg{display:flex;gap:8px;flex-wrap:wrap}
-.chip{padding:10px 16px;border-radius:99px;border:1.5px solid var(--hair);font:600 14px var(--sans);background:#fff;white-space:nowrap}
+.chip{padding:10px 16px;min-height:44px;border-radius:99px;border:1.5px solid var(--hair);font:600 14px var(--sans);background:#fff;white-space:nowrap}
 .chip.on{border-color:var(--violet);background:var(--tint);color:var(--violet)}
 .field{display:flex;flex-direction:column;gap:8px}
 .field label{font:600 15px var(--sans)}
@@ -57,7 +62,7 @@ svg{flex:none}
 .inp:focus-within{border-color:var(--violet);box-shadow:0 0 0 3px var(--tint)}
 .inp .pre{color:var(--subtle);font-weight:500}
 .inp input{flex:1;min-width:0;border:0;outline:0;background:none;font:600 20px var(--sans);width:100%}
-.inp input::placeholder{color:#B7BECC;font-weight:500}
+.inp input::placeholder{color:#8A94A6;font-weight:500}
 .inp .suf{font:500 14px var(--sans);color:var(--subtle);white-space:nowrap}
 .inp.err{border-color:var(--red)}
 .echo{display:flex;align-items:center;gap:6px;font:600 13px var(--sans);color:var(--teal);min-height:18px}
@@ -67,7 +72,7 @@ svg{flex:none}
 .counter .tx b{font:600 16px var(--sans)}
 .counter .tx span{font-size:13px;color:var(--muted)}
 .counter .ctl{display:flex;align-items:center;gap:8px}
-.counter .ctl button{width:40px;height:40px;border-radius:20px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--violet)}
+.counter .ctl button{width:44px;height:44px;border-radius:22px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--violet)}
 .counter .ctl b{font:700 22px var(--head);min-width:28px;text-align:center}
 .bigstep{display:flex;align-items:center;justify-content:space-between;max-width:300px}
 .bigstep button{width:56px;height:56px;border-radius:28px;background:var(--tint);color:var(--violet);display:flex;align-items:center;justify-content:center}
@@ -77,7 +82,7 @@ svg{flex:none}
 .btn.soft{background:var(--tint);color:var(--violet);box-shadow:none}
 .btn.ghost{background:#fff;color:var(--violet);border:1.5px solid var(--violet);box-shadow:none}
 .btn.full{width:100%}
-.btn[disabled]{opacity:.45;pointer-events:none}
+.btn[disabled]{opacity:.55;pointer-events:none}
 .note2{display:flex;gap:10px;padding:14px 16px;border-radius:14px;background:var(--band);font-size:14px;line-height:20px;color:var(--muted)}
 .note2 .tx{display:flex;flex-direction:column;gap:2px}.note2 b{color:var(--ink);font-weight:600}
 .note2.warn{background:var(--mtint);color:var(--mink)}.note2.warn b{color:var(--mink)}
@@ -99,7 +104,7 @@ svg{flex:none}
 .search{display:flex;align-items:center;gap:8px;height:48px;padding:0 14px;border-radius:14px;border:1.5px solid var(--hair)}
 .search input{flex:1;border:0;outline:0;font:500 15px var(--sans);background:none;min-width:0}
 .yearrow{display:flex;align-items:center;justify-content:space-between;font:700 18px var(--head)}
-.yearrow button{width:36px;height:36px;border-radius:18px;background:var(--tint);color:var(--violet);display:flex;align-items:center;justify-content:center}
+.yearrow button{width:44px;height:44px;border-radius:22px;background:var(--tint);color:var(--violet);display:flex;align-items:center;justify-content:center}
 .monthgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .monthgrid button{height:44px;border-radius:12px;border:1.5px solid var(--hair);font:600 14px var(--sans);text-align:center;display:flex;align-items:center;justify-content:center}
 .monthgrid button.on{border-color:var(--violet);background:var(--tint);color:var(--violet)}
@@ -116,7 +121,7 @@ svg{flex:none}
 .live{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--hair);box-shadow:0 -10px 30px -16px rgba(27,19,64,.25);padding:10px 20px calc(10px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;z-index:20}
 .live .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .live .lbl{font:600 11px var(--sans);letter-spacing:.8px;text-transform:uppercase;color:var(--subtle)}
-.live .val{font:800 20px var(--head);letter-spacing:-.4px;white-space:nowrap;transition:all .3s}
+.live .lbl{white-space:nowrap}.live .val{font:800 18px var(--head);letter-spacing:-.4px;white-space:nowrap;transition:all .3s}
 .live.empty .val{color:var(--subtle);font:600 14px var(--sans)}
 .live .bandbar{position:relative;height:8px;border-radius:4px;background:var(--tint)}
 .live .bandbar u{position:absolute;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,#B9A6FB,var(--violet));transition:left .5s cubic-bezier(.2,.7,.2,1),right .5s cubic-bezier(.2,.7,.2,1)}
@@ -125,7 +130,7 @@ svg{flex:none}
 .live .sub b{color:var(--violet);font-weight:600}
 .live .btnrow{display:flex;gap:10px}
 .live .btnrow .btn{flex:1;height:52px}
-.live .rule{font-size:11px;line-height:15px;color:var(--subtle)}
+.live .rule{font-size:13px;line-height:17px;color:var(--muted)}
 .live.flash .val{color:var(--violet)}
 .lcard{display:none}
 /* ---------- result ---------- */
@@ -139,7 +144,7 @@ svg{flex:none}
 .rangebar .lab{position:absolute;top:28px;font-size:12px;color:var(--subtle);white-space:nowrap}
 .readfirst{display:flex;flex-direction:column;border-radius:16px;background:var(--mtint);padding:4px 14px}
 .readfirst .h{font:600 12px var(--sans);letter-spacing:.8px;text-transform:uppercase;color:var(--mink);padding:10px 0 4px}
-.readfirst .r{display:flex;flex-direction:column;gap:3px;padding:10px 0;border-top:1px solid rgba(138,83,0,.15);width:100%}
+.readfirst .r{display:flex;flex-direction:column;gap:3px;padding:12px 0;min-height:44px;border-top:1px solid rgba(138,83,0,.15);width:100%}
 .readfirst .r .t{display:flex;justify-content:space-between;gap:10px;font:600 14px/19px var(--sans);color:var(--mink)}
 .readfirst .r .t span:last-child{font-weight:400;opacity:.7;font-size:12px;white-space:nowrap}
 .readfirst .r .d{font-size:13px;line-height:18px;color:var(--mink);opacity:.85}
@@ -175,7 +180,7 @@ svg{flex:none}
 .step i{width:28px;height:28px;border-radius:14px;background:var(--ttint);display:flex;align-items:center;justify-content:center;color:var(--teal)}
 .step i.v{background:var(--tint);color:var(--violet)}
 .step .k{font-size:12px;color:var(--subtle)}.step .v{font:600 15px/20px var(--sans);color:var(--ink)}
-.step button{font:600 13px var(--sans);color:var(--violet);padding:6px 0 6px 8px}
+.step button{font:600 14px var(--sans);color:var(--violet);padding:12px 0 12px 12px;min-height:44px}
 .step .tx{display:flex;flex-direction:column}
 .twoamt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .twoamt .c{border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:2px;border:1px solid var(--hair)}
@@ -211,7 +216,7 @@ svg{flex:none}
   .nav .logo svg{height:28px;width:auto;display:block}
   .nav .right{display:flex;align-items:center;gap:16px;font:500 14px var(--sans);color:var(--muted)}
   .dkprog{height:4px;background:var(--tint)}.dkprog em{display:block;height:100%;background:var(--violet);transition:width .4s}
-  .dkgrid{display:grid;grid-template-columns:1fr 340px;gap:64px;padding:40px 144px 60px;align-items:start;flex:1}
+  .dkgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:64px;padding:40px 144px 60px;align-items:start;flex:1;max-width:1440px;margin:0 auto;width:100%}
   .dkmain{max-width:720px;display:flex;flex-direction:column;gap:18px}
   .dkmain .h1{font-size:44px;line-height:52px;letter-spacing:-1.2px}
   .dkmain .hint{font-size:17px;line-height:26px}
@@ -234,14 +239,15 @@ svg{flex:none}
   .dec.now i{background:var(--violet);border-color:var(--violet);color:#fff}
   .dec.done span{color:var(--ink)}.dec.now span{color:var(--violet);font-weight:600}
   .dec span{white-space:nowrap}.dec em{font-style:normal;font-size:12px;text-align:right;color:var(--subtle);line-height:16px}
-  .dec.done em{color:var(--ink)}.dec.done em button{color:var(--violet);font:600 12px var(--sans);margin-left:6px}
+  .dec.done em{color:var(--ink)}.dec.done em button{color:var(--violet);font:600 12px var(--sans);margin-left:6px;padding:8px 0 8px 6px}
   .dec.now em{color:var(--violet)}
-  .lcard .rule{font-size:11px;line-height:15px;color:var(--subtle)}
+  .lcard .rule{font-size:13px;line-height:17px;color:var(--muted)}
   .actions{display:flex;align-items:center;gap:20px;padding-top:6px}
   .dkfoot{display:flex;justify-content:space-between;padding:20px 144px;border-top:1px solid var(--hair);font-size:13px;color:var(--subtle)}
   .opts.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .body{padding:0}
-  .dkcols{display:grid;grid-template-columns:600px 1fr;gap:40px;padding:36px 144px 40px;align-items:start;flex:1}
+  .dkgrid .dkmain{padding:0}
+  .dkcols{display:grid;grid-template-columns:minmax(480px,600px) minmax(0,1fr);gap:40px;padding:36px 144px 40px;align-items:start;flex:1;max-width:1600px;margin:0 auto;width:100%}
   .dkcols .col{gap:14px}
   .hero .amt2{font-size:64px;line-height:68px}
   .tabs2{max-width:640px}
@@ -714,7 +720,9 @@ return module.exports;})();</script><script>/* Crashfree India — compensation 
 (function () {
 'use strict';
 const E = window.ENGINE;
-const AS_OF = '2026-10-31';
+const AS_OF = (() => { const d = new Date(); return d.toISOString().slice(0, 10); })();
+const AS_OF_LABEL = (() => { const d = new Date(); return d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getFullYear(); })();
+const THIS_YEAR = new Date().getFullYear();
 const HONEST = 'Estimate so far. The court decides the final amount; it can go up or down.';
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -744,10 +752,15 @@ const BLANK = { kind: '', victimRole: '', vehicleTraced: '', s164: '', age: '', 
   married: '', spouse: '', children: '', parents: '', dependentParents: '', certificatePct: '', noCertificate: false, certificateBasis: '', monthsOffWork: '', accidentDate: '', state: '',
   functionalPct: '', workCapacity: '', permanentAttendant: false, medicalBills: '', cashlessPaid: '', monthlyTax: '', studentCourse: '', zone: '', familyPensionMonthly: '', claimedMonthly: '',
   vehicleInsured: '', accidentDay: '', claimFiled: '', claimFiledDate: '' };
-let S = { f: { ...BLANK }, screen: 'home', q: 'kind', di: 0, tab: 0, offer: '', offerOpts: { years: 6, rate: 7.5 }, returnTo: null, hist: [], sheet: null, scaleMax: 0, detailsDone: [], detailsSkipped: [], showAllHeads: false, moreCautions: false, occQ: '', year: 2025 };
-try { const s = JSON.parse(localStorage.getItem('cfi-proto3') || 'null'); if (s && s.f) S = { ...S, ...s, hist: [] }; } catch (e) {}
+let S = { f: { ...BLANK }, screen: 'home', q: 'kind', di: 0, tab: 0, offer: '', offerOpts: { years: 6, rate: 7.5 }, returnTo: null, hist: [], sheet: null, scaleMax: 0, detailsDone: [], detailsSkipped: [], showAllHeads: false, moreCautions: false, occQ: '', year: new Date().getFullYear() };
+try { const s = JSON.parse(localStorage.getItem('cfi-proto3') || 'null'); if (s && s.f) S = { ...S, ...s, sheet: null }; } catch (e) {}
 const save = () => { try { localStorage.setItem('cfi-proto3', JSON.stringify(S)); } catch (e) {} };
 
+/* ------------------------------------------------------------------ validation */
+const sanitizeInt = (v, lo, hi) => { const n = parseInt(String(v).replace(/[^\d]/g, ''), 10); if (isNaN(n)) return ''; return String(Math.max(lo, Math.min(hi, n))); };
+const validAge = () => { const a = f().age; return a !== '' && /^\d+$/.test(a) && Number(a) >= 0 && Number(a) <= 110; };
+const validCert = () => { const x = f(); return x.noCertificate || (/^\d+$/.test(x.certificatePct) && Number(x.certificatePct) >= 1 && Number(x.certificatePct) <= 100 && !!x.certificateBasis); };
+const daysInMonth = (iso) => { if (!iso) return 31; const [y, m] = iso.split('-').map(Number); return new Date(y, m, 0).getDate(); };
 /* ------------------------------------------------------------------ flow */
 const f = () => S.f;
 const QUICK = ['kind', 'role', 'traced', 's164', 'age', 'work', 'family', 'injury', 'when', 'state'];
@@ -760,9 +773,9 @@ const stepIndex = (q) => stepsList().indexOf(stepKey(q));
 function answered(step) {
   const x = f();
   switch (step) {
-    case 'kind': return !!x.kind; case 'checks': return !!(x.victimRole && x.vehicleTraced && x.s164); case 'age': return x.age !== '';
+    case 'kind': return !!x.kind; case 'checks': return !!(x.victimRole && x.vehicleTraced && x.s164); case 'age': return validAge();
     case 'work': return workDone(); case 'family': return x.married !== '' && (x.kind === 'injury' || x.married === 'no' || (x.spouse && x.children !== '' && x.parents !== '' && (x.parents === '0' || x.dependentParents !== '')));
-    case 'injury': return x.noCertificate || (x.certificatePct !== '' && x.certificateBasis !== '');
+    case 'injury': return validCert();
     case 'when': return !!x.accidentDate; case 'state': return !!x.state;
   }
 }
@@ -835,22 +848,42 @@ const EMPS = [['permanent', 'Permanent job', 'Regular post with yearly pay rises
 const empLabel = (c) => (EMPS.find((e) => e[0] === c) || [])[1] || '';
 
 /* ------------------------------------------------------------------ navigation */
+let popping = false;
 function go(screen, extra) {
-  S.hist.push({ screen: S.screen, q: S.q, di: S.di });
+  S.hist.push({ screen: S.screen, q: S.q, di: S.di }); if (S.hist.length > 60) S.hist.shift();
   S.screen = screen; if (extra && extra.q) S.q = extra.q; if (extra && extra.di != null) S.di = extra.di;
-  S.sheet = null; save(); render(); window.scrollTo(0, 0);
+  S.sheet = null; save();
+  try { if (!popping) history.pushState({ screen: S.screen, q: S.q, di: S.di }, ''); } catch (e) {}
+  render(); window.scrollTo(0, 0); focusHeading();
 }
 function back() {
   if (S.sheet) { S.sheet = null; render(); return; }
-  const h = S.hist.pop(); if (!h) { S.screen = 'home'; render(); return; }
-  S.screen = h.screen; S.q = h.q; S.di = h.di; save(); render(); window.scrollTo(0, 0);
+  try { if (history.state && history.state.screen) { history.back(); return; } } catch (e) {}
+  backLocal();
 }
+function backLocal() {
+  const h = S.hist.pop(); if (!h) { S.screen = 'home'; save(); render(); return; }
+  S.screen = h.screen; S.q = h.q; S.di = h.di; save(); render(); window.scrollTo(0, 0); focusHeading();
+}
+window.addEventListener('popstate', (ev) => {
+  popping = true;
+  if (ev.state && ev.state.screen) { S.sheet = null; S.screen = ev.state.screen; S.q = ev.state.q; S.di = ev.state.di; if (S.hist.length) S.hist.pop(); save(); render(); window.scrollTo(0, 0); focusHeading(); }
+  else backLocal();
+  popping = false;
+});
+function focusHeading() { const h = document.querySelector('#app h1'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
 function nextQuick() {
-  if (S.returnTo) { const r = S.returnTo; S.returnTo = null; go(r); return; }
   const stop = stopCode();
-  if (stop && ['role', 'traced', 's164'].includes(S.q)) { go('stop'); return; }
+  if (stop && ['role', 'traced', 's164'].includes(S.q)) { S.returnTo = null; go('stop'); return; }
   const list = quickList(); const i = list.indexOf(S.q);
-  for (let j = i + 1; j < list.length; j++) { if (!answered(stepKey(list[j])) || true) { go('q', { q: list[j] }); return; } }
+  if (S.returnTo) {
+    // finish the sibling checks before returning, and never return past a missing answer
+    const next = list.slice(i + 1).find((q) => (['role', 'traced', 's164'].includes(S.q) && ['traced', 's164'].includes(q)) || !answered(stepKey(q)));
+    if (next) { go('q', { q: next }); return; }
+    const r = S.returnTo; S.returnTo = null; go(r); return;
+  }
+  if (allQuick() && ['traced', 's164'].includes(S.q)) { go('ready'); return; }
+  for (let j = i + 1; j < list.length; j++) { go('q', { q: list[j] }); return; }
   go('ready');
 }
 function set(k, v) { S.f[k] = v; save(); }
@@ -877,9 +910,9 @@ function scale(m) {
 }
 function liveStrip(cta) {
   const m = liveModel();
-  if (m.kind === 'empty' || m.kind === 'stop') return `<div class="live empty"><div class="top"><span class="lbl">Your estimate</span><span class="val">${m.kind === 'stop' ? 'No number on these answers' : 'Appears after 3 answers'}</span></div>${cta ? `<div class="btnrow">${cta}</div>` : ''}</div>`;
+  if (m.kind === 'empty' || m.kind === 'stop') return `<div class="live empty"><div class="top"><span class="lbl">Your estimate</span><span class="val">${m.kind === 'stop' ? 'No number on these answers' : 'Appears after the Work step'}</span></div>${cta ? `<div class="btnrow">${cta}</div>` : ''}</div>`;
   const s = scale(m); const label = m.kind === 'pin' ? words(m.L) : `${words(m.lo).replace('₹', '₹')} – ${words(m.hi)}`;
-  return `<div class="live"><div class="top"><span class="lbl">Your estimate${m.kind === 'pin' ? '' : ' so far'}</span><span class="val">${label}</span></div>
+  return `<div class="live" aria-live="polite" aria-atomic="true"><div class="top"><span class="lbl">Your estimate${m.kind === 'pin' ? '' : ' so far'}</span><span class="val">${label}</span></div>
     <div class="bandbar"><u style="left:${s.l}%;right:${100 - s.r}%"></u>${s.pin != null ? `<i style="left:${s.pin}%"></i>` : ''}</div>
     <div class="sub"><span>${words(m.lo)} – ${words(m.hi)}</span><b>${esc(m.sub)}</b></div>${cta ? `<div class="btnrow">${cta}</div>` : ''}<span class="rule">${HONEST}</span></div>`;
 }
@@ -898,7 +931,7 @@ function decideValue(k) {
 function lcard(cta) {
   const m = liveModel(); const list = stepsList(); const now = S.screen === 'q' ? stepKey(S.q) : (S.screen === 'home' ? 'kind' : '');
   let head;
-  if (m.kind === 'empty' || m.kind === 'stop') head = `<span class="lbl">Your estimate</span><span class="val empty">${m.kind === 'stop' ? 'No number on these answers' : 'Appears after 3 answers'}</span>`;
+  if (m.kind === 'empty' || m.kind === 'stop') head = `<span class="lbl">Your estimate</span><span class="val empty">${m.kind === 'stop' ? 'No number on these answers' : 'Appears after the Work step'}</span>`;
   else { const s = scale(m); head = `<span class="lbl">Your estimate${m.kind === 'pin' ? '' : ' so far'}</span><span class="val">${m.kind === 'pin' ? words(m.L) : words(m.lo) + ' – ' + words(m.hi)}</span><div class="bandbar"><u style="left:${s.l}%;right:${100 - s.r}%"></u>${s.pin != null ? `<i style="left:${s.pin}%"></i>` : ''}</div><div class="between" style="font-size:12px;color:var(--subtle)"><span>${words(m.lo)} – ${words(m.hi)}</span><b style="color:var(--violet)">${esc(m.sub)}</b></div>`; }
   const rows = DECIDES.filter((d) => list.includes(d[0])).map(([k, name, d]) => {
     const st = answered(k) && k !== now ? 'done' : k === now ? 'now' : '';
@@ -911,18 +944,19 @@ const helpcard = () => `<div class="helpcard"><span class="gl">${I.life}</span><
 /* ------------------------------------------------------------------ shell */
 function shell(main, opts) {
   const o = Object.assign({ back: true, prog: null, meta: '', cta: '', railCta: '', rail: true, foot: true, wide: false }, opts || {});
-  const nav = `<div class="nav"><a class="logo" href="index.html" aria-label="Crashfree India">${window.CFI_LOGO || ''}</a><div class="right"><span class="row">${I.lock}Your answers stay on this device</span><button class="langpill" data-act="hindi">हिन्दी</button></div></div>${o.prog != null ? `<div class="dkprog"><em style="width:${Math.max(3, o.prog * 100)}%"></em></div>` : ''}`;
-  const appbar = `<div class="appbar">${o.back === 'landing' ? `<a class="back" href="index.html">${I.back}Home</a>` : o.back ? `<button class="back" data-act="back">${I.back}Back</button>` : '<span></span>'}<button class="langpill" data-act="hindi">हिन्दी</button></div>${o.prog != null ? `<div class="prog"><em style="width:${Math.max(3, o.prog * 100)}%"></em></div>` : ''}${o.meta ? `<div class="pmeta">${o.meta}</div>` : ''}`;
+  const nav = `<div class="nav"><a class="logo" href="index.html" aria-label="Crashfree India">${window.CFI_LOGO || ''}</a><div class="right"><span class="row">${I.lock}Your answers stay on this device</span></div></div>${o.prog != null ? `<div class="dkprog"><em style="width:${Math.max(3, o.prog * 100)}%"></em></div>` : ''}`;
+  const appbar = `<div class="appbar">${o.back === 'landing' ? `<a class="back" href="index.html">${I.back}Home</a>` : o.back ? `<button class="back" data-act="back">${I.back}Back</button>` : '<span></span>'}<span class="small" style="padding:8px">English</span></div>${o.prog != null ? `<div class="prog"><em style="width:${Math.max(3, o.prog * 100)}%"></em></div>` : ''}${o.meta ? `<div class="pmeta">${o.meta}</div>` : ''}`;
   const rail = o.rail ? `<div class="rail">${lcard(o.railCta)}${helpcard()}</div>` : '';
   const foot = o.foot ? `<div class="dkfoot"><span class="row">${I.life}Free legal help: your DLSA, or the NALSA helpline <b>15100</b></span><span>Not legal advice. An estimate on the facts you give.</span></div>` : '';
   const inner = o.wide ? main : `<div class="dkgrid"><div class="dkmain">${o.meta ? `<div class="dkmeta">${o.back ? `<button class="back" data-act="back">${I.back}Back</button><span>·</span>` : ''}${o.meta}</div>` : ''}${main}</div>${rail}</div>`;
   return `${nav}${appbar}${inner}${o.cta || ''}${foot}${S.sheet ? sheetHtml() : ''}`;
 }
 const pq = (eyebrow, title, hint) => `<div class="col" style="gap:6px"><div class="eyebrow">${eyebrow}</div><h1 class="h1">${title}</h1>${hint ? `<p class="hint">${hint}</p>` : ''}</div>`;
-const opt = (k, v, label, sub, icon, on) => `<button class="opt${on ? ' on' : ''}" data-set="${k}" data-val="${v}">${icon ? `<span class="gl">${I[icon]}</span>` : ''}<span class="tx"><b>${label}</b>${sub ? `<span>${sub}</span>` : ''}</span><span class="ra">${on ? I.check.replace('width="20" height="20"', 'width="14" height="14"').replace('currentColor', '#fff') : ''}</span></button>`;
-const notsure = (k, v, on) => `<button class="ns${on ? ' on' : ''}" data-set="${k}" data-val="${v}"><span class="ra">${on ? I.check.replace('width="20" height="20"', 'width="12" height="12"').replace('currentColor', '#fff') : ''}</span>Not sure</button>`;
-const chip = (k, v, label, on) => `<button class="chip${on ? ' on' : ''}" data-set="${k}" data-val="${v}">${label}</button>`;
-const inputMoney = (k, ph, suf, auto) => `<div class="inp"><span class="pre">₹</span><input inputmode="numeric" data-in="${k}" value="${fmtIn(f()[k])}" placeholder="${ph}"${auto ? ' autofocus' : ''}>${suf ? `<span class="suf">${suf}</span>` : ''}</div><div class="echo">${echoLine(num(f()[k]), suf ? ' ' + suf : '')}</div>`;
+const opt = (k, v, label, sub, icon, on) => `<button class="opt${on ? ' on' : ''}" role="radio" aria-checked="${on ? 'true' : 'false'}" data-set="${k}" data-val="${v}">${icon ? `<span class="gl">${I[icon]}</span>` : ''}<span class="tx"><b>${label}</b>${sub ? `<span>${sub}</span>` : ''}</span><span class="ra">${on ? I.check.replace('width="20" height="20"', 'width="14" height="14"').replace('currentColor', '#fff') : ''}</span></button>`;
+const notsure = (k, v, on) => `<button class="ns${on ? ' on' : ''}" role="radio" aria-checked="${on ? 'true' : 'false'}" data-set="${k}" data-val="${v}"><span class="ra">${on ? I.check.replace('width="20" height="20"', 'width="12" height="12"').replace('currentColor', '#fff') : ''}</span>Not sure</button>`;
+const chip = (k, v, label, on) => `<button class="chip${on ? ' on' : ''}" aria-pressed="${on ? 'true' : 'false'}" data-set="${k}" data-val="${v}">${label}</button>`;
+const LABELS = { monthlySalary: 'Monthly salary', itrAnnualIncome: 'Income in the latest tax return', pensionMonthly: 'Monthly pension', medicalBills: 'Medical bills so far', cashlessPaid: 'Paid under the cashless scheme', monthlyTax: 'Income tax deducted each month', familyPensionMonthly: 'Family pension each month', claimedMonthly: 'Monthly income by the family’s account', offer: 'Amount offered', age: 'Age on the day of the accident', certificatePct: 'Permanent disability percentage', functionalPct: 'Functional disability percentage', accidentDay: 'Day of the month', occQ: 'Search occupations', claimFiledDate: 'Date the claim was filed' };
+const inputMoney = (k, ph, suf, auto) => `<div class="inp"><span class="pre">₹</span><input inputmode="numeric" aria-label="${LABELS[k] || k}" data-in="${k}" value="${fmtIn(f()[k])}" placeholder="${ph}"${auto ? ' autofocus' : ''}>${suf ? `<span class="suf">${suf}</span>` : ''}</div><div class="echo">${echoLine(num(f()[k]), suf ? ' ' + suf : '')}</div>`;
 const note2 = (t, b, warn, tint) => `<div class="note2${warn ? ' warn' : ''}${tint ? ' tint' : ''}">${warn ? I.info : I.info}<span class="tx"><b>${t}</b><span>${b}</span></span></div>`;
 const stepMeta = (q) => { const i = stepIndex(q), n = stepsList().length; return i < n - 1 ? `Step ${i + 1} of ${n} · <b>${n - i - 1} more</b>` : '<b>Last step</b>'; };
 const continueBtn = (ok, label) => `<button class="btn full" data-act="next"${ok ? '' : ' disabled'}>${label || 'Continue'}${I.arrow}</button>`;
@@ -936,7 +970,7 @@ function question(q, eyebrow, title, hint, body, ok, autoAdvance) {
 const SITS = [['died', 'Someone died', 'The family claims for the loss', 'heart'], ['hurt', 'Someone was hurt', 'The injured person claims', 'band'], ['homemaker', 'We lost a homemaker', 'Her work at home counts: ₹30,000 a month (Supreme Court, 2026)', 'home'], ['untraced', 'The vehicle was never found', 'A different scheme pays. We show you how.', 'search'], ['offer', 'There is an offer on the table', 'Check it before anyone signs', 'money']];
 function viewHome() {
   const held = S.offer ? note2(`Offer of ${inr(num(S.offer))} held`, 'It will be compared with your estimate at the end.', false, true) : '';
-  const body = `<div class="opts sits">${SITS.map(([id, a, b, ic]) => `<button class="opt" data-act="sit" data-id="${id}"><span class="gl">${I[ic]}</span><span class="tx"><b>${a}</b><span>${b}</span></span><span class="ra"></span></button>`).join('')}</div>${held}<p class="small">About 2 minutes. Your answers stay on this device.${f().kind ? ' <button class="link sm" data-act="resume">Continue where you left off →</button>' : ''}</p>`;
+  const body = `<div class="opts sits">${SITS.map(([id, a, b, ic]) => `<button class="opt" data-act="sit" data-id="${id}"><span class="gl">${I[ic]}</span><span class="tx"><b>${a}</b><span>${b}</span></span><span class="ra"></span></button>`).join('')}</div>${held}<p class="small">About 2 minutes. Your answers stay on this device, and only here.</p>${f().kind ? `<div class="row" style="gap:16px;flex-wrap:wrap"><button class="link sm" data-act="resume">Continue where you left off ${I.arrow.replace('width="20" height="20"', 'width="14" height="14"')}</button><button class="link sm" data-act="clear" style="color:var(--subtle)">Clear my answers</button></div>` : ''}`;
   return shell(`${pq('Compensation calculator · free · private', 'What happened?')}${body}`, { back: 'landing', cta: liveStrip(''), meta: '' });
 }
 function viewQ() {
@@ -949,7 +983,7 @@ function viewQ() {
     const a = x.age === '' ? '' : Number(x.age);
     const bands = [['Under 18', 12], ['18–30', 24], ['30–45', 37], ['45–60', 52], ['Over 60', 65]];
     const on = (lo) => a !== '' && ((lo === 12 && a < 18) || (lo === 24 && a >= 18 && a < 30) || (lo === 37 && a >= 30 && a < 45) || (lo === 52 && a >= 45 && a < 60) || (lo === 65 && a >= 60));
-    return question(q, 'The person', 'How old were they on the day of the accident?', '', `<div class="bigstep"><button data-act="age" data-d="-1">${I.minus}</button><input inputmode="numeric" data-in="age" value="${esc(x.age)}" placeholder="—"><button data-act="age" data-d="1">${I.plus}</button></div><div class="seg">${bands.map(([l, v]) => `<button class="chip${on(v) ? ' on' : ''}" data-act="ageband" data-v="${v}">${l}</button>`).join('')}</div><p class="small">Tap a band, then fine-tune. Or type it.${a !== '' && a > 70 ? ' Over 70 is outside the standard table; the multiplier for 66–70 is used.' : ''}</p>`, x.age !== '' && Number(x.age) >= 0 && Number(x.age) <= 110);
+    return question(q, 'The person', 'How old were they on the day of the accident?', '', `<div class="bigstep"><button data-act="age" data-d="-1" aria-label="One year younger">${I.minus}</button><input inputmode="numeric" aria-label="Age on the day of the accident" data-in="age" value="${esc(x.age)}" placeholder="—"><button data-act="age" data-d="1" aria-label="One year older">${I.plus}</button></div><div class="seg">${bands.map(([l, v]) => `<button class="chip${on(v) ? ' on' : ''}" data-act="ageband" data-v="${v}">${l}</button>`).join('')}</div><span class="errt" id="fielderr">${x.age !== '' && !validAge() ? 'Enter an age from 0 to 110.' : ''}</span><p class="small">Tap a band, then fine-tune. Or type it.${a !== '' && a > 70 ? ' Over 70 is outside the standard table; the multiplier for 66–70 is used.' : ''}</p>`, x.age !== '' && Number(x.age) >= 0 && Number(x.age) <= 110);
   }
   if (q === 'work') return viewWork();
   if (q === 'family') return viewFamily();
@@ -957,7 +991,7 @@ function viewQ() {
   if (q === 'when') {
     const y = S.year, cur = x.accidentDate;
     const grid = MONTHS.map((m, i) => { const iso = `${y}-${String(i + 1).padStart(2, '0')}`; const future = iso > AS_OF.slice(0, 7); return `<button data-act="month" data-iso="${iso}" class="${cur === iso ? 'on' : ''}"${future ? ' disabled' : ''}>${m}</button>`; }).join('');
-    return question(q, 'When and where', 'When did the accident happen?', '', `<div class="card" style="gap:12px;padding:14px"><div class="yearrow"><button data-act="year" data-d="-1">${I.back}</button><span>${y}</span><button data-act="year" data-d="1"${y >= 2026 ? ' disabled style="opacity:.3"' : ''}>${I.right}</button></div><div class="monthgrid">${grid}</div></div><p class="small">Month and year are enough. The exact day is an optional detail later.</p>`, !!x.accidentDate);
+    return question(q, 'When and where', 'When did the accident happen?', '', `<div class="card" style="gap:12px;padding:14px"><div class="yearrow"><button data-act="year" data-d="-1" aria-label="Previous year">${I.back}</button><span aria-live="polite">${y}</span><button data-act="year" data-d="1" aria-label="Next year"${y >= THIS_YEAR ? ' disabled style="opacity:.3"' : ''}>${I.right}</button></div><div class="monthgrid">${grid}</div></div><p class="small">Month and year are enough. The exact day is an optional detail later.</p>`, !!x.accidentDate);
   }
   if (q === 'state') {
     const noWage = x.state && !E.WAGE_STATES.includes(x.state);
@@ -990,7 +1024,7 @@ function viewWork() {
 function occList() {
   const x = f(); const q = S.occQ.toLowerCase();
   const list = E.OCCUPATIONS.filter((o) => !q || o.en.toLowerCase().includes(q)).slice(0, 8);
-  return `<div class="field"><label>What was their occupation? <span class="tag">· optional</span></label><span class="fh">Used to pick the minimum-wage category when income cannot be proved.</span><div class="search">${I.search}<input data-in="occQ" value="${esc(S.occQ)}" placeholder="Search, e.g. driver"></div><div class="list">${list.map((o) => `<button class="li${x.occupationCode === o.code ? ' on' : ''}" data-set="occupationCode" data-val="${o.code}">${o.en}<span>${o.cat.replace('_', '-')}</span></button>`).join('')}<button class="li${x.occupationCode === '' ? ' on' : ''}" data-set="occupationCode" data-val="" style="color:var(--violet)">Not in this list, or not sure</button></div></div>`;
+  return `<div class="field"><label>What was their occupation? <span class="tag">· optional</span></label><span class="fh">Used to pick the minimum-wage category when income cannot be proved.</span><div class="search">${I.search}<input aria-label="Search occupations" data-in="occQ" value="${esc(S.occQ)}" placeholder="Search, e.g. driver"></div><div class="list">${list.map((o) => `<button class="li${x.occupationCode === o.code ? ' on' : ''}" data-set="occupationCode" data-val="${o.code}">${o.en}<span>${o.cat.replace('_', '-')}</span></button>`).join('')}<button class="li${x.occupationCode === '' ? ' on' : ''}" data-set="occupationCode" data-val="" style="color:var(--violet)">Not in this list, or not sure</button></div></div>`;
 }
 function viewFamily() {
   const x = f();
@@ -1010,10 +1044,10 @@ function viewFamily() {
 }
 function viewInjury() {
   const x = f();
-  const body = `<div class="field"><label>Permanent disability in the medical certificate</label><div class="inp" style="max-width:240px${x.noCertificate ? ';opacity:.4' : ''}"><input inputmode="numeric" data-in="certificatePct" value="${esc(x.certificatePct)}" placeholder="e.g. 40"${x.noCertificate ? ' disabled' : ''}><span class="suf">%</span></div>${x.certificatePct !== '' && (Number(x.certificatePct) < 1 || Number(x.certificatePct) > 100) ? '<span class="errt">Enter 1 to 100.</span>' : ''}</div>
+  const body = `<div class="field"><label>Permanent disability in the medical certificate</label><div class="inp" style="max-width:240px${x.noCertificate ? ';opacity:.4' : ''}"><input inputmode="numeric" aria-label="Permanent disability percentage" data-in="certificatePct" value="${esc(x.certificatePct)}" placeholder="e.g. 40"${x.noCertificate ? ' disabled' : ''}><span class="suf">%</span></div>${x.certificatePct !== '' && !(/^\d+$/.test(x.certificatePct) && Number(x.certificatePct) >= 1 && Number(x.certificatePct) <= 100) ? '<span class="errt">Enter a whole number from 1 to 100.</span>' : ''}</div>
     <button class="chk${x.noCertificate ? ' on' : ''}" data-act="nocert"><i>${x.noCertificate ? I.check.replace('width="20" height="20"', 'width="14" height="14"').replace('currentColor', '#fff') : ''}</i><span class="tx">No certificate yet<span>Lost future earnings are then left out. We show how to get one.</span></span></button>
     ${!x.noCertificate && x.certificatePct !== '' ? `<div class="reveal"><div class="field"><label>What does the percentage cover?</label><div class="opts">${opt('certificateBasis', 'whole_body', 'The whole body', '', null, x.certificateBasis === 'whole_body')}${opt('certificateBasis', 'limb', 'One arm or leg, or one part of the body', '', null, x.certificateBasis === 'limb')}${notsure('certificateBasis', 'unknown', x.certificateBasis === 'unknown')}</div></div></div>` : ''}
-    <div class="counter"><span class="tx"><b>Months off work during treatment</b><span>Enter 0 if none</span></span><span class="ctl"><button data-act="months" data-d="-1">${I.minus}</button><b>${x.monthsOffWork === '' ? 0 : x.monthsOffWork}</b><button data-act="months" data-d="1">${I.plus}</button></span></div>`;
+    <div class="counter"><span class="tx"><b>Months off work during treatment</b><span>Enter 0 if none</span></span><span class="ctl"><button data-act="months" data-d="-1" aria-label="One month less">${I.minus}</button><b aria-live="polite">${x.monthsOffWork === '' ? 0 : x.monthsOffWork}</b><button data-act="months" data-d="1" aria-label="One month more">${I.plus}</button></span></div>`;
   return question('injury', 'The injury', 'The medical certificate', '', body, answered('injury') && (x.noCertificate || (Number(x.certificatePct) >= 1 && Number(x.certificatePct) <= 100)));
 }
 const STOPS = {
@@ -1030,6 +1064,7 @@ function viewStop() {
   return shell(`${pq(eb, t)}${body}`, { prog: 0.3, meta: 'No tribunal estimate on these answers', cta: liveStrip('') });
 }
 function viewReady() {
+  if (stopCode()) { go('stop'); return ''; }
   const c = compute(); if (!c.est) { go('q', { q: quickList().find((q) => !answered(stepKey(q))) || 'kind' }); return ''; }
   const est = c.est; const left = detailList().filter((d) => !detailAnswered(d)); const names = { functional: 'work now', workNow: 'work now', attendant: 'attendant', medical: 'medical bills', tax: 'income tax', course: 'course', zone: 'area', familyPension: 'family pension', claimed: 'income claimed', insured: 'vehicle insurance', day: 'exact date', claim: 'claim filed' };
   const body = `<div class="eyebrow" style="color:var(--teal)">Your estimate is ready</div><div class="hero"><div class="amt2">${words(est.L).replace(' lakh', '<small>lakh</small>').replace(' crore', '<small>crore</small>')}</div></div>
@@ -1043,7 +1078,7 @@ const rangebar = (est) => { const lo = est.low, hi = est.high, L = est.L; const 
 
 /* ---------- details ---------- */
 const D = {
-  functional: ['Work after the injury', 'Functional disability, if a doctor or medical board assessed it', 'How much of the earlier work the person can no longer do. If given, it replaces the estimate made from the certificate.', () => `<div class="inp" style="max-width:240px"><input inputmode="numeric" data-in="functionalPct" value="${esc(f().functionalPct)}" placeholder="e.g. 50"><span class="suf">%</span></div>`],
+  functional: ['Work after the injury', 'Functional disability, if a doctor or medical board assessed it', 'How much of the earlier work the person can no longer do. If given, it replaces the estimate made from the certificate.', () => `<div class="inp" style="max-width:240px"><input inputmode="numeric" aria-label="Functional disability percentage" data-in="functionalPct" value="${esc(f().functionalPct)}" placeholder="e.g. 50"><span class="suf">%</span></div>`],
   workNow: ['Work after the injury', 'Can they do their earlier work now?', 'Only “No work at all” changes the estimate. An assessment by a doctor or medical board matters most.', () => `<div class="opts">${[['full', 'Yes, fully'], ['with_difficulty', 'Yes, with difficulty'], ['lighter_only', 'Only lighter work'], ['none', 'No work at all']].map(([v, l]) => opt('workCapacity', v, l, '', null, f().workCapacity === v)).join('')}${notsure('workCapacity', 'unknown', f().workCapacity === 'unknown')}</div>`],
   attendant: ['Work after the injury', 'Do they need someone to look after them for life?', '', () => `<div class="opts">${opt('permanentAttendant', 'true', 'Yes', '', null, f().permanentAttendant === true)}${opt('permanentAttendant', 'false', 'No', '', null, f().permanentAttendant === false && S.detailsDone.includes('attendant'))}</div>`],
   medical: ['Medical bills', 'Medical bills so far', '', () => `<div class="field"><label>Medical bills so far</label>${inputMoney('medicalBills', '2,00,000', '', true)}</div><div class="field"><label>Of which paid under the cashless treatment scheme</label><span class="fh">Enter 0 if none.</span>${inputMoney('cashlessPaid', '0', '')}${num(f().cashlessPaid) > num(f().medicalBills) ? '<span class="errt">Cannot be more than the bills.</span>' : ''}</div>`],
@@ -1053,8 +1088,8 @@ const D = {
   familyPension: ['Income details', 'Family pension now paid each month', '', () => `<div style="max-width:300px">${inputMoney('familyPensionMonthly', '9,250', 'a month', true)}</div>`],
   claimed: ['Income details', 'What did they earn a month, by the family’s account?', 'Without documents, tribunals usually take the state minimum wage instead. This shows what the figure would be if the income were proved.', () => `<div style="max-width:300px">${inputMoney('claimedMonthly', '22,000', 'a month', true)}</div>`],
   insured: ['Vehicle insurance', 'Was the vehicle insured?', 'The police report (FIR) usually says.', () => `<div class="opts">${opt('vehicleInsured', 'yes', 'Yes', '', null, f().vehicleInsured === 'yes')}${opt('vehicleInsured', 'no', 'No', '', null, f().vehicleInsured === 'no')}${notsure('vehicleInsured', 'unknown', f().vehicleInsured === 'unknown')}</div>`],
-  day: ['Exact date', 'Which day of the month was it?', 'Used for the time limit, and if a wage rate changed during that month.', () => `<div class="bigstep" style="max-width:280px"><button data-act="day" data-d="-1">${I.minus}</button><input inputmode="numeric" data-in="accidentDay" value="${esc(f().accidentDay)}" placeholder="—"><button data-act="day" data-d="1">${I.plus}</button></div><p class="small">${monthName(f().accidentDate)}</p>`],
-  claim: ['The claim', 'Has a claim been filed at the tribunal (MACT)?', '', () => `<div class="opts">${opt('claimFiled', 'yes', 'Yes', '', null, f().claimFiled === 'yes')}${opt('claimFiled', 'no', 'No', '', null, f().claimFiled === 'no')}</div>${f().claimFiled === 'yes' ? `<div class="reveal"><div class="field"><label>When was the claim filed?</label><span class="fh">Interest and the deadline caution follow from this date.</span><div class="inp" style="max-width:260px"><input type="date" data-in="claimFiledDate" value="${esc(f().claimFiledDate)}" max="${AS_OF}" style="font-size:16px"></div></div></div>` : ''}`],
+  day: ['Exact date', 'Which day of the month was it?', 'Used for the time limit, and if a wage rate changed during that month.', () => `<div class="bigstep" style="max-width:280px"><button data-act="day" data-d="-1" aria-label="Previous day">${I.minus}</button><input inputmode="numeric" aria-label="Day of the month" data-in="accidentDay" value="${esc(f().accidentDay)}" placeholder="—"><button data-act="day" data-d="1" aria-label="Next day">${I.plus}</button></div><p class="small">${monthName(f().accidentDate)}</p>`],
+  claim: ['The claim', 'Has a claim been filed at the tribunal (MACT)?', '', () => `<div class="opts">${opt('claimFiled', 'yes', 'Yes', '', null, f().claimFiled === 'yes')}${opt('claimFiled', 'no', 'No', '', null, f().claimFiled === 'no')}</div>${f().claimFiled === 'yes' ? `<div class="reveal"><div class="field"><label>When was the claim filed?</label><span class="fh">Interest and the deadline caution follow from this date.</span><div class="inp" style="max-width:260px"><input type="date" aria-label="Date the claim was filed" data-in="claimFiledDate" value="${esc(f().claimFiledDate)}" max="${AS_OF}" style="font-size:16px"></div></div></div>` : ''}`],
 };
 function viewDetail() {
   const list = detailList(); if (S.di >= list.length) { go('check'); return ''; }
@@ -1066,6 +1101,7 @@ function viewDetail() {
 }
 /* ---------- check answers ---------- */
 function viewCheck() {
+  if (stopCode()) { go('stop'); return ''; }
   const list = stepsList(); const dl = detailList(); const done = dl.filter(detailAnswered).length;
   const rows = DECIDES.filter((d) => list.includes(d[0])).map(([k, n]) => `<div class="step"><i>${I.check.replace('width="20" height="20"', 'width="14" height="14"')}</i><span class="tx"><span class="k">${n}</span><span class="v">${esc(decideValue(k))}</span></span><button data-act="change" data-step="${k}">Change</button></div>`).join('');
   const drow = `<div class="step" style="border-bottom:0"><i class="v">${I.plus.replace('width="20" height="20"', 'width="14" height="14"')}</i><span class="tx"><span class="k">Optional details</span><span class="v">${done} added · ${dl.length - done} skipped</span></span><button data-act="details0">Review</button></div>`;
@@ -1111,8 +1147,8 @@ function cautions(est, full) {
   return `<div class="readfirst"><span class="h">Read first · ${ws.length} thing${ws.length === 1 ? '' : 's'}</span>${rows}${!full && ws.length > 2 && !S.moreCautions ? `<button class="r" data-act="morecautions"><span class="t"><span style="color:var(--violet)">${ws.length - 2} more</span></span></button>` : ''}</div>`;
 }
 function heroBlock(est, dk) {
-  return `<div class="hero"><div class="eyebrow">Your estimate</div><div class="amt2">${words(est.L).replace(' lakh', '<small>lakh</small>').replace(' crore', '<small>crore</small>')}</div><span class="small">${inr(est.L)} · as of 31 Oct 2026 · ${dk ? 'what the Supreme Court’s method gives on these facts' : 'Supreme Court method'}</span></div>${rangebar(est)}
-    <p class="hint" style="font-size:14px;line-height:20px">A court could award as little as ${words(est.low)}, or up to ${words(est.high)} if it takes the claimant’s view. ${HONEST}</p>`;
+  return `<div class="hero"><div class="eyebrow">Your estimate</div><div class="amt2">${words(est.L).replace(' lakh', '<small>lakh</small>').replace(' crore', '<small>crore</small>')}</div><span class="small">${inr(est.L)} · as of ${AS_OF_LABEL} · ${dk ? 'what the Supreme Court’s method gives on these facts' : 'Supreme Court method'}</span></div>${rangebar(est)}
+    <p class="hint" style="font-size:14px;line-height:20px">A court could award as little as ${words(est.low)}, or up to ${words(est.high)} if it takes the claimant’s view. ${HONEST}</p><div class="row" style="gap:16px"><button class="link sm" data-act="check">${I.edit.replace('width="20" height="20"', 'width="14" height="14"')}Edit answers</button><span class="small">Rules ${E.VERSIONS.rules}</span></div>`;
 }
 function builtTab(est, all) {
   const heads = est.runs.L.heads.filter((h) => h.v > 0).sort((a, b) => b.v - a.v); const mx = heads[0].v; const n = all ? heads.length : Math.min(3, heads.length);
@@ -1152,12 +1188,13 @@ const NEXT = ['Free legal help: the District Legal Services Authority (DLSA) in 
 const nextList = () => `<ul class="ul">${NEXT.map((n) => `<li>${I.arrow.replace('width="20" height="20"', 'width="18" height="18"')}<span>${n}</span></li>`).join('')}</ul>`;
 const interestRows = (est) => `<div class="facts">${[6, 7.5, 9].map((r) => `<div class="fact"><span>Interest after 6 years at ${r}%</span><b>+${words(est.L * (r / 100) * 6)}</b></div>`).join('')}</div>`;
 function viewResult() {
+  if (stopCode()) { go('stop'); return ''; }
   const c = compute(); if (!c.est) { go('ready'); return ''; }
   const est = c.est; const tabs = ['Built from', 'Cases', 'Papers'];
   const tabbar = (on, names) => `<div class="tabs2">${names.map((t, i) => `<button class="${i === on ? 'on' : ''}" data-act="tab" data-i="${i}">${t}</button>`).join('')}</div>`;
   const content = [`<div>${builtTab(est, S.showAllHeads)}</div>`, `<div class="col">${casesTab(est)}</div>`, papersTab()][S.tab];
   const phone = `<div class="body res">${heroBlock(est)}${cautions(est)}${tabbar(S.tab, tabs)}${content}</div>`;
-  const dock = `<div class="dock2"><button class="btn" data-act="offer">Check an offer${I.arrow}</button><button class="btn soft" data-act="nextsheet">Next steps</button><button class="btn soft" data-act="share" style="flex:0 0 52px;padding:0">${I.share}</button></div>`;
+  const dock = `<div class="dock2"><button class="btn" data-act="offer">Check an offer${I.arrow}</button><button class="btn soft" data-act="nextsheet">Next steps</button><button class="btn soft" data-act="share" aria-label="Share or save" style="flex:0 0 52px;padding:0">${I.share}</button></div>`;
   const left = `<div class="col">${heroBlock(est, true)}${cautions(est, true)}<div class="card" style="gap:8px"><div class="between"><b style="font:600 15px var(--sans)">Got an offer on the table?</b><span class="pill">1 min</span></div><div class="row"><div class="inp" style="flex:1"><span class="pre">₹</span><input inputmode="numeric" data-in="offer" value="${fmtIn(S.offer)}" placeholder="Amount offered"></div><button class="btn" data-act="offer" style="height:56px">Check</button></div></div><div class="card" style="gap:10px"><b style="font:700 16px var(--head)">What to do next</b>${nextList()}</div></div>`;
   const dkTabs = ['Built from', 'Cases like yours', 'Papers', 'Interest'];
   const dkContent = [`<div class="card" style="gap:4px">${builtTab(est, true)}</div><div class="card" style="gap:8px">${moversBlock(est)}</div>`, `<div class="col">${casesTab(est)}</div>`, `<div class="card">${papersTab()}</div>`, `<div class="card"><p class="hint">Tribunals add simple interest from the date of filing, usually 6–9% a year. It is not in the number on the left.</p>${interestRows(est)}</div>`][Math.min(S.tab, 3)];
@@ -1175,26 +1212,27 @@ function viewOffer() {
     const V = { far_below: 'Far below the estimate', well_below: 'Well below the estimate', below: 'Below the estimate', near: 'Near the estimate', close: 'Close to the estimate', above: 'Above the estimate' }[r.verdict];
     const ok = ['near', 'close', 'above'].includes(r.verdict);
     const mx = Math.max(o, est.L, r.withInterest);
-    body += `<div class="twoamt"><div class="c bad"><span>The offer</span><b>${words(o)}</b></div><div class="c good"><span>Your estimate</span><b>${words(est.L)}</b></div></div>
+    body += `<div class="twoamt"><div class="c ${ok ? 'good' : 'bad'}"><span>The offer</span><b>${words(o)}</b></div><div class="c" style="background:var(--band)"><span>Your estimate</span><b>${words(est.L)}</b></div></div>
       <div class="ratio${ok ? ' ok' : ''}"><b>${pct}%</b><span>of the estimate. ${V.replace('the estimate', 'it')}.</span></div>
-      <div class="cmp"><div class="r"><span>The offer</span><i><u class="lo" style="width:${(o / mx) * 100}%"></u></i><b>${words(o)}</b></div><div class="r"><span>Your estimate</span><i><u style="width:${(est.L / mx) * 100}%"></u></i><b>${words(est.L)}</b></div><div class="r"><span>With interest, ${S.offerOpts.years} years</span><i><u style="width:${(r.withInterest / mx) * 100}%"></u></i><b>${words(r.withInterest)}</b></div></div>
+      <div class="cmp"><div class="r"><span>The offer</span><i><u class="${ok ? '' : 'lo'}" style="width:${(o / mx) * 100}%"></u></i><b>${words(o)}</b></div><div class="r"><span>Your estimate</span><i><u style="width:${(est.L / mx) * 100}%"></u></i><b>${words(est.L)}</b></div><div class="r"><span>With interest, ${S.offerOpts.years} years</span><i><u style="width:${(r.withInterest / mx) * 100}%"></u></i><b>${words(r.withInterest)}</b></div></div>
       <div class="between"><span class="small">${S.offerOpts.years} years to award · ${S.offerOpts.rate}% interest · no fee</span><button class="link sm" data-act="assume">Change</button></div>
       ${S.assume ? `<div class="reveal"><div class="field"><label>Years until the award</label><div class="seg">${[3, 6, 9].map((y) => `<button class="chip${S.offerOpts.years === y ? ' on' : ''}" data-act="years" data-v="${y}">${y}</button>`).join('')}</div></div><div class="field"><label>Interest rate</label><div class="seg">${[6, 7.5, 9].map((y) => `<button class="chip${S.offerOpts.rate === y ? ' on' : ''}" data-act="rate" data-v="${y}">${y}%</button>`).join('')}</div></div></div>` : ''}
       ${note2('Signing usually ends the claim', 'A full-and-final settlement closes it. Nothing more can be asked for later, even if the injury worsens.', true)}
       ${ok ? note2('Still take advice before signing', 'A higher figure can carry conditions. Free advice: your DLSA, or the NALSA helpline 15100.') : ''}`;
   }
   const cta = `<a class="btn" href="tel:15100" style="flex:1">Call 15100 for free help</a>`;
-  return shell(`${pq('Is the offer fair?', 'Here is how it compares')}${body}<div class="actions dkonly">${cta}<button class="link" data-act="result">Back to the estimate</button></div>`, { meta: `Offer ${o ? inr(o) : '—'} · estimate ${inr(est.L)}`, cta: `<div class="dock2">${cta}</div>`, rail: true });
+  const dock = `<div class="dock2"><button class="btn ghost" data-act="result" style="flex:0 0 auto;padding:0 16px">${I.back}Estimate</button>${cta}</div>`;
+  return shell(`<div id="offerout">${pq('Is the offer fair?', 'Here is how it compares')}${body}<div class="actions dkonly">${cta}<button class="link" data-act="result">Back to the estimate</button></div></div>`, { meta: `Offer ${o ? inr(o) : '—'} · estimate ${inr(est.L)}`, cta: dock, rail: true });
 }
 function shareText() {
   const c = compute(); const est = c.est; const x = f();
-  return `Estimate from Crashfree India’s compensation calculator · 31 Oct 2026\nFacts: ${x.kind === 'death' ? 'death' : 'injury'}, ${x.age} · ${x.occupationCode ? OCC_LABEL(x.occupationCode) : empLabel(x.employment)} · ${stateName(x.state)} · accident ${monthName(x.accidentDate)}\nEstimate: ${inr(est.L)} (about ${words(est.L)}) · range ${words(est.low)}–${words(est.high)}\nNot legal advice. Free help: your DLSA, or NALSA 15100.\nRules ${E.VERSIONS.rules} · engine ${E.VERSIONS.engine} · not to be cited as authority.`;
+  return `Estimate from Crashfree India’s compensation calculator · ${AS_OF_LABEL}\nFacts: ${x.kind === 'death' ? 'death' : 'injury'}, ${x.age} · ${x.occupationCode ? OCC_LABEL(x.occupationCode) : empLabel(x.employment)} · ${stateName(x.state)} · accident ${monthName(x.accidentDate)}\nEstimate: ${inr(est.L)} (about ${words(est.L)}) · range ${words(est.low)}–${words(est.high)}\nNot legal advice. Free help: your DLSA, or NALSA 15100.\nRules ${E.VERSIONS.rules} · engine ${E.VERSIONS.engine} · not to be cited as authority.`;
 }
 function sheetHtml() {
   const c = compute(); const est = c.est;
-  if (S.sheet === 'next') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet"><span class="grab"></span><h3>What to do next</h3>${nextList()}<div class="eyebrow m" style="margin-top:4px">Interest is not in your number</div>${interestRows(est)}<a class="btn full" href="tel:15100">Call 15100 for free help</a></div></div>`;
-  if (S.sheet === 'offerfirst') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet"><span class="grab"></span><h3>What is the offer?</h3><p class="hint">Enter it now and it stays with you. A few questions follow, only the ones a figure needs, and the comparison appears with the number.</p><div class="inp"><span class="pre">₹</span><input inputmode="numeric" data-in="offer" value="${fmtIn(S.offer)}" placeholder="e.g. 8,00,000" autofocus></div><div class="echo">${echoLine(num(S.offer))}</div><button class="btn full" data-act="holdoffer"${num(S.offer) > 0 ? '' : ' disabled'}>Hold it and ask me the questions${I.arrow}</button></div></div>`;
-  if (S.sheet === 'share') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet"><span class="grab"></span><h3>Share or save</h3><div class="pre">${esc(shareText())}</div><div class="row"><button class="btn soft" style="flex:1;height:52px" data-act="copy">${I.copy}Copy text</button><button class="btn soft printbtn" style="flex:1;height:52px" data-act="print">${I.print}Save PDF</button></div><span class="small" style="text-align:center">Text, not a link: nothing leaves the device unless you send it.</span></div></div>`;
+  if (S.sheet === 'next') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" tabindex="-1"><span class="grab"></span><h3 id="sheet-title">What to do next</h3>${nextList()}<div class="eyebrow m" style="margin-top:4px">Interest is not in your number</div>${interestRows(est)}<a class="btn full" href="tel:15100">Call 15100 for free help</a></div></div>`;
+  if (S.sheet === 'offerfirst') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" tabindex="-1"><span class="grab"></span><h3 id="sheet-title">What is the offer?</h3><p class="hint">Enter it now and it stays with you. A few questions follow, only the ones a figure needs, and the comparison appears with the number.</p><div class="inp"><span class="pre">₹</span><input inputmode="numeric" data-in="offer" value="${fmtIn(S.offer)}" placeholder="e.g. 8,00,000" autofocus></div><div class="echo">${echoLine(num(S.offer))}</div><button class="btn full" data-act="holdoffer"${num(S.offer) > 0 ? '' : ' disabled'}>Hold it and ask me the questions${I.arrow}</button></div></div>`;
+  if (S.sheet === 'share') return `<div class="sheetwrap"><div class="overlay" data-act="closesheet"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" tabindex="-1"><span class="grab"></span><h3 id="sheet-title">Share or save</h3><div class="pre">${esc(shareText())}</div><div class="row"><button class="btn soft" style="flex:1;height:52px" data-act="copy">${I.copy}Copy text</button><button class="btn soft printbtn" style="flex:1;height:52px" data-act="print">${I.print}Save PDF</button></div><span class="small" style="text-align:center">Text, not a link: nothing leaves the device unless you send it.</span><button class="link sm" data-act="clear" style="align-self:center">Clear my answers from this device</button></div></div>`;
   return '';
 }
 
@@ -1202,7 +1240,7 @@ function sheetHtml() {
 function render() {
   let html = '';
   switch (S.screen) { case 'home': html = viewHome(); break; case 'q': html = viewQ(); break; case 'stop': html = viewStop(); break; case 'ready': html = viewReady(); break; case 'detail': html = viewDetail(); break; case 'check': html = viewCheck(); break; case 'result': html = viewResult(); break; case 'offer': html = viewOffer(); break; }
-  if (html) { const app = $('#app'); app.innerHTML = html; const a = app.querySelector('[autofocus]'); if (a && window.innerWidth >= 1024) a.focus(); }
+  if (html) { const app = $('#app'); app.innerHTML = html; const a = app.querySelector('[autofocus]'); if (a && window.innerWidth >= 1024) a.focus(); const d = app.querySelector('[role="dialog"]'); if (d) d.focus(); measureDock(); document.title = ({ home: 'What happened?', q: STEP_OF[S.q] || 'Question', stop: 'What applies instead', ready: 'Your estimate is ready', detail: 'Make it sharper', check: 'Check your answers', result: 'Your estimate', offer: 'Is the offer fair?' }[S.screen] || 'Calculator') + ' · Crashfree India'; }
 }
 function toast(m) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
 function changeStep(step) {
@@ -1230,18 +1268,19 @@ document.addEventListener('click', (ev) => {
     case 'back': back(); break;
     case 'hindi': toast('Hindi copy is with the legal reviewer. English for now.'); break;
     case 'sit': { const id = el.dataset.id; if (id === 'offer') { S.sheet = 'offerfirst'; render(); break; }
-      if (!f().kind || (id === 'died' && f().kind !== 'death') || (id === 'hurt' && f().kind !== 'injury')) { S.f = { ...BLANK }; S.scaleMax = 0; S.detailsDone = []; }
+      if ((id === 'died' && f().kind === 'injury') || (id === 'hurt' && f().kind === 'death')) { S.scaleMax = 0; S.detailsDone = []; S.moreCautions = false; }
       if (id === 'died') set('kind', 'death'); if (id === 'hurt') set('kind', 'injury'); if (id === 'homemaker') { set('kind', 'death'); set('employment', 'homemaker'); } if (id === 'untraced') { set('vehicleTraced', 'no'); set('kind', f().kind || 'death'); set('victimRole', 'not_driving'); go('stop'); break; }
       go('q', { q: 'role' }); break; }
     case 'resume': go('q', { q: quickList().find((q) => !answered(stepKey(q))) || 'state' }); break;
     case 'next': nextQuick(); break;
     case 'age': { const n = Math.max(0, Math.min(110, (num(f().age) || 0) + Number(el.dataset.d))); set('age', String(n)); render(); break; }
+    case 'clear': { try { localStorage.removeItem('cfi-proto3'); } catch (e) {} S.f = { ...BLANK }; S.offer = ''; S.hist = []; S.detailsDone = []; S.scaleMax = 0; S.sheet = null; S.screen = 'home'; save(); render(); toast('Your answers were cleared from this device'); break; }
     case 'ageband': set('age', el.dataset.v); render(); break;
     case 'months': { const n = Math.max(0, Math.min(60, (num(f().monthsOffWork) || 0) + Number(el.dataset.d))); set('monthsOffWork', String(n)); render(); break; }
-    case 'day': { const n = Math.max(1, Math.min(31, (num(f().accidentDay) || 0) + Number(el.dataset.d))); set('accidentDay', String(n)); render(); break; }
+    case 'day': { const n = Math.max(1, Math.min(daysInMonth(f().accidentDate), (num(f().accidentDay) || 0) + Number(el.dataset.d))); set('accidentDay', String(n)); render(); break; }
     case 'nocert': set('noCertificate', !f().noCertificate); if (f().noCertificate) { set('certificatePct', ''); set('certificateBasis', ''); } render(); break;
     case 'month': set('accidentDate', el.dataset.iso); render(); break;
-    case 'year': S.year = Math.max(2011, Math.min(2026, S.year + Number(el.dataset.d))); render(); break;
+    case 'year': S.year = Math.max(2011, Math.min(THIS_YEAR, S.year + Number(el.dataset.d))); render(); break;
     case 'change': changeStep(el.dataset.step); break;
     case 'foundlater': set('vehicleTraced', 'yes'); go('q', { q: 's164' }); break;
     case 'details': S.di = 0; go('detail', { di: 0 }); break;
@@ -1249,6 +1288,7 @@ document.addEventListener('click', (ev) => {
     case 'dsave': { const d = detailList()[S.di]; if (!S.detailsDone.includes(d)) S.detailsDone.push(d); if (S.di + 1 >= detailList().length) go('check'); else go('detail', { di: S.di + 1 }); break; }
     case 'dskip': { if (S.di + 1 >= detailList().length) go('check'); else go('detail', { di: S.di + 1 }); break; }
     case 'result': S.tab = 0; go('result'); break;
+    case 'check': go('check'); break;
     case 'tab': S.tab = Number(el.dataset.i); render(); break;
     case 'allheads': S.showAllHeads = !S.showAllHeads; render(); break;
     case 'caution': S.openCaution = S.openCaution === el.dataset.w ? null : el.dataset.w; render(); break;
@@ -1269,20 +1309,27 @@ document.addEventListener('input', (ev) => {
   const el = ev.target.closest('[data-in]'); if (!el) return; const k = el.dataset.in; const v = el.value;
   if (k === 'occQ') { S.occQ = v; const list = el.closest('.field').querySelector('.list'); const q = v.toLowerCase(); const items = E.OCCUPATIONS.filter((o) => !q || o.en.toLowerCase().includes(q)).slice(0, 8);
     list.innerHTML = items.map((o) => `<button class="li${f().occupationCode === o.code ? ' on' : ''}" data-set="occupationCode" data-val="${o.code}">${o.en}<span>${o.cat.replace('_', '-')}</span></button>`).join('') + `<button class="li" data-set="occupationCode" data-val="" style="color:var(--violet)">Not in this list, or not sure</button>`; return; }
-  if (k === 'offer') { S.offer = String(num(v)); save(); el.value = fmtIn(v); const e2 = el.closest('.inp').nextElementSibling; if (e2 && e2.classList.contains('echo')) e2.innerHTML = echoLine(num(v)); if (S.sheet === 'offerfirst') { const b = document.querySelector('[data-act="holdoffer"]'); if (b) b.disabled = !(num(v) > 0); } if (S.screen === 'offer') { render(); const n = document.querySelector('[data-in="offer"]'); if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); } } return; }
+  if (k === 'offer') { S.offer = String(num(v)); save(); el.value = fmtIn(v); const e2 = el.closest('.inp').nextElementSibling; if (e2 && e2.classList.contains('echo')) e2.innerHTML = echoLine(num(v)); if (S.sheet === 'offerfirst') { const b = document.querySelector('[data-act="holdoffer"]'); if (b) b.disabled = !(num(v) > 0); } if (S.screen === 'offer') { clearTimeout(window.__ot); window.__ot = setTimeout(() => { const t = document.createElement('div'); t.innerHTML = viewOffer(); const fresh = t.querySelector('#offerout'); const cur = document.querySelector('#offerout'); if (fresh && cur) { const keep = cur.querySelector('[data-in="offer"]'); const parts = [...fresh.children].slice(1); [...cur.children].slice(1).forEach((c) => c.remove()); parts.forEach((p) => cur.appendChild(p)); const nk = cur.querySelector('[data-in="offer"]'); if (keep !== nk && nk) { nk.replaceWith(keep); } keep.focus(); } }, 120); } return; }
   if (['monthlySalary', 'itrAnnualIncome', 'pensionMonthly', 'medicalBills', 'cashlessPaid', 'monthlyTax', 'familyPensionMonthly', 'claimedMonthly'].includes(k)) { set(k, String(num(v))); el.value = fmtIn(v); const echo = el.closest('.inp').nextElementSibling; if (echo && echo.classList.contains('echo')) echo.innerHTML = echoLine(num(v), el.parentElement.querySelector('.suf') ? ' ' + el.parentElement.querySelector('.suf').textContent : ''); refreshChrome(); return; }
+  if (k === 'age') { const clean = String(v).replace(/[^\d]/g, '').slice(0, 3); if (clean !== v) el.value = clean; set(k, clean); refreshChrome(); return; }
+  if (k === 'certificatePct' || k === 'functionalPct') { const clean = String(v).replace(/[^\d]/g, '').slice(0, 3); if (clean !== v) el.value = clean; set(k, clean); refreshChrome(); return; }
+  if (k === 'accidentDay') { const clean = sanitizeInt(v, 1, daysInMonth(f().accidentDate)); if (String(v) !== clean && v !== '') el.value = clean; set(k, clean); refreshChrome(); return; }
   set(k, v); refreshChrome();
 });
 /* Re-render only the live strip, rail card and continue button while typing, so the input keeps focus. */
 function refreshChrome() {
   const app = $('#app'); const live = app.querySelector('.live'); if (live) { const t = document.createElement('div'); t.innerHTML = liveStrip(live.querySelector('.btnrow') ? live.querySelector('.btnrow').innerHTML : ''); live.replaceWith(t.firstElementChild); }
   const lc = app.querySelector('.lcard'); if (lc) { const t = document.createElement('div'); t.innerHTML = lcard(''); lc.replaceWith(t.firstElementChild); }
-  const ok = S.screen === 'q' ? (S.q === 'work' ? workDone() : S.q === 'injury' ? answered('injury') && (f().noCertificate || (Number(f().certificatePct) >= 1 && Number(f().certificatePct) <= 100)) : S.q === 'age' ? f().age !== '' : answered(stepKey(S.q))) : true;
+  const ok = S.screen === 'q' ? (S.q === 'work' ? workDone() : S.q === 'injury' ? validCert() : S.q === 'age' ? validAge() : answered(stepKey(S.q))) : true;
+  const err = app.querySelector('#fielderr'); if (err) err.textContent = (S.screen === 'q' && S.q === 'age' && f().age !== '' && !validAge()) ? 'Enter an age from 0 to 110.' : '';
   app.querySelectorAll('[data-act="next"]').forEach((b) => { b.disabled = !ok; });
   if (S.screen === 'q' && S.q === 'injury') { const basis = app.querySelector('[data-set="certificateBasis"]'); if (!basis && f().certificatePct !== '' && !f().noCertificate) render(); }
 }
-document.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && ev.target.matches('input') && S.screen === 'q') { const b = $('[data-act="next"]'); if (b && !b.disabled) nextQuick(); } if (ev.key === 'Escape' && S.sheet) { S.sheet = null; render(); } });
-window.addEventListener('resize', () => { clearTimeout(window.__rt); window.__rt = setTimeout(render, 150); });
+document.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && ev.target.matches('input') && S.screen === 'q') { refreshChrome(); const b = $('[data-act="next"]'); if (b && !b.disabled) nextQuick(); } if (ev.key === 'Escape' && S.sheet) { S.sheet = null; render(); } });
+let wasDesk = window.innerWidth >= 1024;
+window.addEventListener('resize', () => { const isDesk = window.innerWidth >= 1024; if (isDesk !== wasDesk) { wasDesk = isDesk; render(); } else measureDock(); });
+function measureDock() { const el = document.querySelector('.live, .dock2'); const h = el && window.innerWidth < 1024 ? el.getBoundingClientRect().height : 0; document.documentElement.style.setProperty('--dock-h', Math.ceil(h) + 'px'); }
+new MutationObserver(() => measureDock()).observe(document.getElementById('app'), { childList: true, subtree: true });
 window.PROTO = { S, set, go, render, compute, reset: () => { localStorage.removeItem('cfi-proto3'); location.reload(); } };
 render();
 })();
